@@ -29,30 +29,11 @@
 #include "SpPath.h"
 #include "SpDirMon.h"
 
-class SpDirMonEvent
+class testSpDirMonitor : public SpTester
 {
-	public:
-		enum SpCode {null, changed, deleted, added};
-		SpDirMonEvent(SpCode c = null, SpFsObjectHandle h = SpFsObjectHandle(NULL)) : code(c), o(h) { }
-		~SpDirMonEvent() { }
-		SpCode getCode() { return code; }
-		SpFsObjectHandle getFsObjectHandle() { return o; }
-	private:
-		SpCode code;
-		SpFsObjectHandle o;
-};
-
-class testSpDirMonitor : public SpTester, public SpDirMonObserver
-{
-private:
-	SpDirMonEvent nextEvent;
 public:
 	testSpDirMonitor();
-	void checkNextEvent(string testName, SpDirMon *m, int code, const SpPath &p);
-	void notifyChanged(SpFsObjectHandle o);
-	void notifyDeleted(SpFsObjectHandle o);
-	void notifyAdded(SpFsObjectHandle o);
-	
+	void checkNextEvent(string testName, SpDirMon *m, int code, const SpPath &p);	
 	void test();
 };
 

@@ -26,7 +26,7 @@
 #include "SpFile.h"
 #include "SpFsObjectHandle.h"
 
-testSpFsObjectHandle::testSpFsObjectHandle() : SpTester("testSpFsObjectHandle")
+testSpFsObjectHandle::testSpFsObjectHandle() : SpTester("SpFsObjectHandle")
 {
 	test();
 };

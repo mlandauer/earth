@@ -50,8 +50,7 @@ bool SpDirMonFam::stop() {
 }
 	
 void SpDirMonFam::update() {
-	int eventCount = 0;
-	while ((FAMPending(&fc) == 1) && (eventCount < getMaxEvents())) {
+	while (FAMPending(&fc) == 1) {
 		FAMEvent fe;
 		if (FAMNextEvent(&fc, &fe) == -1) {
 			cerr << "SpDirMonitor::update() FAMNextEvent failed" << endl;
@@ -64,19 +63,15 @@ void SpDirMonFam::update() {
 			switch (fe.code) {
 				case FAMChanged:
 					changed(fileNamePath);
-					eventCount++;
 					break;
 				case FAMDeleted:
 					deleted(fileNamePath);
-					eventCount++;
 					break;
 				case FAMCreated:
 					added(fileNamePath);
-					eventCount++;
 					break;
 				case FAMExists:
 					added(fileNamePath);
-					eventCount++;
 					break;
 				// Do nothing with the following
 				case FAMStartExecuting:
@@ -101,7 +96,6 @@ void SpDirMonFam::deleted(const SpPath &path)
 
 void SpDirMonFam::added(const SpPath &path)
 {
-	SpFsObjectHandle o = SpFsObject::construct(path);
-	known[path] = o;
-	notifyAdded(o);
+	known[path] = SpFsObject::construct(path);
+	notifyAdded(known[path]);
 }

@@ -25,14 +25,20 @@
 #ifndef _spdirmon_h_
 #define _spdirmon_h_
 
+#include <queue>
 #include "SpDir.h"
 
-class SpDirMonObserver
+class SpDirMonEvent
 {
 	public:
-		virtual void notifyChanged(SpFsObjectHandle o) = 0;
-		virtual void notifyDeleted(SpFsObjectHandle o) = 0;
-		virtual void notifyAdded(SpFsObjectHandle o) = 0;
+		enum SpCode {null, changed, deleted, added};
+		SpDirMonEvent(SpCode c = null, SpFsObjectHandle h = SpFsObjectHandle(NULL)) : code(c), o(h) { }
+		~SpDirMonEvent() { }
+		SpCode getCode() { return code; }
+		SpFsObjectHandle getFsObjectHandle() { return o; }
+	private:
+		SpCode code;
+		SpFsObjectHandle o;
 };
 
 // This class monitors just one directory and its contents
@@ -40,20 +46,19 @@ class SpDirMon
 {
 	public:
 		~SpDirMon() { }
-		static SpDirMon * construct(const SpDir &d, SpDirMonObserver *o);
+		static SpDirMon * construct(const SpDir &d);
 		virtual void update() = 0;
-		void setMaxEvents(int number) { maxEvents = number; };
-		int getMaxEvents() { return maxEvents; };
+		bool pendingEvent();
+		SpDirMonEvent getNextEvent();
 	protected:
-		SpDirMon() : maxEvents(1000) { }
+		SpDirMon() { }
 		virtual bool start(const SpDir &d) = 0;
 		virtual bool stop() = 0;
 		void notifyChanged(SpFsObjectHandle o);
 		void notifyDeleted(SpFsObjectHandle o);
 		void notifyAdded(SpFsObjectHandle o);
-		int maxEvents;
 	private:
-		SpDirMonObserver *observer;
+		queue<SpDirMonEvent> eventQueue;
 };
 
 
