@@ -14,19 +14,29 @@
 
 list<SpImageFormat *> SpImageFormat::plugins;
 
+SpImageFormat::SpImageFormat()
+{
+	addPlugin(this);
+}
+
+SpImageFormat::~SpImageFormat()
+{
+	removePlugin(this);
+}
+
 // Register all the supported image types
 void SpImageFormat::registerPlugins()
 {
 	// Construct one of every image type. This is all leading up
 	// to some kind of nice plugin architecture
-	addPlugin(new SpTIFFImageFormat);
-	addPlugin(new SpIFFImageFormat);
-	addPlugin(new SpSGIImageFormat);
-	addPlugin(new SpFITImageFormat);
-	addPlugin(new SpGIFImageFormat);
-	addPlugin(new SpPRMANZImageFormat);
-	addPlugin(new SpCINEONImageFormat);
-	addPlugin(new SpPRTEXImageFormat);
+	new SpTIFFImageFormat;
+	new SpIFFImageFormat;
+	new SpSGIImageFormat;
+	new SpFITImageFormat;
+	new SpGIFImageFormat;
+	new SpPRMANZImageFormat;
+	new SpCINEONImageFormat;
+	new SpPRTEXImageFormat;
 }
 
 void SpImageFormat::addPlugin(SpImageFormat *plugin)
@@ -34,12 +44,13 @@ void SpImageFormat::addPlugin(SpImageFormat *plugin)
 	plugins.push_back(plugin);
 }
 
+void SpImageFormat::removePlugin(SpImageFormat *plugin)
+{
+	plugins.remove(plugin);
+}
+
 void SpImageFormat::deRegisterPlugins()
 {
-	// Iterate through all the objects and destroy
-	for (list<SpImageFormat *>::iterator a = plugins.begin();
-		a != plugins.end(); ++a)
-		delete (*a);
 }
 
 SpImage* SpImage::construct(const SpPath &path)

@@ -13,6 +13,8 @@ class SpImage;
 class SpImageFormat
 {
 	public:
+		SpImageFormat();
+		~SpImageFormat();
 		virtual string formatString() = 0;
 		virtual SpImage* constructImage() = 0;
 		virtual bool recognise(unsigned char *buf) = 0;
@@ -23,6 +25,7 @@ class SpImageFormat
 	private:
 		static list<SpImageFormat *> plugins;
 		static void addPlugin(SpImageFormat *plugin);
+		static void removePlugin(SpImageFormat *plugin);
 };
 
 class SpImage : public SpFile
