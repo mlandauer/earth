@@ -27,3 +27,8 @@ string SpSGIImage::formatString()
 {
 	return (string("SGI"));
 }
+
+bool SpSGIImage::valid()
+{
+	return (true);
+}

@@ -5,6 +5,7 @@
 #include "SpImage.h"
 #include "SpSGIImage.h"
 #include "SpTIFFImage.h"
+#include "SpFITImage.h"
 
 SpImage::SpImage()
 {
@@ -51,11 +52,17 @@ SpImage* SpImage::open(SpFile f)
 		(buf[10] == 'M') && (buf[11] == 'G'))
 		cout << "IFF" << endl;
 	else if ((buf[0] == 'I') && (buf[1] == 'T') &&
-		(buf[2] == '0') && (buf[3] == '1'))
-		cout << "FIT" << endl;
+		(buf[2] == '0') && (buf[3] == '1')) {
+		image = new SpFITImage;
+		image->file = f;
+		return (image);
+	}
 	else if ((buf[0] == 'I') && (buf[1] == 'T') &&
-		(buf[2] == '0') && (buf[3] == '2'))
-		cout << "FIT" << endl;
+		(buf[2] == '0') && (buf[3] == '2')) {
+		image = new SpFITImage;
+		image->file = f;
+		return (image);
+	}
 	else if ((buf[0] == 'G') && (buf[1] == 'I') &&
 		(buf[2] == 'F') && (buf[3] == '8'))
 		cout << "GIF" << endl;

@@ -1,19 +1,19 @@
 // $Id$
 
-#ifndef _spsgiimage_h_
-#define _spsgiimage_h_
+#ifndef _spfitimage_h_
+#define _spfitimage_h_
 
 #include "SpImage.h"
 
-class SpSGIImage : public SpImage
+class SpFITImage : public SpImage
 {
 	public:
 		unsigned int width();
 		unsigned int height();
 		string formatString();
 		bool valid();
-		SpSGIImage();
-		~SpSGIImage();
+		SpFITImage();
+		~SpFITImage();
 	private:
 };
 

@@ -41,6 +41,12 @@ string SpTIFFImage::formatString()
 		return ("Unknown");
 }
 
+bool SpTIFFImage::valid()
+{
+	readHeader();
+	return (validHeader);
+}
+
 void SpTIFFImage::readHeader()
 {
 	if (!headerRead) {

@@ -13,6 +13,7 @@ class SpTIFFImage : public SpImage
 		unsigned int width();
 		unsigned int height();
 		string formatString();
+		bool valid();
 	private:
 		unsigned int h, w;
 		bool headerRead;

@@ -14,6 +14,7 @@ class SpImage
 		virtual unsigned int width() = 0;
 		virtual unsigned int height() = 0;
 		virtual string formatString() = 0;
+		virtual bool valid() = 0;
 	protected:
 		unsigned char  readChar() const;
 		unsigned short readShort(const int &endian) const;
