@@ -5,10 +5,7 @@ int main(int argc, char **argv)
 { int m, s; /* master and slave sockets */
   struct soap soap;
   soap_init(&soap);
-  if (argc < 2)
-    soap_serve(&soap);	/* serve as CGI application */
-  else
-  { m = soap_bind(&soap, NULL, atoi(argv[1]), 100);
+  m = soap_bind(&soap, NULL, 8080, 100);
     if (m < 0)
     { soap_print_fault(&soap, stderr);
       exit(-1);
@@ -24,7 +21,6 @@ int main(int argc, char **argv)
       soap_serve(&soap);
       soap_end(&soap);
     }
-  }
   return 0;
 } 
 
