@@ -8,15 +8,20 @@ bool SpTester::verbose = false;
 int SpTester::noErrors = 0;
 float SpTester::floatDelta = 0.1;
 
+SpTester::SpTester(string className) : name(className)
+{
+	cout << endl << "Testing " << name << ": ";
+}
+
 void SpTester::check(string testName, bool a)
 {
 	if (!a) {
-		cout << endl << "FAILED " << testName << endl;
+		cout << endl << "FAILED " << name << " " << testName << endl;
 		noErrors++;
 	}
 	else
 		if (verbose)
-			cout << "SUCCESS " << testName << endl;
+			cout << "SUCCESS " << name << " " << testName << endl;
 		else
 			cout << ".";
 }
@@ -24,13 +29,13 @@ void SpTester::check(string testName, bool a)
 void SpTester::checkEqual(string testName, string a, string b)
 {
 	if (a != b) {
-		cout << endl << "FAILED " << testName << ": Expected " << b
+		cout << endl << "FAILED " << name << " " << testName << ": Expected " << b
 			<< " but got " << a << endl;
 		noErrors++;
 	}
 	else
 		if (verbose)
-			cout << "SUCCESS " << testName << ": returned " << a << endl;
+			cout << "SUCCESS " << name << " " << testName << ": returned " << a << endl;
 		else
 			cout << ".";
 }
@@ -38,13 +43,13 @@ void SpTester::checkEqual(string testName, string a, string b)
 void SpTester::checkEqual(string testName, bool a, bool b)
 {
 	if (a != b) {
-		cout << endl << "FAILED " << testName << ": Expected " << b
+		cout << endl << "FAILED " << name << " " << testName << ": Expected " << b
 			<< " but got " << a << endl;
 		noErrors++;
 	}
 	else
 		if (verbose)
-			cout << "SUCCESS " << testName << ": returned " << a << endl;
+			cout << "SUCCESS " << name << " " << testName << ": returned " << a << endl;
 		else
 			cout << ".";
 }
@@ -52,13 +57,13 @@ void SpTester::checkEqual(string testName, bool a, bool b)
 void SpTester::checkEqual(string testName, int a, int b)
 {
 	if (a != b) {
-		cout << endl << "FAILED " << testName << ": Expected " << b
+		cout << endl << "FAILED " << name << " " << testName << ": Expected " << b
 			<< " but got " << a << endl;
 		noErrors++;
 	}
 	else
 		if (verbose)
-			cout << "SUCCESS " << testName << ": returned " << a << endl;
+			cout << "SUCCESS " << name << " " << testName << ": returned " << a << endl;
 		else
 			cout << ".";
 }
@@ -66,13 +71,13 @@ void SpTester::checkEqual(string testName, int a, int b)
 void SpTester::checkEqual(string testName, float a, float b)
 {
 	if (fabs(a-b) > floatDelta) {
-		cout << endl << "FAILED " << testName << ": Expected " << b
+		cout << endl << "FAILED " << name << " " << testName << ": Expected " << b
 			<< " but got " << a << endl;
 		noErrors++;
 	}
 	else
 		if (verbose)
-			cout << "SUCCESS " << testName << ": returned " << a << endl;
+			cout << "SUCCESS " << name << " " << testName << ": returned " << a << endl;
 		else
 			cout << ".";
 }
