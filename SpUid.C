@@ -23,8 +23,8 @@ void SpUid::setCurrent()
 	uid = getuid();
 }
 
-SpString SpUid::string()
+string SpUid::name()
 {
 	struct passwd *p = getpwuid(uid);
-	return (SpString(p->pw_name));
+	return (string(p->pw_name));
 }

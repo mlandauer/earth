@@ -4,8 +4,7 @@
 #define _spgid_h_
 
 #include <sys/types.h>
-
-#include "SpString.h"
+#include <string>
 
 class SpGid
 {
@@ -13,7 +12,7 @@ class SpGid
 		SpGid();
 		~SpGid();
 		void setUnixGid(gid_t g);
-		SpString string();
+		string name();
 		void setCurrent();
 	private:
 		gid_t gid;

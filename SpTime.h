@@ -8,7 +8,7 @@
 #define _sptime_h_
 
 #include <time.h>
-#include "SpString.h"
+#include <string>
 
 class SpTime
 {
@@ -16,7 +16,7 @@ class SpTime
 		SpTime();
 		~SpTime();
 		void setUnixTime(time_t t);
-		SpString string();
+		string timeAndDateString();
 		void setCurrentTime();
 		int dayOfWeek();
 		int dayOfMonth();
@@ -25,13 +25,13 @@ class SpTime
 		int hour();
 		int minute();
 		int second();
-		SpString monthStringShort();
-		SpString monthString();
-		SpString dayOfWeekStringShort();
-		SpString dayOfWeekString();
-		SpString timeString();
-		SpString dayOfMonthString();
-		SpString yearString();
+		string monthStringShort();
+		string monthString();
+		string dayOfWeekStringShort();
+		string dayOfWeekString();
+		string timeString();
+		string dayOfMonthString();
+		string yearString();
 	private:
 		time_t time;
 };

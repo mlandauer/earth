@@ -1,5 +1,9 @@
 // $Id$
 
+#include <string>
+#include <strstream>
+#include <iomanip>
+
 #include "SpTime.h"
 
 SpTime::SpTime()
@@ -15,24 +19,30 @@ void SpTime::setUnixTime(time_t t)
 	time = t;
 }
 
-SpString SpTime::string()
+string SpTime::timeAndDateString()
 {
-	SpString s = dayOfWeekStringShort() + " " + monthStringShort() + " " +
+	string s = dayOfWeekStringShort() + " " + monthStringShort() + " " +
 		dayOfMonthString() + " " + timeString() + " " + yearString();
 	return s;
 }
 
-SpString SpTime::dayOfMonthString()
+string SpTime::dayOfMonthString()
 {
-	SpString s;
-	s.setNum(dayOfMonth());
+	char buf[100];
+	string s;
+	strstream o(buf, 100);
+	o << dayOfMonth();
+	o >> s;
 	return (s);
 }
 
-SpString SpTime::yearString()
+string SpTime::yearString()
 {
-	SpString s;
-	s.setNum(year());
+	string s;
+	char buf[100];
+	strstream o(buf, 100);
+	o << year();
+	o >> s;
 	return (s);
 }
 
@@ -64,21 +74,27 @@ int SpTime::month()
 	return (1 + localtime->tm_mon);
 }
 
-SpString SpTime::dayOfWeekStringShort()
+string SpTime::dayOfWeekStringShort()
 {
-	SpString s = dayOfWeekString();
-	s.truncate(3);
+	string s = dayOfWeekString();
+	s.resize(3);
 	return (s);
 }
 
-SpString SpTime::timeString()
+string SpTime::timeString()
 {
-	SpString s;
-	s.sprintf("%02i:%02i:%02i", hour(), minute(), second());
+	string s;
+	char buf[100];
+	strstream o(buf, 100);
+	o << setfill('0')
+	  << setw(2) << hour() << ":"
+	  << setw(2) << minute() << ":"
+	  << setw(2) << second();
+	o >> s;
 	return (s);
 }
 
-SpString SpTime::dayOfWeekString()
+string SpTime::dayOfWeekString()
 {
 	switch (dayOfWeek())
 	{
@@ -99,14 +115,14 @@ SpString SpTime::dayOfWeekString()
 	}
 }
 
-SpString SpTime::monthStringShort()
+string SpTime::monthStringShort()
 {
-	SpString s = monthString();
-	s.truncate(3);
+	string s = monthString();
+	s.resize(3);
 	return (s);
 }
 
-SpString SpTime::monthString()
+string SpTime::monthString()
 {
 	switch (month()) {
 		case 1:

@@ -4,8 +4,7 @@
 #define _spuid_h_
 
 #include <sys/types.h>
-
-#include "SpString.h"
+#include <string>
 
 class SpUid
 {
@@ -13,7 +12,7 @@ class SpUid
 		SpUid();
 		~SpUid();
 		void setUnixUid(uid_t u);
-		SpString string();
+		string name();
 		void setCurrent();
 	private:
 		uid_t uid;

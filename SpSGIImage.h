@@ -10,7 +10,7 @@ class SpSGIImage : public SpImage
 	public:
 		unsigned int width() const;
 		unsigned int height() const;
-		SpString formatString() const;
+		string formatString() const;
 		SpSGIImage();
 		~SpSGIImage();
 	private:

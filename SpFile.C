@@ -13,7 +13,7 @@ SpFile::SpFile()
 {
 }
 
-SpFile::SpFile(SpString path)
+SpFile::SpFile(string path)
 {
 	pathString.set(path);
 }
@@ -31,7 +31,7 @@ SpSize SpFile::size() const
 {
 	struct stat fileStat;
 	SpSize s;
-	lstat(pathString.fullName(), &fileStat);
+	lstat(pathString.fullName().data(), &fileStat);
 	s.setBytes(fileStat.st_size);
 	return (s);
 }
@@ -40,7 +40,7 @@ SpTime SpFile::lastModification() const
 {
 	struct stat fileStat;
 	SpTime t;
-	lstat(pathString.fullName(), &fileStat);
+	lstat(pathString.fullName().data(), &fileStat);
 	t.setUnixTime(fileStat.st_mtime);
 	return (t);
 }
@@ -49,7 +49,7 @@ SpTime SpFile::lastAccess() const
 {
 	struct stat fileStat;
 	SpTime t;
-	lstat(pathString.fullName(), &fileStat);
+	lstat(pathString.fullName().data(), &fileStat);
 	t.setUnixTime(fileStat.st_atime);
 	return (t);
 }
@@ -58,7 +58,7 @@ SpTime SpFile::lastChange() const
 {
 	struct stat fileStat;
 	SpTime t;
-	lstat(pathString.fullName(), &fileStat);
+	lstat(pathString.fullName().data(), &fileStat);
 	t.setUnixTime(fileStat.st_ctime);
 	return (t);
 }
@@ -67,7 +67,7 @@ SpUid SpFile::uid() const
 {
 	struct stat fileStat;
 	SpUid u;
-	lstat(pathString.fullName(), &fileStat);
+	lstat(pathString.fullName().data(), &fileStat);
 	u.setUnixUid(fileStat.st_uid);
 	return (u);
 }
@@ -76,7 +76,7 @@ SpGid SpFile::gid() const
 {
 	struct stat fileStat;
 	SpGid g;
-	lstat(pathString.fullName(), &fileStat);
+	lstat(pathString.fullName().data(), &fileStat);
 	g.setUnixGid(fileStat.st_gid);
 	return (g);
 }
@@ -84,7 +84,7 @@ SpGid SpFile::gid() const
 // Opens for read only at the moment
 void SpFile::open()
 {
-	fd = std::open(pathString.fullName(), O_RDONLY);
+	fd = std::open(pathString.fullName().data(), O_RDONLY);
 }
 
 void SpFile::close()

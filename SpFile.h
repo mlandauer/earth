@@ -14,7 +14,7 @@ class SpFile
 	public:
 		SpFile();
 		~SpFile();
-		SpFile(SpString path);
+		SpFile(string path);
 		SpTime lastAccess() const;
 		SpTime lastModification() const;
 		SpTime lastChange() const;

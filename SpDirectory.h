@@ -9,7 +9,7 @@ class SpDirectory
 		SpDirectory();
 		void setParent(SpDirectory *parent);
 		SpTime getLastUpdateTime();
-		SpString getName();
+		string getName();
 		~SpDirectory();
 	private:
 }

@@ -24,8 +24,8 @@ void SpGid::setCurrent()
 	gid = getgid();
 }
 
-SpString SpGid::string()
+string SpGid::name()
 {
 	struct group *e = getgrgid(gid);
-	return (SpString(e->gr_name));
+	return (string(e->gr_name));
 }

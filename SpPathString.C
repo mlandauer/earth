@@ -10,12 +10,12 @@ SpPathString::~SpPathString()
 {
 }
 
-void SpPathString::set(SpString a)
+void SpPathString::set(string a)
 {
 	pathString = a;
 }
 
-SpString SpPathString::fullName() const
+string SpPathString::fullName() const
 {
 	return (pathString);
 }

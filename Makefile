@@ -2,7 +2,7 @@
 
 CC = g++
 OPTION = -g
-INCLUDE = -I/usr/lib/qt/include
+INCLUDE = 
 
 OBJECTS = SpSize.o SpFile.o SpPathString.o SpTime.o \
           SpUid.o SpGid.o SpImage.o SpSGIImage.o
@@ -25,16 +25,16 @@ SpSize.o: SpSize.C SpSize.h
 SpFile.o: SpFile.C SpFile.h SpPathString.h SpTime.h SpSize.h SpUid.h SpGid.h
 	$(CC) $(OPTION) -c SpFile.C $(INCLUDE)
 
-SpPathString.o: SpPathString.C SpPathString.h SpString.h
+SpPathString.o: SpPathString.C SpPathString.h
 	$(CC) $(OPTION) -c SpPathString.C $(INCLUDE)
 
-SpTime.o: SpTime.C SpTime.h SpString.h
+SpTime.o: SpTime.C SpTime.h
 	$(CC) $(OPTION) -c SpTime.C $(INCLUDE)
 
-SpUid.o: SpUid.C SpUid.h SpString.h
+SpUid.o: SpUid.C SpUid.h
 	$(CC) $(OPTION) -c SpUid.C $(INCLUDE)
 
-SpGid.o: SpGid.C SpGid.h SpString.h
+SpGid.o: SpGid.C SpGid.h
 	$(CC) $(OPTION) -c SpGid.C $(INCLUDE)
 
 SpImage.o: SpImage.C SpImage.h SpFile.h

@@ -23,7 +23,7 @@ unsigned int SpSGIImage::height() const
 	return (readShort(1));
 }
 
-SpString SpSGIImage::formatString() const
+string SpSGIImage::formatString() const
 {
-	return (SpString("SGI"));
+	return (string("SGI"));
 }

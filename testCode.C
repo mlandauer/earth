@@ -27,7 +27,7 @@ void testSpTime()
 {
 	SpTime t;
 	t.setCurrentTime();
-	cout << "Current time and date = " << t.string() << endl;
+	cout << "Current time and date = " << t.timeAndDateString() << endl;
 	cout << "Year = " << t.year() << endl;
 	cout << "Hour = " << t.hour() << endl;
 	cout << "Minute = " << t.minute() << endl;
@@ -47,11 +47,11 @@ void testSpFile()
 	cout << "filename = " << file.path().fullName() << endl;
 	cout << "size = " << file.size().bytes() << " bytes" << endl;
 	cout << "size = " << file.size().kbytes() << " Kbytes" << endl;
-	cout << "last access = " << file.lastAccess().string() << endl;
-	cout << "last modification = " << file.lastModification().string() << endl;
-	cout << "last change = " << file.lastChange().string() << endl;
-	cout << "owner = " << file.uid().string() << endl;
-	cout << "group owner = " << file.gid().string() << endl;
+	cout << "last access = " << file.lastAccess().timeAndDateString() << endl;
+	cout << "last modification = " << file.lastModification().timeAndDateString() << endl;
+	cout << "last change = " << file.lastChange().timeAndDateString() << endl;
+	cout << "owner = " << file.uid().name() << endl;
+	cout << "group owner = " << file.gid().name() << endl;
 	file.open();
 	cout << "File opened" << endl;
 	unsigned char buf[2];
@@ -92,8 +92,8 @@ void testSpUid()
 	SpGid g;
 	u.setCurrent();
 	g.setCurrent();
-	cout << "current user = " << u.string() << endl;
-	cout << "current group = " << g.string() << endl;
+	cout << "current user = " << u.name() << endl;
+	cout << "current group = " << g.name() << endl;
 }
 
 main()
