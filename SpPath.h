@@ -9,6 +9,7 @@ class SpPath
 {
 	public:
 		SpPath(const string &a = "");
+		SpPath(char *s);
 		~SpPath();
 		void set(const string &a);
 		string fullName() const;

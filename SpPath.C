@@ -7,6 +7,11 @@ SpPath::SpPath(const string &a)
 	set(a);
 }
 
+SpPath::SpPath(char *s)
+{
+	 set(string(s));
+}
+
 SpPath::~SpPath()
 {
 }
