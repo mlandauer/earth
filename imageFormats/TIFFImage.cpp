@@ -27,7 +27,7 @@
 
 namespace Sp {
 
-ImageDim TIFFImage::getDim()
+ImageDim TIFFImage::getDim() const
 {
 	readHeader();
 	if (validHeader)
@@ -36,13 +36,13 @@ ImageDim TIFFImage::getDim()
 		return (ImageDim(0, 0));
 }
 
-bool TIFFImage::valid()
+bool TIFFImage::valid() const
 {
 	readHeader();
 	return (validHeader);
 }
 
-void TIFFImage::readHeader()
+void TIFFImage::readHeader() const
 {
 	if (!headerRead) {
 		headerRead = true;

@@ -26,14 +26,14 @@
 #define _IMAGEEVENTOBSERVER_H_
 
 #include "File.h"
-#include "Image.h"
+#include "CachedImage.h"
 
 namespace Sp {
 	
 class ImageEventObserver
 {
 public:
-	virtual void imageAdded(const Image *image) = 0;
+	virtual void imageAdded(const CachedImage &image) = 0;
 	virtual void fileDeleted(const File &file) = 0;
 };
 

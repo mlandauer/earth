@@ -21,42 +21,33 @@
 //  Temple Place - Suite 330, Boston MA 02111-1307, USA.
 //
 // $Id$
+//
 
-#ifndef _prteximage_h_
-#define _prteximage_h_
+#ifndef _SP_CACHED_FILE_H_
+#define _SP_CACHED_FILE_H_
 
-#include "Image.h"
-#include "ImageFormat.h"
-#include "ImageDim.h"
+#include "CachedFsObject.h"
+#include "Size.h"
 
 namespace Sp {
 
-//! Properties of the PRTEX image format
-/*!
-  This is the image format used by Pixar's Photorealistic Renderman (PRMAN) for storing
-  texture maps.
-*/
-class PRTEXImageFormat: public ImageFormat
+class CachedFile : public CachedFsObject
 {
-	public:
-		virtual Image* constructImage();
-		virtual bool recognise(unsigned char *buf);
-		virtual int getSizeToRecognise() { return 4; };
-		virtual std::string getFormatString() { return "PRTEX"; }
-};
+public:
+	CachedFile(const File &file) : CachedFsObject(file) {
+		size = file.getSize();
+		sizeBytes = file.getSizeBytes();
+	}
 
-//! Support operations on a PRTEX format image
-/*!
-  For a description of the PRTEX format see PRTEXImageFormat
-*/
-class PRTEXImage : public Image
-{
-	public:
-		PRTEXImage() { };
-		~PRTEXImage() { };
-		ImageDim getDim() const;
-		bool valid() const;
-	private:
+	//! Returns the file size
+	Size getSize() const { return size; }
+
+	//! Returns the file size in bytes
+	long int getSizeBytes() const { return sizeBytes; }
+	
+private:
+	Size size;
+	long int sizeBytes;
 };
 
 }

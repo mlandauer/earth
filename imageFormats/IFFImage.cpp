@@ -26,19 +26,19 @@
 
 namespace Sp {
 
-ImageDim IFFImage::getDim()
+ImageDim IFFImage::getDim() const
 {
 	readHeader();
 	return (ImageDim(w, h));
 }
 
-bool IFFImage::valid()
+bool IFFImage::valid() const
 {
 	readHeader();
 	return (validHeader);
 }
 
-void IFFImage::readHeader()
+void IFFImage::readHeader() const
 {
 	if (!headerRead) {
 		char chunkTag[4];

@@ -54,8 +54,8 @@ class PRMANZImage : public Image
 	public:
 		PRMANZImage() { };
 		~PRMANZImage() { };
-		ImageDim getDim();
-		bool valid();
+		ImageDim getDim() const;
+		bool valid() const;
 	private:
 };
 

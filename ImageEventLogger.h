@@ -36,7 +36,7 @@ class ImageEventLogger : public ImageEventObserver
 public:
 	std::list<Path> getPendingEventsAdded();
 	std::list<Path> getPendingEventsDeleted();
-	virtual void imageAdded(const Image *image);
+	virtual void imageAdded(const CachedImage &image);
 	virtual void fileDeleted(const File &file);
 
 private:

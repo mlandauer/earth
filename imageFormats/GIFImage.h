@@ -54,8 +54,8 @@ class GIFImage : public Image
 	public:
 		GIFImage() { };
 		~GIFImage() { };
-		ImageDim getDim();
-		bool valid();
+		ImageDim getDim() const;
+		bool valid() const;
 	private:
 };
 

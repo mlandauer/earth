@@ -32,7 +32,7 @@
 
 namespace Sp {
 
-File::File(const Path &path) : FsObject(path), fileOpen(false)
+File::File(const Path &path) : FsObject(path)
 {
 }
 
@@ -49,14 +49,12 @@ bool File::valid() const
 /*!
   \todo Opens for read only at the moment
 */
-void File::open()
+void File::open() const
 {
 	fd = ::open(getPath().getFullName().c_str(), O_RDONLY);
 	// TEMPORARY HACK
 	if (fd == -1)
 		std::cerr << "Error opening file " << getPath().getFullName().c_str() << std::endl;
-	else
-		fileOpen = true;
 }
 
 Size File::getSize() const
@@ -72,10 +70,9 @@ long int File::getSizeBytes() const
 	return fileStat.st_size;
 }
 
-void File::close()
+void File::close() const
 {
 	::close(fd);
-	fileOpen = false;
 }
 
 unsigned long int File::read(void *buf, unsigned long int count) const

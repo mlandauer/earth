@@ -55,8 +55,8 @@ class SGIImage : public Image
 	public:
 		SGIImage() { };
 		~SGIImage() { };
-		ImageDim getDim();
-		bool valid();
+		ImageDim getDim() const;
+		bool valid() const;
 	private:
 };
 

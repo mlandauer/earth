@@ -28,12 +28,12 @@
 
 namespace Sp {
 
-bool PRTEXImage::valid()
+bool PRTEXImage::valid() const
 {
 	return (getSizeBytes() >= 15);
 };
 
-ImageDim PRTEXImage::getDim()
+ImageDim PRTEXImage::getDim() const
 {
 	if (!valid())
 		return ImageDim(0, 0);

@@ -27,12 +27,12 @@
 
 namespace Sp {
 
-bool FITImage::valid()
+bool FITImage::valid() const
 {
 	return (getSizeBytes() >= 12);
 };
 
-ImageDim FITImage::getDim()
+ImageDim FITImage::getDim() const
 {
 	if (!valid())
 		return ImageDim(0, 0);

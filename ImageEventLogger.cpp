@@ -26,10 +26,9 @@
 
 namespace Sp {
 	
-void ImageEventLogger::imageAdded(const Image *image)
+void ImageEventLogger::imageAdded(const CachedImage &image)
 {
-	assert(image != NULL);
-	eventsAdded.push_back(image->getPath());
+	eventsAdded.push_back(image.getPath());
 }
 
 void ImageEventLogger::fileDeleted(const File &file)

@@ -54,13 +54,12 @@ class IFFImage : public Image
 	public:
 		IFFImage() : headerRead(false), validHeader(false) { };
 		~IFFImage() { };
-		ImageDim getDim();
-		bool valid();
+		ImageDim getDim() const;
+		bool valid() const;
 	private:
-		unsigned int h, w;
-		bool headerRead;
-		bool validHeader;
-		void readHeader();
+		mutable unsigned int h, w;
+		mutable bool headerRead, validHeader;
+		void readHeader() const;
 };
 
 }

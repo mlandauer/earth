@@ -26,14 +26,14 @@
 
 namespace Sp {
 
-bool CINEONImage::valid()
+bool CINEONImage::valid() const
 {
 	// Do a basic check for validity by ensuring that the file is big enough
 	// to read the header that we want
 	return (getSizeBytes() >= 208);
 };
 
-ImageDim CINEONImage::getDim()
+ImageDim CINEONImage::getDim() const
 {
 	if (!valid())
 		return ImageDim(0, 0);

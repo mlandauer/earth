@@ -26,12 +26,12 @@
 
 namespace Sp {
 
-bool PRMANZImage::valid()
+bool PRMANZImage::valid() const
 {
 	return (getSizeBytes() >= 8);
 };
 
-ImageDim PRMANZImage::getDim()
+ImageDim PRMANZImage::getDim() const
 {
 	if (!valid())
 		return ImageDim(0, 0);

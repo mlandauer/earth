@@ -26,12 +26,12 @@
 
 namespace Sp {
 
-bool GIFImage::valid()
+bool GIFImage::valid() const
 {
 	return (getSizeBytes() >= 10);
 };
 
-ImageDim GIFImage::getDim()
+ImageDim GIFImage::getDim() const
 {
 	if (!valid())
 		return ImageDim(0, 0);

@@ -56,13 +56,13 @@ class TIFFImage : public Image
 	public:
 		TIFFImage() : headerRead(false), validHeader(false) { };
 		~TIFFImage() { };
-		ImageDim getDim();
-		bool valid();
+		ImageDim getDim() const;
+		bool valid() const;
 	private:
-		unsigned int h, w;
-		bool headerRead;
-		bool validHeader;
-		void readHeader();
+		mutable unsigned int h, w;
+		mutable bool headerRead;
+		mutable bool validHeader;
+		void readHeader() const;
 };
 
 }

@@ -56,8 +56,8 @@ class FITImage : public Image
 	public:
 		FITImage() { };
 		~FITImage() { };
-		ImageDim getDim();
-		bool valid();
+		ImageDim getDim() const;
+		bool valid() const;
 	private:
 };
 

@@ -42,10 +42,10 @@ public:
 	virtual ~File() { };
 
 	//! Open file
-	void open();
+	void open() const;
 
 	//! Close file
-	void close();
+	void close() const;
 
 	//! Read from file
 	/*!
@@ -98,8 +98,7 @@ public:
 	File() { };
 	
 private:
-	int fd;
-	bool fileOpen;
+	mutable int fd;
 };
 
 }

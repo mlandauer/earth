@@ -26,12 +26,12 @@
 
 namespace Sp {
 
-bool SGIImage::valid()
+bool SGIImage::valid() const
 {
 	return (getSizeBytes() >= 10);
 };
 
-ImageDim SGIImage::getDim()
+ImageDim SGIImage::getDim() const
 {
 	if (!valid())
 		return ImageDim(0, 0);

@@ -56,8 +56,8 @@ class CINEONImage : public Image
 	public:
 		CINEONImage() { };
 		~CINEONImage() { };
-		ImageDim getDim();
-		bool valid();
+		ImageDim getDim() const;
+		bool valid() const;
 	private:
 };
 
