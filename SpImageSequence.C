@@ -45,11 +45,25 @@ void SpImageSequence::removeImage(SpImage *i)
 		f.erase(frameNumber(i->path()));
 }
 
+void SpImageSequence::removeImage(const SpPath &p)
+{
+	if (partOfSequence(p))
+		f.erase(frameNumber(p));
+}
+
 bool SpImageSequence::partOfSequence(SpImage *i) const
 {
 	if (!couldBePartOfSequence(i))
 		return false;
 	int no = frameNumber(i->path());
+	return (f.find(no) != f.end());
+}
+
+bool SpImageSequence::partOfSequence(const SpPath &path) const
+{
+	if (pattern(path) != p)
+		return false;
+	int no = frameNumber(path);
 	return (f.find(no) != f.end());
 }
 

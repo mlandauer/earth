@@ -427,6 +427,12 @@ public:
 				seq.removeImage(i2);
 				checkSequence("test 13", seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
 			}
+			// Removing by giving a path
+			if (checkNotNULL("test 12a", i3)) {
+				seq.removeImage(path1c);
+				checkSequence("test 12", seq, "test/seq/test1.#.gif", "1,4", 2, 2, "GIF");
+			}
+			
 		}
 		
 		if (checkNotNULL("test 5a", i5)) {

@@ -34,6 +34,7 @@ class SpImageSequence
 		SpImageSequence(SpImage *i);
 		void addImage(SpImage *i);
 		void removeImage(SpImage *i);
+		void removeImage(const SpPath &p);
 		SpPath path() const;
 		string framesString() const;
 		SpImageDim dim() const { return dimensions; };
@@ -46,6 +47,7 @@ class SpImageSequence
 		string hash(int size) const;
 		bool couldBePartOfSequence(SpImage *i) const;
 		bool partOfSequence(SpImage *i) const;
+		bool partOfSequence(const SpPath &p) const;
 		// Image/Sequence attributes
 		SpImageFormat *imageFormat;
 		SpImageDim dimensions;
