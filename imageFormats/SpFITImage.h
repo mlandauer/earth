@@ -35,6 +35,7 @@ class SpFITImageFormat: public SpImageFormat
 		virtual SpImage* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };
+		virtual std::string formatString() { return "FIT"; }
 };
 
 class SpFITImage : public SpImage

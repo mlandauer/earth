@@ -35,6 +35,7 @@ class SpIFFImageFormat: public SpImageFormat
 		virtual SpImage* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 12; };
+		virtual std::string formatString() { return "IFF"; }
 };
 
 class SpIFFImage : public SpImage

@@ -42,12 +42,9 @@ void SpImageFormat::registerPlugins()
 		return;
 	}
 	while (formats) {
-		std::string libraryFilename, formatString;
+		std::string libraryFilename;
 		formats >> libraryFilename;
-		formats >> formatString;
 		loader.load(libraryFilename);
-		// Set the format name on the plugin we just loaded
-		recentPlugin()->setFormatString(formatString);
 	}
 }
 
@@ -69,11 +66,6 @@ void SpImageFormat::removePlugin(SpImageFormat *plugin)
 void SpImageFormat::deRegisterPlugins()
 {
 	loader.releaseAll();
-}
-
-void SpImageFormat::setFormatString(std::string n)
-{
-	shortFormat = n;
 }
 
 SpImageFormat* SpImageFormat::recogniseByMagic(const SpPath &path)

@@ -35,6 +35,7 @@ class SpSGIImageFormat: public SpImageFormat
 		virtual SpImage* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 2; };
+		virtual std::string formatString() { return "SGI"; }
 };
 
 class SpSGIImage : public SpImage

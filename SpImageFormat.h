@@ -36,16 +36,14 @@ class SpImageFormat
 	public:
 		SpImageFormat() { addPlugin(this); };
 		virtual ~SpImageFormat() { removePlugin(this); };
-		std::string formatString() { return shortFormat; };
+		virtual std::string formatString() = 0;
 		virtual SpImage* constructImage() = 0;
 		static void registerPlugins();
 		static void deRegisterPlugins();
 		static SpImageFormat* recogniseByMagic(const SpPath &path);
 	private:
-		std::string shortFormat;
 		virtual bool recognise(unsigned char *buf) = 0;
 		virtual int sizeToRecognise() = 0;
-		void setFormatString(std::string n);
 		static std::list<SpImageFormat *> plugins;
 		static void addPlugin(SpImageFormat *plugin);
 		static void removePlugin(SpImageFormat *plugin);

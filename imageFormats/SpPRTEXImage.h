@@ -35,6 +35,7 @@ class SpPRTEXImageFormat: public SpImageFormat
 		virtual SpImage* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };
+		virtual std::string formatString() { return "PRTEX"; }
 };
 
 class SpPRTEXImage : public SpImage
