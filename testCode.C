@@ -2,6 +2,8 @@
 // Some very simple test code
 
 #include <stream.h>
+#include <algorithm>
+#include <vector>
 
 #include "SpFile.h"
 #include "SpImage.h"
@@ -217,10 +219,7 @@ void testSpDir()
 	SpDir dir("test/templateImages/");
 	checkEqual("SpDir test 1", dir.path().fullName(), "test/templateImages");
 	checkEqual("SpDir test 2", dir.size().kbytes(), 1);
-	checkEqual("SpDir test 4", dir.lastModification().timeAndDateString(),
-		"Fri Apr 13 10:24:01 2001");
-	checkEqual("SpDir test 5", dir.lastChange().timeAndDateString(),
-		"Fri Apr 13 10:24:01 2001");
+	// Think of some way to test the modification dates automatically
 	// Check that this user owns the files
 	SpUid u;
 	u.setCurrent();
@@ -231,34 +230,26 @@ void testSpDir()
 	checkEqual("SpDir test 8", dir.isFile(), false);
 	checkEqual("SpDir test 9", dir.isDir(), true);
 	list<SpFsObject *> ls = dir.ls();
-	list<SpFsObject *>::iterator a = ls.begin();
-	checkEqual("SpDir ls test 1", (*a++)->path().fullName(),
-		"test/templateImages/8x8.jpg");
-	checkEqual("SpDir ls test 2", (*a++)->path().fullName(),
-		"test/templateImages/8x8.tiff");
-	checkEqual("SpDir ls test 3", (*a++)->path().fullName(),
-		"test/templateImages/8x8.sgi");
-	checkEqual("SpDir ls test 4", (*a++)->path().fullName(),
-		"test/templateImages/8x8.gif");
-	checkEqual("SpDir ls test 5", (*a++)->path().fullName(),
-		"test/templateImages/4x4.gif");
-	checkEqual("SpDir ls test 6", (*a++)->path().fullName(),
-		"test/templateImages/2x2.gif");
-	checkEqual("SpDir ls test 7", (*a++)->path().fullName(),
-		"test/templateImages/4x4.jpg");
-	checkEqual("SpDir ls test 8", (*a++)->path().fullName(),
-		"test/templateImages/2x2.jpg");
-	checkEqual("SpDir ls test 9", (*a++)->path().fullName(),
-		"test/templateImages/4x4.sgi");
-	checkEqual("SpDir ls test 10", (*a++)->path().fullName(),
-		"test/templateImages/2x2.sgi");
-	checkEqual("SpDir ls test 11", (*a++)->path().fullName(),
-		"test/templateImages/4x4.tiff");
-	checkEqual("SpDir ls test 12", (*a++)->path().fullName(),
-		"test/templateImages/2x2.tiff");
-	checkEqual("SpDir ls test 13", (*a++)->path().fullName(),
-		"test/templateImages/CVS");
-	
+	// Create a vector of just the filenames
+	vector<string> names;
+	for (list<SpFsObject *>::iterator a = ls.begin(); a != ls.end(); ++a) {
+		names.push_back((*a)->path().fullName());
+	}
+	sort(names.begin(), names.end());
+	vector<string>::iterator a = names.begin();
+	checkEqual("SpDir ls test 1",  (*a++), "test/templateImages/2x2.gif");
+	checkEqual("SpDir ls test 2",  (*a++), "test/templateImages/2x2.jpg");
+	checkEqual("SpDir ls test 3",  (*a++), "test/templateImages/2x2.sgi");
+	checkEqual("SpDir ls test 4",  (*a++), "test/templateImages/2x2.tiff");
+	checkEqual("SpDir ls test 5",  (*a++), "test/templateImages/4x4.gif");
+	checkEqual("SpDir ls test 6",  (*a++), "test/templateImages/4x4.jpg");
+	checkEqual("SpDir ls test 7",  (*a++), "test/templateImages/4x4.sgi");
+	checkEqual("SpDir ls test 8",  (*a++), "test/templateImages/4x4.tiff");
+	checkEqual("SpDir ls test 9",  (*a++), "test/templateImages/8x8.gif");
+	checkEqual("SpDir ls test 10", (*a++), "test/templateImages/8x8.jpg");
+	checkEqual("SpDir ls test 11", (*a++), "test/templateImages/8x8.sgi");
+	checkEqual("SpDir ls test 12", (*a++), "test/templateImages/8x8.tiff");
+	checkEqual("SpDir ls test 13", (*a++), "test/templateImages/CVS");
 }
 
 void testSpPath()
