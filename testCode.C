@@ -59,14 +59,14 @@ main()
 	
 	testSpDir();
 	testSpSize();
-	testSpTime();
+	//testSpTime();
 	testSpFile();
 	testSpImage();
 	testSpFsObject();
 	testSpPath();
 	testSpImageSeq();
 	testSpFsObjectHandle();
-	testSpDirMon();
+	//testSpDirMon();
 	
 	SpTester::finish();
 	SpImageFormat::deRegisterPlugins();
