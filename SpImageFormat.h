@@ -34,8 +34,8 @@ class SpImage;
 class SpImageFormat
 {
 	public:
-		SpImageFormat() { addPlugin(this); };
-		virtual ~SpImageFormat() { removePlugin(this); };
+		SpImageFormat();
+		virtual ~SpImageFormat();
 		virtual std::string formatString() = 0;
 		virtual SpImage* constructImage() = 0;
 		static void registerPlugins();

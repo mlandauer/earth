@@ -24,22 +24,31 @@
 
 #include <iostream>
 #include "SpLibLoader.h"
-//#include <mach-o/dyld.h>
+
+#ifdef __APPLE__
+	#include <mach-o/dyld.h>
+#endif
 
 void SpLibLoader::load(std::string fileName)
 {
-  //const struct mach_header *handle = NSAddImage(fileName.c_str(), NSADDIMAGE_OPTION_RETURN_ON_ERROR);
-  void *handle = dlopen(fileName.c_str(), RTLD_LAZY);
-	if (handle == NULL)
-		std::cerr << "SpLibLoader: dlopen failed: " << dlerror() << std::endl;
-		//std::cerr << "SpLibLoader: NSAddImage failed " << std::endl;
-	else
-		handles.push_back(handle);
+	#ifndef __APPLE__
+  	void *handle = dlopen(fileName.c_str(), RTLD_LAZY);
+		if (handle == NULL)
+			std::cerr << "SpLibLoader: dlopen failed: " << dlerror() << std::endl;
+		else
+			handles.push_back(handle);
+	#else
+  	const struct mach_header *handle = NSAddImage(fileName.c_str(), NSADDIMAGE_OPTION_RETURN_ON_ERROR);
+		if (handle == NULL)
+			std::cerr << "SpLibLoader: NSAddImage failed " << std::endl;
+	#endif
 }
 
 void SpLibLoader::releaseAll()
 {
-	for (std::list<void *>::iterator a = handles.begin(); a != handles.end(); ++a)
-		dlclose((*a));
+	#ifndef __APPLE__
+		for (std::list<void *>::iterator a = handles.begin(); a != handles.end(); ++a)
+			dlclose((*a));
+	#endif
 }
 

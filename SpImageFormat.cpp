@@ -31,10 +31,22 @@
 std::list<SpImageFormat *> SpImageFormat::plugins;
 SpLibLoader SpImageFormat::loader;
 
+SpImageFormat::SpImageFormat()
+{
+	addPlugin(this);
+};
+
+SpImageFormat::~SpImageFormat()
+{
+	#ifndef __APPLE
+		removePlugin(this);
+	#endif
+};
+
 // Register all the supported image types
 void SpImageFormat::registerPlugins()
 {
-  //#if 0
+  #ifndef __APPLE__
 	const char formatsFilename[] = "imageFormats.conf";
 	std::ifstream formats(formatsFilename);
 	if (!formats) {
@@ -47,7 +59,7 @@ void SpImageFormat::registerPlugins()
 		formats >> libraryFilename;
 		loader.load(libraryFilename);
 	}
-  //#endif
+  #endif
 }
 
 void SpImageFormat::addPlugin(SpImageFormat *plugin)
@@ -67,9 +79,9 @@ void SpImageFormat::removePlugin(SpImageFormat *plugin)
 
 void SpImageFormat::deRegisterPlugins()
 {
-  //#if 0
+  #ifndef __APPLE__
 	loader.releaseAll();
-  //#endif
+  #endif
 }
 
 SpImageFormat* SpImageFormat::recogniseByMagic(const SpPath &path)
