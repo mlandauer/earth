@@ -76,29 +76,35 @@ void testSpFile()
 
 void testSpImage()
 {
-	SpFile file1("/home/matthew/images/dibble1.sgi");
-	SpImage *image1 = SpImage::open(file1);
-	cout << "Opened image " << file1.path().fullName() << endl;
+	SpImage *image1 = SpImage::construct("/home/matthew/images/dibble1.sgi");
+	cout << "Opened image " << image1->path().fullName() << endl;
+	cout << "Image Filesize = " << image1->size().kbytes() << " Kbytes" << endl;
+	cout << "Last modification = " << image1->lastModification().timeAndDateString() << endl;
 	cout << "Image format = " << image1->formatString() << endl;
 	cout << "Image width = " << image1->dim().width() << endl;
 	cout << "Image height = " << image1->dim().height() << endl;
-	image1->close();
-	SpFile file2("/home/matthew/images/blah1.tiff");
-	SpImage *image2 = SpImage::open(file2);
-	cout << "Opened image " << file2.path().fullName() << endl;
+	delete image1;
+
+	SpImage *image2 = SpImage::construct("/home/matthew/images/blah1.tiff");
+	cout << "Opened image " << image2->path().fullName() << endl;
+	cout << "Image Filesize = " << image2->size().kbytes() << " Kbytes" << endl;
+	cout << "Last modification = " << image2->lastModification().timeAndDateString() << endl;
 	cout << "Image format = " << image2->formatString() << endl;
 	cout << "Image width = " << image2->dim().width() << endl;
 	cout << "Image height = " << image2->dim().height() << endl;
-	image2->close();
+	delete image2;
+	
 	// *** FIT File format currently untested ****
 	// *** PRMANZ File format currently untested ****
-	SpFile file3("/home/matthew/images/foo1.gif");
-	SpImage *image3 = SpImage::open(file3);
-	cout << "Opened image " << file3.path().fullName() << endl;
+
+	SpImage *image3 = SpImage::construct("/home/matthew/images/foo1.gif");
+	cout << "Opened image " << image3->path().fullName() << endl;
+	cout << "Image Filesize = " << image3->size().kbytes() << " Kbytes" << endl;
+	cout << "Last modification = " << image3->lastModification().timeAndDateString() << endl;
 	cout << "Image format = " << image3->formatString() << endl;
 	cout << "Image width = " << image3->dim().width() << endl;
 	cout << "Image height = " << image3->dim().height() << endl;
-	image3->close();
+	delete image3;
 }
 
 void space()

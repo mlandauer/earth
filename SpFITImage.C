@@ -13,9 +13,11 @@ SpFITImage::~SpFITImage()
 
 SpImageDim SpFITImage::dim()
 {
-	file.seek(4);
+	open();
+	seek(4);
 	unsigned int width = readLong(1);
 	unsigned int height = readLong(1);
+	close();
 	return (SpImageDim(width, height));
 }
 

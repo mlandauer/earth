@@ -15,10 +15,10 @@ all: testCode
 clean:
 	rm -fr ii_files *.o testCode
 
-testCode: testCode.o $(OBJECTS) SpFile.h SpUid.h SpGid.h SpImage.h
+testCode: testCode.o $(OBJECTS)
 	$(CC) $(OPTION) -o testCode testCode.o $(OBJECTS) -lqt
 
-testCode.o: testCode.C SpFile.h
+testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h
 	$(CC) $(OPTION) -c testCode.C $(INCLUDE)
 
 SpSize.o: SpSize.C SpSize.h

@@ -1,21 +1,24 @@
 // $Id$
 
 #include "SpGIFImage.h"
-#include <stream.h>
 
 SpGIFImage::SpGIFImage()
 {
+	cout << "SpGIFImage constructor" << endl;
 }
 
 SpGIFImage::~SpGIFImage()
 {
+	cout << "SpGIFImage destructor" << endl;
 }
 
 SpImageDim SpGIFImage::dim()
 {
-	file.seek(6);
+	open();
+	seek(6);
 	unsigned int width = readShort(0);
 	unsigned int height = readShort(0);
+	close();
 	return (SpImageDim(width, height));
 }
 

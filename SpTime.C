@@ -19,14 +19,14 @@ void SpTime::setUnixTime(time_t t)
 	time = t;
 }
 
-string SpTime::timeAndDateString()
+string SpTime::timeAndDateString() const
 {
 	string s = dayOfWeekStringShort() + " " + monthStringShort() + " " +
 		dayOfMonthString() + " " + timeString() + " " + yearString();
 	return s;
 }
 
-string SpTime::dayOfMonthString()
+string SpTime::dayOfMonthString() const
 {
 	char buf[100];
 	string s;
@@ -36,7 +36,7 @@ string SpTime::dayOfMonthString()
 	return (s);
 }
 
-string SpTime::yearString()
+string SpTime::yearString() const
 {
 	string s;
 	char buf[100];
@@ -49,39 +49,39 @@ string SpTime::yearString()
 // What happens to all these pointers that are returned??
 
 // Sun = 0, Mon = 1, Tue = 2, Wed = 3, Thu = 4, Fri = 5, Sat = 6
-int SpTime::dayOfWeek()
+int SpTime::dayOfWeek() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_wday);
 }
 
-int SpTime::dayOfMonth()
+int SpTime::dayOfMonth() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_mday);
 }
 
-int SpTime::year()
+int SpTime::year() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (1900 + localtime->tm_year);
 }
 
 // Jan = 1, Feb = 2, Mar = 3, etc...
-int SpTime::month()
+int SpTime::month() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (1 + localtime->tm_mon);
 }
 
-string SpTime::dayOfWeekStringShort()
+string SpTime::dayOfWeekStringShort() const
 {
 	string s = dayOfWeekString();
 	s.resize(3);
 	return (s);
 }
 
-string SpTime::timeString()
+string SpTime::timeString() const
 {
 	string s;
 	char buf[100];
@@ -94,7 +94,7 @@ string SpTime::timeString()
 	return (s);
 }
 
-string SpTime::dayOfWeekString()
+string SpTime::dayOfWeekString() const
 {
 	switch (dayOfWeek())
 	{
@@ -115,14 +115,14 @@ string SpTime::dayOfWeekString()
 	}
 }
 
-string SpTime::monthStringShort()
+string SpTime::monthStringShort() const
 {
 	string s = monthString();
 	s.resize(3);
 	return (s);
 }
 
-string SpTime::monthString()
+string SpTime::monthString() const
 {
 	switch (month()) {
 		case 1:
@@ -152,19 +152,19 @@ string SpTime::monthString()
 	}
 }
 
-int SpTime::hour()
+int SpTime::hour() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_hour);
 }
 
-int SpTime::minute()
+int SpTime::minute() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_min);
 }
 
-int SpTime::second()
+int SpTime::second() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_sec);

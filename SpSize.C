@@ -34,22 +34,22 @@ void SpSize::setGBytes(unsigned long int n)
 	KBytes = n * 1024 * 1024;
 }
 
-unsigned long int SpSize::bytes()
+unsigned long int SpSize::bytes() const
 {
 	return KBytes * 1024;
 }
 
-unsigned long int SpSize::kbytes()
+unsigned long int SpSize::kbytes() const
 {
 	return KBytes;
 }
 
-unsigned long int SpSize::mbytes()
+unsigned long int SpSize::mbytes() const
 {
 	return KBytes / 1024;
 }
 
-unsigned long int SpSize::gbytes()
+unsigned long int SpSize::gbytes() const
 {
 	return KBytes / 1024 / 1024;
 }

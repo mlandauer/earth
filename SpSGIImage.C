@@ -1,21 +1,24 @@
 // $Id$
 
 #include "SpSGIImage.h"
-#include <stream.h>
 
 SpSGIImage::SpSGIImage()
 {
+	cout << "SpSGIImage constructor" << endl;
 }
 
 SpSGIImage::~SpSGIImage()
 {
+	cout << "SpSGIImage destructor" << endl;
 }
 
 SpImageDim SpSGIImage::dim()
 {
-	file.seek(6);
+	open();
+	seek(6);
 	unsigned int width = readShort(1);
 	unsigned int height = readShort(1);
+	close();
 	return (SpImageDim(width, height));
 }
 

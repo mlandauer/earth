@@ -12,9 +12,12 @@ SpPRMANZImage::~SpPRMANZImage()
 
 SpImageDim SpPRMANZImage::dim()
 {
-	file.seek(4);
+	open();
+	seek(4);
 	unsigned int width = readShort(1);
 	unsigned int height = readShort(1);
+	close();
+	return (SpImageDim(width, height));
 }
 
 string SpPRMANZImage::formatString()

@@ -6,21 +6,17 @@
 #include "SpFile.h"
 #include "SpImageDim.h"
 
-class SpImage
+class SpImage : public SpFile
 {
 	public:
-		static SpImage* open(SpFile f);
-		SpImage();
-		~SpImage();
+		static SpImage* construct(string path);
 		virtual SpImageDim dim() = 0;
 		virtual string formatString() = 0;
 		virtual bool valid() = 0;
-		void close();
 	protected:
 		unsigned char  readChar() const;
 		unsigned short readShort(const int &endian) const;
 		unsigned long  readLong(const int &endian) const;
-		SpFile file;
 	private:
 };
 

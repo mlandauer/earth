@@ -27,6 +27,8 @@ class SpFile
 		unsigned long int read(void *buf, unsigned long int count) const;
 		void seek(unsigned long int pos) const;
 		void seekForward(unsigned long int pos) const;
+	protected:
+		void setPath(string path);
 	private:
 		SpPathString pathString;
 		int fd;
