@@ -62,3 +62,5 @@ SpImage* SpIFFImageFormat::constructImage()
 {
 	return (new SpIFFImage);
 }
+
+static SpIFFImageFormat thisIFFImageFormat;

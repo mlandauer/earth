@@ -33,3 +33,6 @@ SpImage* SpCINEONImageFormat::constructImage()
 {
 	return (new SpCINEONImage);
 };
+
+static SpCINEONImageFormat thisCINEONImageFormat;
+

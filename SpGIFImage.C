@@ -25,3 +25,6 @@ SpImage* SpGIFImageFormat::constructImage()
 {
 	return (new SpGIFImage);
 }
+
+static SpGIFImageFormat thisGIFImageFormat;
+

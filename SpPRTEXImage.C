@@ -31,3 +31,5 @@ SpImage* SpPRTEXImageFormat::constructImage()
 {
 	return (new SpPRTEXImage);
 }
+
+SpPRTEXImageFormat thisPRTEXImageFormat;

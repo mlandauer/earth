@@ -25,3 +25,5 @@ SpImage* SpPRMANZImageFormat::constructImage()
 {
 	return (new SpPRMANZImage);
 }
+
+SpPRMANZImageFormat thisPRMANZImageFormat;

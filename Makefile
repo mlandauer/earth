@@ -8,8 +8,7 @@ SO_OBJECTS = SpTIFFImage.so SpFITImage.so SpPRMANZImage.so SpSGIImage.so\
 		  SpGIFImage.so SpCINEONImage.so SpIFFImage.so SpPRTEXImage.so
 		  
 OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o \
-          SpUid.o SpGid.o SpImage.o SpImageDim.o SpFsObject.o SpDir.o \
-		  $(SO_OBJECTS)
+          SpUid.o SpGid.o SpImage.o SpImageDim.o SpFsObject.o SpDir.o
 
 all: testCode $(SO_OBJECTS)
 	LD_LIBRARY_PATH=. ./testCode
@@ -18,7 +17,7 @@ clean:
 	rm -fr ii_files *.o *.so testCode
 
 testCode: testCode.o $(OBJECTS) SpSGIImage.so
-	$(CC) $(OPTION) -o testCode testCode.o $(OBJECTS) -ldl
+	$(CC) $(OPTION) -rdynamic -o testCode testCode.o $(OBJECTS) -ldl
 
 testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h SpFsObject.h
 	$(CC) $(OPTION) -c testCode.C $(INCLUDE)

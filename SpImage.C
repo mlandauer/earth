@@ -2,17 +2,13 @@
 
 #include <stream.h>
 
+// HACK: not platform independent
+#include <dlfcn.h>
+
 #include "SpImage.h"
-#include "SpSGIImage.h"
-#include "SpTIFFImage.h"
-#include "SpIFFImage.h"
-#include "SpFITImage.h"
-#include "SpPRMANZImage.h"
-#include "SpGIFImage.h"
-#include "SpCINEONImage.h"
-#include "SpPRTEXImage.h"
 
 list<SpImageFormat *> SpImageFormat::plugins;
+list<void *> SpImageFormat::dynamicLibraryHandles;
 
 SpImageFormat::SpImageFormat()
 {
@@ -29,14 +25,31 @@ void SpImageFormat::registerPlugins()
 {
 	// Construct one of every image type. This is all leading up
 	// to some kind of nice plugin architecture
-	new SpTIFFImageFormat;
-	new SpIFFImageFormat;
-	new SpSGIImageFormat;
-	new SpFITImageFormat;
-	new SpGIFImageFormat;
-	new SpPRMANZImageFormat;
-	new SpCINEONImageFormat;
-	new SpPRTEXImageFormat;
+	loadDynamicLibrary("SpTIFFImage.so");
+	loadDynamicLibrary("SpTIFFImage.so");
+	loadDynamicLibrary("SpIFFImage.so");
+	loadDynamicLibrary("SpSGIImage.so");
+	loadDynamicLibrary("SpFITImage.so");
+	loadDynamicLibrary("SpGIFImage.so");
+	loadDynamicLibrary("SpPRMANZImage.so");
+	loadDynamicLibrary("SpCINEONImage.so");
+	loadDynamicLibrary("SpPRTEXImage.so");
+}
+
+void SpImageFormat::loadDynamicLibrary(char *fileName)
+{
+	void *handle = dlopen(fileName, RTLD_LAZY);
+	if (handle == NULL)
+		cerr << "dlopen failed: " << dlerror() << endl;
+	else
+		dynamicLibraryHandles.push_back(handle);
+}
+
+void SpImageFormat::releaseDynamicLibraries()
+{
+	for (list<void *>::iterator a = dynamicLibraryHandles.begin();
+		a != dynamicLibraryHandles.end(); ++a)
+		dlclose((*a));
 }
 
 void SpImageFormat::addPlugin(SpImageFormat *plugin)
@@ -51,6 +64,7 @@ void SpImageFormat::removePlugin(SpImageFormat *plugin)
 
 void SpImageFormat::deRegisterPlugins()
 {
+	releaseDynamicLibraries();
 }
 
 SpImage* SpImage::construct(const SpPath &path)

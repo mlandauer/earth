@@ -24,3 +24,5 @@ SpImage* SpSGIImageFormat::constructImage()
 {
 	return (new SpSGIImage);
 }
+
+static SpSGIImageFormat thisSGIImageFormat;

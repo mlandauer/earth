@@ -116,3 +116,5 @@ SpImage* SpTIFFImageFormat::constructImage()
 	return (new SpTIFFImage);
 }
 
+static SpTIFFImageFormat thisTIFFImageFormat;
+

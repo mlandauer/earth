@@ -29,3 +29,5 @@ SpImage* SpFITImageFormat::constructImage()
 {
 	return (new SpFITImage);
 }
+
+static SpFITImageFormat thisFITImageFormat;

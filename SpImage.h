@@ -26,6 +26,9 @@ class SpImageFormat
 		static list<SpImageFormat *> plugins;
 		static void addPlugin(SpImageFormat *plugin);
 		static void removePlugin(SpImageFormat *plugin);
+		static void loadDynamicLibrary(char *fileName);
+		static void releaseDynamicLibraries();
+		static list<void *> dynamicLibraryHandles;
 };
 
 class SpImage : public SpFile
