@@ -32,30 +32,6 @@
 
 namespace Sp {
 	
-class FileMonEvent
-{
-	public:
-		enum Code {deleted, added};
-
-	private:
-		Code code;
-		File o;
-		
-	public:
-		FileMonEvent(Code c, const File &h) : code(c), o(h) { }
-		Code getCode() const { return code; }
-		File getFile() const { return o; }
-		bool operator==(const FileMonEvent &e) const {
-			return ((getCode() == e.getCode()) && (getFile() == e.getFile()));
-		}
-		bool operator<(const FileMonEvent &e) const {
-			if (getCode() == e.getCode())
-				return (getFile() < e.getFile());
-			else
-				return (getCode() < e.getCode());
-		}
-};
-
 class CachedDir
 {
 public:
