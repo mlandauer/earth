@@ -9,9 +9,8 @@ SpFile::SpFile()
 {
 }
 
-SpFile::SpFile(const string &path)
+SpFile::SpFile(const string &path) : SpFsObject(path)
 {
-	setPath(path);
 }
 
 SpFile::~SpFile()
