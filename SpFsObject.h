@@ -24,6 +24,7 @@ class SpFsObject
 		SpUid uid() const;
 		SpGid gid() const;
 		void setPath(const SpPath &path);
+		virtual bool valid() const = 0;
 	protected:
 		SpFsObject(const SpPath &path = "");
 	private:

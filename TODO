@@ -6,6 +6,7 @@ Start Sequence class
 Write shell script that generates fake image sequences (from image Templates)
 Figure out what to do with the multiple versions of ls in SpDir
 Make Makefile actually work and concise
+Makes tests subclass from tester
 
 Done
 ====

@@ -190,41 +190,105 @@ void testSpDir()
 	g.setCurrent();
 	SpTester::checkEqual("SpDir test 3", dir.gid().name(), g.name());
 	SpTester::checkEqual("SpDir test 4", dir.valid(), true);
-	vector<SpImage *> ls = dir.lsImagesSortedByPath();
-	SpTester::checkEqual("SpDir ls test 0", ls.size(), 9);
+	vector<SpFsObject *> ls = dir.lsSortedByPath();
+	SpTester::checkEqual("SpDir ls test 0", ls.size(), 13);
 	// Don't even attempt the next ones if the above test failed
-	if (ls.size() == 9) {
-		vector<SpImage *>::iterator a = ls.begin();
+	if (ls.size() == 13) {
+		SpImage *i;
+		vector<SpFsObject *>::iterator a = ls.begin();
 		SpTester::checkEqual("SpDir ls test 1a",  (*a)->path().fullName(),
 			"test/templateImages/2x2.gif");
-		SpTester::checkEqual("SpDir ls test 1b",  (*a++)->formatString(), "GIF");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::check("SpDir ls test 1b", i);
+		SpTester::checkEqual("SpDir ls test 1c",  i->formatString(), "GIF");
+		delete i;
+		a++;
+		
+		SpTester::checkEqual("SpDir ls test 2a",  (*a)->path().fullName(),
+			"test/templateImages/2x2.jpg");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::checkEqual("SpDir ls test 2c",  i, NULL);
+		a++;
+
 		SpTester::checkEqual("SpDir ls test 3a",  (*a)->path().fullName(),
 			"test/templateImages/2x2.sgi");
-		SpTester::checkEqual("SpDir ls test 3b",  (*a++)->formatString(), "SGI");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::check("SpDir ls test 3b", i);
+		SpTester::checkEqual("SpDir ls test 3c",  i->formatString(), "SGI");
+		delete i;
+		a++;
+		
 		SpTester::checkEqual("SpDir ls test 4a",  (*a)->path().fullName(),
 			"test/templateImages/2x2.tiff");
-		SpTester::checkEqual("SpDir ls test 4b",  (*a++)->formatString(), "TIFF");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::check("SpDir ls test 4b", i);
+		SpTester::checkEqual("SpDir ls test 4c",  i->formatString(), "TIFF");
+		delete i;
+		a++;
+		
 		SpTester::checkEqual("SpDir ls test 5a",  (*a)->path().fullName(),
 			"test/templateImages/4x4.gif");
-		SpTester::checkEqual("SpDir ls test 5b",  (*a++)->formatString(), "GIF");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::check("SpDir ls test 5b", i);
+		SpTester::checkEqual("SpDir ls test 5c",  i->formatString(), "GIF");
+		delete i;
+		a++;
+		
+		SpTester::checkEqual("SpDir ls test 6a",  (*a)->path().fullName(),
+			"test/templateImages/4x4.jpg");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::checkEqual("SpDir ls test 6c",  i, NULL);
+		a++;
+		
 		SpTester::checkEqual("SpDir ls test 7a",  (*a)->path().fullName(),
 			"test/templateImages/4x4.sgi");
-		SpTester::checkEqual("SpDir ls test 7b",  (*a++)->formatString(), "SGI");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::check("SpDir ls test 7b", i);
+		SpTester::checkEqual("SpDir ls test 7c",  i->formatString(), "SGI");
+		delete i;
+		a++;
+		
 		SpTester::checkEqual("SpDir ls test 8a",  (*a)->path().fullName(),
 			"test/templateImages/4x4.tiff");
-		SpTester::checkEqual("SpDir ls test 8b",  (*a++)->formatString(), "TIFF");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::check("SpDir ls test 8b", i);
+		SpTester::checkEqual("SpDir ls test 8c",  i->formatString(), "TIFF");
+		delete i;
+		a++;
+		
 		SpTester::checkEqual("SpDir ls test 9a",  (*a)->path().fullName(),
 			"test/templateImages/8x8.gif");
-		SpTester::checkEqual("SpDir ls test 9b",  (*a++)->formatString(), "GIF");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::check("SpDir ls test 9b", i);
+		SpTester::checkEqual("SpDir ls test 9c",  i->formatString(), "GIF");
+		delete i;
+		a++;
+		
+		SpTester::checkEqual("SpDir ls test 10a",  (*a)->path().fullName(),
+			"test/templateImages/8x8.jpg");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::checkEqual("SpDir ls test 10c",  i, NULL);
+		a++;
+		
 		SpTester::checkEqual("SpDir ls test 11a", (*a)->path().fullName(),
 			"test/templateImages/8x8.sgi");
-		SpTester::checkEqual("SpDir ls test 11b", (*a++)->formatString(), "SGI");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::check("SpDir ls test 11b", i);
+		SpTester::checkEqual("SpDir ls test 11c", i->formatString(), "SGI");
+		delete i;
+		a++;
+		
 		SpTester::checkEqual("SpDir ls test 12a", (*a)->path().fullName(),
 			"test/templateImages/8x8.tiff");
-		SpTester::checkEqual("SpDir ls test 12b", (*a++)->formatString(), "TIFF");
+		i = dynamic_cast<SpImage *>(*a);
+		SpTester::check("SpDir ls test 12b", i);
+		SpTester::checkEqual("SpDir ls test 12c", i->formatString(), "TIFF");
+		a++;
+		
+		SpTester::checkEqual("SpDir ls test 13a", (*a)->path().fullName(),
+			"test/templateImages/CVS");
+		SpTester::check("SpDir ls test 13b", dynamic_cast<SpDir *>(*a));
 	}
-	//SpTester::checkEqual("SpDir ls test 13",  (*a)->path().fullName(),
-	//	"test/templateImages/CVS");
 }
 
 void testSpPath()

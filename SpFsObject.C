@@ -17,24 +17,25 @@ SpFsObject::~SpFsObject()
 
 SpFsObject *SpFsObject::construct(const SpPath &path)
 {
-	SpDir *d = new SpDir(path);
-	if (d->valid())
-		return (d);
+	SpFsObject *o;
+	o = new SpDir(path);
+	if (o->valid())
+		return (o);
 	else
-		delete d;
+		delete o;
 		
-	SpFile *f = new SpFile(path);
-	if (f->valid()) {
+	o = new SpFile(path);
+	if (o->valid()) {
 		SpImage *i = SpImage::construct(path);
 		if (i == NULL)
-			return (f);
+			return (o);
 		else {
-			delete f;
+			delete o;
 			return (i);
 		}
 	}
 	else
-		delete f;
+		delete o;
 	return (NULL);
 }
 
