@@ -25,8 +25,11 @@ int main(int argc, char **argv)
 	return 0;
 } 
 
-int ns__add(struct soap *soap, double a, double b, double *result)
+int ns__getDim(struct soap *soap, double a, double b, struct ns__getDimResponse *result)
 {
-	*result = a + b;
+	ns__Dim d;
+	d.width = 1024;
+	d.height = 768;
+	result->return_ = d;
 	return SOAP_OK;
 } 
