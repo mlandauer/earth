@@ -22,41 +22,38 @@
 //
 // $Id$
 
-#ifndef _ImageMon_h_
-#define _ImageMon_h_
-
-#include <queue>
-#include "Dir.h"
-#include "File.h"
-#include "ImageEventObserver.h"
+#include "CachedDir.h"
 
 namespace Sp {
 	
-//! This class monitors directories and their contents and sends out updates on changes to files
-/*!
-	This assumes a POSIX type filesystem which we can monitor using update
-	times of the directories.
-	\todo Refactor: extract superclass when we add more monitoring types
-	\todo add change (different from deleted or added) notification when it is appropriate
-*/
-class ImageMon
+CachedDir::CachedDir(const Dir &d) : dir(d)
 {
-	public:
-		ImageMon();
-		void startMonitorDirectory(const Dir &d);
-		void stopMonitorDirectory(const Dir &d);
-		
-		void registerObserver(ImageEventObserver *o);
-		
-		void update();
-		
-	private:
-		void notifyDeleted(const File &o);
-		void notifyAdded(const File &o);
-		std::list<CachedDir> dirs;
-		ImageEventObserver *observer;
-};
+	// Really the following should be an automatic operation
+	// By default making the lists sorted
+	files = dir.listFiles(true);
+	dirs = dir.listDirs(true);
+	change = dir.lastChange();
+}
+
+std::vector<File> CachedDir::listFiles() const
+{
+	return files;
+}
+
+std::vector<Dir> CachedDir::listDirs() const
+{
+	return dirs;
+}
+
+DateTime CachedDir::lastChange() const
+{
+	return change;
+}
+
+Dir CachedDir::getDir() const
+{
+	return dir;
+}
 
 }
 
-#endif
