@@ -198,7 +198,6 @@ public:
 		checkEqual("test 4", dir.valid(), true);
 		vector<SpFsObject *> ls = dir.lsSortedByPath();
 		if (checkEqual("ls test 0", ls.size(), 13)) {
-			SpImage *i;
 			vector<SpFsObject *>::iterator a = ls.begin();
 			checkImage("ls test 1", *(a++), "test/templateImages/2x2.gif", "GIF");
 			checkNotImage("ls test 2", *(a++), "test/templateImages/2x2.jpg");
