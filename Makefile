@@ -19,7 +19,7 @@ clean:
 testCode: testCode.o $(OBJECTS)
 	$(CC) $(OPTION) -rdynamic -o testCode testCode.o $(OBJECTS) -ldl
 
-testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h SpFsObject.h SpFsMonitor.h
+testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h SpFsObject.h SpFsMonitor.h SpDir.h SpFile.h
 	$(CC) $(OPTION) -c testCode.C $(INCLUDE)
 
 SpTester.o: SpTester.C SpTester.h

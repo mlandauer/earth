@@ -32,4 +32,21 @@ class SpFile : public SpFsObject
 		bool fileOpen;
 };
 
+// Stores a file with its time stamps
+class SpFileTime : public SpFile
+{
+	public:
+		SpFileTime(const SpFile &file) : SpFile(file) { }
+		bool changed() {
+			if (lastChange() > cachedChange) {
+				cachedChange = lastChange();
+				return true;
+			}
+			else
+				return false;
+		}
+	protected:
+		SpTime cachedChange;
+};
+
 #endif

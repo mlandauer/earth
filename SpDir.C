@@ -49,3 +49,23 @@ vector<SpFsObject *> SpDir::ls() const
 		sort(l.begin(), l.end(), SpCompareFsObjectPaths());
 	return (l);
 }
+
+map<SpPath, SpFsObject *> SpDir::lsMap() const
+{
+	map<SpPath, SpFsObject *> l;
+	if (!valid())
+		return l;
+	// First open a directory stream
+	DIR *d = opendir(path().fullName().c_str());
+	struct dirent *entry;
+	while ((entry = readdir(d)) != NULL) {
+		string pathString = entry->d_name;
+		if ((pathString != ".") && (pathString != "..")) {
+			SpPath p = path();
+			p.add(pathString);
+			SpFsObject *o = SpFsObject::construct(p);
+			l[p] = o;
+		}
+	}
+	return (l);
+}
