@@ -10,6 +10,7 @@
 #include "SpFsObject.h"
 #include "SpDir.h"
 #include "SpTester.h"
+#include "SpFsMonitor.h"
 
 class testSpSize : public SpTester
 {
@@ -213,6 +214,11 @@ public:
 			checkImage("ls test 12", *(a++), "test/templateImages/8x8.tiff", "TIFF");		
 			checkDir("ls test 13", *(a++), "test/templateImages/CVS");		
 		}
+		// Try doing an ls on a non-existant directory
+		SpDir dirNotExist("test/whatASillyFella");
+		checkEqual("non-existant test 1", dirNotExist.valid(), false);
+		vector<SpFsObject *> lsNotExist = dirNotExist.ls();
+		checkEqual("non-existant test 2", lsNotExist.size(), 0);
 	}
 	void checkImage(string n, SpFsObject *o, string fileName, string formatString) {
 		checkEqual(n + "a",  o->path().fullName(), fileName);
@@ -281,12 +287,30 @@ public:
 	}
 };
 
+class testSpFsMonitor : public SpTester
+{
+public:
+	testSpFsMonitor() : SpTester("SpFsMonitor") { test(); };
+	void test() {
+		// First create a directory with some test files
+		system ("rm -fr test/FsMonitor");
+		system ("mkdir test/FsMonitor");
+		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0001.gif");
+		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0002.gif");
+		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0003.gif");
+		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0004.gif");
+		SpFsMonitor m;
+		m.addMonitor(SpDir("test/FsMonitor"));
+		system ("rm -fr test/FsMonitor");
+	}
+};
+
 main()
 {
 	// Register the plugins
 	SpImageFormat::registerPlugins();
 	// Configure the tester
-	SpTester::setVerbose(false);
+	SpTester::setVerbose(true);
 	SpTester::setFloatDelta(0.1);
 	
 	testSpSize();
@@ -297,6 +321,7 @@ main()
 	testSpFsObject();
 	testSpDir();
 	testSpPath();
+	testSpFsMonitor();
 	
 	SpTester::finish();
 	SpImageFormat::deRegisterPlugins();

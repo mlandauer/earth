@@ -25,10 +25,12 @@ SpDir::SpDir(const SpPath &path) : SpFsObject(path)
 
 vector<SpFsObject *> SpDir::ls() const
 {
+	vector<SpFsObject *> l;
+	if (!valid())
+		return l;
 	// First open a directory stream
 	DIR *d = opendir(path().fullName().c_str());
 	struct dirent *entry;
-	vector<SpFsObject *> l;
 	while ((entry = readdir(d)) != NULL) {
 		string pathString = entry->d_name;
 		if ((pathString != ".") && (pathString != "..")) {
