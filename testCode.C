@@ -10,77 +10,138 @@
 #include "SpFsObject.h"
 #include "SpDir.h"
 
-int noErrors = 0;
-float floatDelta = 0.1;
-
-void checkEqual(string testName, string a, string b)
+class SpTester
 {
+	public:
+		static void checkEqual(string testName, string a, string b);
+		static void checkEqual(string testName, bool a, bool b);
+		static void checkEqual(string testName, int a, int b);
+		static void checkEqual(string testName, float a, float b);
+		static void setVerbose(bool v);
+		static void setFloatDelta(float d);
+		static float floatDelta();
+		static void finish();
+};
+
+void SpTester::setVerbose(bool v)
+{
+	extern bool verbose;
+	verbose = v;
+}
+
+void SpTester::setFloatDelta(float d)
+{
+	extern float floatDelta;
+	floatDelta = d;
+}
+
+float SpTester::floatDelta()
+{
+	extern float floatDelta;
+	return floatDelta;
+}
+
+void SpTester::checkEqual(string testName, string a, string b)
+{
+	extern int noErrors;
+	extern bool verbose;
 	if (a != b) {
 		cout << endl << "FAILED " << testName << ": Expected " << b
 			<< " but got " << a << endl;
 		noErrors++;
 	}
 	else
-		cout << ".";
+		if (verbose)
+			cout << endl << "SUCCESS " << testName << ": returned " << a;
+		else
+			cout << ".";
 }
 
-void checkEqual(string testName, bool a, bool b)
+void SpTester::checkEqual(string testName, bool a, bool b)
 {
+	extern int noErrors;
+	extern bool verbose;
 	if (a != b) {
 		cout << endl << "FAILED " << testName << ": Expected " << b
 			<< " but got " << a << endl;
 		noErrors++;
 	}
 	else
-		cout << ".";
+		if (verbose)
+			cout << endl << "SUCCESS " << testName << ": returned " << a;
+		else
+			cout << ".";
 }
 
-void checkEqual(string testName, int a, int b)
+void SpTester::checkEqual(string testName, int a, int b)
 {
+	extern int noErrors;
+	extern bool verbose;
 	if (a != b) {
 		cout << endl << "FAILED " << testName << ": Expected " << b
 			<< " but got " << a << endl;
 		noErrors++;
 	}
 	else
-		cout << ".";
+		if (verbose)
+			cout << endl << "SUCCESS " << testName << ": returned " << a;
+		else
+			cout << ".";
 }
 
-void checkEqual(string testName, float a, float b)
+void SpTester::checkEqual(string testName, float a, float b)
 {
+	extern int noErrors;
+	extern bool verbose;
+	extern float floatDelta;
 	if (fabs(a-b) > floatDelta) {
 		cout << endl << "FAILED " << testName << ": Expected " << b
 			<< " but got " << a << endl;
 		noErrors++;
 	}
 	else
-		cout << ".";
+		if (verbose)
+			cout << endl << "SUCCESS " << testName << ": returned " << a;
+		else
+			cout << ".";
 }
+
+void SpTester::finish()
+{
+	extern int noErrors;
+	cout << endl;
+	if (noErrors == 0)
+		cout << "All tests passed!" << endl;
+}
+
+bool verbose = false;
+int noErrors = 0;
+float floatDelta = 0.1;
 
 void testSpSize()
 {
 	cout << endl << "Testing SpSize: ";
 	SpSize s;
 	s.setBytes(4097);
-	checkEqual("SpSize test 1", s.bytes(), 4097.0);
-	checkEqual("SpSize test 2", s.kbytes(), 4.0);
-	checkEqual("SpSize test 3", s.mbytes(), 0.0);
-	checkEqual("SpSize test 4", s.gbytes(), 0.0);
+	SpTester::checkEqual("SpSize test 1", s.bytes(), 4097.0);
+	SpTester::checkEqual("SpSize test 2", s.kbytes(), 4.0);
+	SpTester::checkEqual("SpSize test 3", s.mbytes(), 0.0);
+	SpTester::checkEqual("SpSize test 4", s.gbytes(), 0.0);
 
 	s.setGBytes(10);
-	checkEqual("SpSize test 5", s.gbytes(), 10.0);
-	checkEqual("SpSize test 6", s.mbytes(), 10240.0);
-	checkEqual("SpSize test 7", s.kbytes(), 10485760.0);
-	float temp = floatDelta;
-	floatDelta = 10e5;
-	checkEqual("SpSize test 8", s.bytes(), 1.073741e10);
-	floatDelta = temp;
+	SpTester::checkEqual("SpSize test 5", s.gbytes(), 10.0);
+	SpTester::checkEqual("SpSize test 6", s.mbytes(), 10240.0);
+	SpTester::checkEqual("SpSize test 7", s.kbytes(), 10485760.0);
+	float temp = SpTester::floatDelta();
+	SpTester::setFloatDelta(10e5);
+	SpTester::checkEqual("SpSize test 8", s.bytes(), 1.073741e10);
+	SpTester::setFloatDelta(temp);
 	
 	s.setBytes(0);
-	checkEqual("SpSize test 9", s.bytes(), 0.0);
-	checkEqual("SpSize test 10", s.kbytes(), 0.0);
-	checkEqual("SpSize test 11", s.mbytes(), 0.0);
-	checkEqual("SpSize test 12", s.gbytes(), 0.0);
+	SpTester::checkEqual("SpSize test 9", s.bytes(), 0.0);
+	SpTester::checkEqual("SpSize test 10", s.kbytes(), 0.0);
+	SpTester::checkEqual("SpSize test 11", s.mbytes(), 0.0);
+	SpTester::checkEqual("SpSize test 12", s.gbytes(), 0.0);
 	
 }
 
@@ -89,55 +150,55 @@ void testSpTime()
 	cout << endl << "Testing SpTime: ";
 	SpTime t;
 	t.setUnixTime(0);
-	checkEqual("SpTime test 1", t.timeAndDateString(),
+	SpTester::checkEqual("SpTime test 1", t.timeAndDateString(),
 		"Wed Dec 31 16:00:00 1969");
-	checkEqual("SpTime test 2", t.year(), 1969);
-	checkEqual("SpTime test 3", t.hour(), 16);
-	checkEqual("SpTime test 4", t.minute(), 0);
-	checkEqual("SpTime test 5", t.second(), 0);
-	checkEqual("SpTime test 6", t.dayOfWeek(), 3);
-	checkEqual("SpTime test 7", t.dayOfMonth(), 31);
-	checkEqual("SpTime test 8", t.month(), 12);
-	checkEqual("SpTime test 9", t.monthStringShort(), "Dec");
-	checkEqual("SpTime test 10", t.monthString(), "December");
-	checkEqual("SpTime test 11", t.dayOfWeekStringShort(), "Wed");
-	checkEqual("SpTime test 12", t.dayOfWeekString(), "Wednesday");
-	checkEqual("SpTime test 13", t.timeString(), "16:00:00");
+	SpTester::checkEqual("SpTime test 2", t.year(), 1969);
+	SpTester::checkEqual("SpTime test 3", t.hour(), 16);
+	SpTester::checkEqual("SpTime test 4", t.minute(), 0);
+	SpTester::checkEqual("SpTime test 5", t.second(), 0);
+	SpTester::checkEqual("SpTime test 6", t.dayOfWeek(), 3);
+	SpTester::checkEqual("SpTime test 7", t.dayOfMonth(), 31);
+	SpTester::checkEqual("SpTime test 8", t.month(), 12);
+	SpTester::checkEqual("SpTime test 9", t.monthStringShort(), "Dec");
+	SpTester::checkEqual("SpTime test 10", t.monthString(), "December");
+	SpTester::checkEqual("SpTime test 11", t.dayOfWeekStringShort(), "Wed");
+	SpTester::checkEqual("SpTime test 12", t.dayOfWeekString(), "Wednesday");
+	SpTester::checkEqual("SpTime test 13", t.timeString(), "16:00:00");
 }
 
 void testSpFile()
 {
 	cout << endl << "Testing SpFile: ";
 	SpFile file("test/templateImages/8x8.tiff");
-	checkEqual("SpFile test 1", file.path().fullName(),
+	SpTester::checkEqual("SpFile test 1", file.path().fullName(),
 		"test/templateImages/8x8.tiff");
-	checkEqual("SpFile test 2", file.size().bytes(), 396.0);
-	checkEqual("SpFile test 3", file.size().kbytes(), 0.39);
+	SpTester::checkEqual("SpFile test 2", file.size().bytes(), 396.0);
+	SpTester::checkEqual("SpFile test 3", file.size().kbytes(), 0.39);
 	file.open();
 	unsigned char buf[2];
 	int a;
-	checkEqual("SpFile test 4", file.read(buf, 2), 2);
-	checkEqual("SpFile test 5", buf[0], 0x49);
-	checkEqual("SpFile test 6", buf[1], 0x49);
+	SpTester::checkEqual("SpFile test 4", file.read(buf, 2), 2);
+	SpTester::checkEqual("SpFile test 5", buf[0], 0x49);
+	SpTester::checkEqual("SpFile test 6", buf[1], 0x49);
 	file.seek(10);
 	file.read(buf, 1);
-	checkEqual("SpFile test 7", buf[0], 0xff);
+	SpTester::checkEqual("SpFile test 7", buf[0], 0xff);
 	file.seekForward(2);
 	file.read(buf, 1);
-	checkEqual("SpFile test 8", buf[0], 0xff);
+	SpTester::checkEqual("SpFile test 8", buf[0], 0xff);
 	file.close();
 	
 	SpFile f;
 	f.setPath("test/templateImages/8x8.tiff");
-	checkEqual("SpFile test 9", f.path().fullName(),
+	SpTester::checkEqual("SpFile test 9", f.path().fullName(),
 		"test/templateImages/8x8.tiff");
 	f.open();
 	f.setPath("test/templateImages/4x4.tiff");
-	checkEqual("SpFile test 10", f.path().fullName(),
+	SpTester::checkEqual("SpFile test 10", f.path().fullName(),
 		"test/templateImages/8x8.tiff");
 	f.close();
 	f.setPath("test/templateImages/2x2.tiff");	
-	checkEqual("SpFile test 11", f.path().fullName(),
+	SpTester::checkEqual("SpFile test 11", f.path().fullName(),
 		"test/templateImages/2x2.tiff");
 }
 
@@ -146,12 +207,12 @@ void testSpImage()
 	cout << endl << "Testing SpImage: ";
 	SpImage *image1 = SpImage::construct("test/templateImages/8x8.sgi");
 	if (image1 != NULL) {
-		checkEqual("SpImage test 1", image1->path().fullName(),
+		SpTester::checkEqual("SpImage test 1", image1->path().fullName(),
 			"test/templateImages/8x8.sgi");
-		checkEqual("SpImage test 2", image1->size().kbytes(), 0.89);
-		checkEqual("SpImage test 3", image1->formatString(), "SGI");
-		checkEqual("SpImage test 4", image1->dim().width(), 8);
-		checkEqual("SpImage test 5", image1->dim().height(), 8);
+		SpTester::checkEqual("SpImage test 2", image1->size().kbytes(), 0.89);
+		SpTester::checkEqual("SpImage test 3", image1->formatString(), "SGI");
+		SpTester::checkEqual("SpImage test 4", image1->dim().width(), 8);
+		SpTester::checkEqual("SpImage test 5", image1->dim().height(), 8);
 		delete image1;
 	}
 	else
@@ -159,12 +220,12 @@ void testSpImage()
 
 	SpImage *image2 = SpImage::construct("test/templateImages/8x8.tiff");
 	if (image2 != NULL) {
-		checkEqual("SpImage test 6", image2->path().fullName(),
+		SpTester::checkEqual("SpImage test 6", image2->path().fullName(),
 			"test/templateImages/8x8.tiff");
-		checkEqual("SpImage test 7", image2->size().kbytes(), 0.39);
-		checkEqual("SpImage test 8", image2->formatString(), "TIFF");
-		checkEqual("SpImage test 9", image2->dim().width(), 8);
-		checkEqual("SpImage test 10", image2->dim().height(), 8);
+		SpTester::checkEqual("SpImage test 7", image2->size().kbytes(), 0.39);
+		SpTester::checkEqual("SpImage test 8", image2->formatString(), "TIFF");
+		SpTester::checkEqual("SpImage test 9", image2->dim().width(), 8);
+		SpTester::checkEqual("SpImage test 10", image2->dim().height(), 8);
 		delete image2;
 	}
 	else
@@ -178,12 +239,12 @@ void testSpImage()
 
 	SpImage *image3 = SpImage::construct("test/templateImages/8x8.gif");
 	if (image3 != NULL) {
-		checkEqual("SpImage test 11", image3->path().fullName(),
+		SpTester::checkEqual("SpImage test 11", image3->path().fullName(),
 			"test/templateImages/8x8.gif");
-		checkEqual("SpImage test 12", image3->size().kbytes(), 0.83);
-		checkEqual("SpImage test 13", image3->formatString(), "GIF");
-		checkEqual("SpImage test 14", image3->dim().width(), 8);
-		checkEqual("SpImage test 15", image3->dim().height(), 8);
+		SpTester::checkEqual("SpImage test 12", image3->size().kbytes(), 0.83);
+		SpTester::checkEqual("SpImage test 13", image3->formatString(), "GIF");
+		SpTester::checkEqual("SpImage test 14", image3->dim().width(), 8);
+		SpTester::checkEqual("SpImage test 15", image3->dim().height(), 8);
 		delete image3;
 	}
 	else
@@ -200,41 +261,43 @@ void testSpFsObject()
 {
 	cout << endl << "Testing SpFsObject: ";
 	SpFsObject file("test/templateImages/8x8.tiff");
-	checkEqual("SpFsObject test 1", file.path().fullName(),
+	SpTester::checkEqual("SpFsObject test 1", file.path().fullName(),
 		"test/templateImages/8x8.tiff");
-	checkEqual("SpFsObject test 2", file.size().kbytes(), 0.39);
+	SpTester::checkEqual("SpFsObject test 2", file.size().kbytes(), 0.39);
 	SpUid u;
 	u.setCurrent();
 	SpGid g;
 	g.setCurrent();
-	checkEqual("SpFsObject test 3", file.uid().name(), u.name());
-	checkEqual("SpFsObject test 4", file.gid().name(), g.name());
-	checkEqual("SpFsObject test 5", file.isFile(), true);
-	checkEqual("SpFsObject test 6", file.isDir(), false);
+	SpTester::checkEqual("SpFsObject test 3", file.uid().name(), u.name());
+	SpTester::checkEqual("SpFsObject test 4", file.gid().name(), g.name());
+	SpTester::checkEqual("SpFsObject test 5", file.isFile(), true);
+	SpTester::checkEqual("SpFsObject test 6", file.isDir(), false);
 	SpFsObject file2("test/templateImages/");
-	checkEqual("SpFsObject test 7", file2.path().fullName(), "test/templateImages");
-	checkEqual("SpFsObject test 8", file2.size().kbytes(), 1.0);
+	SpTester::checkEqual("SpFsObject test 7", file2.path().fullName(),
+		"test/templateImages");
+	SpTester::checkEqual("SpFsObject test 8", file2.size().kbytes(), 1.0);
 	// Find some way to test access, modification and change times
-	checkEqual("SpFsObject test 9", file2.isFile(), false);
-	checkEqual("SpFsObject test 10", file2.isDir(), true);
+	SpTester::checkEqual("SpFsObject test 9", file2.isFile(), false);
+	SpTester::checkEqual("SpFsObject test 10", file2.isDir(), true);
 }
 
 void testSpDir()
 {
 	cout << endl << "Testing SpDir: ";
 	SpDir dir("test/templateImages/");
-	checkEqual("SpDir test 1", dir.path().fullName(), "test/templateImages");
-	checkEqual("SpDir test 2", dir.size().kbytes(), 1.0);
+	SpTester::checkEqual("SpDir test 1", dir.path().fullName(),
+		"test/templateImages");
+	SpTester::checkEqual("SpDir test 2", dir.size().kbytes(), 1.0);
 	// Think of some way to test the modification dates automatically
 	// Check that this user owns the files
 	SpUid u;
 	u.setCurrent();
-	checkEqual("SpDir test 6", dir.uid().name(), u.name());
+	SpTester::checkEqual("SpDir test 6", dir.uid().name(), u.name());
 	SpGid g;
 	g.setCurrent();
-	checkEqual("SpDir test 7", dir.gid().name(), g.name());
-	checkEqual("SpDir test 8", dir.isFile(), false);
-	checkEqual("SpDir test 9", dir.isDir(), true);
+	SpTester::checkEqual("SpDir test 7", dir.gid().name(), g.name());
+	SpTester::checkEqual("SpDir test 8", dir.isFile(), false);
+	SpTester::checkEqual("SpDir test 9", dir.isDir(), true);
 	list<SpFsObject *> ls = dir.ls();
 	// Create a vector of just the filenames
 	vector<string> names;
@@ -243,44 +306,57 @@ void testSpDir()
 	}
 	sort(names.begin(), names.end());
 	vector<string>::iterator a = names.begin();
-	checkEqual("SpDir ls test 1",  (*a++), "test/templateImages/2x2.gif");
-	checkEqual("SpDir ls test 2",  (*a++), "test/templateImages/2x2.jpg");
-	checkEqual("SpDir ls test 3",  (*a++), "test/templateImages/2x2.sgi");
-	checkEqual("SpDir ls test 4",  (*a++), "test/templateImages/2x2.tiff");
-	checkEqual("SpDir ls test 5",  (*a++), "test/templateImages/4x4.gif");
-	checkEqual("SpDir ls test 6",  (*a++), "test/templateImages/4x4.jpg");
-	checkEqual("SpDir ls test 7",  (*a++), "test/templateImages/4x4.sgi");
-	checkEqual("SpDir ls test 8",  (*a++), "test/templateImages/4x4.tiff");
-	checkEqual("SpDir ls test 9",  (*a++), "test/templateImages/8x8.gif");
-	checkEqual("SpDir ls test 10", (*a++), "test/templateImages/8x8.jpg");
-	checkEqual("SpDir ls test 11", (*a++), "test/templateImages/8x8.sgi");
-	checkEqual("SpDir ls test 12", (*a++), "test/templateImages/8x8.tiff");
-	checkEqual("SpDir ls test 13", (*a++), "test/templateImages/CVS");
+	SpTester::checkEqual("SpDir ls test 1",  (*a++),
+		"test/templateImages/2x2.gif");
+	SpTester::checkEqual("SpDir ls test 2",  (*a++),
+		"test/templateImages/2x2.jpg");
+	SpTester::checkEqual("SpDir ls test 3",  (*a++),
+		"test/templateImages/2x2.sgi");
+	SpTester::checkEqual("SpDir ls test 4",  (*a++),
+		"test/templateImages/2x2.tiff");
+	SpTester::checkEqual("SpDir ls test 5",  (*a++),
+		"test/templateImages/4x4.gif");
+	SpTester::checkEqual("SpDir ls test 6",  (*a++),
+		"test/templateImages/4x4.jpg");
+	SpTester::checkEqual("SpDir ls test 7",  (*a++),
+		"test/templateImages/4x4.sgi");
+	SpTester::checkEqual("SpDir ls test 8",  (*a++),
+		"test/templateImages/4x4.tiff");
+	SpTester::checkEqual("SpDir ls test 9",  (*a++),
+		"test/templateImages/8x8.gif");
+	SpTester::checkEqual("SpDir ls test 10", (*a++),
+		"test/templateImages/8x8.jpg");
+	SpTester::checkEqual("SpDir ls test 11", (*a++),
+		"test/templateImages/8x8.sgi");
+	SpTester::checkEqual("SpDir ls test 12", (*a++),
+		"test/templateImages/8x8.tiff");
+	SpTester::checkEqual("SpDir ls test 13", (*a++),
+		"test/templateImages/CVS");
 }
 
 void testSpPath()
 {
 	cout << endl << "Testing SpPath: ";
 	SpPath p("/home/blah/foo.tif");
-	checkEqual("SpPath test 1", p.fullName(), "/home/blah/foo.tif");
-	checkEqual("SpPath test 2", p.root(),     "/home/blah/");
-	checkEqual("SpPath test 3", p.relative(), "foo.tif");
+	SpTester::checkEqual("SpPath test 1", p.fullName(), "/home/blah/foo.tif");
+	SpTester::checkEqual("SpPath test 2", p.root(),     "/home/blah/");
+	SpTester::checkEqual("SpPath test 3", p.relative(), "foo.tif");
 	SpPath p2("/home/blah/");
-	checkEqual("SpPath test 4", p2.fullName(), "/home/blah");
-	checkEqual("SpPath test 5", p2.root(),     "/home/");
-	checkEqual("SpPath test 6", p2.relative(), "blah");
+	SpTester::checkEqual("SpPath test 4", p2.fullName(), "/home/blah");
+	SpTester::checkEqual("SpPath test 5", p2.root(),     "/home/");
+	SpTester::checkEqual("SpPath test 6", p2.relative(), "blah");
 	SpPath p3("blah");
-	checkEqual("SpPath test 7", p3.fullName(), "blah");
-	checkEqual("SpPath test 8", p3.root(),     "");
-	checkEqual("SpPath test 9", p3.relative(), "blah");
+	SpTester::checkEqual("SpPath test 7", p3.fullName(), "blah");
+	SpTester::checkEqual("SpPath test 8", p3.root(),     "");
+	SpTester::checkEqual("SpPath test 9", p3.relative(), "blah");
 	SpPath p4("/home/blah///");
-	checkEqual("SpPath test 10", p4.fullName(), "/home/blah");
-	checkEqual("SpPath test 11", p4.root(),     "/home/");
-	checkEqual("SpPath test 12", p4.relative(), "blah");
+	SpTester::checkEqual("SpPath test 10", p4.fullName(), "/home/blah");
+	SpTester::checkEqual("SpPath test 11", p4.root(),     "/home/");
+	SpTester::checkEqual("SpPath test 12", p4.relative(), "blah");
 	SpPath p5("/blah");
-	checkEqual("SpPath test 13", p5.fullName(), "/blah");
-	checkEqual("SpPath test 14", p5.root(),     "/");
-	checkEqual("SpPath test 15", p5.relative(), "blah");
+	SpTester::checkEqual("SpPath test 13", p5.fullName(), "/blah");
+	SpTester::checkEqual("SpPath test 14", p5.root(),     "/");
+	SpTester::checkEqual("SpPath test 15", p5.relative(), "blah");
 }
 
 main()
@@ -288,6 +364,8 @@ main()
 	// Register the plugins
 	SpImage::registerPlugins();
 	
+	SpTester::setVerbose(false);
+	SpTester::setFloatDelta(0.1);
 	testSpSize();
 	testSpTime();
 	testSpUid();
@@ -297,9 +375,7 @@ main()
 	testSpDir();
 	testSpPath();
 	
-	cout << endl;
-	if (noErrors == 0)
-		cout << "All tests passed!" << endl;
+	SpTester::finish();
 	
 	SpImage::deRegisterPlugins();
 }
