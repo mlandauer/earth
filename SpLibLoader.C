@@ -2,9 +2,9 @@
 
 #include "SpLibLoader.h"
 
-void SpLibLoader::load(char *fileName)
+void SpLibLoader::load(string fileName)
 {
-	void *handle = dlopen(fileName, RTLD_LAZY);
+	void *handle = dlopen(fileName.c_str(), RTLD_LAZY);
 	if (handle == NULL)
 		cerr << "SpLibLoader: dlopen failed: " << dlerror() << endl;
 	else

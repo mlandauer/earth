@@ -1,5 +1,7 @@
 // $Id$
 
+#include <fstream>
+
 #include "SpImageFormat.h"
 #include "SpFile.h"
 
@@ -9,16 +11,18 @@ SpLibLoader SpImageFormat::loader;
 // Register all the supported image types
 void SpImageFormat::registerPlugins()
 {
-	// This will in future be a list read in from a file
-	loader.load("SpTIFFImage.so");
-	loader.load("SpTIFFImage.so");
-	loader.load("SpIFFImage.so");
-	loader.load("SpSGIImage.so");
-	loader.load("SpFITImage.so");
-	loader.load("SpGIFImage.so");
-	loader.load("SpPRMANZImage.so");
-	loader.load("SpCINEONImage.so");
-	loader.load("SpPRTEXImage.so");
+	const char formatsFilename[] = "imageFormats.conf";
+	ifstream formats(formatsFilename);
+	if (!formats) {
+		cerr << "SpImageFormat::registerPlugins(): Could not open image formats file: "
+			<< formatsFilename << endl;
+		return;
+	}
+	string line;
+	while (formats) {
+		formats >> line;
+		loader.load(line);
+	}
 }
 
 void SpImageFormat::addPlugin(SpImageFormat *plugin)
