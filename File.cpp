@@ -60,10 +60,9 @@ void File::open()
 Size File::size() const
 {
 	struct stat fileStat;
-	Size s;
-	lstat(path().fullName().c_str(), &fileStat);
-	s.setBytes(fileStat.st_size);
-	return (s);
+	int ret = lstat(path().fullName().c_str(), &fileStat);
+  assert(ret == 0);
+	return (Size::Bytes(fileStat.st_size));
 }
 
 void File::close()

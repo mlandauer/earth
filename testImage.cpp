@@ -36,7 +36,7 @@ void testImage::test()
 	if (checkNotNULL("test 0", image1)) {
 		checkEqual("test 1", image1->path().fullName(),
 			"test/templateImages/8x8.sgi");
-		checkEqual("test 2", image1->size().kbytes(), 0.89);
+		checkEqual("test 2", image1->size().getKBytes(), 0.89);
 		checkEqual("test 3", image1->formatString(), "SGI");
 		checkEqual("test 4", image1->dim().width(), 8);
 		checkEqual("test 5", image1->dim().height(), 8);
@@ -47,7 +47,7 @@ void testImage::test()
 	if (checkNotNULL("test 5b", image2)) {
 		checkEqual("test 6", image2->path().fullName(),
 			"test/templateImages/8x8.tiff");
-		checkEqual("test 7", image2->size().kbytes(), 0.39);
+		checkEqual("test 7", image2->size().getKBytes(), 0.39);
 		checkEqual("test 8", image2->formatString(), "TIFF");
 		checkEqual("test 9", image2->dim().width(), 8);
 		checkEqual("test 10", image2->dim().height(), 8);
@@ -64,7 +64,7 @@ void testImage::test()
 	if (checkNotNULL("test 10b", image3)) {
 		checkEqual("test 11", image3->path().fullName(),
 			"test/templateImages/8x8.gif");
-		checkEqual("test 12", image3->size().kbytes(), 0.83);
+		checkEqual("test 12", image3->size().getKBytes(), 0.83);
 		checkEqual("test 13", image3->formatString(), "GIF");
 		checkEqual("test 14", image3->dim().width(), 8);
 		checkEqual("test 15", image3->dim().height(), 8);

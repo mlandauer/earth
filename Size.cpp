@@ -29,53 +29,60 @@
 
 namespace Sp {
 
-Size::Size()
+Size::Size() : kb(0)
 {
-	KBytes = 0;
 }
 
 Size::~Size()
 {
 }
 
-void Size::setBytes(float n)
+Size Size::Bytes(float n)
 {
-	KBytes = n / 1024;
+  Size s;
+  s.kb = n / 1024;
+  return s;
 }
 
-void Size::setKBytes(float n)
+Size Size::KBytes(float n)
 {
-	KBytes = n;
+  Size s;
+	s.kb = n;
+  return s;
 }
 
-void Size::setMBytes(float n)
+Size Size::MBytes(float n)
 {
-	KBytes = n * 1024;
+  Size s;
+	s.kb = n * 1024;
+  return s;
 }
 
-void Size::setGBytes(float n)
+Size Size::GBytes(float n)
 {
-	KBytes = n * 1024 * 1024;
+  Size s;
+	s.kb = n * 1024 * 1024;
+  return s;
 }
 
-float Size::bytes() const
+float Size::getBytes() const
 {
-	return KBytes * 1024;
+	return kb * 1024;
 }
 
-float Size::kbytes() const
+float Size::getKBytes() const
 {
-	return KBytes;
+	return kb;
 }
 
-float Size::mbytes() const
+float Size::getMBytes() const
 {
-	return KBytes / 1024;
+	return kb / 1024;
 }
 
-float Size::gbytes() const
+float Size::getGBytes() const
 {
-	return KBytes / 1024 / 1024;
+	return kb / 1024 / 1024;
 }
 
 }

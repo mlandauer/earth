@@ -34,16 +34,18 @@ class Size
 	public:
 		Size();
 		~Size();
-		void setBytes(float n);
-		void setKBytes(float n);
-		void setMBytes(float n);
-		void setGBytes(float n);
-		float bytes() const;
-		float kbytes() const;
-		float mbytes() const;
-		float gbytes() const;
+    static Size Bytes(float n);
+    static Size KBytes(float n);
+    static Size MBytes(float n);
+    static Size GBytes(float n);
+    
+    float getBytes() const;
+    float getKBytes() const;
+    float getMBytes() const;
+    float getGBytes() const;
+    
 	private:
-		float KBytes;
+		float kb;
 };
 
 }
