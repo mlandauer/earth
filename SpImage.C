@@ -7,16 +7,6 @@
 list<SpImageFormat *> SpImageFormat::plugins;
 SpLibLoader SpImageFormat::loader;
 
-SpImageFormat::SpImageFormat()
-{
-	addPlugin(this);
-}
-
-SpImageFormat::~SpImageFormat()
-{
-	removePlugin(this);
-}
-
 // Register all the supported image types
 void SpImageFormat::registerPlugins()
 {
@@ -47,9 +37,8 @@ void SpImageFormat::deRegisterPlugins()
 	loader.releaseAll();
 }
 
-SpImage* SpImage::construct(const SpPath &path)
+SpImageFormat* SpImageFormat::recogniseByMagic(const SpPath &path)
 {
-	list<SpImageFormat *> plugins = SpImageFormat::getPlugins();
 	// Figure out what the greatest amount of the header that needs
 	// to be read so that all the plugins can recognise themselves.
 	int largestSizeToRecognise = 0;
@@ -69,15 +58,24 @@ SpImage* SpImage::construct(const SpPath &path)
 	for (list<SpImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
 		if ((*a)->recognise(buf)) {
-			SpImage* image = (*a)->constructImage();
-			image->format = *a;
-			image->setPath(path);
 			delete buf;
-			return (image);
+			return (*a);
 		}
-	// This signals an error or an unrecognised image type
 	delete buf;
 	return (NULL);
+}
+
+SpImage* SpImage::construct(const SpPath &path)
+{
+	SpImageFormat *format = SpImageFormat::recogniseByMagic(path);
+	if (format) {
+		SpImage* image = format->constructImage();
+		image->format = format;
+		image->setPath(path);
+		return (image);
+	}
+	else
+		return (NULL);
 }
 
 
