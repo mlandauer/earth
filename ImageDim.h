@@ -33,9 +33,9 @@ class ImageDim
 public:
 	ImageDim(unsigned int width = 0, unsigned int height = 0);
 	//! Returns image width (in pixels)
-	unsigned int width() const;
+	unsigned int getWidth() const;
 	//! Returns image height (in pixels)
-	unsigned int height() const;
+	unsigned int getHeight() const;
 	bool operator==(const ImageDim &d) const;
 	
 private:

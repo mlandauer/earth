@@ -32,21 +32,21 @@ namespace Sp {
 */
 ImageSeq::ImageSeq(Image *i)
 {
-	p = pattern(i->path());
-	int frame = frameNumber(i->path());
+	p = pattern(i->getPath());
+	int frame = frameNumber(i->getPath());
 	// If frame is -1 there is no frame number in the path
 	if (frame != -1) {
 		m_frames.add(frame);
 	}
 	m_valid = i->valid();
 	imageFormat = i->getFormat();
-	dimensions = i->dim();
+	dimensions = i->getDim();
 }
 
 bool ImageSeq::addImage(Image *i)
 {
 	if (couldBePartOfSequence(i)) {
-		m_frames.add(frameNumber(i->path()));
+		m_frames.add(frameNumber(i->getPath()));
     return true;
   }
   else {
@@ -57,7 +57,7 @@ bool ImageSeq::addImage(Image *i)
 bool ImageSeq::removeImage(Image *i)
 {
 	if (partOfSequence(i)) {
-		return m_frames.remove(frameNumber(i->path()));
+		return m_frames.remove(frameNumber(i->getPath()));
   }
   else {
     return false;
@@ -77,7 +77,7 @@ bool ImageSeq::removeImage(const Path &p)
 bool ImageSeq::partOfSequence(Image *i) const
 {
 	if (couldBePartOfSequence(i)) {
-		return (m_frames.partOfSequence(frameNumber(i->path())));
+		return (m_frames.partOfSequence(frameNumber(i->getPath())));
   }
   else {
 		return false;
@@ -102,9 +102,9 @@ bool ImageSeq::couldBePartOfSequence(const Path &path) const
 bool ImageSeq::couldBePartOfSequence(Image *i) const
 {
 	// Check that the name of the image matches the name of the sequence
-	if ((pattern(i->path()) == p) && (i->valid() == m_valid)) {
+	if ((pattern(i->getPath()) == p) && (i->valid() == m_valid)) {
 		if (m_valid) {
-			return (i->getFormat() == imageFormat) && (i->dim() == dimensions);
+			return (i->getFormat() == imageFormat) && (i->getDim() == dimensions);
 		}
 		else {
 			return true;
@@ -115,19 +115,19 @@ bool ImageSeq::couldBePartOfSequence(Image *i) const
 	}
 }
 
-Frames ImageSeq::frames() const
+Frames ImageSeq::getFrames() const
 {
 	return m_frames;
 }
 
-Path ImageSeq::path() const
+Path ImageSeq::getPath() const
 {
 	return p;
 }
 
 Path ImageSeq::pattern(const Path &a) const
 {
-	std::string s = a.fullName();
+	std::string s = a.getFullName();
 	std::string::size_type first, size;
 	if (findLastNumber(s, first, size)) {
 		s.replace(first, size, hash(size));
@@ -157,7 +157,7 @@ bool ImageSeq::findLastNumber(const std::string &s, std::string::size_type &pos,
 */
 int ImageSeq::frameNumber(const Path &a) const
 {
-	std::string s = a.fullName();
+	std::string s = a.getFullName();
 	std::string::size_type first, size;
 
 	if (findLastNumber(s, first, size)) {

@@ -29,10 +29,10 @@ namespace Sp {
 
 bool FITImage::valid()
 {
-	return (sizeBytes() >= 12);
+	return (getSizeBytes() >= 12);
 };
 
-ImageDim FITImage::dim()
+ImageDim FITImage::getDim()
 {
 	if (!valid())
 		return ImageDim(0, 0);

@@ -53,7 +53,7 @@ UserGroup UserGroup::current()
   return ret;
 }
 
-std::string UserGroup::name() const
+std::string UserGroup::getName() const
 {
 	struct group *e = getgrgid(gid);
 	return (std::string(e->gr_name));

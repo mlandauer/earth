@@ -87,10 +87,10 @@ public:
 	void seekForward(unsigned long int pos) const;
 
 	//! Returns the file size
-	Size size() const;
+	Size getSize() const;
 
 	//! Returns the file size in bytes
-	long int sizeBytes() const;
+	long int getSizeBytes() const;
 	
 	//! Is this a valid file?
 	bool valid() const;

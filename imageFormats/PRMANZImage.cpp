@@ -28,10 +28,10 @@ namespace Sp {
 
 bool PRMANZImage::valid()
 {
-	return (sizeBytes() >= 8);
+	return (getSizeBytes() >= 8);
 };
 
-ImageDim PRMANZImage::dim()
+ImageDim PRMANZImage::getDim()
 {
 	if (!valid())
 		return ImageDim(0, 0);

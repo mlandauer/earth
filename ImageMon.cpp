@@ -73,8 +73,8 @@ void ImageMon::update()
 {
 	// Go through the cached directories and check if any of them have been updated
 	for (std::list<CachedDir>::iterator i = dirs.begin(); i != dirs.end(); ++i ) {
-		DateTime cachedTime = i->lastChange();
-		DateTime currentTime = i->getDir().lastChange();
+		DateTime cachedTime = i->getLastChange();
+		DateTime currentTime = i->getDir().getLastChange();
 		if (currentTime > cachedTime) {
 			CachedDir currentDir(i->getDir());
 			

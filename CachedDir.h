@@ -39,7 +39,7 @@ public:
 	std::vector<File> listFiles(bool sortByPath = false) const;
 	//! Returns all the directories immediately under this directory
 	std::vector<Dir> listDirs(bool sortByPath = false) const;
-	DateTime lastChange() const;
+	DateTime getLastChange() const;
 	Dir getDir() const;
 	
 private:

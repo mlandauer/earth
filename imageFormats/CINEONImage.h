@@ -43,8 +43,8 @@ class CINEONImageFormat: public ImageFormat
 	public:
 		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
-		virtual int sizeToRecognise() { return 4; };
-		virtual std::string formatString() { return "Cineon"; }
+		virtual int getSizeToRecognise() { return 4; };
+		virtual std::string getFormatString() { return "Cineon"; }
 };
 
 //! Support operations on a Cineon format image
@@ -56,7 +56,7 @@ class CINEONImage : public Image
 	public:
 		CINEONImage() { };
 		~CINEONImage() { };
-		ImageDim dim();
+		ImageDim getDim();
 		bool valid();
 	private:
 };

@@ -181,11 +181,11 @@ void testImageSeq::testStrangeName()
 void testImageSeq::checkSequence(const ImageSeq &seq, std::string name, std::string frames,
 	int width, int height, std::string format, bool valid)
 {
-	CPPUNIT_ASSERT_EQUAL(seq.path().fullName(), name);
-	CPPUNIT_ASSERT_EQUAL(seq.frames().text(), frames);
-	CPPUNIT_ASSERT(seq.dim().width() == width);
-	CPPUNIT_ASSERT(seq.dim().height() == height);
-	CPPUNIT_ASSERT(seq.format() != NULL);
-	CPPUNIT_ASSERT_EQUAL(seq.format()->formatString(), format);		
+	CPPUNIT_ASSERT_EQUAL(seq.getPath().getFullName(), name);
+	CPPUNIT_ASSERT_EQUAL(seq.getFrames().getText(), frames);
+	CPPUNIT_ASSERT(seq.getDim().getWidth() == width);
+	CPPUNIT_ASSERT(seq.getDim().getHeight() == height);
+	CPPUNIT_ASSERT(seq.getFormat() != NULL);
+	CPPUNIT_ASSERT_EQUAL(seq.getFormat()->getFormatString(), format);		
 	CPPUNIT_ASSERT(seq.valid() == valid);
 }

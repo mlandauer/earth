@@ -97,8 +97,8 @@ ImageFormat* ImageFormat::recogniseByMagic(const Path &path)
 	long int largestSizeToRecognise = 0;
 	for (std::list<ImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
-		if ((*a)->sizeToRecognise() > largestSizeToRecognise)
-			largestSizeToRecognise = (*a)->sizeToRecognise();
+		if ((*a)->getSizeToRecognise() > largestSizeToRecognise)
+			largestSizeToRecognise = (*a)->getSizeToRecognise();
 			
 	File f(path);
 	// If it's not a valid file then it can't be an image!
@@ -106,7 +106,7 @@ ImageFormat* ImageFormat::recogniseByMagic(const Path &path)
 		return NULL;
 		
 	// Make sure we don't read beyond the end of the file
-	long int bufferSize = std::min(f.sizeBytes(), largestSizeToRecognise);
+	long int bufferSize = std::min(f.getSizeBytes(), largestSizeToRecognise);
 	
 	// Create a temporary file object
 	unsigned char *buf = new unsigned char[bufferSize];
@@ -118,7 +118,7 @@ ImageFormat* ImageFormat::recogniseByMagic(const Path &path)
 	// See if any of the plugins recognise themselves.
 	for (std::list<ImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
-		if (bufferSize >= (*a)->sizeToRecognise()) {
+		if (bufferSize >= (*a)->getSizeToRecognise()) {
 			if ((*a)->recognise(buf)) {
 				format = *a;
 				break;

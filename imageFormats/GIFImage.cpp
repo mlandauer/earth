@@ -28,10 +28,10 @@ namespace Sp {
 
 bool GIFImage::valid()
 {
-	return (sizeBytes() >= 10);
+	return (getSizeBytes() >= 10);
 };
 
-ImageDim GIFImage::dim()
+ImageDim GIFImage::getDim()
 {
 	if (!valid())
 		return ImageDim(0, 0);

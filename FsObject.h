@@ -54,37 +54,37 @@ public:
 		In Unix, this gets set when any of the following system calls are made:
 		mknod, utimes and read.
 	*/
-	DateTime lastAccess() const;
+	DateTime getLastAccess() const;
 
 	//! Returns the date and time that the filesystem object was last modified
 	/*!
 		In Unix, this gets set when any of the following system calls are made:
 		mknod, utimes and write.
 	*/
-	DateTime lastModification() const;
+	DateTime getLastModification() const;
 
 	//! Returns the date and time the filesystem object was last changes
 	/*!
 		In Unix, this gets set when any of the following system calls are made:
 		chmod, chown, link, mknod, rename, unlink, utimes and write.
 	*/
-	DateTime lastChange() const;
+	DateTime getLastChange() const;
 
 	//! Returns the owning user of the filesystem object
-	User user() const;
+	User getUser() const;
 	//! Returns the owning group of the filesystem object
-	UserGroup userGroup() const;
+	UserGroup getUserGroup() const;
 	//! Returns the path to the filesystem object
-	Path path() const { return p; };
+	Path getPath() const { return p; };
 	
-	bool operator<(const FsObject &o) const { return path() < o.path(); }
-	bool operator==(const FsObject &o) const { return path() == o.path(); }
+	bool operator<(const FsObject &o) const { return getPath() < o.getPath(); }
+	bool operator==(const FsObject &o) const { return getPath() == o.getPath(); }
 
 protected:
 	void setPath(const Path &path) { p = path; };
 
 private:
-	struct stat unixStat() const;
+	struct stat getUnixStat() const;
 	Path p;
 };
 

@@ -47,16 +47,16 @@ void testFile::test()
 	File file1("test/templateImages/8x8.tiff");
 	File file2("test/templateImages/");
  
-	CPPUNIT_ASSERT(file1.path().fullName() == "test/templateImages/8x8.tiff");
-	CPPUNIT_ASSERT(file1.user() == User::current());
-	CPPUNIT_ASSERT(file1.userGroup() == UserGroup::current());
+	CPPUNIT_ASSERT(file1.getPath().getFullName() == "test/templateImages/8x8.tiff");
+	CPPUNIT_ASSERT(file1.getUser() == User::current());
+	CPPUNIT_ASSERT(file1.getUserGroup() == UserGroup::current());
 
 	// Find some way to test access, modification and change times
 
 	File file("test/templateImages/8x8.tiff");
-	CPPUNIT_ASSERT(file.path().fullName() == "test/templateImages/8x8.tiff");
-	CPPUNIT_ASSERT_DOUBLES_EQUAL(file.size().getBytes(), 396.0, 0.1);
-	CPPUNIT_ASSERT_DOUBLES_EQUAL(file.size().getKBytes(), 0.39, 0.1);
+	CPPUNIT_ASSERT(file.getPath().getFullName() == "test/templateImages/8x8.tiff");
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(file.getSize().getBytes(), 396.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(file.getSize().getKBytes(), 0.39, 0.1);
 }
 
 void testFile::testValid()

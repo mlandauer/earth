@@ -41,8 +41,8 @@ class PRTEXImageFormat: public ImageFormat
 	public:
 		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
-		virtual int sizeToRecognise() { return 4; };
-		virtual std::string formatString() { return "PRTEX"; }
+		virtual int getSizeToRecognise() { return 4; };
+		virtual std::string getFormatString() { return "PRTEX"; }
 };
 
 //! Support operations on a PRTEX format image
@@ -54,7 +54,7 @@ class PRTEXImage : public Image
 	public:
 		PRTEXImage() { };
 		~PRTEXImage() { };
-		ImageDim dim();
+		ImageDim getDim();
 		bool valid();
 	private:
 };

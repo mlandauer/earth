@@ -30,10 +30,10 @@ bool CINEONImage::valid()
 {
 	// Do a basic check for validity by ensuring that the file is big enough
 	// to read the header that we want
-	return (sizeBytes() >= 208);
+	return (getSizeBytes() >= 208);
 };
 
-ImageDim CINEONImage::dim()
+ImageDim CINEONImage::getDim()
 {
 	if (!valid())
 		return ImageDim(0, 0);

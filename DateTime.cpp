@@ -57,29 +57,29 @@ DateTime DateTime::unixDateTime(time_t t)
   return (ret);
 }
 
-std::string DateTime::timeAndDateString() const
+std::string DateTime::getTimeAndDateString() const
 {
-	std::string s = dayOfWeekStringShort() + " " + monthStringShort() + " " +
-		dayOfMonthString() + " " + timeString() + " " + yearString();
+	std::string s = getDayOfWeekStringShort() + " " + getMonthStringShort() + " " +
+		getDayOfMonthString() + " " + getTimeString() + " " + getYearString();
 	return s;
 }
 
-std::string DateTime::dayOfMonthString() const
+std::string DateTime::getDayOfMonthString() const
 {
 	char buf[100];
 	std::string s;
 	std::strstream o(buf, 100);
-	o << dayOfMonth();
+	o << getDayOfMonth();
 	o >> s;
 	return (s);
 }
 
-std::string DateTime::yearString() const
+std::string DateTime::getYearString() const
 {
 	std::string s;
 	char buf[100];
 	std::strstream o(buf, 100);
-	o << year();
+	o << getYear();
 	o >> s;
 	return (s);
 }
@@ -87,54 +87,54 @@ std::string DateTime::yearString() const
 // What happens to all these pointers that are returned??
 
 // Sun = 0, Mon = 1, Tue = 2, Wed = 3, Thu = 4, Fri = 5, Sat = 6
-int DateTime::dayOfWeek() const
+int DateTime::getDayOfWeek() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_wday);
 }
 
-int DateTime::dayOfMonth() const
+int DateTime::getDayOfMonth() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_mday);
 }
 
-int DateTime::year() const
+int DateTime::getYear() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (1900 + localtime->tm_year);
 }
 
 // Jan = 1, Feb = 2, Mar = 3, etc...
-int DateTime::month() const
+int DateTime::getMonth() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (1 + localtime->tm_mon);
 }
 
-std::string DateTime::dayOfWeekStringShort() const
+std::string DateTime::getDayOfWeekStringShort() const
 {
-	std::string s = dayOfWeekString();
+	std::string s = getDayOfWeekString();
 	s.resize(3);
 	return (s);
 }
 
-std::string DateTime::timeString() const
+std::string DateTime::getTimeString() const
 {
 	std::string s;
 	char buf[100];
 	std::strstream o(buf, 100);
 	o << std::setfill('0')
-	  << std::setw(2) << hour() << ":"
-	  << std::setw(2) << minute() << ":"
-	  << std::setw(2) << second();
+	  << std::setw(2) << getHour() << ":"
+	  << std::setw(2) << getMinute() << ":"
+	  << std::setw(2) << getSecond();
 	o >> s;
 	return (s);
 }
 
-std::string DateTime::dayOfWeekString() const
+std::string DateTime::getDayOfWeekString() const
 {
-	switch (dayOfWeek())
+	switch (getDayOfWeek())
 	{
 		case 0:
 			return ("Sunday");
@@ -155,16 +155,16 @@ std::string DateTime::dayOfWeekString() const
 	}
 }
 
-std::string DateTime::monthStringShort() const
+std::string DateTime::getMonthStringShort() const
 {
-	std::string s = monthString();
+	std::string s = getMonthString();
 	s.resize(3);
 	return (s);
 }
 
-std::string DateTime::monthString() const
+std::string DateTime::getMonthString() const
 {
-	switch (month()) {
+	switch (getMonth()) {
 		case 1:
 			return ("January");
 		case 2:
@@ -194,19 +194,19 @@ std::string DateTime::monthString() const
 	}
 }
 
-int DateTime::hour() const
+int DateTime::getHour() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_hour);
 }
 
-int DateTime::minute() const
+int DateTime::getMinute() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_min);
 }
 
-int DateTime::second() const
+int DateTime::getSecond() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_sec);

@@ -30,19 +30,19 @@ ImageDim::ImageDim(unsigned int width, unsigned int height) : w(width), h(height
 {
 }
 
-unsigned int ImageDim::width() const
+unsigned int ImageDim::getWidth() const
 {
 	return w;
 }
 
-unsigned int ImageDim::height() const
+unsigned int ImageDim::getHeight() const
 {
 	return h;
 }
 
 bool ImageDim::operator==(const ImageDim &d) const
 {
-	return ((w == d.width()) && (h == d.height()));
+	return ((w == d.getWidth()) && (h == d.getHeight()));
 }
 
 }

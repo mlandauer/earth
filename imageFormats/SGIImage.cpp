@@ -28,10 +28,10 @@ namespace Sp {
 
 bool SGIImage::valid()
 {
-	return (sizeBytes() >= 10);
+	return (getSizeBytes() >= 10);
 };
 
-ImageDim SGIImage::dim()
+ImageDim SGIImage::getDim()
 {
 	if (!valid())
 		return ImageDim(0, 0);

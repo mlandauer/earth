@@ -43,8 +43,8 @@ class TIFFImageFormat: public ImageFormat
 	public:
 		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
-		virtual int sizeToRecognise() { return 4; };
-		virtual std::string formatString() { return "TIFF"; }
+		virtual int getSizeToRecognise() { return 4; };
+		virtual std::string getFormatString() { return "TIFF"; }
 };
 
 //! Support operations on a TIFF format image
@@ -56,7 +56,7 @@ class TIFFImage : public Image
 	public:
 		TIFFImage() : headerRead(false), validHeader(false) { };
 		~TIFFImage() { };
-		ImageDim dim();
+		ImageDim getDim();
 		bool valid();
 	private:
 		unsigned int h, w;

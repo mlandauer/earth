@@ -115,10 +115,10 @@ void testImage::checkImage(Image *image, bool valid, const std::string &name, fl
 {
 	CPPUNIT_ASSERT(image != NULL);
 	CPPUNIT_ASSERT(image->valid() == valid);
-	CPPUNIT_ASSERT(image->path().fullName() == name);
-	CPPUNIT_ASSERT_DOUBLES_EQUAL(image->size().getKBytes(), sizeKb, 0.1);
-	CPPUNIT_ASSERT(image->formatString() == format);
-	CPPUNIT_ASSERT(image->dim().width() == width);
-	CPPUNIT_ASSERT(image->dim().height() == height);
+	CPPUNIT_ASSERT(image->getPath().getFullName() == name);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(image->getSize().getKBytes(), sizeKb, 0.1);
+	CPPUNIT_ASSERT(image->getFormatString() == format);
+	CPPUNIT_ASSERT(image->getDim().getWidth() == width);
+	CPPUNIT_ASSERT(image->getDim().getHeight() == height);
 }
 

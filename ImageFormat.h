@@ -43,7 +43,7 @@ public:
 	ImageFormat();
 	virtual ~ImageFormat();
 	//! Get the name of the image format
-	virtual std::string formatString() = 0;
+	virtual std::string getFormatString() = 0;
 	//! Construct an instance of the related image object
 	virtual Image* constructImage() = 0;
 	//! Load all the image format plugins
@@ -62,7 +62,7 @@ private:
 	virtual bool recognise(unsigned char *buf) = 0;
 
 	//! Return the number of bytes from the header that are required to recognise this image format
-	virtual int sizeToRecognise() = 0;
+	virtual int getSizeToRecognise() = 0;
 	static std::list<ImageFormat *> plugins;
 	static void addPlugin(ImageFormat *plugin);
 	static void removePlugin(ImageFormat *plugin);

@@ -120,13 +120,13 @@ void testImageMon::test()
 	CPPUNIT_CHECK_NEXT_EVENTS(logger);
 	
 	// Test adding files
-	DateTime before = Dir("test/FsMonitor").lastChange();
+	DateTime before = Dir("test/FsMonitor").getLastChange();
 	// Wait one second to ensure that change can be detected
 	DateTime::sleep(1);
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0005.gif");
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0006.gif");
 	// Check that the change time of the directory has changed
-	DateTime after = Dir("test/FsMonitor").lastChange();
+	DateTime after = Dir("test/FsMonitor").getLastChange();
 	CPPUNIT_ASSERT(after > before);
 	m.update();
 	addExpectedAdded("test/FsMonitor/test.0005.gif");

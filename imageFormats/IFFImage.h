@@ -41,8 +41,8 @@ class IFFImageFormat: public ImageFormat
 	public:
 		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
-		virtual int sizeToRecognise() { return 12; };
-		virtual std::string formatString() { return "IFF"; }
+		virtual int getSizeToRecognise() { return 12; };
+		virtual std::string getFormatString() { return "IFF"; }
 };
 
 //! Support operations on an IFF format image
@@ -54,7 +54,7 @@ class IFFImage : public Image
 	public:
 		IFFImage() : headerRead(false), validHeader(false) { };
 		~IFFImage() { };
-		ImageDim dim();
+		ImageDim getDim();
 		bool valid();
 	private:
 		unsigned int h, w;

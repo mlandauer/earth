@@ -44,7 +44,7 @@ public:
     static UserGroup current();
    
     //! Returns the human-readable name of the user group
-	std::string name() const;
+	std::string getName() const;
 	bool operator==(const UserGroup &g) const;
 	
 private:

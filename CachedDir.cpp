@@ -33,7 +33,7 @@ CachedDir::CachedDir(const Dir &d) : dir(d), filesSorted(false), dirsSorted(fals
 	// By default making the lists sorted
 	files = dir.listFiles(false);
 	dirs = dir.listDirs(false);
-	change = dir.lastChange();
+	change = dir.getLastChange();
 }
 
 std::vector<File> CachedDir::listFiles(bool sortByPath) const
@@ -54,7 +54,7 @@ std::vector<Dir> CachedDir::listDirs(bool sortByPath) const
 	return dirs;
 }
 
-DateTime CachedDir::lastChange() const
+DateTime CachedDir::getLastChange() const
 {
 	return change;
 }

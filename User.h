@@ -44,7 +44,7 @@ public:
 	static User current();
 
 	//! Returns the human-readable name of the user
-	std::string name() const;
+	std::string getName() const;
 	bool operator==(const User &u) const;
 	
 private:

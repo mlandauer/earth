@@ -46,7 +46,7 @@ bool Frames::partOfSequence(int frame) const
 	return (f.find(frame) != f.end());
 }
 
-std::string Frames::text() const
+std::string Frames::getText() const
 {
 	std::string r;
 	char buf[100];

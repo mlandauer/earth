@@ -39,7 +39,7 @@ File::File(const Path &path) : FsObject(path), fileOpen(false)
 bool File::valid() const
 {
 	struct stat fileStat;
-	int ret = lstat(path().fullName().c_str(), &fileStat);
+	int ret = lstat(getPath().getFullName().c_str(), &fileStat);
 	if (ret == 0)
 		return(S_ISREG(fileStat.st_mode));
 	else
@@ -51,23 +51,23 @@ bool File::valid() const
 */
 void File::open()
 {
-	fd = ::open(path().fullName().c_str(), O_RDONLY);
+	fd = ::open(getPath().getFullName().c_str(), O_RDONLY);
 	// TEMPORARY HACK
 	if (fd == -1)
-		std::cerr << "Error opening file " << path().fullName().c_str() << std::endl;
+		std::cerr << "Error opening file " << getPath().getFullName().c_str() << std::endl;
 	else
 		fileOpen = true;
 }
 
-Size File::size() const
+Size File::getSize() const
 {
-	return (Size::Bytes(sizeBytes()));
+	return (Size::Bytes(getSizeBytes()));
 }
 
-long int File::sizeBytes() const
+long int File::getSizeBytes() const
 {
 	struct stat fileStat;
-	int ret = lstat(path().fullName().c_str(), &fileStat);
+	int ret = lstat(getPath().getFullName().c_str(), &fileStat);
 	assert(ret == 0);
 	return fileStat.st_size;
 }

@@ -57,7 +57,7 @@ public:
 		For example, a continuous frame range is written as "1-245" and a discontinuous
 		range is written as "1-145,147-240,242,245"
 	*/
-	std::string text() const;
+	std::string getText() const;
 };
 
 }

@@ -30,10 +30,10 @@ namespace Sp {
 
 bool PRTEXImage::valid()
 {
-	return (sizeBytes() >= 15);
+	return (getSizeBytes() >= 15);
 };
 
-ImageDim PRTEXImage::dim()
+ImageDim PRTEXImage::getDim()
 {
 	if (!valid())
 		return ImageDim(0, 0);

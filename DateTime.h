@@ -51,64 +51,64 @@ public:
 	/*!
 		The string has the following format: Fri Dec 13 15:57:28 2002
 	*/
-	std::string timeAndDateString() const;
+	std::string getTimeAndDateString() const;
     
 	//! Returns the number of days since the last sunday as an integer
 	/*!
 		In other words, Sun = 0, Mon = 1, Tue = 2, Wed = 3, Thu = 4, Fri = 5, Sat = 6
 	*/
-	int dayOfWeek() const;
+	int getDayOfWeek() const;
     
 	//! Returns the day in the month as an integer
 	/*!
 		For the time Fri Dec 13 15:57:28 2002 this returns 13.
 	*/
-	int dayOfMonth() const;
+	int getDayOfMonth() const;
     
 	//! Returns the year as an integer
 	/*!
 		For the time Fri Dec 13 15:57:28 2002 this returns 2002.
 	*/
-	int year() const;
+	int getYear() const;
     
 	//! Returns the number of months since the last december as an integer
 	/*!
 		In other words, Jan = 1, Feb = 2, Mar = 3, etc...
 	*/
-	int month() const;
+	int getMonth() const;
     
 	//! Returns the hour as an integer
 	/*!
 		For the time Fri Dec 13 15:57:28 2002 this returns 15.
 	*/
-	int hour() const;
+	int getHour() const;
     
 	//! Returns the minutes as an integer
 	/*!
 		For the time Fri Dec 13 15:57:28 2002 this returns 57.
 	*/
-	int minute() const;
+	int getMinute() const;
     
 	//! Returns the seconds as an integer
 	/*!
 		For the time Fri Dec 13 15:57:28 2002 this returns 28.
 	*/
-	int second() const;
+	int getSecond() const;
     
 	//! Returns a short form of monthString()
-	std::string monthStringShort() const;
+	std::string getMonthStringShort() const;
 	//! Returns the months as a string
-	std::string monthString() const;
+	std::string getMonthString() const;
 	//! Returns a short form of dayOfWeekString()
-	std::string dayOfWeekStringShort() const;
+	std::string getDayOfWeekStringShort() const;
 	//! Returns the day of the week as a string
-	std::string dayOfWeekString() const;
+	std::string getDayOfWeekString() const;
 	//! Returns the time as a string
-	std::string timeString() const;
+	std::string getTimeString() const;
 	//! Returns the day of the month as a string
-	std::string dayOfMonthString() const;
+	std::string getDayOfMonthString() const;
 	//! Returns the year as a string
-	std::string yearString() const;
+	std::string getYearString() const;
 	bool operator<(const DateTime &t) const;
 	bool operator==(const DateTime &t) const;
 	

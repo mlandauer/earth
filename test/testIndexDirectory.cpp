@@ -75,8 +75,8 @@ void testIndexDirectory::test()
 void testIndexDirectory::checkSequence(const ImageSeq &sequence,
 	const std::string &format, int width, int height, const std::string &path, const std::string &frames)
 {
-	CPPUNIT_ASSERT_EQUAL(sequence.format()->formatString(), format);
-	CPPUNIT_ASSERT(sequence.dim() == ImageDim(width, height));
-	CPPUNIT_ASSERT_EQUAL(sequence.path().fullName(), path);
-	CPPUNIT_ASSERT_EQUAL(sequence.frames().text(), frames);
+	CPPUNIT_ASSERT_EQUAL(sequence.getFormat()->getFormatString(), format);
+	CPPUNIT_ASSERT(sequence.getDim() == ImageDim(width, height));
+	CPPUNIT_ASSERT_EQUAL(sequence.getPath().getFullName(), path);
+	CPPUNIT_ASSERT_EQUAL(sequence.getFrames().getText(), frames);
 }

@@ -26,7 +26,7 @@
 
 namespace Sp {
 
-ImageDim IFFImage::dim()
+ImageDim IFFImage::getDim()
 {
 	readHeader();
 	return (ImageDim(w, h));

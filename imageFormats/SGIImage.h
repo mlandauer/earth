@@ -42,8 +42,8 @@ class SGIImageFormat: public ImageFormat
 	public:
 		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
-		virtual int sizeToRecognise() { return 2; };
-		virtual std::string formatString() { return "SGI"; }
+		virtual int getSizeToRecognise() { return 2; };
+		virtual std::string getFormatString() { return "SGI"; }
 };
 
 //! Support operations on an SGI format image
@@ -55,7 +55,7 @@ class SGIImage : public Image
 	public:
 		SGIImage() { };
 		~SGIImage() { };
-		ImageDim dim();
+		ImageDim getDim();
 		bool valid();
 	private:
 };

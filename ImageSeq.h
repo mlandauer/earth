@@ -64,22 +64,22 @@ public:
 		A four padded frame number is represented by "#" and an arbitrary length
 		frame padding is represented by a number of "@".
 	*/
-	Path path() const;
+	Path getPath() const;
 
 	//! Returns the size of the images in the sequence
 	/*!
 		For images to be part of the same sequence they all have to have the same dimensions.
 	*/
-	ImageDim dim() const { return dimensions; };
+	ImageDim getDim() const { return dimensions; };
 
 	//! Returns the image format of the images in the sequence
 	/*!
 		For images to be part of the same sequence they all have to have the same image format.
 	*/
-	ImageFormat* format() const { return imageFormat; };
+	ImageFormat* getFormat() const { return imageFormat; };
 	
 	//! Returns the frames in this sequence
-	Frames frames() const;
+	Frames getFrames() const;
 	
 	//! Is this a sequence consisting of valid images?
 	bool valid() const { return m_valid; }

@@ -43,8 +43,8 @@ class FITImageFormat: public ImageFormat
 	public:
 		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
-		virtual int sizeToRecognise() { return 4; };
-		virtual std::string formatString() { return "FIT"; }
+		virtual int getSizeToRecognise() { return 4; };
+		virtual std::string getFormatString() { return "FIT"; }
 };
 
 //! Support operations on a FIT format image
@@ -56,7 +56,7 @@ class FITImage : public Image
 	public:
 		FITImage() { };
 		~FITImage() { };
-		ImageDim dim();
+		ImageDim getDim();
 		bool valid();
 	private:
 };

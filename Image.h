@@ -49,7 +49,7 @@ public:
 	//! Unload all the image format plugins
 	static void deRegisterPlugins();
 	//! Return the dimensions (width and height) of the image
-	virtual ImageDim dim() = 0;
+	virtual ImageDim getDim() = 0;
 	//! Is this a valid file in this format?
 	/*!
 		As the image constructing in construct() is done by recognising the image format from a
@@ -58,7 +58,7 @@ public:
 		header is valid.
 	*/
 	virtual bool valid() = 0;
-	std::string formatString() { return getFormat()->formatString(); };
+	std::string getFormatString() { return getFormat()->getFormatString(); };
 	ImageFormat* getFormat() { return format; };
 	
 private:

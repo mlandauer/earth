@@ -31,37 +31,37 @@
 
 namespace Sp {
 
-struct stat FsObject::unixStat() const
+struct stat FsObject::getUnixStat() const
 {
 	struct stat s;
-	int ret = lstat(path().fullName().c_str(), &s);
+	int ret = lstat(getPath().getFullName().c_str(), &s);
   assert(ret == 0);
 	return (s);
 }
 
-DateTime FsObject::lastModification() const
+DateTime FsObject::getLastModification() const
 {
-	return DateTime::unixDateTime(unixStat().st_mtime);
+	return DateTime::unixDateTime(getUnixStat().st_mtime);
 }
 
-DateTime FsObject::lastAccess() const
+DateTime FsObject::getLastAccess() const
 {
-	return DateTime::unixDateTime(unixStat().st_atime);
+	return DateTime::unixDateTime(getUnixStat().st_atime);
 }
 
-DateTime FsObject::lastChange() const
+DateTime FsObject::getLastChange() const
 {
-	return DateTime::unixDateTime(unixStat().st_ctime);
+	return DateTime::unixDateTime(getUnixStat().st_ctime);
 }
 
-User FsObject::user() const
+User FsObject::getUser() const
 {
-	return User::unixUid(unixStat().st_uid);
+	return User::unixUid(getUnixStat().st_uid);
 }
 
-UserGroup FsObject::userGroup() const
+UserGroup FsObject::getUserGroup() const
 {
-	return UserGroup::unixGid(unixStat().st_gid);
+	return UserGroup::unixGid(getUnixStat().st_gid);
 }
 
 }

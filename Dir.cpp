@@ -43,7 +43,7 @@ Dir::Dir(const Path &path) : FsObject(path)
 bool Dir::valid() const
 {
 	struct stat fileStat;
-	int ret = lstat(path().fullName().c_str(), &fileStat);
+	int ret = lstat(getPath().getFullName().c_str(), &fileStat);
 	if (ret == 0)
 		return(S_ISDIR(fileStat.st_mode));
 	else
@@ -96,12 +96,12 @@ std::vector<Path> Dir::listPaths(bool sortByPath) const
 	if (!valid())
 		return l;
 	// First open a directory stream
-	DIR *d = opendir(path().fullName().c_str());
+	DIR *d = opendir(getPath().getFullName().c_str());
 	struct dirent *entry;
 	while ((entry = readdir(d)) != NULL) {
 		std::string pathString = entry->d_name;
 		if ((pathString != ".") && (pathString != "..")) {
-			Path p = path();
+			Path p = getPath();
 			p.add(pathString);
       l.push_back(p);
 		}
@@ -114,7 +114,7 @@ std::vector<Path> Dir::listPaths(bool sortByPath) const
 
 bool Dir::operator==(const Dir &d) const
 {
-	return (d.path() == path());
+	return (d.getPath() == getPath());
 }
 
 }

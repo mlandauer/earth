@@ -36,7 +36,7 @@ std::vector<ImageSeq> IndexDirectory::getImageSequences(const Path &path) const
 	// Make a list of image sequences from this
 	std::vector<ImageSeq> sequences;
 	for (std::vector<File>::iterator i = files.begin(); i != files.end(); ++i) {
-		Image *image = Image::construct(i->path());
+		Image *image = Image::construct(i->getPath());
 		// Doesn't correctly take account of whether the image is valid or not
 		if (image != NULL) {
 			// Go through each sequence and try adding it until one accepts. If one

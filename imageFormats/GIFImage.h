@@ -41,8 +41,8 @@ class GIFImageFormat: public ImageFormat
 	public:
 		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
-		virtual int sizeToRecognise() { return 4; };
-		virtual std::string formatString() { return "GIF"; }
+		virtual int getSizeToRecognise() { return 4; };
+		virtual std::string getFormatString() { return "GIF"; }
 };
 
 //! Support operations on a GIF format image
@@ -54,7 +54,7 @@ class GIFImage : public Image
 	public:
 		GIFImage() { };
 		~GIFImage() { };
-		ImageDim dim();
+		ImageDim getDim();
 		bool valid();
 	private:
 };

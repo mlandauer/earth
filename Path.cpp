@@ -60,7 +60,7 @@ void Path::set(const std::string a)
 	}
 }
 
-std::string Path::root() const
+std::string Path::getRoot() const
 {
 	std::string a = pathString;
 	unsigned int f = pathString.rfind('/');
@@ -73,7 +73,7 @@ std::string Path::root() const
 	return (a);
 }
 
-std::string Path::relative() const
+std::string Path::getRelative() const
 {
 	std::string a = pathString;
 	unsigned int f = pathString.rfind('/');
@@ -83,7 +83,7 @@ std::string Path::relative() const
 	return (a);
 }
 
-std::string Path::absolute() const
+std::string Path::getAbsolute() const
 {
 	if (pathString[0] == '/')
 		return pathString;
@@ -95,7 +95,7 @@ std::string Path::absolute() const
 	return (std::string(workingDirectory) + "/" + pathString);
 }
 
-std::string Path::fullName() const
+std::string Path::getFullName() const
 {
 	return (pathString);
 }

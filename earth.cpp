@@ -56,15 +56,15 @@ void printHumanReadable(const std::vector<ImageSeq> &s)
 	std::cout << std::endl;
 	for (std::vector<ImageSeq>::const_iterator i = s.begin(); i != s.end(); ++i) {
 		if (i->valid()) {
-			std::cout << i->format()->formatString() << "\t"
-				<< i->dim().width() << "x" << i->dim().height() << "\t"
-				<< i->path().fullName() << "\t"
-				<< i->frames().text() << std::endl;
+			std::cout << i->getFormat()->getFormatString() << "\t"
+				<< i->getDim().getWidth() << "x" << i->getDim().getHeight() << "\t"
+				<< i->getPath().getFullName() << "\t"
+				<< i->getFrames().getText() << std::endl;
 		}
 		else {
-			std::cout << "INVALID " << i->format()->formatString() << "\t\t"
-				<< i->path().fullName() << "\t"
-				<< i->frames().text() << std::endl;
+			std::cout << "INVALID " << i->getFormat()->getFormatString() << "\t\t"
+				<< i->getPath().getFullName() << "\t"
+				<< i->getFrames().getText() << std::endl;
 		}
 	}
 }
@@ -81,29 +81,29 @@ void printXML(const std::vector<ImageSeq> &s)
 				xmlpp::Element* nodeSequence = nodeRoot->add_child("sequence");
 				
 				std::stringstream wss, hss;
-				wss << i->dim().width();
-				hss << i->dim().height();
+				wss << i->getDim().getWidth();
+				hss << i->getDim().getHeight();
 				std::string widthString(wss.str()), heightString(hss.str());
 				
 				nodeSequence->add_child("valid")->set_child_content("true");
-				nodeSequence->add_child("format")->set_child_content(i->format()->formatString());
+				nodeSequence->add_child("format")->set_child_content(i->getFormat()->getFormatString());
 		 		nodeSequence->add_child("width")->set_child_content(widthString);
 		 		nodeSequence->add_child("height")->set_child_content(heightString);
-		 		nodeSequence->add_child("path")->set_child_content(i->path().fullName());
-		 		nodeSequence->add_child("frames")->set_child_content(i->frames().text());
+		 		nodeSequence->add_child("path")->set_child_content(i->getPath().getFullName());
+		 		nodeSequence->add_child("frames")->set_child_content(i->getFrames().getText());
 			}
 			else {
 				xmlpp::Element* nodeSequence = nodeRoot->add_child("sequence");
 				
 				std::stringstream wss, hss;
-				wss << i->dim().width();
-				hss << i->dim().height();
+				wss << i->getDim().getWidth();
+				hss << i->getDim().getHeight();
 				std::string widthString(wss.str()), heightString(hss.str());
 				
 				nodeSequence->add_child("valid")->set_child_content("false");
-				nodeSequence->add_child("format")->set_child_content(i->format()->formatString());
-		 		nodeSequence->add_child("path")->set_child_content(i->path().fullName());
-		 		nodeSequence->add_child("frames")->set_child_content(i->frames().text());
+				nodeSequence->add_child("format")->set_child_content(i->getFormat()->getFormatString());
+		 		nodeSequence->add_child("path")->set_child_content(i->getPath().getFullName());
+		 		nodeSequence->add_child("frames")->set_child_content(i->getFrames().getText());
 			}
 		}
  		std::cout << parser.write_to_string() << std::endl;

@@ -41,8 +41,8 @@ class PRMANZImageFormat: public ImageFormat
 	public:
 		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
-		virtual int sizeToRecognise() { return 4; };
-		virtual std::string formatString() { return "PRMANZ"; }
+		virtual int getSizeToRecognise() { return 4; };
+		virtual std::string getFormatString() { return "PRMANZ"; }
 };
 
 //! Support operations on a PRMANZ format image
@@ -54,7 +54,7 @@ class PRMANZImage : public Image
 	public:
 		PRMANZImage() { };
 		~PRMANZImage() { };
-		ImageDim dim();
+		ImageDim getDim();
 		bool valid();
 	private:
 };

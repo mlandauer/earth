@@ -27,7 +27,7 @@
 
 namespace Sp {
 
-ImageDim TIFFImage::dim()
+ImageDim TIFFImage::getDim()
 {
 	readHeader();
 	if (validHeader)

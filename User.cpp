@@ -52,7 +52,7 @@ User User::current()
   return ret;
 }
 
-std::string User::name() const
+std::string User::getName() const
 {
 	struct passwd *p = getpwuid(uid);
   assert(p != NULL);
