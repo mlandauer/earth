@@ -30,6 +30,7 @@
 #include "User.h"
 #include "UserGroup.h"
 #include "Path.h"
+#include "FsObject.h"
 
 namespace Sp {
 
@@ -42,6 +43,10 @@ public:
 		m_userGroup = o.getUserGroup();
 		m_path = o.getPath();
 	};
+	//! Constructor useful for testing purposes
+	CachedFsObject(const DateTime &lastChange, const User &user, const UserGroup &userGroup,
+		const Path &path) : m_lastChange(lastChange), m_user(user), m_userGroup(userGroup),
+		m_path(path) { }
 
 	DateTime getLastChange() const { return m_lastChange; }
 	User getUser() const { return m_user; }

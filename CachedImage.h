@@ -37,20 +37,26 @@ class CachedImage : public CachedFile
 {
 public:
 	CachedImage(const Image *image) : CachedFile(*image) {
-		dim = image->getDim();
-		v = image->valid();
-		format = image->getFormat();
+		m_dim = image->getDim();
+		m_valid = image->valid();
+		m_format = image->getFormat();
 	}
+	//! Constructor useful for testing purposes
+	CachedImage(const ImageDim &dim, bool valid, ImageFormat* format, long int sizeBytes,
+		const DateTime &lastChange, const User &user, const UserGroup &userGroup,
+		const Path &path)
+		: CachedFile(sizeBytes, lastChange, user, userGroup, path),
+			m_dim(dim), m_valid(valid), m_format(format) { }
 	
-	ImageDim getDim() const { return dim; }
-	bool valid() const { return v; }
-	std::string getFormatString() { return format->getFormatString(); }
-	ImageFormat* getFormat() { return format; }
+	ImageDim getDim() const { return m_dim; }
+	bool valid() const { return m_valid; }
+	std::string getFormatString() const { return m_format->getFormatString(); }
+	ImageFormat* getFormat() const { return m_format; }
 	
 private:
-	ImageDim dim;
-	bool v;
-	ImageFormat *format;
+	ImageDim m_dim;
+	bool m_valid;
+	ImageFormat *m_format;
 };
 
 }

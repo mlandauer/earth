@@ -28,6 +28,7 @@
 
 #include "CachedFsObject.h"
 #include "Size.h"
+#include "File.h"
 
 namespace Sp {
 
@@ -35,19 +36,24 @@ class CachedFile : public CachedFsObject
 {
 public:
 	CachedFile(const File &file) : CachedFsObject(file) {
-		size = file.getSize();
-		sizeBytes = file.getSizeBytes();
+		m_size = file.getSize();
+		m_sizeBytes = file.getSizeBytes();
 	}
+	//! Constructor useful for testing purposes
+	CachedFile(long int sizeBytes, const DateTime &lastChange, const User &user, const UserGroup &userGroup,
+		const Path &path)
+		: CachedFsObject(lastChange, user, userGroup, path),
+			m_size(Size::Bytes((float) sizeBytes)), m_sizeBytes(sizeBytes) { }
 
 	//! Returns the file size
-	Size getSize() const { return size; }
+	Size getSize() const { return m_size; }
 
 	//! Returns the file size in bytes
-	long int getSizeBytes() const { return sizeBytes; }
+	long int getSizeBytes() const { return m_sizeBytes; }
 	
 private:
-	Size size;
-	long int sizeBytes;
+	Size m_size;
+	long int m_sizeBytes;
 };
 
 }
