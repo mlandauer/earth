@@ -50,6 +50,20 @@ SpTime SpFsObject::lastChange() const
 	return (t);
 }
 
+bool SpFsObject::isFile() const
+{
+	struct stat fileStat;
+	lstat(pathString.fullName().c_str(), &fileStat);
+	return(S_ISREG(fileStat.st_mode));
+}
+
+bool SpFsObject::isDir() const
+{
+	struct stat fileStat;
+	lstat(pathString.fullName().c_str(), &fileStat);
+	return(S_ISDIR(fileStat.st_mode));
+}
+
 SpUid SpFsObject::uid() const
 {
 	struct stat fileStat;

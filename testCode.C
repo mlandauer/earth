@@ -133,6 +133,8 @@ void testSpFsObject()
 	cout << "last change = " << file.lastChange().timeAndDateString() << endl;
 	cout << "owner = " << file.uid().name() << endl;
 	cout << "group owner = " << file.gid().name() << endl;
+	cout << "is a file? = " << file.isFile() << endl;
+	cout << "is a directory? = " << file.isDir() << endl;
 	SpFsObject file2("/home/matthew/images/");
 	cout << "path = " << file2.path().fullName() << endl;
 	cout << "last access = " << file2.lastAccess().timeAndDateString() << endl;
@@ -140,6 +142,8 @@ void testSpFsObject()
 	cout << "last change = " << file2.lastChange().timeAndDateString() << endl;
 	cout << "owner = " << file2.uid().name() << endl;
 	cout << "group owner = " << file2.gid().name() << endl;
+	cout << "is a file? = " << file2.isFile() << endl;
+	cout << "is a directory? = " << file2.isDir() << endl;
 }
 
 
