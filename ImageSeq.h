@@ -25,6 +25,7 @@
 #ifndef _imageseq_h_
 #define _imageseq_h_
 
+#include <string>
 #include "Image.h"
 #include "Frames.h"
 
@@ -86,6 +87,7 @@ public:
 private:
 	Frames m_frames;
 	Path p;
+	void findLastNumber(const std::string &s, std::string::size_type &pos, std::string::size_type &size) const;
 	Path pattern(const Path &a) const;
 	int frameNumber(const Path &a) const;
 	std::string hash(int size) const;

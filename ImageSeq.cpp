@@ -124,21 +124,25 @@ Path ImageSeq::path() const
 Path ImageSeq::pattern(const Path &a) const
 {
 	std::string s = a.fullName();
-	// Search backwards from the end for numbers
-	std::string::size_type last = s.find_last_of("0123456789");
-	std::string::size_type first = s.find_last_not_of("0123456789", last) + 1;
-	int size = last - first + 1;
+	std::string::size_type first, size;
+	findLastNumber(s, first, size);
 	s.replace(first, size, hash(size));
 	return Path(s);
+}
+
+void ImageSeq::findLastNumber(const std::string &s, std::string::size_type &pos, std::string::size_type &size) const
+{
+	// Search backwards from the end for numbers
+	std::string::size_type last = s.find_last_of("0123456789");
+	pos = s.find_last_not_of("0123456789", last) + 1;
+	size = last - pos + 1;	
 }
 
 int ImageSeq::frameNumber(const Path &a) const
 {
 	std::string s = a.fullName();
-	// Search backwards from the end for numbers
-	std::string::size_type last = s.find_last_of("0123456789");
-	std::string::size_type first = s.find_last_not_of("0123456789", last) + 1;
-	int size = last - first + 1;
+	std::string::size_type first, size;
+	findLastNumber(s, first, size);
 	std::string number = s.substr(first, size);
 	unsigned int r;
 	sscanf(number.c_str(), "%u", &r);
