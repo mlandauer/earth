@@ -48,9 +48,6 @@ int main(int argc, char **argv)
 	// Configure the tester
 	Tester::setVerbose(false);
 	Tester::setFloatDelta(0.1);
-	// To make tests reliable have to ensure that ls() always
-	// returns things in alphabetical order.
-	Dir::setSortByPath(true);
 	
 	testDir();
 	testSize();

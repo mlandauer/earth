@@ -47,7 +47,7 @@ void testDir::test()
 	check("test 2", dir.user() == User::current());
 	check("test 3", dir.userGroup() == UserGroup::current());
 	checkEqualBool("test 4", dir.valid(), true);
-	std::vector<File> files = dir.listFiles();
+	std::vector<File> files = dir.listFiles(true);
 	if (checkEqual("ls test 0", files.size(), 12)) {
 		checkEqual("ls test 1", files[0].path().fullName(), "test/templateImages/2x2.gif");
 		checkEqual("ls test 2", files[1].path().fullName(), "test/templateImages/2x2.jpg");
@@ -63,7 +63,7 @@ void testDir::test()
 		checkEqual("ls test 12", files[11].path().fullName(), "test/templateImages/8x8.tiff");
 	}
   
-	std::vector<Dir> dirs = dir.listDirs();
+	std::vector<Dir> dirs = dir.listDirs(true);
 	if (checkEqual("ls test 13", dirs.size(), 1)) {
 		checkEqual("ls test 14", dirs[0].path().fullName(), "test/templateImages/CVS");
 	}

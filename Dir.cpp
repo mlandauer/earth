@@ -36,8 +36,6 @@
 
 namespace Sp {
 
-bool Dir::sortByPath = false;
-
 bool Dir::valid() const
 {
 	struct stat fileStat;
@@ -48,10 +46,10 @@ bool Dir::valid() const
 		return false;
 }
 
-std::vector<File> Dir::listFiles() const
+std::vector<File> Dir::listFiles(bool sortByPath) const
 {
 	std::vector<File> l;
-  std::vector<Path> paths = listPaths();
+  std::vector<Path> paths = listPaths(sortByPath);
 
   for (std::vector<Path>::iterator i = paths.begin(); i != paths.end(); ++i) {
     File f(*i);
@@ -61,10 +59,10 @@ std::vector<File> Dir::listFiles() const
   return l;
 }
 
-std::vector<Dir> Dir::listDirs() const
+std::vector<Dir> Dir::listDirs(bool sortByPath) const
 {
 	std::vector<Dir> l;
-  std::vector<Path> paths = listPaths();
+  std::vector<Path> paths = listPaths(sortByPath);
 
   for (std::vector<Path>::iterator i = paths.begin(); i != paths.end(); ++i) {
     Dir f(*i);
@@ -74,7 +72,7 @@ std::vector<Dir> Dir::listDirs() const
   return l;
 }
 
-std::vector<Path> Dir::listPaths() const
+std::vector<Path> Dir::listPaths(bool sortByPath) const
 {
 	std::vector<Path> l;
 	if (!valid())

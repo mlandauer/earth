@@ -38,14 +38,12 @@ class Dir : public FsObject
 		Dir(const Path &path) : FsObject(path) { };
 		Dir() { };
 		~Dir() { };
-    std::vector<File> listFiles() const;
-    std::vector<Dir> listDirs() const;
+    std::vector<File> listFiles(bool sortByPath = false) const;
+    std::vector<Dir> listDirs(bool sortByPath = false) const;
 		bool valid() const;
-		static void setSortByPath(bool b) { sortByPath = b; };
     
 	private:
-		static bool sortByPath;
-    std::vector<Path> listPaths() const;
+    std::vector<Path> listPaths(bool sortByPath) const;
 };
 
 }
