@@ -67,7 +67,8 @@ void testDirMon::test()
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0004.gif");
 
 	// Test initial startup
-	DirMon m(Dir("test/FsMonitor"));
+	DirMon m;
+	m.startMonitorDirectory(Dir("test/FsMonitor"));
 	
 	//DateTime::sleep(6);
 	m.update();

@@ -70,7 +70,7 @@ private:
 	Dir dir;
 };
 
-//! This class monitors just one directory and its contents
+//! This class monitors directories and their contents
 /*!
 	This assumes a POSIX type filesystem which we can monitor using update
 	times of the directories.
@@ -80,7 +80,10 @@ private:
 class DirMon
 {
 	public:
-		DirMon(const Dir &d);
+		DirMon();
+		void startMonitorDirectory(const Dir &d);
+		void stopMonitorDirectory(const Dir &d);
+		
 		void update();
 		bool pendingEvent() const;
 		DirMonEvent getNextEvent();
@@ -88,8 +91,6 @@ class DirMon
 	private:
 		void notifyDeleted(const File &o);
 		void notifyAdded(const File &o);
-		void addedDirectory(const Dir &d);
-		void deletedDirectory(const Dir &d);
 		std::queue<DirMonEvent> eventQueue;
 		std::list<CachedDir> dirs;
 };

@@ -27,12 +27,11 @@
 
 namespace Sp {
 	
-DirMon::DirMon(const Dir &d)
+DirMon::DirMon()
 {
-	addedDirectory(d);
 }
 
-void DirMon::addedDirectory(const Dir &d)
+void DirMon::startMonitorDirectory(const Dir &d)
 {
 	CachedDir c(d);
 	dirs.push_back(c);
@@ -43,10 +42,10 @@ void DirMon::addedDirectory(const Dir &d)
 	// And check for subdirectories
 	std::vector<Dir> dirs = c.listDirs();
 	for (std::vector<Dir>::iterator i = dirs.begin(); i != dirs.end(); ++i)
-		addedDirectory(*i);
+		startMonitorDirectory(*i);
 }
 
-void DirMon::deletedDirectory(const Dir &d)
+void DirMon::stopMonitorDirectory(const Dir &d)
 {
 	// Find the directory
 	for (std::list<CachedDir>::iterator i = dirs.begin(); i != dirs.end(); ++i) {
@@ -58,7 +57,7 @@ void DirMon::deletedDirectory(const Dir &d)
 			// And check for subdirectories
 			std::vector<Dir> deletedDirs = i->listDirs();
 			for (std::vector<Dir>::iterator j = deletedDirs.begin(); j != deletedDirs.end(); ++j)
-				deletedDirectory(*j);
+				stopMonitorDirectory(*j);
 			dirs.erase(i);
 			return;
 		}
@@ -102,10 +101,10 @@ void DirMon::update()
 				currentDirs.begin(), currentDirs.end(),
 				std::back_inserter(deletedDirs));
 			for (std::vector<Dir>::iterator j = addedDirs.begin(); j != addedDirs.end(); ++j) {
-				addedDirectory(*j);
+				startMonitorDirectory(*j);
 			}
 			for (std::vector<Dir>::iterator j = deletedDirs.begin(); j != deletedDirs.end(); ++j) {
-				deletedDirectory(*j);
+				stopMonitorDirectory(*j);
 			}
 			
 			// Replace stored cached directory
