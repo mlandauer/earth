@@ -8,9 +8,9 @@
 class SpSGIImage : public SpImage
 {
 	public:
-		unsigned int width() const;
-		unsigned int height() const;
-		string formatString() const;
+		unsigned int width();
+		unsigned int height();
+		string formatString();
 		SpSGIImage();
 		~SpSGIImage();
 	private:

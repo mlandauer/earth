@@ -72,13 +72,22 @@ void testSpFile()
 	cout << "Value here = " << a << endl;
 	file.close();
 	cout << "File closed" << endl;
-	
-	SpFile file2("/home/matthew/images/dibble1.sgi");
-	SpImage *image = SpImage::open(file2);
+}
+
+void testSpImage()
+{
+	SpFile file1("/home/matthew/images/dibble1.sgi");
+	SpImage *image1 = SpImage::open(file1);
+	cout << "Opened image " << file1.path().fullName() << endl;
+	cout << "Image format = " << image1->formatString() << endl;
+	cout << "Image width = " << image1->width() << endl;
+	cout << "Image height = " << image1->height() << endl;
+	SpFile file2("/home/matthew/images/blah1.tiff");
+	SpImage *image2 = SpImage::open(file2);
 	cout << "Opened image " << file2.path().fullName() << endl;
-	cout << "Image format = " << image->formatString() << endl;
-	cout << "Image width = " << image->width() << endl;
-	cout << "Image height = " << image->height() << endl;
+	cout << "Image format = " << image2->formatString() << endl;
+	cout << "Image width = " << image2->width() << endl;
+	cout << "Image height = " << image2->height() << endl;
 }
 
 void space()
@@ -105,5 +114,7 @@ main()
 	testSpUid();
 	space();
 	testSpFile();
+	space();
+	testSpImage();
 }
 

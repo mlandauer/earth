@@ -4,6 +4,7 @@
 
 #include "SpImage.h"
 #include "SpSGIImage.h"
+#include "SpTIFFImage.h"
 
 SpImage::SpImage()
 {
@@ -28,11 +29,17 @@ SpImage* SpImage::open(SpFile f)
 		(buf[2] == 0x5f) && (buf[3] == 0xd7))
 		cout << "Cineon" << endl;
 	else if ((buf[0] == 'I') && (buf[1] == 'I') &&
-		(buf[2] == 0x2a) && (buf[3] == 0x00))
-		cout << "TIFF" << endl;
+		(buf[2] == 0x2a) && (buf[3] == 0x00)) {
+		image = new SpTIFFImage;
+		image->file = f;
+		return (image);
+	}
 	else if ((buf[0] == 'M') && (buf[1] == 'M') &&
-		(buf[2] == 0x00) && (buf[3] == 0x2a))
-		cout << "TIFF" << endl;
+		(buf[2] == 0x00) && (buf[3] == 0x2a)) {
+		image = new SpTIFFImage;
+		image->file = f;
+		return (image);
+	}
 	else if ((buf[0] == 0x01) && (buf[1] == 0xda)) {
 		image = new SpSGIImage;
 		image->file = f;
@@ -63,18 +70,40 @@ SpImage* SpImage::open(SpFile f)
 		cout << "PRTEX" << endl;
 }
 
+unsigned char SpImage::readChar() const
+{
+	unsigned char value;
+	file.read(&value, 1);
+	return (value);
+}
+
 unsigned short SpImage::readShort(const int &endian) const
 {
-    unsigned short value;
-    unsigned char temp[2];
-    file.read(temp, 2);
+	unsigned short value;
+	unsigned char temp[2];
+	file.read(temp, 2);
 
-    // If small endian
-    if (endian == 0)
-        value = (temp[0]<<0) + (temp[1]<<8);
-    else
-        value = (temp[0]<<8) + (temp[1]<<0);
-    return (value);
+	// If small endian
+	if (endian == 0)
+		value = (temp[0]<<0) + (temp[1]<<8);
+	else
+		value = (temp[0]<<8) + (temp[1]<<0);
+	return (value);
 }
+
+unsigned long SpImage::readLong(const int &endian) const
+{
+	unsigned char temp[4];
+	file.read(temp, 4);
+
+	unsigned long value;
+	if (endian == 0)
+		value = (temp[0]<<0) + (temp[1]<<8) + (temp[2]<<16) + (temp[3]<<24);
+	else
+		value = (temp[0]<<24) + (temp[1]<<16) + (temp[2]<<8) + (temp[3]<<0);
+	return (value);
+}
+  
+
 
 

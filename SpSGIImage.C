@@ -11,19 +11,19 @@ SpSGIImage::~SpSGIImage()
 {
 }
 
-unsigned int SpSGIImage::width() const
+unsigned int SpSGIImage::width()
 {
 	file.seek(6);
 	return (readShort(1));
 }
 
-unsigned int SpSGIImage::height() const
+unsigned int SpSGIImage::height()
 {
 	file.seek(8);
 	return (readShort(1));
 }
 
-string SpSGIImage::formatString() const
+string SpSGIImage::formatString()
 {
 	return (string("SGI"));
 }
