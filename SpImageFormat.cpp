@@ -38,7 +38,7 @@ SpImageFormat::SpImageFormat()
 
 SpImageFormat::~SpImageFormat()
 {
-	#ifndef __APPLE
+	#ifndef __APPLE__
 		removePlugin(this);
 	#endif
 };
