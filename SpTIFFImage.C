@@ -25,11 +25,7 @@ SpImageDim SpTIFFImage::dim()
 
 string SpTIFFImage::formatString()
 {
-	readHeader();
-	if (validHeader)
-		return ("TIFF");
-	else
-		return ("Unknown");
+	return ("TIFF");
 }
 
 bool SpTIFFImage::valid()

@@ -21,11 +21,7 @@ SpImageDim SpIFFImage::dim()
 
 string SpIFFImage::formatString()
 {
-	readHeader();
-	if (validHeader)
-		return ("IFF");
-	else
-		return ("Unknown");
+	return ("IFF");
 }
 
 bool SpIFFImage::valid()
