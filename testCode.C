@@ -88,19 +88,21 @@ void testSpTime()
 {
 	cout << endl << "Testing SpTime: ";
 	SpTime t;
-	t.setCurrentTime();
-	cout << "Current time and date = " << t.timeAndDateString() << endl;
-	cout << "Year = " << t.year() << endl;
-	cout << "Hour = " << t.hour() << endl;
-	cout << "Minute = " << t.minute() << endl;
-	cout << "Second = " << t.second() << endl;
-	cout << "Day of the week = " << t.dayOfWeek() << endl;
-	cout << "Day of the month = " << t.dayOfMonth() << endl;
-	cout << "month = " << t.month() << endl;
-	cout << "monthStringShort = " << t.monthStringShort() << endl;
-	cout << "monthString = " << t.monthString() << endl;
-	cout << "dayOfWeekStringShort = " << t.dayOfWeekStringShort() << endl;
-	cout << "time = " << t.timeString() << endl;
+	t.setUnixTime(0);
+	checkEqual("SpTime test 1", t.timeAndDateString(),
+		"Wed Dec 31 16:00:00 1969");
+	checkEqual("SpTime test 2", t.year(), 1969);
+	checkEqual("SpTime test 3", t.hour(), 16);
+	checkEqual("SpTime test 4", t.minute(), 0);
+	checkEqual("SpTime test 5", t.second(), 0);
+	checkEqual("SpTime test 6", t.dayOfWeek(), 3);
+	checkEqual("SpTime test 7", t.dayOfMonth(), 31);
+	checkEqual("SpTime test 8", t.month(), 12);
+	checkEqual("SpTime test 9", t.monthStringShort(), "Dec");
+	checkEqual("SpTime test 10", t.monthString(), "December");
+	checkEqual("SpTime test 11", t.dayOfWeekStringShort(), "Wed");
+	checkEqual("SpTime test 12", t.dayOfWeekString(), "Wednesday");
+	checkEqual("SpTime test 13", t.timeString(), "16:00:00");
 }
 
 void testSpFile()
@@ -191,12 +193,7 @@ void testSpImage()
 void testSpUid()
 {
 	cout << endl << "Testing SpUid: ";
-	SpUid u;
-	SpGid g;
-	u.setCurrent();
-	g.setCurrent();
-	cout << "current user = " << u.name() << endl;
-	cout << "current group = " << g.name() << endl;
+	// Have to think of some way of testing this class
 }
 
 void testSpFsObject()
