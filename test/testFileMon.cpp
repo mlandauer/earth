@@ -28,21 +28,23 @@
 #include <algorithm>
 #include "FileMon.h"
 #include "Path.h"
+#include "FileObserver.h"
 
 using namespace Sp;
 
-class testFileMon : public CppUnit::TestFixture
+class testFileMon : public CppUnit::TestFixture, public FileObserver
 {
 public:
 	CPPUNIT_TEST_SUITE(testFileMon);
 	CPPUNIT_TEST(test);
 	CPPUNIT_TEST_SUITE_END();
 	
+	virtual void fileAdded(const File &file);
+	virtual void fileDeleted(const File &file);
 	void test();
 	
 private:
 	void checkNextEvents(std::list<FileMonEvent> &actualEvents, std::list<FileMonEvent> &expectedEvents, CppUnit::SourceLine sourceLine);
-	void grabQueuedEvents(FileMon &m);
 	std::list<FileMonEvent> events;
 };
 
@@ -70,12 +72,14 @@ void testFileMon::checkNextEvents(std::list<FileMonEvent> &actualEvents, std::li
 	expectedEvents.clear();
 }
 
-// Grab all the queued events and put them into the local list
-void testFileMon::grabQueuedEvents(FileMon &m)
+void testFileMon::fileAdded(const File &file)
 {
-	while (m.pendingEvent()) {
-		events.push_back(m.getNextEvent());
-	}
+	events.push_back(FileMonEvent(FileMonEvent::added, file));
+}
+
+void testFileMon::fileDeleted(const File &file)
+{
+	events.push_back(FileMonEvent(FileMonEvent::deleted, file));
 }
 
 void testFileMon::test()
@@ -91,6 +95,7 @@ void testFileMon::test()
 
 	// Test initial startup
 	FileMon m;
+	m.registerObserver(this);
 	m.startMonitorDirectory(Dir("test/FsMonitor"));
 	
 	// I'm putting these tests out of order as these events are not guaranteed to come in any
@@ -100,7 +105,6 @@ void testFileMon::test()
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::added, File("test/FsMonitor/test.0004.gif")));
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::added, File("test/FsMonitor/test.0002.gif")));
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::added, File("test/FsMonitor/test.0003.gif")));
-	grabQueuedEvents(m);
 	CPPUNIT_CHECK_NEXT_EVENTS(events, expectedEvents);
 	
 	// Test adding files
@@ -115,12 +119,10 @@ void testFileMon::test()
 	m.update();
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::added, File("test/FsMonitor/test.0005.gif")));
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::added, File("test/FsMonitor/test.0006.gif")));
-	grabQueuedEvents(m);
 	CPPUNIT_CHECK_NEXT_EVENTS(events, expectedEvents);
 	
 	// Test changing nothing
 	m.update();
-	grabQueuedEvents(m);
 	CPPUNIT_CHECK_NEXT_EVENTS(events, expectedEvents);
 	
 	// Test deleting files
@@ -130,12 +132,10 @@ void testFileMon::test()
 	m.update();
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::deleted, File("test/FsMonitor/test.0001.gif")));
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::deleted, File("test/FsMonitor/test.0006.gif")));
-	grabQueuedEvents(m);
 	CPPUNIT_CHECK_NEXT_EVENTS(events, expectedEvents);
 	
 	// Test changing nothing
 	m.update();
-	grabQueuedEvents(m);
 	CPPUNIT_CHECK_NEXT_EVENTS(events, expectedEvents);
 
 	// Test adding subdirectory
@@ -144,12 +144,10 @@ void testFileMon::test()
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/subdirectory/test.0001.gif");
 	m.update();
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::added, File("test/FsMonitor/subdirectory/test.0001.gif")));
-	grabQueuedEvents(m);
 	CPPUNIT_CHECK_NEXT_EVENTS(events, expectedEvents);
 	
 	// Test changing nothing
 	m.update();
-	grabQueuedEvents(m);
 	CPPUNIT_CHECK_NEXT_EVENTS(events, expectedEvents);
 
 	// Test adding in both directories
@@ -159,12 +157,10 @@ void testFileMon::test()
 	m.update();
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::added, File("test/FsMonitor/test.0006.gif")));
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::added, File("test/FsMonitor/subdirectory/test.0002.gif")));
-	grabQueuedEvents(m);
 	CPPUNIT_CHECK_NEXT_EVENTS(events, expectedEvents);
 
 	// Test changing nothing
 	m.update();
-	grabQueuedEvents(m);
 	CPPUNIT_CHECK_NEXT_EVENTS(events, expectedEvents);
 	
 	// Test removing a directory
@@ -173,7 +169,6 @@ void testFileMon::test()
 	m.update();
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::deleted, File("test/FsMonitor/subdirectory/test.0001.gif")));
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::deleted, File("test/FsMonitor/subdirectory/test.0002.gif")));
-	grabQueuedEvents(m);
 	CPPUNIT_CHECK_NEXT_EVENTS(events, expectedEvents);
 
 	// Test removing the rest
@@ -185,7 +180,6 @@ void testFileMon::test()
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::deleted, File("test/FsMonitor/test.0004.gif")));
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::deleted, File("test/FsMonitor/test.0005.gif")));
 	expectedEvents.push_back(FileMonEvent(FileMonEvent::deleted, File("test/FsMonitor/test.0006.gif")));
-	grabQueuedEvents(m);
 	CPPUNIT_CHECK_NEXT_EVENTS(events, expectedEvents);
 	
 	// We're stopping watching. So we can delete the top level directory

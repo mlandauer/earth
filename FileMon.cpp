@@ -27,7 +27,7 @@
 
 namespace Sp {
 	
-FileMon::FileMon()
+FileMon::FileMon() : observer(NULL)
 {
 }
 
@@ -62,6 +62,11 @@ void FileMon::stopMonitorDirectory(const Dir &d)
 			return;
 		}
 	}
+}
+
+void FileMon::registerObserver(FileObserver *o)
+{
+	observer = o;
 }
 
 void FileMon::update()
@@ -114,28 +119,15 @@ void FileMon::update()
 	}
 }
 
-bool FileMon::pendingEvent() const
-{
-	return (!eventQueue.empty());
-}
-
-FileMonEvent FileMon::getNextEvent()
-{
-	// Double check that there is indeed a pending event
-	assert(pendingEvent());
-
-	FileMonEvent e = eventQueue.front();
-	eventQueue.pop();
-	return e;
-}
-
 void FileMon::notifyDeleted(const File &o)
 {
-	eventQueue.push(FileMonEvent(FileMonEvent::deleted, o));
+	assert(observer != NULL);
+	observer->fileDeleted(o);
 }	
 void FileMon::notifyAdded(const File &o)
 {
-	eventQueue.push(FileMonEvent(FileMonEvent::added, o));
+	assert(observer != NULL);
+	observer->fileAdded(o);
 }
 
 }
