@@ -22,12 +22,7 @@ class SpFITImage : public SpImage
 		~SpFITImage() { };
 		SpImageDim dim();
 		bool valid() { return true; };
-		string formatString() { format.formatString(); };
-		SpImage* clone() { return format.constructImage(); };
-		bool recognise(unsigned char *buf) { return format.recognise(buf); };
-		int sizeToRecognise() { return format.sizeToRecognise(); };
 	private:
-		SpFITImageFormat format;
 };
 
 #endif

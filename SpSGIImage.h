@@ -22,12 +22,7 @@ class SpSGIImage : public SpImage
 		~SpSGIImage() { };
 		SpImageDim dim();
 		bool valid() { return true; };
-		string formatString() { return format.formatString(); };
-		SpImage* clone() { return format.constructImage(); };
-		bool recognise(unsigned char *buf) { return format.recognise(buf); };
-		int sizeToRecognise() { return format.sizeToRecognise(); };		
 	private:
-		SpSGIImageFormat format;
 };
 
 #endif

@@ -22,16 +22,11 @@ class SpIFFImage : public SpImage
 		~SpIFFImage() { };
 		SpImageDim dim();
 		bool valid();
-		string formatString() { return format.formatString(); };
-		SpImage* clone() { return format.constructImage(); };
-		bool recognise(unsigned char *buf) { return format.recognise(buf); };
-		int sizeToRecognise() { return format.sizeToRecognise(); };
 	private:
 		unsigned int h, w;
 		bool headerRead;
 		bool validHeader;
 		void readHeader();
-		SpIFFImageFormat format;
 };
 
 #endif

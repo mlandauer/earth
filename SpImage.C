@@ -12,27 +12,27 @@
 #include "SpCINEONImage.h"
 #include "SpPRTEXImage.h"
 
-list<SpImage *> SpImage::plugins;
+list<SpImageFormat *> SpImage::plugins;
 
 // Register all the supported image types
 void SpImage::registerPlugins()
 {
 	// Construct one of every image type. This is all leading up
 	// to some kind of nice plugin architecture
-	plugins.push_back(new SpTIFFImage);
-	plugins.push_back(new SpIFFImage);
-	plugins.push_back(new SpSGIImage);
-	plugins.push_back(new SpFITImage);
-	plugins.push_back(new SpGIFImage);
-	plugins.push_back(new SpPRMANZImage);
-	plugins.push_back(new SpCINEONImage);
-	plugins.push_back(new SpPRTEXImage);
+	plugins.push_back(new SpTIFFImageFormat);
+	plugins.push_back(new SpIFFImageFormat);
+	plugins.push_back(new SpSGIImageFormat);
+	plugins.push_back(new SpFITImageFormat);
+	plugins.push_back(new SpGIFImageFormat);
+	plugins.push_back(new SpPRMANZImageFormat);
+	plugins.push_back(new SpCINEONImageFormat);
+	plugins.push_back(new SpPRTEXImageFormat);
 }
 
 void SpImage::deRegisterPlugins()
 {
 	// Iterate through all the objects and destroy
-	for (list<SpImage *>::iterator a = plugins.begin();
+	for (list<SpImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
 		delete (*a);
 }
@@ -42,7 +42,7 @@ SpImage* SpImage::construct(const SpPath &path)
 	// Figure out what the greatest amount of the header that needs
 	// to be read so that all the plugins can recognise themselves.
 	int largestSizeToRecognise = 0;
-	for (list<SpImage *>::iterator a = plugins.begin();
+	for (list<SpImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
 		if ((*a)->sizeToRecognise() > largestSizeToRecognise)
 			largestSizeToRecognise = (*a)->sizeToRecognise();
@@ -55,10 +55,11 @@ SpImage* SpImage::construct(const SpPath &path)
 	f.close();
 	
 	// See if any of the plugins recognise themselves.
-	for (list<SpImage *>::iterator a = plugins.begin();
+	for (list<SpImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
 		if ((*a)->recognise(buf)) {
-			SpImage* image = (*a)->clone();
+			SpImage* image = (*a)->constructImage();
+			image->format = *a;
 			image->setPath(path);
 			delete buf;
 			return (image);

@@ -22,12 +22,7 @@ class SpCINEONImage : public SpImage
 		~SpCINEONImage() { };
 		SpImageDim dim();
 		bool valid() { return true; };
-		string formatString() { return format.formatString(); };
-		SpImage* clone() { return (format.constructImage()); };
-		bool recognise(unsigned char *buf) { return format.recognise(buf); };
-		int sizeToRecognise() {return format.sizeToRecognise(); };
 	private:
-		SpCINEONImageFormat format;
 };
 
 
