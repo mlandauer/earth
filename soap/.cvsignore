@@ -1,5 +1,3 @@
-calc.add.req.xml
-calc.add.res.xml
 calc.nsmap
 calc.wsdl
 calcclient
@@ -11,3 +9,5 @@ soapStub.h
 soapC.cpp
 soapClient.cpp
 soapServer.cpp
+calc.getDim.res.xml
+calc.getDim.req.xml
