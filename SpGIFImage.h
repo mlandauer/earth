@@ -6,18 +6,28 @@
 #include "SpImage.h"
 #include "SpImageDim.h"
 
+class SpGIFImageFormat: public SpImageFormat
+{
+	public:
+		virtual string formatString() { return "GIF"; };
+		virtual SpImage* constructImage();
+		virtual bool recognise(unsigned char *buf);
+		virtual int sizeToRecognise() { return 4; };
+};
+
 class SpGIFImage : public SpImage
 {
 	public:
+		SpGIFImage() { };
+		~SpGIFImage() { };
 		SpImageDim dim();
-		string formatString();
-		bool valid();
-		SpGIFImage();
-		~SpGIFImage();
-		int sizeToRecognise();
-		bool recognise(unsigned char *buf);
-		SpImage* clone();
+		bool valid() { return (true); };
+		string formatString() { return format.formatString(); };
+		SpImage* clone() { return format.constructImage(); };
+		bool recognise(unsigned char *buf) { return format.recognise(buf); };
+		int sizeToRecognise() { return format.sizeToRecognise(); };
 	private:
+		SpGIFImageFormat format;
 };
 
 #endif

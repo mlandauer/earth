@@ -4,14 +4,6 @@
 
 #include "SpPRTEXImage.h"
 
-SpPRTEXImage::SpPRTEXImage()
-{
-}
-
-SpPRTEXImage::~SpPRTEXImage()
-{
-}
-
 SpImageDim SpPRTEXImage::dim()
 {
 	open();
@@ -23,22 +15,7 @@ SpImageDim SpPRTEXImage::dim()
 	return (SpImageDim(width, height));
 }
 
-string SpPRTEXImage::formatString()
-{
-	return (string("PRTEX"));
-}
-
-bool SpPRTEXImage::valid()
-{
-	return (true);
-}
-
-int SpPRTEXImage::sizeToRecognise()
-{
-	return (4);
-}
-
-bool SpPRTEXImage::recognise(unsigned char *buf)
+bool SpPRTEXImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 0xce) && (buf[1] == 0xfa) &&
 		(buf[2] == 0x03) && (buf[3] == 0x00))
@@ -50,7 +27,7 @@ bool SpPRTEXImage::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpPRTEXImage::clone()
+SpImage* SpPRTEXImageFormat::constructImage()
 {
 	return (new SpPRTEXImage);
 }

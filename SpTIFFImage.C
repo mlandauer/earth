@@ -3,17 +3,6 @@
 #include "SpTIFFImage.h"
 #include <stream.h>
 
-SpTIFFImage::SpTIFFImage()
-{
-	// Assume the worst case to start with
-	headerRead = false;
-	validHeader = false;
-}
-
-SpTIFFImage::~SpTIFFImage()
-{
-}
-
 SpImageDim SpTIFFImage::dim()
 {
 	readHeader();
@@ -21,11 +10,6 @@ SpImageDim SpTIFFImage::dim()
 		return (SpImageDim(w, h));
 	else
 		return (SpImageDim(0, 0));
-}
-
-string SpTIFFImage::formatString()
-{
-	return ("TIFF");
 }
 
 bool SpTIFFImage::valid()
@@ -115,12 +99,7 @@ void SpTIFFImage::readHeader()
 	}
 }
 
-int SpTIFFImage::sizeToRecognise()
-{
-	return (4);
-}
-
-bool SpTIFFImage::recognise(unsigned char *buf)
+bool SpTIFFImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 'I') && (buf[1] == 'I') &&
 		(buf[2] == 0x2a) && (buf[3] == 0x00))
@@ -132,7 +111,7 @@ bool SpTIFFImage::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpTIFFImage::clone()
+SpImage* SpTIFFImageFormat::constructImage()
 {
 	return (new SpTIFFImage);
 }

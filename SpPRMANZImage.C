@@ -2,14 +2,6 @@
 
 #include "SpPRMANZImage.h"
 
-SpPRMANZImage::SpPRMANZImage()
-{
-}
-
-SpPRMANZImage::~SpPRMANZImage()
-{
-}
-
 SpImageDim SpPRMANZImage::dim()
 {
 	open();
@@ -20,22 +12,7 @@ SpImageDim SpPRMANZImage::dim()
 	return (SpImageDim(width, height));
 }
 
-string SpPRMANZImage::formatString()
-{
-	return (string("PRMANZ"));
-}
-
-bool SpPRMANZImage::valid()
-{
-	return (true);
-}
-
-int SpPRMANZImage::sizeToRecognise()
-{
-	return (4);
-}
-
-bool SpPRMANZImage::recognise(unsigned char *buf)
+bool SpPRMANZImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 0x2f) && (buf[1] == 0x08) &&
 		(buf[2] == 0x67) && (buf[3] == 0xab))
@@ -44,8 +21,7 @@ bool SpPRMANZImage::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpPRMANZImage::clone()
+SpImage* SpPRMANZImageFormat::constructImage()
 {
 	return (new SpPRMANZImage);
 }
-

@@ -2,26 +2,10 @@
 
 #include "SpIFFImage.h"
 
-SpIFFImage::SpIFFImage()
-{
-	// Assume the worst case to start with
-	headerRead = false;
-	validHeader = false;
-}
-
-SpIFFImage::~SpIFFImage()
-{
-}
-
 SpImageDim SpIFFImage::dim()
 {
 	readHeader();
 	return (SpImageDim(w, h));
-}
-
-string SpIFFImage::formatString()
-{
-	return ("IFF");
 }
 
 bool SpIFFImage::valid()
@@ -63,12 +47,7 @@ void SpIFFImage::readHeader()
 	}
 }
 
-int SpIFFImage::sizeToRecognise()
-{
-	return (12);
-}
-
-bool SpIFFImage::recognise(unsigned char *buf)
+bool SpIFFImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0]  == 'F') && (buf[1]  == 'O') &&
 		(buf[2]  == 'R') && (buf[3]  == '4') &&
@@ -79,7 +58,7 @@ bool SpIFFImage::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpIFFImage::clone()
+SpImage* SpIFFImageFormat::constructImage()
 {
 	return (new SpIFFImage);
 }

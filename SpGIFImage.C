@@ -2,14 +2,6 @@
 
 #include "SpGIFImage.h"
 
-SpGIFImage::SpGIFImage()
-{
-}
-
-SpGIFImage::~SpGIFImage()
-{
-}
-
 SpImageDim SpGIFImage::dim()
 {
 	open();
@@ -20,22 +12,7 @@ SpImageDim SpGIFImage::dim()
 	return (SpImageDim(width, height));
 }
 
-string SpGIFImage::formatString()
-{
-	return (string("GIF"));
-}
-
-bool SpGIFImage::valid()
-{
-	return (true);
-}
-
-int SpGIFImage::sizeToRecognise()
-{
-	return (4);
-}
-
-bool SpGIFImage::recognise(unsigned char *buf)
+bool SpGIFImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 'G') && (buf[1] == 'I') &&
 		(buf[2] == 'F') && (buf[3] == '8'))
@@ -44,7 +21,7 @@ bool SpGIFImage::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpGIFImage::clone()
+SpImage* SpGIFImageFormat::constructImage()
 {
 	return (new SpGIFImage);
 }

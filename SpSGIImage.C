@@ -2,14 +2,6 @@
 
 #include "SpSGIImage.h"
 
-SpSGIImage::SpSGIImage()
-{
-}
-
-SpSGIImage::~SpSGIImage()
-{
-}
-
 SpImageDim SpSGIImage::dim()
 {
 	open();
@@ -20,22 +12,7 @@ SpImageDim SpSGIImage::dim()
 	return (SpImageDim(width, height));
 }
 
-string SpSGIImage::formatString()
-{
-	return (string("SGI"));
-}
-
-bool SpSGIImage::valid()
-{
-	return (true);
-}
-
-int SpSGIImage::sizeToRecognise()
-{
-	return (2);
-}
-	
-bool SpSGIImage::recognise(unsigned char *buf)
+bool SpSGIImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 0x01) && (buf[1] == 0xda))
 		return (true);
@@ -43,8 +20,7 @@ bool SpSGIImage::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpSGIImage::clone()
+SpImage* SpSGIImageFormat::constructImage()
 {
 	return (new SpSGIImage);
 }
-

@@ -6,18 +6,28 @@
 #include "SpImage.h"
 #include "SpImageDim.h"
 
+class SpPRTEXImageFormat: public SpImageFormat
+{
+	public:
+		virtual string formatString() { return "PRTEX"; };
+		virtual SpImage* constructImage();
+		virtual bool recognise(unsigned char *buf);
+		virtual int sizeToRecognise() { return 4; };
+};
+
 class SpPRTEXImage : public SpImage
 {
 	public:
-		SpPRTEXImage();
-		~SpPRTEXImage();
+		SpPRTEXImage() { };
+		~SpPRTEXImage() { };
 		SpImageDim dim();
-		string formatString();
-		bool valid();
-		int sizeToRecognise();
-		bool recognise(unsigned char *buf);
-		SpImage* clone();
+		bool valid() { return (true); };
+		string formatString() { return format.formatString(); };
+		SpImage* clone() { return format.constructImage(); };
+		bool recognise(unsigned char *buf) { return format.recognise(buf); };
+		int sizeToRecognise() { return format.sizeToRecognise(); };
 	private:
+		SpPRTEXImageFormat format;
 };
 
 #endif

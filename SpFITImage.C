@@ -3,14 +3,6 @@
 #include "SpFITImage.h"
 #include <stream.h>
 
-SpFITImage::SpFITImage()
-{
-}
-
-SpFITImage::~SpFITImage()
-{
-}
-
 SpImageDim SpFITImage::dim()
 {
 	open();
@@ -21,22 +13,7 @@ SpImageDim SpFITImage::dim()
 	return (SpImageDim(width, height));
 }
 
-string SpFITImage::formatString()
-{
-	return (string("FIT"));
-}
-
-bool SpFITImage::valid()
-{
-	return (true);
-}
-
-int SpFITImage::sizeToRecognise()
-{
-	return (4);
-}
-
-bool SpFITImage::recognise(unsigned char *buf)
+bool SpFITImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 'I') && (buf[1] == 'T') &&
 		(buf[2] == '0') && (buf[3] == '1'))
@@ -48,7 +25,7 @@ bool SpFITImage::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpFITImage::clone()
+SpImage* SpFITImageFormat::constructImage()
 {
 	return (new SpFITImage);
 }
