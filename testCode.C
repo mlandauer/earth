@@ -338,13 +338,11 @@ class testSpDirMonitor : public SpTester, public SpDirMonObserver
 {
 private:
 	SpDirMonEvent nextEvent;
-	string nextTestName;
 public:
 	testSpDirMonitor() : SpTester("SpDirMonitor") { test(); };
 	void checkNextEvent(string testName, SpDirMon *m, const SpDirMonEvent &event) {
-		nextEvent = event;
-		nextTestName = testName;
 		m->update();
+		check(testName + "a", event == nextEvent);
 	}
 	
 	SpDirMonEvent::SpType type(SpFsObject *o) {
@@ -355,17 +353,15 @@ public:
 	}
 
 	void notifyChanged(SpFsObject *o) {
-		SpDirMonEvent e = SpDirMonEvent(SpDirMonEvent::changed, type(o), o->path());
-		check(nextTestName + "a", e == nextEvent);		
+		nextEvent = SpDirMonEvent(SpDirMonEvent::changed, type(o), o->path());
 	}
 	void notifyDeleted(SpFsObject *o) {
-		SpDirMonEvent e = SpDirMonEvent(SpDirMonEvent::deleted, type(o), o->path());
-		check(nextTestName + "b", e == nextEvent);		
+		nextEvent = SpDirMonEvent(SpDirMonEvent::deleted, type(o), o->path());
 	}
 	void notifyAdded(SpFsObject *o) {
-		SpDirMonEvent e = SpDirMonEvent(SpDirMonEvent::added, type(o), o->path());
-		check(nextTestName + "c", e == nextEvent);		
+		nextEvent = SpDirMonEvent(SpDirMonEvent::added, type(o), o->path());
 	}
+	
 	void test() {
 		cout << "Note: the following tests will take about 20 seconds" << endl;
 		// First create a directory with some test files
