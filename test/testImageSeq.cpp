@@ -22,6 +22,7 @@
 //
 // $Id$
 
+#include <iostream>
 #include "testImageSeq.h"
 #include "Path.h"
 
@@ -41,6 +42,10 @@ void testImageSeq::test()
 	Path path3a("test/seq/test2.000123.gif");		
 	Path path4a("test/seq/120.gif");		
 	Path path5a("test/seq/110.gif");
+	Path path6a("test/seq/test3.0001");
+	Path path6b("test/seq/test3.0002");
+	Path path6c("test/seq/test3.0003");
+	Path path6d("test/seq/test3.0004");
 	makeDirectory("test/seq");
 	copyFile("test/templateImages/2x2.gif", path1a);
 	copyFile("test/templateImages/2x2.gif", path1b);
@@ -50,6 +55,10 @@ void testImageSeq::test()
 	copyFile("test/templateImages/2x2.gif", path3a);
 	copyFile("test/templateImages/2x2.gif", path4a);
 	copyFile("test/templateImages/4x4.tiff", path5a);
+	copyFile("test/templateImages/8x8.cin", path6a);
+	copyFile("test/templateImages/8x8.cin-invalid", path6b);
+	copyFile("test/templateImages/8x8.cin", path6c);
+	copyFile("test/templateImages/8x8.cin-invalid", path6d);
 	Image *i1 = Image::construct(path1a);
 	Image *i2 = Image::construct(path1b);
 	Image *i3 = Image::construct(path1c);
@@ -58,6 +67,10 @@ void testImageSeq::test()
 	Image *i6 = Image::construct(path3a);
 	Image *i7 = Image::construct(path4a);
 	Image *i8 = Image::construct(path5a);
+	Image *i9 = Image::construct(path6a);
+	Image *i10 = Image::construct(path6b);
+	Image *i11 = Image::construct(path6c);
+	Image *i12 = Image::construct(path6d);
 		
 	if (checkNotNULL("test 1a", i1)) {
 		ImageSeq seq(i1);
@@ -123,7 +136,20 @@ void testImageSeq::test()
 		ImageSeq seq5(i8);
 		checkSequence("test 10", seq5, "test/seq/@@@.gif", "110", 4, 4, "TIFF");
 	}
-			
+	
+	// Now test what happens when we have a mix of valid and invalid images
+	if (checkNotNULL("test 11", i9) && checkNotNULL("test 12", i10)) {
+		ImageSeq one(i9), two(i10);
+		check("test 13", i9->valid());
+		check("test 14", !i10->valid());
+		check("test 15", i11->valid());
+		check("test 16", !i12->valid());
+		check("test 17", one.addImage(i11));
+		check("test 18", !one.addImage(i12));
+		check("test 19", !two.addImage(i11));
+		check("test 20", two.addImage(i12));
+	}
+	
 	system ("rm -rf test/seq");
 	delete i1;
   delete i2;
@@ -133,6 +159,10 @@ void testImageSeq::test()
   delete i6;
   delete i7;
   delete i8;
+	delete i9;
+	delete i10;
+	delete i11;
+	delete i12;
 }
 
 void testImageSeq::checkSequence(std::string testName, const ImageSeq &seq,

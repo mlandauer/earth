@@ -97,6 +97,7 @@ class ImageSeq
 		// Image/Sequence attributes
 		ImageFormat *imageFormat;
 		ImageDim dimensions;
+		bool valid;
 };
 
 }

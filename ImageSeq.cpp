@@ -27,12 +27,18 @@
 
 namespace Sp {
 
+/*!
+	\todo should give values to imageFormat and dimensions when image not valid
+*/
 ImageSeq::ImageSeq(Image *i)
 {
 	p = pattern(i->path());
 	frames.add(frameNumber(i->path()));
-	imageFormat = i->getFormat();
-	dimensions = i->dim();
+	valid = i->valid();
+	if (valid) {
+		imageFormat = i->getFormat();
+		dimensions = i->dim();
+	}
 }
 
 bool ImageSeq::addImage(Image *i)
@@ -94,8 +100,17 @@ bool ImageSeq::couldBePartOfSequence(const Path &path) const
 bool ImageSeq::couldBePartOfSequence(Image *i) const
 {
 	// Check that the name of the image matches the name of the sequence
-	return (pattern(i->path()) == p) && (i->getFormat() == imageFormat)
-		&& (i->dim() == dimensions);
+	if ((pattern(i->path()) == p) && (i->valid() == valid)) {
+		if (valid) {
+			return (i->getFormat() == imageFormat) && (i->dim() == dimensions);
+		}
+		else {
+			return true;
+		}
+	}
+	else {
+		return false;
+	}
 }
 
 std::string ImageSeq::framesString() const

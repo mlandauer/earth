@@ -48,7 +48,7 @@ void testDir::test()
 	check("test 3", dir.userGroup() == UserGroup::current());
 	checkEqualBool("test 4", dir.valid(), true);
 	std::vector<File> files = dir.listFiles(true);
-	if (checkEqual("ls test 0", files.size(), 18)) {
+	if (checkEqual("ls test 0", files.size(), 19)) {
 		checkEqual("ls test 1", files[0].path().fullName(), "test/templateImages/2x2.cin");
 		checkEqual("ls test 1", files[1].path().fullName(), "test/templateImages/2x2.gif");
 		checkEqual("ls test 1", files[2].path().fullName(), "test/templateImages/2x2.iff");
@@ -62,11 +62,12 @@ void testDir::test()
 		checkEqual("ls test 7", files[10].path().fullName(), "test/templateImages/4x4.sgi");		
 		checkEqual("ls test 8", files[11].path().fullName(), "test/templateImages/4x4.tiff");		
 		checkEqual("ls test 9", files[12].path().fullName(), "test/templateImages/8x8.cin");		
-		checkEqual("ls test 9", files[13].path().fullName(), "test/templateImages/8x8.gif");		
-		checkEqual("ls test 9", files[14].path().fullName(), "test/templateImages/8x8.iff");		
-		checkEqual("ls test 10", files[15].path().fullName(), "test/templateImages/8x8.jpg");		
-		checkEqual("ls test 11", files[16].path().fullName(), "test/templateImages/8x8.sgi");		
-		checkEqual("ls test 12", files[17].path().fullName(), "test/templateImages/8x8.tiff");
+		checkEqual("ls test 9", files[13].path().fullName(), "test/templateImages/8x8.cin-invalid");		
+		checkEqual("ls test 9", files[14].path().fullName(), "test/templateImages/8x8.gif");		
+		checkEqual("ls test 9", files[15].path().fullName(), "test/templateImages/8x8.iff");		
+		checkEqual("ls test 10", files[16].path().fullName(), "test/templateImages/8x8.jpg");		
+		checkEqual("ls test 11", files[17].path().fullName(), "test/templateImages/8x8.sgi");		
+		checkEqual("ls test 12", files[18].path().fullName(), "test/templateImages/8x8.tiff");
 	}
   
 	std::vector<Dir> dirs = dir.listDirs(true);
@@ -82,7 +83,7 @@ void testDir::test()
 	
 	// Test a recursive listing
 	files = dir.listFilesRecursive(true);
-	if (checkEqual("ls test 15", files.size(), 21)) {
+	if (checkEqual("ls test 15", files.size(), 22)) {
 		checkEqual("ls test 16", files[0].path().fullName(), "test/templateImages/2x2.cin");
 		checkEqual("ls test 17", files[1].path().fullName(), "test/templateImages/2x2.gif");
 		checkEqual("ls test 18", files[2].path().fullName(), "test/templateImages/2x2.iff");
@@ -96,14 +97,15 @@ void testDir::test()
 		checkEqual("ls test 26", files[10].path().fullName(), "test/templateImages/4x4.sgi");		
 		checkEqual("ls test 27", files[11].path().fullName(), "test/templateImages/4x4.tiff");		
 		checkEqual("ls test 28", files[12].path().fullName(), "test/templateImages/8x8.cin");		
-		checkEqual("ls test 29", files[13].path().fullName(), "test/templateImages/8x8.gif");		
-		checkEqual("ls test 30", files[14].path().fullName(), "test/templateImages/8x8.iff");		
-		checkEqual("ls test 31", files[15].path().fullName(), "test/templateImages/8x8.jpg");		
-		checkEqual("ls test 32", files[16].path().fullName(), "test/templateImages/8x8.sgi");		
-		checkEqual("ls test 33", files[17].path().fullName(), "test/templateImages/8x8.tiff");
-		checkEqual("ls test 34", files[18].path().fullName(), "test/templateImages/CVS/Entries");
-		checkEqual("ls test 35", files[19].path().fullName(), "test/templateImages/CVS/Repository");
-		checkEqual("ls test 36", files[20].path().fullName(), "test/templateImages/CVS/Root");
+		checkEqual("ls test 28", files[13].path().fullName(), "test/templateImages/8x8.cin-invalid");		
+		checkEqual("ls test 29", files[14].path().fullName(), "test/templateImages/8x8.gif");		
+		checkEqual("ls test 30", files[15].path().fullName(), "test/templateImages/8x8.iff");		
+		checkEqual("ls test 31", files[16].path().fullName(), "test/templateImages/8x8.jpg");		
+		checkEqual("ls test 32", files[17].path().fullName(), "test/templateImages/8x8.sgi");		
+		checkEqual("ls test 33", files[18].path().fullName(), "test/templateImages/8x8.tiff");
+		checkEqual("ls test 34", files[19].path().fullName(), "test/templateImages/CVS/Entries");
+		checkEqual("ls test 35", files[20].path().fullName(), "test/templateImages/CVS/Repository");
+		checkEqual("ls test 36", files[21].path().fullName(), "test/templateImages/CVS/Root");
 	}
 	
 }
