@@ -1,7 +1,16 @@
+Todo
+====
 Cache lstats in SpFsObject
 Have to do error checking on file access
-Make SpFsObject use plugins for returning objects
-Actually compile so's that get read in (finalise plugins)
 Start Sequence class
 Write shell script that generates fake image sequences (from image Templates)
 Figure out what to do with the multiple versions of ls in SpDir
+Make Makefile actually work and concise
+
+Done
+====
+Actually compile so's that get read in (finalise plugins)
+
+Not going to do
+===============
+Make SpFsObject use plugins for returning objects
