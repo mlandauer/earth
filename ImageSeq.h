@@ -28,6 +28,7 @@
 #include <string>
 #include "Image.h"
 #include "Frames.h"
+#include "CachedImage.h"
 
 namespace Sp {
 
@@ -36,21 +37,21 @@ class ImageSeq
 {
 public:
 	//! Construct an image sequence from a single image
-	ImageSeq(Image *i);
+	ImageSeq(const CachedImage &image);
 
 	//! Add an image to current sequence
 	/*!
 		If the image is not part of the sequence nothing happens
 		\return true if the image was successfully added
 	*/
-	bool addImage(Image *i);
+	bool addImage(const CachedImage &image);
 
 	//! Remove an image from the current sequence
 	/*!
 		If the image is not part of the sequence nothing happens
 		\return true if the image was successfully removed
 	*/
-	bool removeImage(Image *i);
+	bool removeImage(const CachedImage &image);
 
 	//! Remove an image from the current sequence
 	/*!
@@ -91,9 +92,9 @@ private:
 	Path pattern(const Path &a) const;
 	int frameNumber(const Path &a) const;
 	std::string hash(int size) const;
-	bool couldBePartOfSequence(Image *i) const;
+	bool couldBePartOfSequence(const CachedImage &image) const;
 	bool couldBePartOfSequence(const Path &path) const;
-	bool partOfSequence(Image *i) const;
+	bool partOfSequence(const CachedImage &image) const;
 	bool partOfSequence(const Path &p) const;
 	// Image/Sequence attributes
 	ImageFormat *imageFormat;

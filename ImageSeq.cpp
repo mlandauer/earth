@@ -30,23 +30,23 @@ namespace Sp {
 /*!
 	\todo should give values to imageFormat and dimensions when image not valid
 */
-ImageSeq::ImageSeq(Image *i)
+ImageSeq::ImageSeq(const CachedImage &image)
 {
-	p = pattern(i->getPath());
-	int frame = frameNumber(i->getPath());
+	p = pattern(image.getPath());
+	int frame = frameNumber(image.getPath());
 	// If frame is -1 there is no frame number in the path
 	if (frame != -1) {
 		m_frames.add(frame);
 	}
-	m_valid = i->valid();
-	imageFormat = i->getFormat();
-	dimensions = i->getDim();
+	m_valid = image.valid();
+	imageFormat = image.getFormat();
+	dimensions = image.getDim();
 }
 
-bool ImageSeq::addImage(Image *i)
+bool ImageSeq::addImage(const CachedImage &image)
 {
-	if (couldBePartOfSequence(i)) {
-		m_frames.add(frameNumber(i->getPath()));
+	if (couldBePartOfSequence(image)) {
+		m_frames.add(frameNumber(image.getPath()));
     return true;
   }
   else {
@@ -54,10 +54,10 @@ bool ImageSeq::addImage(Image *i)
   }
 }
 
-bool ImageSeq::removeImage(Image *i)
+bool ImageSeq::removeImage(const CachedImage &image)
 {
-	if (partOfSequence(i)) {
-		return m_frames.remove(frameNumber(i->getPath()));
+	if (partOfSequence(image)) {
+		return m_frames.remove(frameNumber(image.getPath()));
   }
   else {
     return false;
@@ -74,10 +74,10 @@ bool ImageSeq::removeImage(const Path &p)
   }
 }
 
-bool ImageSeq::partOfSequence(Image *i) const
+bool ImageSeq::partOfSequence(const CachedImage &image) const
 {
-	if (couldBePartOfSequence(i)) {
-		return (m_frames.partOfSequence(frameNumber(i->getPath())));
+	if (couldBePartOfSequence(image)) {
+		return (m_frames.partOfSequence(frameNumber(image.getPath())));
   }
   else {
 		return false;
@@ -99,12 +99,12 @@ bool ImageSeq::couldBePartOfSequence(const Path &path) const
   return (pattern(path) == p);
 }
 
-bool ImageSeq::couldBePartOfSequence(Image *i) const
+bool ImageSeq::couldBePartOfSequence(const CachedImage &image) const
 {
 	// Check that the name of the image matches the name of the sequence
-	if ((pattern(i->getPath()) == p) && (i->valid() == m_valid)) {
+	if ((pattern(image.getPath()) == p) && (image.valid() == m_valid)) {
 		if (m_valid) {
-			return (i->getFormat() == imageFormat) && (i->getDim() == dimensions);
+			return (image.getFormat() == imageFormat) && (image.getDim() == dimensions);
 		}
 		else {
 			return true;
