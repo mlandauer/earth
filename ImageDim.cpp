@@ -26,10 +26,8 @@
 
 namespace Sp {
 
-ImageDim::ImageDim(unsigned int width, unsigned int height)
+ImageDim::ImageDim(unsigned int width, unsigned int height) : w(width), h(height)
 {
-	setWidth(width);
-	h = height;
 }
 
 ImageDim::~ImageDim()

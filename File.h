@@ -56,23 +56,6 @@ class File : public FsObject
 		bool fileOpen;
 };
 
-// Stores a file with its time stamps
-class FileDateTime : public File
-{
-	public:
-		FileDateTime(const File &file) : File(file) { }
-		bool changed() {
-			if (cachedChange < lastChange()) {
-				cachedChange = lastChange();
-				return true;
-			}
-			else
-				return false;
-		}
-	protected:
-		DateTime cachedChange;
-};
-
 }
 
 #endif
