@@ -33,7 +33,11 @@ namespace Sp {
 ImageSeq::ImageSeq(Image *i)
 {
 	p = pattern(i->path());
-	m_frames.add(frameNumber(i->path()));
+	int frame = frameNumber(i->path());
+	// If frame is -1 there is no frame number in the path
+	if (frame != -1) {
+		m_frames.add(frame);
+	}
 	m_valid = i->valid();
 	imageFormat = i->getFormat();
 	dimensions = i->dim();
@@ -125,28 +129,46 @@ Path ImageSeq::pattern(const Path &a) const
 {
 	std::string s = a.fullName();
 	std::string::size_type first, size;
-	findLastNumber(s, first, size);
-	s.replace(first, size, hash(size));
-	return Path(s);
+	if (findLastNumber(s, first, size)) {
+		s.replace(first, size, hash(size));
+		return Path(s);
+	}
+	else {
+		return a;
+	}
 }
 
-void ImageSeq::findLastNumber(const std::string &s, std::string::size_type &pos, std::string::size_type &size) const
+/*!
+	/return false if there are no numbers in the string
+*/
+bool ImageSeq::findLastNumber(const std::string &s, std::string::size_type &pos, std::string::size_type &size) const
 {
 	// Search backwards from the end for numbers
 	std::string::size_type last = s.find_last_of("0123456789");
+	if (last == std::string::npos)
+		return false;
 	pos = s.find_last_not_of("0123456789", last) + 1;
-	size = last - pos + 1;	
+	size = last - pos + 1;
+	return true;
 }
 
+/*!
+	/return -1 if there is no frame number in the path
+*/
 int ImageSeq::frameNumber(const Path &a) const
 {
 	std::string s = a.fullName();
 	std::string::size_type first, size;
-	findLastNumber(s, first, size);
-	std::string number = s.substr(first, size);
-	unsigned int r;
-	sscanf(number.c_str(), "%u", &r);
-	return r;
+
+	if (findLastNumber(s, first, size)) {
+		std::string number = s.substr(first, size);
+		unsigned int r;
+		sscanf(number.c_str(), "%u", &r);
+		return r;
+	}
+	else {
+		return -1;
+	}
 }
 
 // Returns the correct replacement for a number based on the number of

@@ -35,10 +35,12 @@ public:
 	CPPUNIT_TEST_SUITE(testImageSeq);
 	CPPUNIT_TEST(test);
 	CPPUNIT_TEST(testInvalidSequence);
+	CPPUNIT_TEST(testStrangeName);
 	CPPUNIT_TEST_SUITE_END();
 	
 	void test();
 	void testInvalidSequence();
+	void testStrangeName();
 
 private:
 	void checkSequence(const ImageSeq &seq, std::string name, std::string frames,
@@ -155,6 +157,34 @@ void testImageSeq::testInvalidSequence()
 	delete i2;
 	delete i3;
 	delete i4;
+}
+
+// This is what should happen if the image that we are making a sequence out of
+// doesn't have a frame number in the name. 
+void testImageSeq::testStrangeName()
+{
+	Image *i1 = Image::construct("test/seq/foo");
+	Image *i2 = Image::construct("test/seq/bar");
+	
+	CPPUNIT_ASSERT(i1 != NULL);
+	CPPUNIT_ASSERT(i2 != NULL);
+	
+	ImageSeq one(i1);
+	
+	std::cout << "Finished construction..." << std::endl;
+	std::cout << "one.path().fullName() = " << one.path().fullName() << std::endl;
+	std::cout << "one.frames().text() = " << one.frames().text() << std::endl;
+	std::cout << "one.dim().width() = " << one.dim().width() << std::endl;
+	std::cout << "one.dim().height() = " << one.dim().height() << std::endl;
+	std::cout << "one.format() = " << one.format() << std::endl;
+	std::cout << "one.format()->formatString() = " << one.format()->formatString() << std::endl;
+	std::cout << "one.valid() = " << one.valid() << std::endl;
+
+	checkSequence(one, "test/seq/foo", "", 8, 8, "Cineon", true);
+	CPPUNIT_ASSERT(!one.addImage(i2));
+	
+	delete i1;
+	delete i2;
 }
 
 void testImageSeq::checkSequence(const ImageSeq &seq, std::string name, std::string frames,
