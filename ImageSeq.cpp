@@ -34,7 +34,7 @@ ImageSeq::ImageSeq(Image *i)
 {
 	p = pattern(i->path());
 	frames.add(frameNumber(i->path()));
-	valid = i->valid();
+	m_valid = i->valid();
 	imageFormat = i->getFormat();
 	dimensions = i->dim();
 }
@@ -98,8 +98,8 @@ bool ImageSeq::couldBePartOfSequence(const Path &path) const
 bool ImageSeq::couldBePartOfSequence(Image *i) const
 {
 	// Check that the name of the image matches the name of the sequence
-	if ((pattern(i->path()) == p) && (i->valid() == valid)) {
-		if (valid) {
+	if ((pattern(i->path()) == p) && (i->valid() == m_valid)) {
+		if (m_valid) {
 			return (i->getFormat() == imageFormat) && (i->dim() == dimensions);
 		}
 		else {

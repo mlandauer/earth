@@ -84,6 +84,9 @@ public:
 	*/
 	std::string framesString() const;
 	
+	//! Is this a sequence consisting of valid images?
+	bool valid() const { return m_valid; }
+	
 private:
 	Frames frames;
 	Path p;
@@ -97,7 +100,7 @@ private:
 	// Image/Sequence attributes
 	ImageFormat *imageFormat;
 	ImageDim dimensions;
-	bool valid;
+	bool m_valid;
 };
 
 }

@@ -40,7 +40,7 @@ public:
 
 private:
 	void checkSequence(const ImageSeq &seq, std::string name, std::string frames,
-		int width, int height, std::string format);
+		int width, int height, std::string format, bool valid);
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testImageSeq);
@@ -78,48 +78,48 @@ void testImageSeq::test()
 	CPPUNIT_ASSERT(i12 != NULL);
 	
 	ImageSeq seq(i1);
-	checkSequence(seq, "test/seq/test1.#.gif", "1", 2, 2, "GIF");
+	checkSequence(seq, "test/seq/test1.#.gif", "1", 2, 2, "GIF", true);
 	CPPUNIT_ASSERT(seq.addImage(i2));
-	checkSequence(seq, "test/seq/test1.#.gif", "1-2", 2, 2, "GIF");
+	checkSequence(seq, "test/seq/test1.#.gif", "1-2", 2, 2, "GIF", true);
 
 	CPPUNIT_ASSERT(seq.addImage(i4));
-	checkSequence(seq, "test/seq/test1.#.gif", "1-2,4", 2, 2, "GIF");
+	checkSequence(seq, "test/seq/test1.#.gif", "1-2,4", 2, 2, "GIF", true);
 
 	CPPUNIT_ASSERT(seq.addImage(i3));
-	checkSequence(seq, "test/seq/test1.#.gif", "1-4", 2, 2, "GIF");
+	checkSequence(seq, "test/seq/test1.#.gif", "1-4", 2, 2, "GIF", true);
 
 	CPPUNIT_ASSERT(seq.removeImage(i2));
-	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
+	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF", true);
 
 	// If we remove something that's not part of the sequence nothing should change
 	CPPUNIT_ASSERT(!seq.removeImage(i8));
-	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
+	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF", true);
 
 	CPPUNIT_ASSERT(!seq.removeImage(i2));
-	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
+	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF", true);
 
 	// Removing by giving a path
 	CPPUNIT_ASSERT(seq.removeImage("test/seq/test1.0003.gif"));
-	checkSequence(seq, "test/seq/test1.#.gif", "1,4", 2, 2, "GIF");		
+	checkSequence(seq, "test/seq/test1.#.gif", "1,4", 2, 2, "GIF", true);		
 		
 	ImageSeq seq2(i5);
-	checkSequence(seq2, "test/seq/test2.@.gif", "8", 2, 2, "GIF");
+	checkSequence(seq2, "test/seq/test2.@.gif", "8", 2, 2, "GIF", true);
 
 	ImageSeq seq3(i6);
-	checkSequence(seq3, "test/seq/test2.@@@@@@.gif", "123", 2, 2, "GIF");
+	checkSequence(seq3, "test/seq/test2.@@@@@@.gif", "123", 2, 2, "GIF", true);
 
 	ImageSeq seq4(i7);
-	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
+	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF", true);
 	// Adding in an image with a different name should not work
 	CPPUNIT_ASSERT(!seq4.addImage(i5));
-	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
+	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF", true);
 
 	// Adding in an image with a correct name but wrong image size should not work
 	CPPUNIT_ASSERT(!seq4.addImage(i8));
-	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
+	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF", true);
 		
 	ImageSeq seq5(i8);
-	checkSequence(seq5, "test/seq/@@@.gif", "110", 4, 4, "TIFF");
+	checkSequence(seq5, "test/seq/@@@.gif", "110", 4, 4, "TIFF", true);
 	
 	// Now test what happens when we have a mix of valid and invalid images
 	ImageSeq one(i9), two(i10);
@@ -132,8 +132,8 @@ void testImageSeq::test()
 	CPPUNIT_ASSERT(!two.addImage(i11));
 	CPPUNIT_ASSERT(two.addImage(i12));
 
-	checkSequence(one, "test/seq/test3.#", "1,3", 8, 8, "Cineon");
-	checkSequence(two, "test/seq/test3.#", "2,4", 0, 0, "Cineon");
+	checkSequence(one, "test/seq/test3.#", "1,3", 8, 8, "Cineon", true);
+	checkSequence(two, "test/seq/test3.#", "2,4", 0, 0, "Cineon", false);
 
 	delete i1;
 	delete i2;
@@ -150,7 +150,7 @@ void testImageSeq::test()
 }
 
 void testImageSeq::checkSequence(const ImageSeq &seq, std::string name, std::string frames,
-	int width, int height, std::string format)
+	int width, int height, std::string format, bool valid)
 {
 	CPPUNIT_ASSERT_EQUAL(seq.path().fullName(), name);
 	CPPUNIT_ASSERT_EQUAL(seq.framesString(), frames);
@@ -158,4 +158,5 @@ void testImageSeq::checkSequence(const ImageSeq &seq, std::string name, std::str
 	CPPUNIT_ASSERT(seq.dim().height() == height);
 	CPPUNIT_ASSERT(seq.format() != NULL);
 	CPPUNIT_ASSERT_EQUAL(seq.format()->formatString(), format);		
+	CPPUNIT_ASSERT(seq.valid() == valid);
 }
