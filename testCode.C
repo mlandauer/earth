@@ -58,6 +58,16 @@ void space()
 	cout << "=========================" << endl;
 }
 
+void testSpUid()
+{
+	SpUid u;
+	SpGid g;
+	u.setCurrent();
+	g.setCurrent();
+	cout << "current user = " << u.string() << endl;
+	cout << "current group = " << g.string() << endl;
+}
+
 main()
 {
 	testSpSize();
@@ -65,5 +75,7 @@ main()
 	testSpTime();
 	space();
 	testSpFile();
+	space();
+	testSpUid();
 }
 

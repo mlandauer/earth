@@ -14,6 +14,7 @@ class SpGid
 		~SpGid();
 		void setUnixGid(gid_t g);
 		SpString string();
+		void setCurrent();
 	private:
 		gid_t gid;
 };

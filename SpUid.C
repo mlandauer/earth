@@ -1,6 +1,7 @@
 // $Id$ 
 
 #include <pwd.h>
+#include <unistd.h>
 
 #include "SpUid.h"
 
@@ -15,6 +16,11 @@ SpUid::~SpUid()
 void SpUid::setUnixUid(uid_t u)
 {
 	uid = u;
+}
+
+void SpUid::setCurrent()
+{
+	uid = getuid();
 }
 
 SpString SpUid::string()

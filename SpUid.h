@@ -14,6 +14,7 @@ class SpUid
 		~SpUid();
 		void setUnixUid(uid_t u);
 		SpString string();
+		void setCurrent();
 	private:
 		uid_t uid;
 };

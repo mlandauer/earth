@@ -12,7 +12,7 @@ all: testCode
 clean:
 	rm -fr ii_files *.o testCode
 
-testCode: testCode.o $(OBJECTS) SpFile.h
+testCode: testCode.o $(OBJECTS) SpFile.h SpUid.h SpGid.h
 	$(CC) $(OPTION) -o testCode testCode.o $(OBJECTS) -lqt
 
 testCode.o: testCode.C SpFile.h
