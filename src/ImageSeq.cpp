@@ -59,29 +59,14 @@ void ImageSeq::removeImage(const Path &p)
 	m_frames.remove(frameNumber(p));
 }
 
-bool ImageSeq::partOfSequence(const CachedImage &image) const
-{
-	if (couldBePartOfSequence(image)) {
-		return (m_frames.partOfSequence(frameNumber(image.getPath())));
-  }
-  else {
-		return false;
-  }
-}
-
 bool ImageSeq::partOfSequence(const Path &path) const
 {
-	if (couldBePartOfSequence(path)) {
+	// Does the name of the image match the name of the sequence?
+	if (pattern(path) == p) {
 		return (m_frames.partOfSequence(frameNumber(path)));
-  }
-  else
+	}
+	else
 		return false;
-}
-
-bool ImageSeq::couldBePartOfSequence(const Path &path) const
-{
-	// Check that the name of the image matches the name of the sequence
-  return (pattern(path) == p);
 }
 
 bool ImageSeq::couldBePartOfSequence(const CachedImage &image) const

@@ -88,8 +88,7 @@ private:
 	Path pattern(const Path &a) const;
 	int frameNumber(const Path &a) const;
 	std::string hash(int size) const;
-	bool couldBePartOfSequence(const Path &path) const;
-	bool partOfSequence(const CachedImage &image) const;
+
 	// Image/Sequence attributes
 	ImageFormat *imageFormat;
 	ImageDim dimensions;
