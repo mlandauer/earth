@@ -7,13 +7,8 @@
 
 #include "SpFile.h"
 
-SpFile::SpFile() : fileOpen(false)
+SpFile::SpFile(const SpPath &path) : fileOpen(false), SpFsObject(path)
 {
-}
-
-SpFile::SpFile(const SpPath &path) : fileOpen(false)
-{
-	setPath(path);
 }
 
 bool SpFile::valid() const
@@ -29,22 +24,6 @@ void SpFile::setPath(const SpPath &path)
 		SpFsObject::setPath(path);
 	//else 
 	//	cerr << "Cannot setPath for file when it is open!" << endl;
-}
-
-SpFile::~SpFile()
-{
-}
-
-// Override default implementation in parent class for efficiency sake
-bool SpFile::isFile() const
-{
-	return (true);
-}
-
-// Override default implementation in parent class for efficiency sake
-bool SpFile::isDir() const
-{
-	return (false);
 }
 
 // Opens for read only at the moment

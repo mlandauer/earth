@@ -12,14 +12,6 @@
 
 #include "SpFsObject.h"
 
-SpDir::SpDir()
-{
-}
-
-SpDir::~SpDir()
-{
-}
-
 bool SpDir::valid() const
 {
 	struct stat fileStat;
@@ -27,21 +19,8 @@ bool SpDir::valid() const
 	return(S_ISDIR(fileStat.st_mode));
 }
 
-SpDir::SpDir(const SpPath &path)
+SpDir::SpDir(const SpPath &path) : SpFsObject(path)
 {
-	setPath(path);
-}
-
-// Overrides default implementation in SpFsObject for efficiency
-bool SpDir::isFile() const
-{
-	return (false);
-}
-
-// Overrides default implementation in SpFsObject for efficiency
-bool SpDir::isDir() const
-{
-	return (true);
 }
 
 vector<SpFsObject *> SpDir::ls() const

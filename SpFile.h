@@ -13,11 +13,8 @@
 class SpFile : public SpFsObject
 {
 	public:
-		SpFile();
-		~SpFile();
-		SpFile(const SpPath &path);
-		inline bool isFile() const;
-		inline bool isDir() const;
+		SpFile(const SpPath &path = "");
+		~SpFile() { };
 		void open();
 		void close();
 		unsigned long int read(void *buf, unsigned long int count) const;

@@ -63,6 +63,7 @@ void testSpFile()
 {
 	cout << endl << "Testing SpFile: ";
 	SpFile file("test/templateImages/8x8.tiff");
+	SpTester::checkEqual("Spfile test 0", file.valid(), true);
 	SpTester::checkEqual("SpFile test 1", file.path().fullName(),
 		"test/templateImages/8x8.tiff");
 	SpTester::checkEqual("SpFile test 2", file.size().bytes(), 396.0);
@@ -188,8 +189,7 @@ void testSpDir()
 	SpGid g;
 	g.setCurrent();
 	SpTester::checkEqual("SpDir test 3", dir.gid().name(), g.name());
-	SpTester::checkEqual("SpDir test 4", dir.isFile(), false);
-	SpTester::checkEqual("SpDir test 5", dir.isDir(), true);
+	SpTester::checkEqual("SpDir test 4", dir.valid(), true);
 	vector<SpImage *> ls = dir.lsImagesSortedByPath();
 	SpTester::checkEqual("SpDir ls test 0", ls.size(), 9);
 	// Don't even attempt the next ones if the above test failed
