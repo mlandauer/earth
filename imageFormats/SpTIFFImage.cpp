@@ -25,22 +25,22 @@
 #include "SpTIFFImage.h"
 #include <stream.h>
 
-SpImageDim SpTIFFImage::dim()
+ImageDim TIFFImage::dim()
 {
 	readHeader();
 	if (validHeader)
-		return (SpImageDim(w, h));
+		return (ImageDim(w, h));
 	else
-		return (SpImageDim(0, 0));
+		return (ImageDim(0, 0));
 }
 
-bool SpTIFFImage::valid()
+bool TIFFImage::valid()
 {
 	readHeader();
 	return (validHeader);
 }
 
-void SpTIFFImage::readHeader()
+void TIFFImage::readHeader()
 {
 	if (!headerRead) {
 		headerRead = true;
@@ -121,7 +121,7 @@ void SpTIFFImage::readHeader()
 	}
 }
 
-bool SpTIFFImageFormat::recognise(unsigned char *buf)
+bool TIFFImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 'I') && (buf[1] == 'I') &&
 		(buf[2] == 0x2a) && (buf[3] == 0x00))
@@ -133,10 +133,10 @@ bool SpTIFFImageFormat::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpTIFFImageFormat::constructImage()
+Image* TIFFImageFormat::constructImage()
 {
-	return (new SpTIFFImage);
+	return (new TIFFImage);
 }
 
-static SpTIFFImageFormat thisTIFFImageFormat;
+static TIFFImageFormat thisTIFFImageFormat;
 

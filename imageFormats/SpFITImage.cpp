@@ -25,17 +25,17 @@
 #include "SpFITImage.h"
 #include <stream.h>
 
-SpImageDim SpFITImage::dim()
+ImageDim FITImage::dim()
 {
 	open();
 	seek(4);
 	unsigned int width = readLong(1);
 	unsigned int height = readLong(1);
 	close();
-	return (SpImageDim(width, height));
+	return (ImageDim(width, height));
 }
 
-bool SpFITImageFormat::recognise(unsigned char *buf)
+bool FITImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 'I') && (buf[1] == 'T') &&
 		(buf[2] == '0') && (buf[3] == '1'))
@@ -47,9 +47,9 @@ bool SpFITImageFormat::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpFITImageFormat::constructImage()
+Image* FITImageFormat::constructImage()
 {
-	return (new SpFITImage);
+	return (new FITImage);
 }
 
-static SpFITImageFormat thisFITImageFormat;
+static FITImageFormat thisFITImageFormat;

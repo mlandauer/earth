@@ -22,15 +22,15 @@
 //
 // $Id$
 
-#ifndef _testspfsobjecthandle_h_
-#define _testspfsobjecthandle_h_
+#ifndef _testfsobjecthandle_h_
+#define _testfsobjecthandle_h_
 
 #include "SpTester.h"
 
-class testSpFsObjectHandle : public SpTester
+class testFsObjectHandle : public Tester
 {
 public:
-	testSpFsObjectHandle();
+	testFsObjectHandle();
 	void test();
 };
 

@@ -24,19 +24,19 @@
 
 #include "SpIFFImage.h"
 
-SpImageDim SpIFFImage::dim()
+ImageDim IFFImage::dim()
 {
 	readHeader();
-	return (SpImageDim(w, h));
+	return (ImageDim(w, h));
 }
 
-bool SpIFFImage::valid()
+bool IFFImage::valid()
 {
 	readHeader();
 	return (validHeader);
 }
 
-void SpIFFImage::readHeader()
+void IFFImage::readHeader()
 {
 	if (!headerRead) {
 		char chunkTag[4];
@@ -69,7 +69,7 @@ void SpIFFImage::readHeader()
 	}
 }
 
-bool SpIFFImageFormat::recognise(unsigned char *buf)
+bool IFFImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0]  == 'F') && (buf[1]  == 'O') &&
 		(buf[2]  == 'R') && (buf[3]  == '4') &&
@@ -80,9 +80,9 @@ bool SpIFFImageFormat::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpIFFImageFormat::constructImage()
+Image* IFFImageFormat::constructImage()
 {
-	return (new SpIFFImage);
+	return (new IFFImage);
 }
 
-static SpIFFImageFormat thisIFFImageFormat;
+static IFFImageFormat thisIFFImageFormat;

@@ -22,15 +22,15 @@
 //
 // $Id$
 
-#ifndef _testsppath_h_
-#define _testsppath_h_
+#ifndef _testpath_h_
+#define _testpath_h_
 
 #include "SpTester.h"
 
-class testSpPath : public SpTester
+class testPath : public Tester
 {
 public:
-	testSpPath();
+	testPath();
 	void test();
 };
 

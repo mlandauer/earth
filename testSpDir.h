@@ -22,20 +22,20 @@
 //
 // $Id$
 
-#ifndef _testspdir_h_
-#define _testspdir_h_
+#ifndef _testdir_h_
+#define _testdir_h_
 
 #include "SpTester.h"
 #include "SpFsObject.h"
 
-class testSpDir : public SpTester
+class testDir : public Tester
 {
 public:
-	testSpDir();
+	testDir();
 	void test();
-	void checkImage(std::string n, SpFsObjectHandle o, std::string fileName, std::string formatString);
-	void checkNotImage(std::string n, SpFsObjectHandle o, std::string fileName);
-	void checkDir(std::string n, SpFsObjectHandle o, std::string fileName);
+	void checkImage(std::string n, FsObjectHandle o, std::string fileName, std::string formatString);
+	void checkNotImage(std::string n, FsObjectHandle o, std::string fileName);
+	void checkDir(std::string n, FsObjectHandle o, std::string fileName);
 };
 
 #endif

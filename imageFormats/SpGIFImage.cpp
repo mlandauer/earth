@@ -24,17 +24,17 @@
 
 #include "SpGIFImage.h"
 
-SpImageDim SpGIFImage::dim()
+ImageDim GIFImage::dim()
 {
 	open();
 	seek(6);
 	unsigned int width = readShort(0);
 	unsigned int height = readShort(0);
 	close();
-	return (SpImageDim(width, height));
+	return (ImageDim(width, height));
 }
 
-bool SpGIFImageFormat::recognise(unsigned char *buf)
+bool GIFImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 'G') && (buf[1] == 'I') &&
 		(buf[2] == 'F') && (buf[3] == '8'))
@@ -43,10 +43,10 @@ bool SpGIFImageFormat::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpGIFImageFormat::constructImage()
+Image* GIFImageFormat::constructImage()
 {
-	return (new SpGIFImage);
+	return (new GIFImage);
 }
 
-static SpGIFImageFormat thisGIFImageFormat;
+static GIFImageFormat thisGIFImageFormat;
 

@@ -25,26 +25,26 @@
 #include "testSpDir.h"
 #include "SpDir.h"
 
-testSpDir::testSpDir() : SpTester("SpDir")
+testDir::testDir() : Tester("Dir")
 {
 	test();
 };
 
-void testSpDir::test()
+void testDir::test()
 {
-	SpDir dir("test/templateImages/");
+	Dir dir("test/templateImages/");
 	checkEqual("test 1", dir.path().fullName(),
 		"test/templateImages");
 	// Think of some way to test the modification dates automatically
 	// Check that this user owns the files
-	SpUid u = SpUid::current();
+	Uid u = Uid::current();
 	checkEqual("test 2", dir.uid().name(), u.name());
-	SpGid g = SpGid::current();
+	Gid g = Gid::current();
 	checkEqual("test 3", dir.gid().name(), g.name());
 	checkEqualBool("test 4", dir.valid(), true);
-	std::vector<SpFsObjectHandle> ls = dir.ls();
+	std::vector<FsObjectHandle> ls = dir.ls();
 	if (checkEqual("ls test 0", ls.size(), 13)) {
-		std::vector<SpFsObjectHandle>::iterator a = ls.begin();
+		std::vector<FsObjectHandle>::iterator a = ls.begin();
 		checkImage("ls test 1", *(a++), "test/templateImages/2x2.gif", "GIF");
 		checkNotImage("ls test 2", *(a++), "test/templateImages/2x2.jpg");
 		checkImage("ls test 3", *(a++), "test/templateImages/2x2.sgi", "SGI");
@@ -60,25 +60,25 @@ void testSpDir::test()
 		checkDir("ls test 13", *(a++), "test/templateImages/CVS");		
 	}
 	// Try doing an ls on a non-existant directory
-	SpDir dirNotExist("test/whatASillyFella");
+	Dir dirNotExist("test/whatASillyFella");
 	checkEqualBool("non-existant test 1", dirNotExist.valid(), false);
-	std::vector<SpFsObjectHandle> lsNotExist = dirNotExist.ls();
+	std::vector<FsObjectHandle> lsNotExist = dirNotExist.ls();
 	checkEqual("non-existant test 2", lsNotExist.size(), 0);
 }
 
-void testSpDir::checkImage(std::string n, SpFsObjectHandle o, std::string fileName, std::string formatString) {
+void testDir::checkImage(std::string n, FsObjectHandle o, std::string fileName, std::string formatString) {
 	checkEqual(n + "a",  o->path().fullName(), fileName);
-	SpImage *i = dynamic_cast<SpImage *>(o.pointer());
-	if (SpTester::checkNotNULL(n + "b", i))
+	Image *i = dynamic_cast<Image *>(o.pointer());
+	if (Tester::checkNotNULL(n + "b", i))
 		checkEqual(n + "c",  i->formatString(), formatString);		
 }
 
-void testSpDir::checkNotImage(std::string n, SpFsObjectHandle o, std::string fileName) {
+void testDir::checkNotImage(std::string n, FsObjectHandle o, std::string fileName) {
 	checkEqual(n + "a",  o->path().fullName(), fileName);
-	checkNULL(n + "b",  dynamic_cast<SpImage *>(o.pointer()));
+	checkNULL(n + "b",  dynamic_cast<Image *>(o.pointer()));
 }
 
-void testSpDir::checkDir(std::string n, SpFsObjectHandle o, std::string fileName) {
+void testDir::checkDir(std::string n, FsObjectHandle o, std::string fileName) {
 	checkEqual(n + "a",  o->path().fullName(), fileName);
-	checkNotNULL(n + "b",  dynamic_cast<SpDir *>(o.pointer()));
+	checkNotNULL(n + "b",  dynamic_cast<Dir *>(o.pointer()));
 }

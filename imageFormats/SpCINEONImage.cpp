@@ -24,7 +24,7 @@
 
 #include "SpCINEONImage.h"
 
-SpImageDim SpCINEONImage::dim()
+ImageDim CINEONImage::dim()
 {
 	open();
 	seek(192);
@@ -39,10 +39,10 @@ SpImageDim SpCINEONImage::dim()
 		height = temp;
 	}
 	close();
-	return (SpImageDim(width, height));
+	return (ImageDim(width, height));
 }
 
-bool SpCINEONImageFormat::recognise(unsigned char *buf)
+bool CINEONImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 0x80) && (buf[1] == 0x2a) &&
 		(buf[2] == 0x5f) && (buf[3] == 0xd7))
@@ -51,10 +51,10 @@ bool SpCINEONImageFormat::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpCINEONImageFormat::constructImage()
+Image* CINEONImageFormat::constructImage()
 {
-	return (new SpCINEONImage);
+	return (new CINEONImage);
 };
 
-static SpCINEONImageFormat thisCINEONImageFormat;
+static CINEONImageFormat thisCINEONImageFormat;
 

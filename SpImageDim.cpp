@@ -24,37 +24,37 @@
 
 #include "SpImageDim.h"
 
-SpImageDim::SpImageDim(unsigned int width, unsigned int height)
+ImageDim::ImageDim(unsigned int width, unsigned int height)
 {
 	setWidth(width);
 	h = height;
 }
 
-SpImageDim::~SpImageDim()
+ImageDim::~ImageDim()
 {
 }
 
-void SpImageDim::setWidth(unsigned int width)
+void ImageDim::setWidth(unsigned int width)
 {
 	w = width;
 }
 
-void SpImageDim::setHeight(unsigned int height)
+void ImageDim::setHeight(unsigned int height)
 {
 	h = height;
 }
 
-unsigned int SpImageDim::width() const
+unsigned int ImageDim::width() const
 {
 	return w;
 }
 
-unsigned int SpImageDim::height() const
+unsigned int ImageDim::height() const
 {
 	return h;
 }
 
-bool SpImageDim::operator==(const SpImageDim &d) const
+bool ImageDim::operator==(const ImageDim &d) const
 {
 	return ((w == d.width()) && (h == d.height()));
 }

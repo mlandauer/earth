@@ -22,28 +22,28 @@
 //
 // $Id$
 
-#ifndef _spsgiimage_h_
-#define _spsgiimage_h_
+#ifndef _sgiimage_h_
+#define _sgiimage_h_
 
 #include "SpImage.h"
 #include "SpImageFormat.h"
 #include "SpImageDim.h"
 
-class SpSGIImageFormat: public SpImageFormat
+class SGIImageFormat: public ImageFormat
 {
 	public:
-		virtual SpImage* constructImage();
+		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 2; };
 		virtual std::string formatString() { return "SGI"; }
 };
 
-class SpSGIImage : public SpImage
+class SGIImage : public Image
 {
 	public:
-		SpSGIImage() { };
-		~SpSGIImage() { };
-		SpImageDim dim();
+		SGIImage() { };
+		~SGIImage() { };
+		ImageDim dim();
 		bool valid() { return true; };
 	private:
 };

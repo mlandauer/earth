@@ -29,22 +29,22 @@
 #include <mach-o/dyld.h>
 #endif
 
-void SpLibLoader::load(std::string fileName)
+void LibLoader::load(std::string fileName)
 {
   #ifndef __APPLE__
     void *handle = dlopen(fileName.c_str(), RTLD_LAZY);
     if (handle == NULL)
-      std::cerr << "SpLibLoader: dlopen failed: " << dlerror() << std::endl;
+      std::cerr << "LibLoader: dlopen failed: " << dlerror() << std::endl;
     else
     	handles.push_back(handle);
   #else
     const struct mach_header *handle = NSAddImage(fileName.c_str(), NSADDIMAGE_OPTION_RETURN_ON_ERROR);
     if (handle == NULL)
-      std::cerr << "SpLibLoader: NSAddImage failed " << std::endl;
+      std::cerr << "LibLoader: NSAddImage failed " << std::endl;
   #endif
 }
 
-void SpLibLoader::releaseAll()
+void LibLoader::releaseAll()
 {
   #ifndef __APPLE__
     for (std::list<void *>::iterator a = handles.begin(); a != handles.end(); ++a)

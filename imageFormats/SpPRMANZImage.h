@@ -22,28 +22,28 @@
 //
 // $Id$
 
-#ifndef _spprmanzimage_h_
-#define _spprmanzimage_h_
+#ifndef _prmanzimage_h_
+#define _prmanzimage_h_
 
 #include "SpImage.h"
 #include "SpImageFormat.h"
 #include "SpImageDim.h"
 
-class SpPRMANZImageFormat: public SpImageFormat
+class PRMANZImageFormat: public ImageFormat
 {
 	public:
-		virtual SpImage* constructImage();
+		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };
 		virtual std::string formatString() { return "PRMANZ"; }
 };
 
-class SpPRMANZImage : public SpImage
+class PRMANZImage : public Image
 {
 	public:
-		SpPRMANZImage() { };
-		~SpPRMANZImage() { };
-		SpImageDim dim();
+		PRMANZImage() { };
+		~PRMANZImage() { };
+		ImageDim dim();
 		bool valid() { return (true); };
 	private:
 };

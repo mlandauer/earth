@@ -22,8 +22,8 @@
 //
 // $Id$
 
-#ifndef _spfile_h
-#define _spfile_h
+#ifndef _file_h
+#define _file_h
 
 #include "SpPath.h"
 #include "SpTime.h"
@@ -32,11 +32,11 @@
 #include "SpGid.h"
 #include "SpFsObject.h"
 
-class SpFile : public SpFsObject
+class File : public FsObject
 {
 	public:
-		SpFile(const SpPath &path);
-		virtual ~SpFile() { };
+		File(const Path &path);
+		virtual ~File() { };
 		void open();
 		void close();
 		unsigned long int read(void *buf, unsigned long int count) const;
@@ -45,20 +45,20 @@ class SpFile : public SpFsObject
 		unsigned long  readLong(const int &endian) const;
 		void seek(unsigned long int pos) const;
 		void seekForward(unsigned long int pos) const;
-		SpSize size() const;
+		Size size() const;
 		bool valid() const;
 	protected:
-		SpFile() { };
+		File() { };
 	private:
 		int fd;
 		bool fileOpen;
 };
 
 // Stores a file with its time stamps
-class SpFileTime : public SpFile
+class FileTime : public File
 {
 	public:
-		SpFileTime(const SpFile &file) : SpFile(file) { }
+		FileTime(const File &file) : File(file) { }
 		bool changed() {
 			if (cachedChange < lastChange()) {
 				cachedChange = lastChange();
@@ -68,7 +68,7 @@ class SpFileTime : public SpFile
 				return false;
 		}
 	protected:
-		SpTime cachedChange;
+		Time cachedChange;
 };
 
 #endif

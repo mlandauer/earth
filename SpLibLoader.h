@@ -22,8 +22,8 @@
 //
 // $Id$
 
-#ifndef _splibloader_h_
-#define _splibloader_h_
+#ifndef _libloader_h_
+#define _libloader_h_
 
 #include <list>
 #include <string>
@@ -31,11 +31,11 @@
 
 // Handles the loading and releasing of dynamic libraries
 
-class SpLibLoader
+class LibLoader
 {
 	public:
-		SpLibLoader() { };
-		~SpLibLoader() { };
+		LibLoader() { };
+		~LibLoader() { };
 		void load(std::string fileName);
 		void releaseAll();
 	private:

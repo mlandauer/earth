@@ -22,16 +22,16 @@
 //
 // $Id$
 
-#ifndef _spsize_h
-#define _spsize_h
+#ifndef _size_h
+#define _size_h
 
 // A utility class for keeping of track of file or sequence sizes using
 // either a measure of bytes, Kb, Mb, etc...
-class SpSize
+class Size
 {
 	public:
-		SpSize();
-		~SpSize();
+		Size();
+		~Size();
 		void setBytes(float n);
 		void setKBytes(float n);
 		void setMBytes(float n);

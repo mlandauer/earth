@@ -22,21 +22,21 @@
 //
 // $Id$
 
-#ifndef _spdir_h_
-#define _spdir_h_
+#ifndef _dir_h_
+#define _dir_h_
 
 #include <vector>
 #include <map>
 #include "SpFsObject.h"
 #include "SpImage.h"
 
-class SpDir : public SpFsObject
+class Dir : public FsObject
 {
 	public:
-		SpDir(const SpPath &path) : SpFsObject(path) { };
-		SpDir() { };
-		~SpDir() { };
-		std::vector<SpFsObjectHandle> ls() const;
+		Dir(const Path &path) : FsObject(path) { };
+		Dir() { };
+		~Dir() { };
+		std::vector<FsObjectHandle> ls() const;
 		bool valid() const;
 		static void setSortByPath(bool b) { sortByPath = b; };
 	private:

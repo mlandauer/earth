@@ -24,11 +24,11 @@
 
 #include "SpImage.h"
 
-SpImage* SpImage::construct(const SpPath &path)
+Image* Image::construct(const Path &path)
 {
-	SpImageFormat *format = SpImageFormat::recogniseByMagic(path);
+	ImageFormat *format = ImageFormat::recogniseByMagic(path);
 	if (format) {
-		SpImage* image = format->constructImage();
+		Image* image = format->constructImage();
 		image->format = format;
 		image->setPath(path);
 		return (image);

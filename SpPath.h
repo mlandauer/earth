@@ -22,25 +22,25 @@
 //
 // $Id$
 
-#ifndef _sppath_h_
-#define _sppath_h_
+#ifndef _path_h_
+#define _path_h_
 
 #include <string>
 
-class SpPath
+class Path
 {
 	public:
-		SpPath(const std::string &a = "");
-		SpPath(const char *s);
-		~SpPath();
+		Path(const std::string &a = "");
+		Path(const char *s);
+		~Path();
 		void set(const std::string a);
 		std::string fullName() const;
 		std::string root() const;
 		std::string relative() const;
 		std::string absolute() const;
 		void add(const std::string &a);
-		bool operator<(const SpPath &p) const;
-		bool operator==(const SpPath &p) const;
+		bool operator<(const Path &p) const;
+		bool operator==(const Path &p) const;
 	private:
 		std::string pathString;
 };

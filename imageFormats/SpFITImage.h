@@ -22,28 +22,28 @@
 //
 // $Id$
 
-#ifndef _spfitimage_h_
-#define _spfitimage_h_
+#ifndef _fitimage_h_
+#define _fitimage_h_
 
 #include "SpImage.h"
 #include "SpImageFormat.h"
 #include "SpImageDim.h"
 
-class SpFITImageFormat: public SpImageFormat
+class FITImageFormat: public ImageFormat
 {
 	public:
-		virtual SpImage* constructImage();
+		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };
 		virtual std::string formatString() { return "FIT"; }
 };
 
-class SpFITImage : public SpImage
+class FITImage : public Image
 {
 	public:
-		SpFITImage() { };
-		~SpFITImage() { };
-		SpImageDim dim();
+		FITImage() { };
+		~FITImage() { };
+		ImageDim dim();
 		bool valid() { return true; };
 	private:
 };

@@ -24,17 +24,17 @@
 
 #include "SpPRMANZImage.h"
 
-SpImageDim SpPRMANZImage::dim()
+ImageDim PRMANZImage::dim()
 {
 	open();
 	seek(4);
 	unsigned int width = readShort(1);
 	unsigned int height = readShort(1);
 	close();
-	return (SpImageDim(width, height));
+	return (ImageDim(width, height));
 }
 
-bool SpPRMANZImageFormat::recognise(unsigned char *buf)
+bool PRMANZImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 0x2f) && (buf[1] == 0x08) &&
 		(buf[2] == 0x67) && (buf[3] == 0xab))
@@ -43,9 +43,9 @@ bool SpPRMANZImageFormat::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpPRMANZImageFormat::constructImage()
+Image* PRMANZImageFormat::constructImage()
 {
-	return (new SpPRMANZImage);
+	return (new PRMANZImage);
 }
 
-SpPRMANZImageFormat thisPRMANZImageFormat;
+PRMANZImageFormat thisPRMANZImageFormat;

@@ -25,22 +25,22 @@
 #include "testSpImageSeq.h"
 #include "SpPath.h"
 
-testSpImageSeq::testSpImageSeq() : SpTester("SpImageSeq")
+testImageSeq::testImageSeq() : Tester("ImageSeq")
 {
 	test();
 };
 
-void testSpImageSeq::test()
+void testImageSeq::test()
 {
 	system ("rm -rf test/seq");
-	SpPath path1a("test/seq/test1.0001.gif");
-	SpPath path1b("test/seq/test1.0002.gif");
-	SpPath path1c("test/seq/test1.0003.gif");
-	SpPath path1d("test/seq/test1.0004.gif");
-	SpPath path2a("test/seq/test2.8.gif");		
-	SpPath path3a("test/seq/test2.000123.gif");		
-	SpPath path4a("test/seq/120.gif");		
-	SpPath path5a("test/seq/110.gif");
+	Path path1a("test/seq/test1.0001.gif");
+	Path path1b("test/seq/test1.0002.gif");
+	Path path1c("test/seq/test1.0003.gif");
+	Path path1d("test/seq/test1.0004.gif");
+	Path path2a("test/seq/test2.8.gif");		
+	Path path3a("test/seq/test2.000123.gif");		
+	Path path4a("test/seq/120.gif");		
+	Path path5a("test/seq/110.gif");
 	makeDirectory("test/seq");
 	copyFile("test/templateImages/2x2.gif", path1a);
 	copyFile("test/templateImages/2x2.gif", path1b);
@@ -50,17 +50,17 @@ void testSpImageSeq::test()
 	copyFile("test/templateImages/2x2.gif", path3a);
 	copyFile("test/templateImages/2x2.gif", path4a);
 	copyFile("test/templateImages/4x4.tiff", path5a);
-	SpImage *i1 = SpImage::construct(path1a);
-	SpImage *i2 = SpImage::construct(path1b);
-	SpImage *i3 = SpImage::construct(path1c);
-	SpImage *i4 = SpImage::construct(path1d);
-	SpImage *i5 = SpImage::construct(path2a);
-	SpImage *i6 = SpImage::construct(path3a);
-	SpImage *i7 = SpImage::construct(path4a);
-	SpImage *i8 = SpImage::construct(path5a);
+	Image *i1 = Image::construct(path1a);
+	Image *i2 = Image::construct(path1b);
+	Image *i3 = Image::construct(path1c);
+	Image *i4 = Image::construct(path1d);
+	Image *i5 = Image::construct(path2a);
+	Image *i6 = Image::construct(path3a);
+	Image *i7 = Image::construct(path4a);
+	Image *i8 = Image::construct(path5a);
 		
 	if (checkNotNULL("test 1a", i1)) {
-		SpImageSeq seq(i1);
+		ImageSeq seq(i1);
 		checkSequence("test 1", seq, "test/seq/test1.#.gif", "1", 2, 2, "GIF");
 		if (checkNotNULL("test 2a", i2)) {
 			seq.addImage(i2);
@@ -96,16 +96,16 @@ void testSpImageSeq::test()
 	}
 		
 	if (checkNotNULL("test 5a", i5)) {
-		SpImageSeq seq2(i5);
+		ImageSeq seq2(i5);
 		checkSequence("test 5", seq2, "test/seq/test2.@.gif", "8", 2, 2, "GIF");
 	}
 	if (checkNotNULL("test 6a", i6)) {
-		SpImageSeq seq3(i6);
+		ImageSeq seq3(i6);
 		checkSequence("test 6", seq3, "test/seq/test2.@@@@@@.gif", "123", 2, 2, "GIF");
 	}
 		
 	if (checkNotNULL("test 7a", i7)) {
-		SpImageSeq seq4(i7);
+		ImageSeq seq4(i7);
 		checkSequence("test 7", seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
 		if (checkNotNULL("test 8a", i5)) {
 			// Adding in an image with a different name should not work
@@ -120,7 +120,7 @@ void testSpImageSeq::test()
 	}
 		
 	if (checkNotNULL("test 10a", i8)) {
-		SpImageSeq seq5(i8);
+		ImageSeq seq5(i8);
 		checkSequence("test 10", seq5, "test/seq/@@@.gif", "110", 4, 4, "TIFF");
 	}
 			
@@ -135,7 +135,7 @@ void testSpImageSeq::test()
   delete i8;
 }
 
-void testSpImageSeq::checkSequence(std::string testName, const SpImageSeq &seq,
+void testImageSeq::checkSequence(std::string testName, const ImageSeq &seq,
 	std::string name, std::string frames, int width, int height, std::string format)
 {
 	checkEqual(testName + "b", seq.path().fullName(), name);
@@ -145,12 +145,12 @@ void testSpImageSeq::checkSequence(std::string testName, const SpImageSeq &seq,
 	checkEqual(testName + "f", seq.format()->formatString(), format);		
 }
 
-void testSpImageSeq::copyFile(const SpPath &path1, const SpPath &path2)
+void testImageSeq::copyFile(const Path &path1, const Path &path2)
 {
 	std::string command = "cp " + path1.fullName() + " " + path2.fullName();
 	system (command.c_str());
 }
-void testSpImageSeq::makeDirectory(const SpPath &path)
+void testImageSeq::makeDirectory(const Path &path)
 {
 	std::string command = "mkdir " + path.fullName();
 	system (command.c_str());

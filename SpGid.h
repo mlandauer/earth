@@ -22,19 +22,19 @@
 //
 // $Id$
 
-#ifndef _spgid_h_
-#define _spgid_h_
+#ifndef _gid_h_
+#define _gid_h_
 
 #include <sys/types.h>
 #include <string>
 
-class SpGid
+class Gid
 {
 	public:
-		SpGid();
-		~SpGid();
-    static SpGid unixGid(gid_t g);
-    static SpGid current();
+		Gid();
+		~Gid();
+    static Gid unixGid(gid_t g);
+    static Gid current();
    
 		std::string name() const;
 	private:

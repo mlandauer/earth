@@ -22,15 +22,15 @@
 //
 // $Id$
 
-#ifndef _testsptime_h_
-#define _testsptime_h_
+#ifndef _testtime_h_
+#define _testtime_h_
 
 #include "SpTester.h"
 
-class testSpTime : public SpTester
+class testTime : public Tester
 {
 public:
-	testSpTime();
+	testTime();
 	void test();
 };
 

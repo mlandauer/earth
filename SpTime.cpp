@@ -29,45 +29,45 @@
 
 #include "SpTime.h"
 
-SpTime::SpTime() : time(0)
+Time::Time() : time(0)
 {
 }
 
-SpTime::~SpTime()
+Time::~Time()
 {
 }
 
 // Wait for an approximate amount of time
-void SpTime::sleep(int seconds)
+void Time::sleep(int seconds)
 {
 	::sleep(seconds);
 }
 
-bool SpTime::operator<(const SpTime &t) const
+bool Time::operator<(const Time &t) const
 {
 	return (time < t.time);
 }
 
-bool SpTime::operator==(const SpTime &t) const
+bool Time::operator==(const Time &t) const
 {
 	return (time == t.time);
 }
 
-SpTime SpTime::unixTime(time_t t)
+Time Time::unixTime(time_t t)
 {
-  SpTime ret;
+  Time ret;
   ret.time = t;
   return (ret);
 }
 
-std::string SpTime::timeAndDateString() const
+std::string Time::timeAndDateString() const
 {
 	std::string s = dayOfWeekStringShort() + " " + monthStringShort() + " " +
 		dayOfMonthString() + " " + timeString() + " " + yearString();
 	return s;
 }
 
-std::string SpTime::dayOfMonthString() const
+std::string Time::dayOfMonthString() const
 {
 	char buf[100];
 	std::string s;
@@ -77,7 +77,7 @@ std::string SpTime::dayOfMonthString() const
 	return (s);
 }
 
-std::string SpTime::yearString() const
+std::string Time::yearString() const
 {
 	std::string s;
 	char buf[100];
@@ -90,39 +90,39 @@ std::string SpTime::yearString() const
 // What happens to all these pointers that are returned??
 
 // Sun = 0, Mon = 1, Tue = 2, Wed = 3, Thu = 4, Fri = 5, Sat = 6
-int SpTime::dayOfWeek() const
+int Time::dayOfWeek() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_wday);
 }
 
-int SpTime::dayOfMonth() const
+int Time::dayOfMonth() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_mday);
 }
 
-int SpTime::year() const
+int Time::year() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (1900 + localtime->tm_year);
 }
 
 // Jan = 1, Feb = 2, Mar = 3, etc...
-int SpTime::month() const
+int Time::month() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (1 + localtime->tm_mon);
 }
 
-std::string SpTime::dayOfWeekStringShort() const
+std::string Time::dayOfWeekStringShort() const
 {
 	std::string s = dayOfWeekString();
 	s.resize(3);
 	return (s);
 }
 
-std::string SpTime::timeString() const
+std::string Time::timeString() const
 {
 	std::string s;
 	char buf[100];
@@ -135,7 +135,7 @@ std::string SpTime::timeString() const
 	return (s);
 }
 
-std::string SpTime::dayOfWeekString() const
+std::string Time::dayOfWeekString() const
 {
 	switch (dayOfWeek())
 	{
@@ -158,14 +158,14 @@ std::string SpTime::dayOfWeekString() const
 	}
 }
 
-std::string SpTime::monthStringShort() const
+std::string Time::monthStringShort() const
 {
 	std::string s = monthString();
 	s.resize(3);
 	return (s);
 }
 
-std::string SpTime::monthString() const
+std::string Time::monthString() const
 {
 	switch (month()) {
 		case 1:
@@ -197,27 +197,27 @@ std::string SpTime::monthString() const
 	}
 }
 
-int SpTime::hour() const
+int Time::hour() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_hour);
 }
 
-int SpTime::minute() const
+int Time::minute() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_min);
 }
 
-int SpTime::second() const
+int Time::second() const
 {
 	struct tm *localtime = std::localtime(&time);
 	return (localtime->tm_sec);
 }
 
-SpTime SpTime::current()
+Time Time::current()
 {
-  SpTime t;
+  Time t;
   t.time = std::time(NULL);
   return t;
 }

@@ -47,26 +47,26 @@
 int main(int argc, char **argv)
 {
 	// Register the plugins
-	SpImageFormat::registerPlugins();
+	ImageFormat::registerPlugins();
 	// Configure the tester
-	SpTester::setVerbose(false);
-	SpTester::setFloatDelta(0.1);
+	Tester::setVerbose(false);
+	Tester::setFloatDelta(0.1);
 	// To make tests reliable have to ensure that ls() always
 	// returns things in alphabetical order.
-	SpDir::setSortByPath(true);
+	Dir::setSortByPath(true);
 	
-	testSpDir();
-	testSpSize();
-	testSpTime();
-	testSpFile();
-	testSpImage();
-	testSpFsObject();
-	testSpPath();
-	testSpImageSeq();
-	testSpFsObjectHandle();
+	testDir();
+	testSize();
+	testTime();
+	testFile();
+	testImage();
+	testFsObject();
+	testPath();
+	testImageSeq();
+	testFsObjectHandle();
 	
-	SpTester::finish();
-	SpImageFormat::deRegisterPlugins();
+	Tester::finish();
+	ImageFormat::deRegisterPlugins();
 }
 
 

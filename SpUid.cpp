@@ -27,29 +27,29 @@
 
 #include "SpUid.h"
 
-SpUid::SpUid() : uid(0)
+Uid::Uid() : uid(0)
 {
 }
 
-SpUid::~SpUid()
+Uid::~Uid()
 {
 }
 
-SpUid SpUid::unixUid(uid_t u)
+Uid Uid::unixUid(uid_t u)
 {
-  SpUid ret;
+  Uid ret;
   ret.uid = u;
   return ret;
 }
 
-SpUid SpUid::current()
+Uid Uid::current()
 {
-  SpUid ret;
+  Uid ret;
   ret.uid = getuid();
   return ret;
 }
 
-std::string SpUid::name() const
+std::string Uid::name() const
 {
 	struct passwd *p = getpwuid(uid);
   assert(p != NULL);

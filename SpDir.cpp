@@ -34,25 +34,25 @@
 
 #include "SpFsObject.h"
 
-bool SpDir::sortByPath = false;
+bool Dir::sortByPath = false;
 
-bool SpDir::valid() const
+bool Dir::valid() const
 {
 	struct stat fileStat;
 	lstat(path().fullName().c_str(), &fileStat);
 	return(S_ISDIR(fileStat.st_mode));
 }
 
-class SpCompareFsObjectPaths
+class CompareFsObjectPaths
 {
 	public:
-		bool operator()(SpFsObjectHandle s1, SpFsObjectHandle s2) const
+		bool operator()(FsObjectHandle s1, FsObjectHandle s2) const
 			{ return s1->path() < s2->path(); }
 };
 
-std::vector<SpFsObjectHandle> SpDir::ls() const
+std::vector<FsObjectHandle> Dir::ls() const
 {
-	std::vector<SpFsObjectHandle> l;
+	std::vector<FsObjectHandle> l;
 	if (!valid())
 		return l;
 	// First open a directory stream
@@ -61,12 +61,12 @@ std::vector<SpFsObjectHandle> SpDir::ls() const
 	while ((entry = readdir(d)) != NULL) {
 		std::string pathString = entry->d_name;
 		if ((pathString != ".") && (pathString != "..")) {
-			SpPath p = path();
+			Path p = path();
 			p.add(pathString);
-			l.push_back(SpFsObject::construct(p));
+			l.push_back(FsObject::construct(p));
 		}
 	}
 	if (sortByPath)
-		sort(l.begin(), l.end(), SpCompareFsObjectPaths());
+		sort(l.begin(), l.end(), CompareFsObjectPaths());
 	return (l);
 }

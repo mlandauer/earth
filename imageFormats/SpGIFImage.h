@@ -22,28 +22,28 @@
 //
 // $Id$
 
-#ifndef _spgifimage_h_
-#define _spgifimage_h_
+#ifndef _gifimage_h_
+#define _gifimage_h_
 
 #include "SpImage.h"
 #include "SpImageFormat.h"
 #include "SpImageDim.h"
 
-class SpGIFImageFormat: public SpImageFormat
+class GIFImageFormat: public ImageFormat
 {
 	public:
-		virtual SpImage* constructImage();
+		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };
 		virtual std::string formatString() { return "GIF"; }
 };
 
-class SpGIFImage : public SpImage
+class GIFImage : public Image
 {
 	public:
-		SpGIFImage() { };
-		~SpGIFImage() { };
-		SpImageDim dim();
+		GIFImage() { };
+		~GIFImage() { };
+		ImageDim dim();
 		bool valid() { return (true); };
 	private:
 };

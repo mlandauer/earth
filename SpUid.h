@@ -22,19 +22,19 @@
 //
 // $Id$
 
-#ifndef _spuid_h_
-#define _spuid_h_
+#ifndef _uid_h_
+#define _uid_h_
 
 #include <sys/types.h>
 #include <string>
 
-class SpUid
+class Uid
 {
 	public:
-		SpUid();
-		~SpUid();
-    static SpUid unixUid(uid_t u);
-    static SpUid current();
+		Uid();
+		~Uid();
+    static Uid unixUid(uid_t u);
+    static Uid current();
 
 		std::string name() const;
 	private:

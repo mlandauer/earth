@@ -25,17 +25,17 @@
 #include "testSpTime.h"
 #include "SpTime.h"
 
-testSpTime::testSpTime() : SpTester("SpTime")
+testTime::testTime() : Tester("Time")
 {
 	test();
 };
 
-void testSpTime::test()
+void testTime::test()
 {
   // Commented this test out because unit time zero (the epoch) is defined as a specific
   // time in GMT. However, when you get the local time it will be different in different
   // time zones and so the test will fail or work depending on which timezone you're in.
-	SpTime t1 = SpTime::unixTime(0);
+	Time t1 = Time::unixTime(0);
 	//checkEqual("test 1", t1.timeAndDateString(), "Wed Dec 31 16:00:00 1969");
 	//checkEqual("test 2", t1.year(), 1969);
 	//checkEqual("test 3", t1.hour(), 16);
@@ -49,8 +49,8 @@ void testSpTime::test()
 	//checkEqual("test 11", t1.dayOfWeekStringShort(), "Wed");
 	//checkEqual("test 12", t1.dayOfWeekString(), "Wednesday");
 	//checkEqual("test 13", t1.timeString(), "16:00:00");
-	SpTime t2 = SpTime::unixTime(100);
-	SpTime t0;
+	Time t2 = Time::unixTime(100);
+	Time t0;
 	check("test 14",    t0 == t1);
 	check("test 15a",   t0 <  t2);
 	check("test 15b", !(t2 <  t0));

@@ -25,13 +25,13 @@
 #include "testSpSize.h"
 #include "SpSize.h"
 
-testSpSize::testSpSize() : SpTester("SpSize")
+testSize::testSize() : Tester("Size")
 {
 	test();
 };
 
-void testSpSize::test() {
-	SpSize s;
+void testSize::test() {
+	Size s;
 	s.setBytes(4097);
 	checkEqual("test 1", s.bytes(), 4097.0);
 	checkEqual("test 2", s.kbytes(), 4.0);

@@ -7,21 +7,21 @@ File Monitor class
 Sequence Monitor class
 Make testCode verbosity switchable on command line
 ImageFormat names stored in imageFormats.conf
-Clean up SpTester class
+Clean up Tester class
 Move over unit tests to CppUnit
-Use Handles instead of pointers to SpFsObject
+Use Handles instead of pointers to FsObject
 Use Sp namespace
-Redo SpFsObject::construct
+Redo FsObject::construct
 
 Done
 ====
 Make Makefile actually work and concise
 Actually compile so's that get read in (finalise plugins)
-Figure out what to do with the multiple versions of ls in SpDir
+Figure out what to do with the multiple versions of ls in Dir
 	Got rid of them.
-Cache lstats in SpFsObject
+Cache lstats in FsObject
 Makes tests subclass from tester
 
 Not going to do
 ===============
-Make SpFsObject use plugins for returning objects
+Make FsObject use plugins for returning objects

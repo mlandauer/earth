@@ -22,21 +22,21 @@
 //
 // $Id$
 
-#ifndef _testspimageseq_h_
-#define _testspimageseq_h_
+#ifndef _testimageseq_h_
+#define _testimageseq_h_
 
 #include "SpTester.h"
 #include "SpImageSeq.h"
 
-class testSpImageSeq : public SpTester
+class testImageSeq : public Tester
 {
 public:
-	testSpImageSeq();
+	testImageSeq();
 	void test();
-	void checkSequence(std::string testName, const SpImageSeq &seq,
+	void checkSequence(std::string testName, const ImageSeq &seq,
 		std::string name, std::string frames, int width, int height, std::string format);
-	void copyFile(const SpPath &path1, const SpPath &path2);
-	void makeDirectory(const SpPath &path);
+	void copyFile(const Path &path1, const Path &path2);
+	void makeDirectory(const Path &path);
 };
 
 #endif

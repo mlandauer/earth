@@ -28,15 +28,15 @@
 #include "SpImageFormat.h"
 #include "SpFile.h"
 
-std::list<SpImageFormat *> SpImageFormat::plugins;
-SpLibLoader SpImageFormat::loader;
+std::list<ImageFormat *> ImageFormat::plugins;
+LibLoader ImageFormat::loader;
 
-SpImageFormat::SpImageFormat()
+ImageFormat::ImageFormat()
 {
 	addPlugin(this);
 };
 
-SpImageFormat::~SpImageFormat()
+ImageFormat::~ImageFormat()
 {
 	#ifndef __APPLE__
 		removePlugin(this);
@@ -44,13 +44,13 @@ SpImageFormat::~SpImageFormat()
 };
 
 // Register all the supported image types
-void SpImageFormat::registerPlugins()
+void ImageFormat::registerPlugins()
 {
   #ifndef __APPLE__
 	const char formatsFilename[] = "imageFormats.conf";
 	std::ifstream formats(formatsFilename);
 	if (!formats) {
-		std::cerr << "SpImageFormat::registerPlugins(): Could not open image formats file: "
+		std::cerr << "ImageFormat::registerPlugins(): Could not open image formats file: "
 			<< formatsFilename << std::endl;
 		return;
 	}
@@ -62,47 +62,47 @@ void SpImageFormat::registerPlugins()
   #endif
 }
 
-void SpImageFormat::addPlugin(SpImageFormat *plugin)
+void ImageFormat::addPlugin(ImageFormat *plugin)
 {
 	plugins.push_back(plugin);
 }
 
-SpImageFormat* SpImageFormat::recentPlugin()
+ImageFormat* ImageFormat::recentPlugin()
 {
 	return *(--plugins.end());
 }
 
-void SpImageFormat::removePlugin(SpImageFormat *plugin)
+void ImageFormat::removePlugin(ImageFormat *plugin)
 {
 	plugins.remove(plugin);
 }
 
-void SpImageFormat::deRegisterPlugins()
+void ImageFormat::deRegisterPlugins()
 {
   #ifndef __APPLE__
 	loader.releaseAll();
   #endif
 }
 
-SpImageFormat* SpImageFormat::recogniseByMagic(const SpPath &path)
+ImageFormat* ImageFormat::recogniseByMagic(const Path &path)
 {
 	// Figure out what the greatest amount of the header that needs
 	// to be read so that all the plugins can recognise themselves.
 	int largestSizeToRecognise = 0;
-	for (std::list<SpImageFormat *>::iterator a = plugins.begin();
+	for (std::list<ImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
 		if ((*a)->sizeToRecognise() > largestSizeToRecognise)
 			largestSizeToRecognise = (*a)->sizeToRecognise();
 			
 	// Create a temporary file object
 	unsigned char *buf = new unsigned char[largestSizeToRecognise];
-	SpFile f(path);
+	File f(path);
 	f.open();
 	f.read(buf, largestSizeToRecognise);
 	f.close();
 	
 	// See if any of the plugins recognise themselves.
-	for (std::list<SpImageFormat *>::iterator a = plugins.begin();
+	for (std::list<ImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
 		if ((*a)->recognise(buf)) {
 			delete [] buf;

@@ -22,28 +22,28 @@
 //
 // $Id$
 
-#ifndef _sptiffimage_h_
-#define _sptiffimage_h_
+#ifndef _tiffimage_h_
+#define _tiffimage_h_
 
 #include "SpImage.h"
 #include "SpImageFormat.h"
 #include "SpImageDim.h"
 
-class SpTIFFImageFormat: public SpImageFormat
+class TIFFImageFormat: public ImageFormat
 {
 	public:
-		virtual SpImage* constructImage();
+		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };
 		virtual std::string formatString() { return "TIFF"; }
 };
 
-class SpTIFFImage : public SpImage
+class TIFFImage : public Image
 {
 	public:
-		SpTIFFImage() : headerRead(false), validHeader(false) { };
-		~SpTIFFImage() { };
-		SpImageDim dim();
+		TIFFImage() : headerRead(false), validHeader(false) { };
+		~TIFFImage() { };
+		ImageDim dim();
 		bool valid();
 	private:
 		unsigned int h, w;

@@ -22,19 +22,19 @@
 //
 // $Id$
 
-#ifndef _spimagedim_h_
-#define _spimagedim_h_
+#ifndef _imagedim_h_
+#define _imagedim_h_
 
-class SpImageDim
+class ImageDim
 {
 	public:
-		SpImageDim(unsigned int width = 0, unsigned int height = 0);
-		~SpImageDim();
+		ImageDim(unsigned int width = 0, unsigned int height = 0);
+		~ImageDim();
 		void setWidth(unsigned int width);
 		void setHeight(unsigned int height);
 		unsigned int width() const;
 		unsigned int height() const;
-		bool operator==(const SpImageDim &d) const;
+		bool operator==(const ImageDim &d) const;
 	private:
 		unsigned int w, h;
 };

@@ -27,51 +27,51 @@
 
 #include "SpSize.h"
 
-SpSize::SpSize()
+Size::Size()
 {
 	KBytes = 0;
 }
 
-SpSize::~SpSize()
+Size::~Size()
 {
 }
 
-void SpSize::setBytes(float n)
+void Size::setBytes(float n)
 {
 	KBytes = n / 1024;
 }
 
-void SpSize::setKBytes(float n)
+void Size::setKBytes(float n)
 {
 	KBytes = n;
 }
 
-void SpSize::setMBytes(float n)
+void Size::setMBytes(float n)
 {
 	KBytes = n * 1024;
 }
 
-void SpSize::setGBytes(float n)
+void Size::setGBytes(float n)
 {
 	KBytes = n * 1024 * 1024;
 }
 
-float SpSize::bytes() const
+float Size::bytes() const
 {
 	return KBytes * 1024;
 }
 
-float SpSize::kbytes() const
+float Size::kbytes() const
 {
 	return KBytes;
 }
 
-float SpSize::mbytes() const
+float Size::mbytes() const
 {
 	return KBytes / 1024;
 }
 
-float SpSize::gbytes() const
+float Size::gbytes() const
 {
 	return KBytes / 1024 / 1024;
 }

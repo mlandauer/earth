@@ -26,22 +26,22 @@
 #include "SpFile.h"
 #include "SpFsObjectHandle.h"
 
-testSpFsObjectHandle::testSpFsObjectHandle() : SpTester("SpFsObjectHandle")
+testFsObjectHandle::testFsObjectHandle() : Tester("FsObjectHandle")
 {
 	test();
 };
 
-void testSpFsObjectHandle::test()
+void testFsObjectHandle::test()
 {
 	// Need to think of a good way to test that objects
 	// have been deleted.
-	SpFile *f = new SpFile("testName");
-	SpFsObject *o = f;
+	File *f = new File("testName");
+	FsObject *o = f;
 
-	SpHandle<SpFsObject> h(o);
+	Handle<FsObject> h(o);
 	checkEqual("test 1", h->path().fullName(), "testName");
 	{
-	SpHandle<SpFsObject> h2(h);
+	Handle<FsObject> h2(h);
 	checkEqual("test 2", h2->path().fullName(), "testName");
 	}
 }

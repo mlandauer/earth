@@ -29,58 +29,58 @@
 #include "SpDir.h"
 #include "SpImage.h"
 
-SpFsObjectHandle SpFsObject::construct(const SpPath &path)
+FsObjectHandle FsObject::construct(const Path &path)
 {
-	SpFsObject *o;
-	o = new SpDir(path);
+	FsObject *o;
+	o = new Dir(path);
 	if (o->valid())
-		return SpFsObjectHandle(o);
+		return FsObjectHandle(o);
 	else
 		delete o;
 		
-	o = new SpFile(path);
+	o = new File(path);
 	if (o->valid()) {
-		SpImage *i = SpImage::construct(path);
+		Image *i = Image::construct(path);
 		if (i == NULL)
-			return SpFsObjectHandle(o);
+			return FsObjectHandle(o);
 		else {
 			delete o;
-			return SpFsObjectHandle(i);
+			return FsObjectHandle(i);
 		}
 	}
 	else
 		delete o;
-	return SpFsObjectHandle(NULL);
+	return FsObjectHandle(NULL);
 }
 
-struct stat SpFsObject::unixStat() const
+struct stat FsObject::unixStat() const
 {
 	struct stat s;
 	lstat(path().fullName().c_str(), &s);
 	return (s);
 }
 
-SpTime SpFsObject::lastModification() const
+Time FsObject::lastModification() const
 {
-	return SpTime::unixTime(unixStat().st_mtime);
+	return Time::unixTime(unixStat().st_mtime);
 }
 
-SpTime SpFsObject::lastAccess() const
+Time FsObject::lastAccess() const
 {
-	return SpTime::unixTime(unixStat().st_atime);
+	return Time::unixTime(unixStat().st_atime);
 }
 
-SpTime SpFsObject::lastChange() const
+Time FsObject::lastChange() const
 {
-	return SpTime::unixTime(unixStat().st_ctime);
+	return Time::unixTime(unixStat().st_ctime);
 }
 
-SpUid SpFsObject::uid() const
+Uid FsObject::uid() const
 {
-	return SpUid::unixUid(unixStat().st_uid);
+	return Uid::unixUid(unixStat().st_uid);
 }
 
-SpGid SpFsObject::gid() const
+Gid FsObject::gid() const
 {
-	return SpGid::unixGid(unixStat().st_gid);
+	return Gid::unixGid(unixStat().st_gid);
 }

@@ -22,16 +22,16 @@
 //
 // $Id$
 
-#ifndef _sptester_h_
-#define _sptester_h_
+#ifndef _tester_h_
+#define _tester_h_
 
 #include <string>
 
-class SpTester
+class Tester
 {
 	public:
-		SpTester(std::string className);
-    virtual ~SpTester();
+		Tester(std::string className);
+    virtual ~Tester();
 		static void finish();
 		static void setVerbose(bool v) { verbose = v; };
 		static void setFloatDelta(float d) { floatDelta = d; };

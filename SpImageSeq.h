@@ -22,35 +22,35 @@
 //
 // $Id$
 
-#ifndef _spimageseq_h_
-#define _spimageseq_h_
+#ifndef _imageseq_h_
+#define _imageseq_h_
 
 #include <set>
 #include "SpImage.h"
 
-class SpImageSeq
+class ImageSeq
 {
 	public:
-		SpImageSeq(SpImage *i);
-		void addImage(SpImage *i);
-		void removeImage(SpImage *i);
-		void removeImage(const SpPath &p);
-		SpPath path() const;
+		ImageSeq(Image *i);
+		void addImage(Image *i);
+		void removeImage(Image *i);
+		void removeImage(const Path &p);
+		Path path() const;
 		std::string framesString() const;
-		SpImageDim dim() const { return dimensions; };
-		SpImageFormat* format() const { return imageFormat; };
+		ImageDim dim() const { return dimensions; };
+		ImageFormat* format() const { return imageFormat; };
 	private:
 		std::set<int> f;
-		SpPath p;
-		SpPath pattern(const SpPath &a) const;
-		int frameNumber(const SpPath &a) const;
+		Path p;
+		Path pattern(const Path &a) const;
+		int frameNumber(const Path &a) const;
 		std::string hash(int size) const;
-		bool couldBePartOfSequence(SpImage *i) const;
-		bool partOfSequence(SpImage *i) const;
-		bool partOfSequence(const SpPath &p) const;
+		bool couldBePartOfSequence(Image *i) const;
+		bool partOfSequence(Image *i) const;
+		bool partOfSequence(const Path &p) const;
 		// Image/Sequence attributes
-		SpImageFormat *imageFormat;
-		SpImageDim dimensions;
+		ImageFormat *imageFormat;
+		ImageDim dimensions;
 };
 
 #endif

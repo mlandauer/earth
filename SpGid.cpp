@@ -28,29 +28,29 @@
 
 #include "SpGid.h"
 
-SpGid::SpGid()
+Gid::Gid()
 {
 }
 
-SpGid::~SpGid()
+Gid::~Gid()
 {
 }
 
-SpGid SpGid::unixGid(gid_t g)
+Gid Gid::unixGid(gid_t g)
 {
-  SpGid ret;
+  Gid ret;
   ret.gid = g;
   return ret;
 }
 
-SpGid SpGid::current()
+Gid Gid::current()
 {
-  SpGid ret;
+  Gid ret;
   ret.gid = getgid();
   return ret;
 }
 
-std::string SpGid::name() const
+std::string Gid::name() const
 {
 	struct group *e = getgrgid(gid);
 	return (std::string(e->gr_name));

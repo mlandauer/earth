@@ -29,29 +29,29 @@
 
 #include "SpTester.h"
 
-bool SpTester::verbose = false;
-int SpTester::noFails = 0;
-int SpTester::noSuccesses = 0;
-float SpTester::floatDelta = 0.1;
+bool Tester::verbose = false;
+int Tester::noFails = 0;
+int Tester::noSuccesses = 0;
+float Tester::floatDelta = 0.1;
 
-SpTester::SpTester(std::string className) : name(className)
+Tester::Tester(std::string className) : name(className)
 {
 	std::cout << std::endl << "Testing " << name << ": ";
 	std::cout.flush();
 }
 
-SpTester::~SpTester()
+Tester::~Tester()
 {
 }
 
-void SpTester::failMessage(std::string testName, std::string expected, std::string got)
+void Tester::failMessage(std::string testName, std::string expected, std::string got)
 {
 	std::cout << std::endl << "FAILED " << name << " " << testName << ": Expected "
 		<< expected << " but got " << got;
 	std::cout.flush();
 }
 
-void SpTester::successMessage(std::string testName, std::string returned)
+void Tester::successMessage(std::string testName, std::string returned)
 {
 	if (verbose) {
 		std::cout << std::endl << "SUCCESS " << name << " " << testName << ": Returned "
@@ -62,7 +62,7 @@ void SpTester::successMessage(std::string testName, std::string returned)
 	std::cout.flush();
 }
 
-bool SpTester::check(std::string testName, bool a, std::string expected, std::string got)
+bool Tester::check(std::string testName, bool a, std::string expected, std::string got)
 {
 	if (a) {
 		successMessage(testName, expected);
@@ -76,47 +76,47 @@ bool SpTester::check(std::string testName, bool a, std::string expected, std::st
 	}
 }
 
-bool SpTester::check(std::string testName, bool a)
+bool Tester::check(std::string testName, bool a)
 {
 	return check(testName, a, "true", "false");
 }
 
-bool SpTester::checkEqual(std::string testName, std::string a, std::string b)
+bool Tester::checkEqual(std::string testName, std::string a, std::string b)
 {
 	return check(testName, a == b, b, a);
 }
 
-bool SpTester::checkEqual(std::string testName, int a, int b)
+bool Tester::checkEqual(std::string testName, int a, int b)
 {
 	return check(testName, a == b, toString(b), toString(a));
 }
 
-bool SpTester::checkEqualBool(std::string testName, bool a, bool b)
+bool Tester::checkEqualBool(std::string testName, bool a, bool b)
 {
 	return check(testName, a == b, toStringBool(b), toStringBool(a));
 }
 
-bool SpTester::checkEqual(std::string testName, float a, float b, float delta)
+bool Tester::checkEqual(std::string testName, float a, float b, float delta)
 {
 	return check(testName, fabs(a-b) <= delta, toString(b), toString(a));
 }
 
-bool SpTester::checkEqual(std::string testName, float a, float b)
+bool Tester::checkEqual(std::string testName, float a, float b)
 {
 	return checkEqual(testName, a, b, floatDelta);
 }
 
-bool SpTester::checkNotNULL(std::string testName, void *p)
+bool Tester::checkNotNULL(std::string testName, void *p)
 {
 	return check(testName, p != NULL, "non-null pointer", "null pointer");
 }
 
-bool SpTester::checkNULL(std::string testName, void *p)
+bool Tester::checkNULL(std::string testName, void *p)
 {
 	return check(testName, p == NULL, "null pointer", "non-null pointer");
 }
 
-void SpTester::finish()
+void Tester::finish()
 {
 	std::cout << std::endl;
 	std::cout << "Tests carried out: " << noFails + noSuccesses << std::endl;
@@ -126,14 +126,14 @@ void SpTester::finish()
 		std::cout << "Tests failed: " << noFails << std::endl;
 }
 
-std::string SpTester::toString(int a)
+std::string Tester::toString(int a)
 {
 	char buf[500];
 	sprintf(buf, "%i", a);
 	return std::string(buf);
 }
 
-std::string SpTester::toStringBool(bool a)
+std::string Tester::toStringBool(bool a)
 {
 	if (a)
 		return "true";
@@ -141,7 +141,7 @@ std::string SpTester::toStringBool(bool a)
 		return "false";
 }
 
-std::string SpTester::toString(float a)
+std::string Tester::toString(float a)
 {
 	char buf[500];
 	sprintf(buf, "%f", a);

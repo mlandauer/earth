@@ -30,11 +30,11 @@
 
 #include "SpFile.h"
 
-SpFile::SpFile(const SpPath &path) : SpFsObject(path), fileOpen(false)
+File::File(const Path &path) : FsObject(path), fileOpen(false)
 {
 }
 
-bool SpFile::valid() const
+bool File::valid() const
 {
 	struct stat fileStat;
 	lstat(path().fullName().c_str(), &fileStat);
@@ -42,7 +42,7 @@ bool SpFile::valid() const
 }
 
 // Opens for read only at the moment
-void SpFile::open()
+void File::open()
 {
 	fd = ::open(path().fullName().c_str(), O_RDONLY);
 	// TEMPORARY HACK
@@ -52,44 +52,44 @@ void SpFile::open()
 		fileOpen = true;
 }
 
-SpSize SpFile::size() const
+Size File::size() const
 {
 	struct stat fileStat;
-	SpSize s;
+	Size s;
 	lstat(path().fullName().c_str(), &fileStat);
 	s.setBytes(fileStat.st_size);
 	return (s);
 }
 
-void SpFile::close()
+void File::close()
 {
 	::close(fd);
 	fileOpen = false;
 }
 
-unsigned long int SpFile::read(void *buf, unsigned long int count) const
+unsigned long int File::read(void *buf, unsigned long int count) const
 {
 	return (::read(fd, buf, count));
 }
 
-void SpFile::seek(unsigned long int pos) const
+void File::seek(unsigned long int pos) const
 {
 	lseek(fd, pos, SEEK_SET);
 }
 
-void SpFile::seekForward(unsigned long int pos) const
+void File::seekForward(unsigned long int pos) const
 {
 	lseek(fd, pos, SEEK_CUR);
 }
 
-unsigned char SpFile::readChar() const
+unsigned char File::readChar() const
 {
 	unsigned char value;
 	read(&value, 1);
 	return (value);
 }
 
-unsigned short SpFile::readShort(const int &endian) const
+unsigned short File::readShort(const int &endian) const
 {
 	unsigned short value;
 	unsigned char temp[2];
@@ -103,7 +103,7 @@ unsigned short SpFile::readShort(const int &endian) const
 	return (value);
 }
 
-unsigned long SpFile::readLong(const int &endian) const
+unsigned long File::readLong(const int &endian) const
 {
 	unsigned char temp[4];
 	read(temp, 4);

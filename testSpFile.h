@@ -22,15 +22,15 @@
 //
 // $Id$
 
-#ifndef _testspfile_h_
-#define _testspfile_h_
+#ifndef _testfile_h_
+#define _testfile_h_
 
 #include "SpTester.h"
 
-class testSpFile : public SpTester
+class testFile : public Tester
 {
 public:
-	testSpFile();
+	testFile();
 	void test();
 };
 

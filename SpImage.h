@@ -22,8 +22,8 @@
 //
 // $Id$
 
-#ifndef _spimage_h_
-#define _spimage_h_
+#ifndef _image_h_
+#define _image_h_
 
 #include <list>
 
@@ -31,18 +31,18 @@
 #include "SpImageDim.h"
 #include "SpImageFormat.h"
 
-class SpImage : public SpFile
+class Image : public File
 {
 	public:
-		static SpImage* construct(const SpPath &path);
+		static Image* construct(const Path &path);
 		static void registerPlugins();
 		static void deRegisterPlugins();
-		virtual SpImageDim dim() = 0;
+		virtual ImageDim dim() = 0;
 		virtual bool valid() = 0;
 		std::string formatString() { return getFormat()->formatString(); };
-		SpImageFormat* getFormat() { return format; };
+		ImageFormat* getFormat() { return format; };
 	private:
-		SpImageFormat *format;
+		ImageFormat *format;
 };
 
 #endif

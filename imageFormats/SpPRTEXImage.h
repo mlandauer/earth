@@ -22,28 +22,28 @@
 //
 // $Id$
 
-#ifndef _spprteximage_h_
-#define _spprteximage_h_
+#ifndef _prteximage_h_
+#define _prteximage_h_
 
 #include "SpImage.h"
 #include "SpImageFormat.h"
 #include "SpImageDim.h"
 
-class SpPRTEXImageFormat: public SpImageFormat
+class PRTEXImageFormat: public ImageFormat
 {
 	public:
-		virtual SpImage* constructImage();
+		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };
 		virtual std::string formatString() { return "PRTEX"; }
 };
 
-class SpPRTEXImage : public SpImage
+class PRTEXImage : public Image
 {
 	public:
-		SpPRTEXImage() { };
-		~SpPRTEXImage() { };
-		SpImageDim dim();
+		PRTEXImage() { };
+		~PRTEXImage() { };
+		ImageDim dim();
 		bool valid() { return (true); };
 	private:
 };

@@ -25,7 +25,7 @@
 #include <stdio.h>
 #include "SpImageSeq.h"
 
-SpImageSeq::SpImageSeq(SpImage *i)
+ImageSeq::ImageSeq(Image *i)
 {
 	p = pattern(i->path());
 	f.insert(frameNumber(i->path()));
@@ -33,25 +33,25 @@ SpImageSeq::SpImageSeq(SpImage *i)
 	dimensions = i->dim();
 }
 
-void SpImageSeq::addImage(SpImage *i)
+void ImageSeq::addImage(Image *i)
 {
 	if (couldBePartOfSequence(i))
 		f.insert(frameNumber(i->path()));
 }
 
-void SpImageSeq::removeImage(SpImage *i)
+void ImageSeq::removeImage(Image *i)
 {
 	if (partOfSequence(i))
 		f.erase(frameNumber(i->path()));
 }
 
-void SpImageSeq::removeImage(const SpPath &p)
+void ImageSeq::removeImage(const Path &p)
 {
 	if (partOfSequence(p))
 		f.erase(frameNumber(p));
 }
 
-bool SpImageSeq::partOfSequence(SpImage *i) const
+bool ImageSeq::partOfSequence(Image *i) const
 {
 	if (!couldBePartOfSequence(i))
 		return false;
@@ -59,7 +59,7 @@ bool SpImageSeq::partOfSequence(SpImage *i) const
 	return (f.find(no) != f.end());
 }
 
-bool SpImageSeq::partOfSequence(const SpPath &path) const
+bool ImageSeq::partOfSequence(const Path &path) const
 {
 	if (pattern(path) == p) {
     int no = frameNumber(path);
@@ -69,14 +69,14 @@ bool SpImageSeq::partOfSequence(const SpPath &path) const
 		return false;
 }
 
-bool SpImageSeq::couldBePartOfSequence(SpImage *i) const
+bool ImageSeq::couldBePartOfSequence(Image *i) const
 {
 	// Check that the name of the image matches the name of the sequence
 	return (pattern(i->path()) == p) && (i->getFormat() == imageFormat)
 		&& (i->dim() == dimensions);
 }
 
-std::string SpImageSeq::framesString() const
+std::string ImageSeq::framesString() const
 {
 	std::string r;
 	char buf[100];
@@ -103,12 +103,12 @@ std::string SpImageSeq::framesString() const
 	return r;
 }
 
-SpPath SpImageSeq::path() const
+Path ImageSeq::path() const
 {
 	return p;
 }
 
-SpPath SpImageSeq::pattern(const SpPath &a) const
+Path ImageSeq::pattern(const Path &a) const
 {
 	std::string s = a.fullName();
 	// Search backwards from the end for numbers
@@ -116,10 +116,10 @@ SpPath SpImageSeq::pattern(const SpPath &a) const
 	std::string::size_type first = s.find_last_not_of("0123456789", last) + 1;
 	int size = last - first + 1;
 	s.replace(first, size, hash(size));
-	return SpPath(s);
+	return Path(s);
 }
 
-int SpImageSeq::frameNumber(const SpPath &a) const
+int ImageSeq::frameNumber(const Path &a) const
 {
 	std::string s = a.fullName();
 	// Search backwards from the end for numbers
@@ -134,7 +134,7 @@ int SpImageSeq::frameNumber(const SpPath &a) const
 
 // Returns the correct replacement for a number based on the number of
 // characters
-std::string SpImageSeq::hash(int size) const
+std::string ImageSeq::hash(int size) const
 {
 	if (size == 4)
 		return "#";

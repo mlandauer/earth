@@ -27,31 +27,31 @@
 
 #include "SpPath.h"
 
-SpPath::SpPath(const std::string &a)
+Path::Path(const std::string &a)
 {
 	set(a);
 }
 
-SpPath::SpPath(const char *s)
+Path::Path(const char *s)
 {
 	 set(s);
 }
 
-SpPath::~SpPath()
+Path::~Path()
 {
 }
 
-bool SpPath::operator<(const SpPath &p) const
+bool Path::operator<(const Path &p) const
 {
 	return (pathString < p.pathString);
 }
 
-bool SpPath::operator==(const SpPath &p) const
+bool Path::operator==(const Path &p) const
 {
 	return (pathString == p.pathString);
 }
 
-void SpPath::set(const std::string a)
+void Path::set(const std::string a)
 {
 	pathString = a;
 	// Remove trailing "/" characters
@@ -62,7 +62,7 @@ void SpPath::set(const std::string a)
 	}
 }
 
-std::string SpPath::root() const
+std::string Path::root() const
 {
 	std::string a = pathString;
 	unsigned int f = pathString.rfind('/');
@@ -75,7 +75,7 @@ std::string SpPath::root() const
 	return (a);
 }
 
-std::string SpPath::relative() const
+std::string Path::relative() const
 {
 	std::string a = pathString;
 	unsigned int f = pathString.rfind('/');
@@ -87,24 +87,24 @@ std::string SpPath::relative() const
 
 // Returns an absolute version of the path
 // i.e. foo/blah.tif -> /home/fiddle/foo/blah.tif
-std::string SpPath::absolute() const
+std::string Path::absolute() const
 {
 	if (pathString[0] == '/')
 		return pathString;
 	char workingDirectory[512];
 	if (getcwd(workingDirectory, 512) == NULL) {
-		std::cerr << "SpPath::absolute() getcwd buffer overflow!" << std::endl;
+		std::cerr << "Path::absolute() getcwd buffer overflow!" << std::endl;
 		exit(1);
 	}
 	return (std::string(workingDirectory) + "/" + pathString);
 }
 
-std::string SpPath::fullName() const
+std::string Path::fullName() const
 {
 	return (pathString);
 }
 
-void SpPath::add(const std::string &a)
+void Path::add(const std::string &a)
 {
 	pathString += "/" + a;
 }

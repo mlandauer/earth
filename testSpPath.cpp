@@ -25,39 +25,39 @@
 #include "testSpPath.h"
 #include "SpPath.h"
 
-testSpPath::testSpPath() : SpTester("SpPath")
+testPath::testPath() : Tester("Path")
 {
 	test();
 };
 
-void testSpPath::test()
+void testPath::test()
 {
-	SpPath p("/home/blah/foo.tif");
+	Path p("/home/blah/foo.tif");
 	checkEqual("test 1", p.fullName(), "/home/blah/foo.tif");
 	checkEqual("test 2", p.root(),     "/home/blah/");
 	checkEqual("test 3", p.relative(), "foo.tif");
-	SpPath p2("/home/blah/");
+	Path p2("/home/blah/");
 	checkEqual("test 4", p2.fullName(), "/home/blah");
 	checkEqual("test 5", p2.root(),     "/home/");
 	checkEqual("test 6", p2.relative(), "blah");
-	SpPath p3("blah");
+	Path p3("blah");
 	checkEqual("test 7", p3.fullName(), "blah");
 	checkEqual("test 8", p3.root(),     "");
 	checkEqual("test 9", p3.relative(), "blah");
-	SpPath p4("/home/blah///");
+	Path p4("/home/blah///");
 	checkEqual("test 10", p4.fullName(), "/home/blah");
 	checkEqual("test 11", p4.root(),     "/home/");
 	checkEqual("test 12", p4.relative(), "blah");
-	SpPath p5("/blah");
+	Path p5("/blah");
 	checkEqual("test 13", p5.fullName(), "/blah");
 	checkEqual("test 14", p5.root(),     "/");
 	checkEqual("test 15", p5.relative(), "blah");
 	// Check that paths can be ordered alphabetically
-	SpPath p6("alpha");
-	SpPath p7("beta");
-	SpPath p8("gamma");
-	SpPath p9("gammb");
-	SpPath p10("gammb");
+	Path p6("alpha");
+	Path p7("beta");
+	Path p8("gamma");
+	Path p9("gammb");
+	Path p10("gammb");
 	check("test 16", p6 < p7);
 	check("test 17", p6 < p8);
 	check("test 18", p6 < p9);

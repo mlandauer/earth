@@ -25,14 +25,14 @@
 #include "testSpFile.h"
 #include "SpFile.h"
 
-testSpFile::testSpFile() : SpTester("SpFile")
+testFile::testFile() : Tester("File")
 {
 	test();
 };
 
-void testSpFile::test()
+void testFile::test()
 {
-	SpFile file("test/templateImages/8x8.tiff");
+	File file("test/templateImages/8x8.tiff");
 	checkEqualBool("test 0", file.valid(), true);
 	checkEqual("test 1", file.path().fullName(), "test/templateImages/8x8.tiff");
 	checkEqual("test 2", file.size().bytes(), 396.0);

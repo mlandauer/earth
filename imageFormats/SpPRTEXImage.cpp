@@ -26,7 +26,7 @@
 
 #include "SpPRTEXImage.h"
 
-SpImageDim SpPRTEXImage::dim()
+ImageDim PRTEXImage::dim()
 {
 	open();
 	seek(13);
@@ -34,10 +34,10 @@ SpImageDim SpPRTEXImage::dim()
 	seekForward(1);
 	unsigned int height = (unsigned int) pow(2, readChar());
 	close();
-	return (SpImageDim(width, height));
+	return (ImageDim(width, height));
 }
 
-bool SpPRTEXImageFormat::recognise(unsigned char *buf)
+bool PRTEXImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 0xce) && (buf[1] == 0xfa) &&
 		(buf[2] == 0x03) && (buf[3] == 0x00))
@@ -49,9 +49,9 @@ bool SpPRTEXImageFormat::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpPRTEXImageFormat::constructImage()
+Image* PRTEXImageFormat::constructImage()
 {
-	return (new SpPRTEXImage);
+	return (new PRTEXImage);
 }
 
-SpPRTEXImageFormat thisPRTEXImageFormat;
+PRTEXImageFormat thisPRTEXImageFormat;

@@ -25,14 +25,14 @@
 #include "testSpImage.h"
 #include "SpImage.h"
 
-testSpImage::testSpImage() : SpTester("SpImage")
+testImage::testImage() : Tester("Image")
 {
 	test();
 };
 
-void testSpImage::test()
+void testImage::test()
 {
-	SpImage *image1 = SpImage::construct("test/templateImages/8x8.sgi");
+	Image *image1 = Image::construct("test/templateImages/8x8.sgi");
 	if (checkNotNULL("test 0", image1)) {
 		checkEqual("test 1", image1->path().fullName(),
 			"test/templateImages/8x8.sgi");
@@ -43,7 +43,7 @@ void testSpImage::test()
 		delete image1;
 	}
 	
-	SpImage *image2 = SpImage::construct("test/templateImages/8x8.tiff");
+	Image *image2 = Image::construct("test/templateImages/8x8.tiff");
 	if (checkNotNULL("test 5b", image2)) {
 		checkEqual("test 6", image2->path().fullName(),
 			"test/templateImages/8x8.tiff");
@@ -60,7 +60,7 @@ void testSpImage::test()
 	// *** CINEON File format currently untested ****
 	// *** IFF File format currently untested ****
 	
-	SpImage *image3 = SpImage::construct("test/templateImages/8x8.gif");
+	Image *image3 = Image::construct("test/templateImages/8x8.gif");
 	if (checkNotNULL("test 10b", image3)) {
 		checkEqual("test 11", image3->path().fullName(),
 			"test/templateImages/8x8.gif");

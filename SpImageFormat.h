@@ -22,33 +22,33 @@
 //
 // $Id$
 
-#ifndef _spimageformat_h_
-#define _spimageformat_h_
+#ifndef _imageformat_h_
+#define _imageformat_h_
 
 #include <string>
 #include "SpLibLoader.h"
 #include "SpPath.h"
 
-class SpImage;
+class Image;
 
-class SpImageFormat
+class ImageFormat
 {
 	public:
-		SpImageFormat();
-		virtual ~SpImageFormat();
+		ImageFormat();
+		virtual ~ImageFormat();
 		virtual std::string formatString() = 0;
-		virtual SpImage* constructImage() = 0;
+		virtual Image* constructImage() = 0;
 		static void registerPlugins();
 		static void deRegisterPlugins();
-		static SpImageFormat* recogniseByMagic(const SpPath &path);
+		static ImageFormat* recogniseByMagic(const Path &path);
 	private:
 		virtual bool recognise(unsigned char *buf) = 0;
 		virtual int sizeToRecognise() = 0;
-		static std::list<SpImageFormat *> plugins;
-		static void addPlugin(SpImageFormat *plugin);
-		static void removePlugin(SpImageFormat *plugin);
-		static SpImageFormat* recentPlugin();
-		static SpLibLoader loader;
+		static std::list<ImageFormat *> plugins;
+		static void addPlugin(ImageFormat *plugin);
+		static void removePlugin(ImageFormat *plugin);
+		static ImageFormat* recentPlugin();
+		static LibLoader loader;
 };
 
 #endif

@@ -22,28 +22,28 @@
 //
 // $Id$
 
-#ifndef _spcineonimage_h_
-#define _spcineonimage_h_
+#ifndef _cineonimage_h_
+#define _cineonimage_h_
 
 #include "SpImage.h"
 #include "SpImageFormat.h"
 #include "SpImageDim.h"
 
-class SpCINEONImageFormat: public SpImageFormat
+class CINEONImageFormat: public ImageFormat
 {
 	public:
-		virtual SpImage* constructImage();
+		virtual Image* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };
 		virtual std::string formatString() { return "Cineon"; }
 };
 
-class SpCINEONImage : public SpImage
+class CINEONImage : public Image
 {
 	public:
-		SpCINEONImage() { };
-		~SpCINEONImage() { };
-		SpImageDim dim();
+		CINEONImage() { };
+		~CINEONImage() { };
+		ImageDim dim();
 		bool valid() { return true; };
 	private:
 };

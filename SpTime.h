@@ -26,19 +26,21 @@
 // making it all human readable but doing this in a way that the unix
 // specific code (relating to time and date) is wrapped up in this class.
 
-#ifndef _sptime_h_
-#define _sptime_h_
+#ifndef _time_h_
+#define _time_h_
 
 #include <time.h>
 #include <string>
 
-class SpTime
+class Time;
+
+class Time
 {
 	public:
-		SpTime();
-		~SpTime();
-    static SpTime unixTime(time_t t);
-    static SpTime current();
+		Time();
+		~Time();
+    static Time unixTime(time_t t);
+    static Time current();
     
 		static void sleep(int seconds);
 		std::string timeAndDateString() const;
@@ -56,8 +58,8 @@ class SpTime
 		std::string timeString() const;
 		std::string dayOfMonthString() const;
 		std::string yearString() const;
-		bool operator<(const SpTime &t) const;
-		bool operator==(const SpTime &t) const;
+		bool operator<(const Time &t) const;
+		bool operator==(const Time &t) const;
 	private:
 		time_t time;
 };

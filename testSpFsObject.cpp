@@ -27,28 +27,28 @@
 #include "SpFile.h"
 #include "SpDir.h"
 
-testSpFsObject::testSpFsObject() : SpTester("SpFsObject")
+testFsObject::testFsObject() : Tester("FsObject")
 {
 	test();
 };
 
-void testSpFsObject::test()
+void testFsObject::test()
 {
-	SpFsObjectHandle file = SpFsObject::construct("test/templateImages/8x8.tiff");
+	FsObjectHandle file = FsObject::construct("test/templateImages/8x8.tiff");
 	checkEqual("test 1", file->path().fullName(),
 		"test/templateImages/8x8.tiff");
-	SpUid u = SpUid::current();
-	SpGid g = SpGid::current();
+	Uid u = Uid::current();
+	Gid g = Gid::current();
 	checkEqual("test 2", file->uid().name(), u.name());
 	checkEqual("test 3", file->gid().name(), g.name());
-	checkNotNULL("test 4", dynamic_cast<SpFile *>(file.pointer()));
-	checkNULL("test 5", dynamic_cast<SpDir *>(file.pointer()));
-	SpFsObjectHandle file2 = SpFsObject::construct("test/templateImages/");
+	checkNotNULL("test 4", dynamic_cast<File *>(file.pointer()));
+	checkNULL("test 5", dynamic_cast<Dir *>(file.pointer()));
+	FsObjectHandle file2 = FsObject::construct("test/templateImages/");
 	checkEqual("test 6", file2->path().fullName(), "test/templateImages");
 	// Find some way to test access, modification and change times
-	checkNULL("test 7", dynamic_cast<SpFile *>(file2.pointer()));
-	checkNotNULL("test 8", dynamic_cast<SpDir *>(file2.pointer()));
+	checkNULL("test 7", dynamic_cast<File *>(file2.pointer()));
+	checkNotNULL("test 8", dynamic_cast<Dir *>(file2.pointer()));
 	// Test opening a non-existing file or directory
-	SpFsObjectHandle notExist = SpFsObject::construct("test/templateImages/no");
+	FsObjectHandle notExist = FsObject::construct("test/templateImages/no");
 	check("test 9", notExist.null());
 }

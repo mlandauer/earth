@@ -22,20 +22,20 @@
 //
 // $Id$
 
-#ifndef _spfsobjecthandle_h_
-#define _spfsobjecthandle_h_
+#ifndef _fsobjecthandle_h_
+#define _fsobjecthandle_h_
 
-template<class C> class SpHandle
+template<class C> class Handle
 {
 	private:
 		C *ptr;
 		int *count;
 	public:
-		SpHandle(C *o = NULL) : ptr(o), count(new int(1)) { };
-		SpHandle(const SpHandle &h) : ptr(h.ptr), count(h.count) {
+		Handle(C *o = NULL) : ptr(o), count(new int(1)) { };
+		Handle(const Handle &h) : ptr(h.ptr), count(h.count) {
 			(*count)++;
 		}
-		SpHandle& operator=(const SpHandle &h) {
+		Handle& operator=(const Handle &h) {
 			if (ptr != h.ptr) {
 				decreaseReferenceCount();
 				ptr = h.ptr;
@@ -44,7 +44,7 @@ template<class C> class SpHandle
 			}
 			return *this;
 		}
-		~SpHandle() { decreaseReferenceCount(); }
+		~Handle() { decreaseReferenceCount(); }
 		C *operator->() { return ptr; };
 		C *pointer() { return ptr; };
 		bool null() { return (ptr == NULL); };
@@ -57,8 +57,8 @@ template<class C> class SpHandle
 		}
 };
 
-class SpFsObject;
+class FsObject;
 
-typedef SpHandle<SpFsObject> SpFsObjectHandle;
+typedef Handle<FsObject> FsObjectHandle;
 
 #endif
