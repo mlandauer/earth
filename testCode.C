@@ -107,47 +107,36 @@ void testSpFile()
 {
 	cout << endl << "Testing SpFile: ";
 	SpFile file("test/templateImages/8x8.tiff");
-	cout << "filename = " << file.path().fullName() << endl;
-	cout << "size = " << file.size().bytes() << " bytes" << endl;
-	cout << "size = " << file.size().kbytes() << " Kbytes" << endl;
-	cout << "last access = " << file.lastAccess().timeAndDateString() << endl;
-	cout << "last modification = " << file.lastModification().timeAndDateString() << endl;
-	cout << "last change = " << file.lastChange().timeAndDateString() << endl;
-	cout << "owner = " << file.uid().name() << endl;
-	cout << "group owner = " << file.gid().name() << endl;
+	checkEqual("SpFile test 1", file.path().fullName(),
+		"test/templateImages/8x8.tiff");
+	checkEqual("SpFile test 2", file.size().bytes(), 396.0);
+	checkEqual("SpFile test 3", file.size().kbytes(), 0.39);
 	file.open();
-	cout << "File opened" << endl;
 	unsigned char buf[2];
-	unsigned long int a = file.read(buf, 2);
-	cout << "Read in " << a << " characters" << endl;
-	a = buf[0];
-	cout << "First value in file = " << a << endl;
-	a = buf[1];
-	cout << "Second value in file = " << a << endl;
+	int a;
+	checkEqual("SpFile test 4", file.read(buf, 2), 2);
+	checkEqual("SpFile test 5", buf[0], 0x49);
+	checkEqual("SpFile test 6", buf[1], 0x49);
 	file.seek(10);
 	file.read(buf, 1);
-	a = buf[0];
-	cout << "Value at position 10 = " << a << endl;
+	checkEqual("SpFile test 7", buf[0], 0xff);
 	file.seekForward(2);
-	cout << "Seek forward another 2" << endl;
 	file.read(buf, 1);
-	a = buf[0];
-	cout << "Value here = " << a << endl;
+	checkEqual("SpFile test 8", buf[0], 0xff);
 	file.close();
-	cout << "File closed" << endl;
 	
-	cout << "Testing setPath checking mechanism" << endl;
 	SpFile f;
-	cout << "setPath..." << endl;
 	f.setPath("test/templateImages/8x8.tiff");
-	cout << "open..." << endl;
+	checkEqual("SpFile test 9", f.path().fullName(),
+		"test/templateImages/8x8.tiff");
 	f.open();
-	cout << "setPath..." << endl;
-	f.setPath("test/templateImages/8x8.tiff");
-	cout << "close..." << endl;
+	f.setPath("test/templateImages/4x4.tiff");
+	checkEqual("SpFile test 10", f.path().fullName(),
+		"test/templateImages/8x8.tiff");
 	f.close();
-	cout << "setPath..." << endl;
-	f.setPath("test/templateImages/8x8.tiff");	
+	f.setPath("test/templateImages/2x2.tiff");	
+	checkEqual("SpFile test 11", f.path().fullName(),
+		"test/templateImages/2x2.tiff");
 }
 
 void testSpImage()
