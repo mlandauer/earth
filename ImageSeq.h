@@ -30,16 +30,58 @@
 
 namespace Sp {
 
+//! A sequence of image files
 class ImageSeq
 {
 	public:
+    //! Construct an image sequence from a single image
 		ImageSeq(Image *i);
+    
+    //! Add an image to current sequence
+    /*!
+      If the image is not part of the sequence nothing happens
+      \todo Return an error condition
+    */
 		void addImage(Image *i);
+    
+    //! Remove an image from the current sequence
+    /*!
+      If the image is not part of the sequence nothing happens
+      \todo Return an error condition
+    */
 		void removeImage(Image *i);
+    
+    //! Remove an image from the current sequence
+    /*!
+      If the image is not part of the sequence nothing happens
+      \todo Return an error condition
+    */
 		void removeImage(const Path &p);
+    
+    //! Returns the path of the image sequence
+    /*!
+      A four padded frame number is represented by "#" and an arbitrary length
+      frame padding is represented by a number of "@".
+    */
 		Path path() const;
+    
+    //! Returns a concise string containing the range of frames in this sequence
+    /*!
+      For example, a continuous frame range is written as "1-245" and a discontinuous
+      range is written as "1-145,147-240,242,245"
+    */
 		std::string framesString() const;
+    
+    //! Returns the size of the images in the sequence
+    /*!
+      For images to be part of the same sequence they all have to have the same dimensions.
+    */
 		ImageDim dim() const { return dimensions; };
+    
+    //! Returns the image format of the images in the sequence
+    /*!
+      For images to be part of the same sequence they all have to have the same image format.
+    */
 		ImageFormat* format() const { return imageFormat; };
 	private:
 		std::set<int> f;
