@@ -41,17 +41,15 @@ public:
 
 	//! Add an image to current sequence
 	/*!
-		If the image is not part of the sequence nothing happens
-		\return true if the image was successfully added
+		The image must be part of the sequence. This can be checked with couldBePartOfSequence.
 	*/
-	bool addImage(const CachedImage &image);
+	void addImage(const CachedImage &image);
 
 	//! Remove an image from the current sequence
 	/*!
-		If the image is not part of the sequence nothing happens
-		\return true if the image was successfully removed
+		The image must be part of the sequence. This can be checked with partOfSequence.
 	*/
-	bool removeImage(const Path &p);
+	void removeImage(const Path &p);
 
 	//! Returns the path of the image sequence
 	/*!
@@ -78,6 +76,11 @@ public:
 	//! Is this a sequence consisting of valid images?
 	bool valid() const { return m_valid; }
 	
+	//! Could this image be part of this sequence?
+	bool couldBePartOfSequence(const CachedImage &image) const;
+	//! Is this image part of this sequence?
+	bool partOfSequence(const Path &p) const;
+	
 private:
 	Frames m_frames;
 	Path p;
@@ -85,10 +88,8 @@ private:
 	Path pattern(const Path &a) const;
 	int frameNumber(const Path &a) const;
 	std::string hash(int size) const;
-	bool couldBePartOfSequence(const CachedImage &image) const;
 	bool couldBePartOfSequence(const Path &path) const;
 	bool partOfSequence(const CachedImage &image) const;
-	bool partOfSequence(const Path &p) const;
 	// Image/Sequence attributes
 	ImageFormat *imageFormat;
 	ImageDim dimensions;

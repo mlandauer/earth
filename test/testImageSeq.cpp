@@ -75,27 +75,32 @@ void testImageSeq::test()
 	
 	ImageSeq seq(i1);
 	checkSequence(seq, "test/seq/test1.#.gif", "1", 2, 2, "GIF", true);
-	CPPUNIT_ASSERT(seq.addImage(i2));
+	CPPUNIT_ASSERT(seq.couldBePartOfSequence(i2));
+	seq.addImage(i2);
 	checkSequence(seq, "test/seq/test1.#.gif", "1-2", 2, 2, "GIF", true);
 
-	CPPUNIT_ASSERT(seq.addImage(i4));
+	CPPUNIT_ASSERT(seq.couldBePartOfSequence(i4));
+	seq.addImage(i4);
 	checkSequence(seq, "test/seq/test1.#.gif", "1-2,4", 2, 2, "GIF", true);
 
-	CPPUNIT_ASSERT(seq.addImage(i3));
+	CPPUNIT_ASSERT(seq.couldBePartOfSequence(i3));
+	seq.addImage(i3);
 	checkSequence(seq, "test/seq/test1.#.gif", "1-4", 2, 2, "GIF", true);
 
-	CPPUNIT_ASSERT(seq.removeImage("test/seq/test1.0002.gif"));
+	CPPUNIT_ASSERT(seq.partOfSequence("test/seq/test1.0002.gif"));
+	seq.removeImage("test/seq/test1.0002.gif");
 	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF", true);
 
 	// If we remove something that's not part of the sequence nothing should change
-	CPPUNIT_ASSERT(!seq.removeImage("test/seq/110.gif"));
+	CPPUNIT_ASSERT(!seq.partOfSequence("test/seq/110.gif"));
 	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF", true);
 
-	CPPUNIT_ASSERT(!seq.removeImage("test/seq/test1.0002.gif"));
+	CPPUNIT_ASSERT(!seq.partOfSequence("test/seq/test1.0002.gif"));
 	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF", true);
 
 	// Removing by giving a path
-	CPPUNIT_ASSERT(seq.removeImage("test/seq/test1.0003.gif"));
+	CPPUNIT_ASSERT(seq.partOfSequence("test/seq/test1.0003.gif"));
+	seq.removeImage("test/seq/test1.0003.gif");
 	checkSequence(seq, "test/seq/test1.#.gif", "1,4", 2, 2, "GIF", true);		
 		
 	ImageSeq seq2(i5);
@@ -107,11 +112,11 @@ void testImageSeq::test()
 	ImageSeq seq4(i7);
 	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF", true);
 	// Adding in an image with a different name should not work
-	CPPUNIT_ASSERT(!seq4.addImage(i5));
+	CPPUNIT_ASSERT(!seq4.couldBePartOfSequence(i5));
 	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF", true);
 
 	// Adding in an image with a correct name but wrong image size should not work
-	CPPUNIT_ASSERT(!seq4.addImage(i8));
+	CPPUNIT_ASSERT(!seq4.couldBePartOfSequence(i8));
 	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF", true);
 		
 	ImageSeq seq5(i8);
@@ -145,10 +150,12 @@ void testImageSeq::testInvalidSequence()
 	CPPUNIT_ASSERT(!i4->valid());
 
 	ImageSeq one(i1), two(i2);
-	CPPUNIT_ASSERT(one.addImage(i3));
-	CPPUNIT_ASSERT(!one.addImage(i4));
-	CPPUNIT_ASSERT(!two.addImage(i3));
-	CPPUNIT_ASSERT(two.addImage(i4));
+	CPPUNIT_ASSERT(one.couldBePartOfSequence(i3));
+	one.addImage(i3);
+	CPPUNIT_ASSERT(!one.couldBePartOfSequence(i4));
+	CPPUNIT_ASSERT(!two.couldBePartOfSequence(i3));
+	CPPUNIT_ASSERT(two.couldBePartOfSequence(i4));
+	two.addImage(i4);
 
 	checkSequence(one, "test/seq/test3.#", "1,3", 8, 8, "Cineon", true);
 	checkSequence(two, "test/seq/test3.#", "2,4", 0, 0, "Cineon", false);
@@ -172,7 +179,7 @@ void testImageSeq::testStrangeName()
 	ImageSeq one(i1);
 	
 	checkSequence(one, "test/seq/foo", "", 8, 8, "Cineon", true);
-	CPPUNIT_ASSERT(!one.addImage(i2));
+	CPPUNIT_ASSERT(!one.couldBePartOfSequence(i2));
 	
 	delete i1;
 	delete i2;

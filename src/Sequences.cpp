@@ -31,7 +31,8 @@ void Sequences::addImage(const CachedImage &image)
 	// Go through each sequence and try adding it until one accepts
 	bool added = false;
 	for (std::vector<ImageSeq>::iterator j = sequences.begin(); j != sequences.end(); ++j) {
-		if (j->addImage(image)) {
+		if (j->couldBePartOfSequence(image)) {
+			j->addImage(image);
 			added = true;
 			break;
 		}
@@ -47,7 +48,8 @@ void Sequences::removeImage(const Path &path)
 {
 	// Try deleting this file from all the currently known sequences
 	for (std::vector<ImageSeq>::iterator i = sequences.begin(); i != sequences.end(); ++i) {
-		if (i->removeImage(path)) {
+		if (i->partOfSequence(path)) {
+			i->removeImage(path);
 			break;
 		}
 	}

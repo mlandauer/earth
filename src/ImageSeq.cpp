@@ -43,25 +43,20 @@ ImageSeq::ImageSeq(const CachedImage &image)
 	dimensions = image.getDim();
 }
 
-bool ImageSeq::addImage(const CachedImage &image)
+void ImageSeq::addImage(const CachedImage &image)
 {
-	if (couldBePartOfSequence(image)) {
-		m_frames.add(frameNumber(image.getPath()));
-    return true;
-  }
-  else {
-    return false;
-  }
+	// You should have already checked that this image can be added
+	assert(couldBePartOfSequence(image));
+	
+	m_frames.add(frameNumber(image.getPath()));
 }
 
-bool ImageSeq::removeImage(const Path &p)
+void ImageSeq::removeImage(const Path &p)
 {
-	if (partOfSequence(p)) {
-		return m_frames.remove(frameNumber(p));
-  }
-  else {
-    return false;
-  }
+	// You should have already checked that this image can be removed
+	assert(partOfSequence(p));
+	
+	m_frames.remove(frameNumber(p));
 }
 
 bool ImageSeq::partOfSequence(const CachedImage &image) const
