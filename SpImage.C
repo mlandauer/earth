@@ -8,6 +8,7 @@
 #include "SpFITImage.h"
 #include "SpPRMANZImage.h"
 #include "SpGIFImage.h"
+#include "SpCINEONImage.h"
 
 SpImage* SpImage::construct(const string &path)
 {
@@ -31,10 +32,10 @@ SpImage* SpImage::construct(const string &path)
 	SpFITImage fitImage;
 	SpGIFImage gifImage;
 	SpPRMANZImage prmanzImage;
+	SpCINEONImage cineonImage;
 	
-	if ((buf[0] == 0x80) && (buf[1] == 0x2a) &&
-		(buf[2] == 0x5f) && (buf[3] == 0xd7))
-		cout << "Cineon" << endl;
+	if (cineonImage.recognise(buf))
+		image = new SpCINEONImage;
 		
 	else if (tiffImage.recognise(buf))
 		image = new SpTIFFImage;

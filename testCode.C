@@ -98,6 +98,7 @@ void testSpImage()
 	
 	// *** FIT File format currently untested ****
 	// *** PRMANZ File format currently untested ****
+	// *** CINEON File format currently untested ****
 
 	SpImage *image3 = SpImage::construct("/home/matthew/images/foo1.gif");
 	cout << "Opened image " << image3->path().fullName() << endl;
