@@ -29,12 +29,12 @@
 
 namespace Sp {
 
-#define checkEqual(testName, a, b) checkEqualInternal(testName, a, b, __FILE__, __LINE__)
-#define checkEqualDelta(testName, a, b, delta) checkEqualInternal(testName, a, b, delta, __FILE__, __LINE__)
-#define checkEqualBool(testName, a, b) checkEqualBoolInternal(testName, a, b, __FILE__, __LINE__)
-#define check(testName, a) checkInternal(testName, a, __FILE__, __LINE__)
-#define checkNULL(testName, a) checkNULLInternal(testName, a, __FILE__, __LINE__)
-#define checkNotNULL(testName, a) checkNotNULLInternal(testName, a, __FILE__, __LINE__)
+#define checkEqual(testName, a, b) checkEqualInternal(a, b, __FILE__, __LINE__)
+#define checkEqualDelta(testName, a, b, delta) checkEqualInternal(a, b, delta, __FILE__, __LINE__)
+#define checkEqualBool(testName, a, b) checkEqualBoolInternal(a, b, __FILE__, __LINE__)
+#define check(testName, a) checkInternal(a, __FILE__, __LINE__)
+#define checkNULL(testName, a) checkNULLInternal(a, __FILE__, __LINE__)
+#define checkNotNULL(testName, a) checkNotNULLInternal(a, __FILE__, __LINE__)
 
 class Tester
 {
@@ -47,14 +47,14 @@ class Tester
 		static float getFloatDelta() { return floatDelta; };
 		virtual void test() = 0;
 	protected:
-		bool checkEqualInternal(std::string testName, std::string a, std::string b, const std::string &filename, int lineNumber);
-		bool checkEqualInternal(std::string testName, int a, int b, const std::string &filename, int lineNumber);
-		bool checkEqualBoolInternal(std::string testName, bool a, bool b, const std::string &filename, int lineNumber);
-		bool checkEqualInternal(std::string testName, float a, float b, const std::string &filename, int lineNumber);
-		bool checkEqualInternal(std::string testName, float a, float b, float delta, const std::string &filename, int lineNumber);
-		bool checkInternal(std::string testName, bool a, const std::string &filename, int lineNumber);
-		bool checkNULLInternal(std::string testName, void *p, const std::string &filename, int lineNumber);
-		bool checkNotNULLInternal(std::string testName, void *p, const std::string &filename, int lineNumber);
+		bool checkEqualInternal(std::string a, std::string b, const std::string &filename, int lineNumber);
+		bool checkEqualInternal(int a, int b, const std::string &filename, int lineNumber);
+		bool checkEqualBoolInternal(bool a, bool b, const std::string &filename, int lineNumber);
+		bool checkEqualInternal(float a, float b, const std::string &filename, int lineNumber);
+		bool checkEqualInternal(float a, float b, float delta, const std::string &filename, int lineNumber);
+		bool checkInternal(bool a, const std::string &filename, int lineNumber);
+		bool checkNULLInternal(void *p, const std::string &filename, int lineNumber);
+		bool checkNotNULLInternal(void *p, const std::string &filename, int lineNumber);
 	private:
 		static bool verbose;
 		static int noFails, noSuccesses;
@@ -63,9 +63,9 @@ class Tester
 		std::string toString(int a);
 		std::string toStringBool(bool a);
 		std::string toString(float a);
-		bool checkInternal(std::string testName, bool a, std::string expected, std::string got, const std::string &filename, int lineNumber);
-		void failMessage(std::string testName, std::string expected, std::string got, const std::string &filename, int lineNumber);
-		void successMessage(std::string testName, std::string message, const std::string &filename, int lineNumber);
+		bool checkInternal(bool a, std::string expected, std::string got, const std::string &filename, int lineNumber);
+		void failMessage(std::string expected, std::string got, const std::string &filename, int lineNumber);
+		void successMessage(std::string message, const std::string &filename, int lineNumber);
 };
 
 }

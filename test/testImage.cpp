@@ -33,7 +33,7 @@ testImage::testImage() : Tester("Image")
 void testImage::test()
 {
 	Image *image1 = Image::construct("test/templateImages/8x8.sgi");
-	if (checkNotNULL("test 0", image1)) {
+	if (checkNotNULL(image1)) {
 		checkEqual("test 1", image1->path().fullName(),
 			"test/templateImages/8x8.sgi");
 		checkEqual("test 2", image1->size().getKBytes(), 0.89);
