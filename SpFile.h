@@ -3,7 +3,7 @@
 #ifndef _spfile_h
 #define _spfile_h
 
-#include "SpPathString.h"
+#include "SpPath.h"
 #include "SpTime.h"
 #include "SpSize.h"
 #include "SpUid.h"
@@ -13,9 +13,8 @@
 class SpFile : public SpFsObject
 {
 	public:
-		SpFile();
+		SpFile(const string &path = "");
 		~SpFile();
-		SpFile(const string &path);
 		inline bool isFile() const;
 		inline bool isDir() const;
 		void open();
@@ -26,8 +25,10 @@ class SpFile : public SpFsObject
 		unsigned long  readLong(const int &endian) const;
 		void seek(unsigned long int pos) const;
 		void seekForward(unsigned long int pos) const;
+		void setPath(const string &path);
 	private:
 		int fd;
+		bool fileOpen;
 };
 
 #endif

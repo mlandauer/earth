@@ -5,12 +5,17 @@
 
 #include "SpFile.h"
 
-SpFile::SpFile()
+SpFile::SpFile(const string &path) : fileOpen(false)
 {
+	setPath(path);
 }
 
-SpFile::SpFile(const string &path) : SpFsObject(path)
+void SpFile::setPath(const string &path)
 {
+	if (!fileOpen)
+		SpFsObject::setPath(path);
+	else 
+		cerr << "Cannot setPath for file when it is open!" << endl;
 }
 
 SpFile::~SpFile()
@@ -36,11 +41,14 @@ void SpFile::open()
 	// TEMPORARY HACK
 	if (fd == -1)
 		cerr << "Error opening file " << path().fullName().c_str() << endl;
+	else
+		fileOpen = true;
 }
 
 void SpFile::close()
 {
 	std::close(fd);
+	fileOpen = false;
 }
 
 unsigned long int SpFile::read(void *buf, unsigned long int count) const
