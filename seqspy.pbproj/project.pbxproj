@@ -183,8 +183,8 @@
 		};
 		DC8E4239039D630F0B02001F = {
 			children = (
-				DC8E4259039D637F0B02001F,
-				DC8E42C3039D637F0B02001F,
+				DCCD6F6803AD64C80BFEE61B,
+				DCCD6F6903AD64C80BFEE61B,
 				DC8E423E039D637F0B02001F,
 				DCCAC7BE03A98CC20BFEE61B,
 				DCCAC74803A9518C0BFEE61B,
@@ -288,11 +288,6 @@
 			isa = PBXFileReference;
 			path = imageFormats.conf;
 			refType = 2;
-		};
-		DC8E4259039D637F0B02001F = {
-			isa = PBXFileReference;
-			path = INSTALL;
-			refType = 4;
 		};
 		DC8E425A039D637F0B02001F = {
 			isa = PBXFileReference;
@@ -437,11 +432,6 @@
 		DC8E428D039D637F0B02001F = {
 			isa = PBXFileReference;
 			path = User.h;
-			refType = 4;
-		};
-		DC8E42C3039D637F0B02001F = {
-			isa = PBXFileReference;
-			path = TODO;
 			refType = 4;
 		};
 		DC8E42C4039D64C60B02001F = {
@@ -1046,6 +1036,18 @@
 			isa = PBXBuildFile;
 			settings = {
 			};
+		};
+		DCCD6F6803AD64C80BFEE61B = {
+			isa = PBXFileReference;
+			name = INSTALL;
+			path = doc/INSTALL;
+			refType = 4;
+		};
+		DCCD6F6903AD64C80BFEE61B = {
+			isa = PBXFileReference;
+			name = TODO;
+			path = doc/TODO;
+			refType = 4;
 		};
 	};
 	rootObject = DC8E423D039D630F0B02001F;

@@ -40,23 +40,23 @@ class ImageSeq
     //! Add an image to current sequence
     /*!
       If the image is not part of the sequence nothing happens
-      \todo Return an error condition
+      \return true if the image was successfully added
     */
-		void addImage(Image *i);
+		bool addImage(Image *i);
     
     //! Remove an image from the current sequence
     /*!
       If the image is not part of the sequence nothing happens
-      \todo Return an error condition
+      \return true if the image was successfully removed
     */
-		void removeImage(Image *i);
+		bool removeImage(Image *i);
     
     //! Remove an image from the current sequence
     /*!
       If the image is not part of the sequence nothing happens
-      \todo Return an error condition
+      \return true if the image was successfully removed
     */
-		void removeImage(const Path &p);
+		bool removeImage(const Path &p);
     
     //! Returns the path of the image sequence
     /*!

@@ -35,22 +35,37 @@ ImageSeq::ImageSeq(Image *i)
 	dimensions = i->dim();
 }
 
-void ImageSeq::addImage(Image *i)
+bool ImageSeq::addImage(Image *i)
 {
-	if (couldBePartOfSequence(i))
+	if (couldBePartOfSequence(i)) {
 		f.insert(frameNumber(i->path()));
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
-void ImageSeq::removeImage(Image *i)
+bool ImageSeq::removeImage(Image *i)
 {
-	if (partOfSequence(i))
+	if (partOfSequence(i)) {
 		f.erase(frameNumber(i->path()));
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
-void ImageSeq::removeImage(const Path &p)
+bool ImageSeq::removeImage(const Path &p)
 {
-	if (partOfSequence(p))
+	if (partOfSequence(p)) {
 		f.erase(frameNumber(p));
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
 bool ImageSeq::partOfSequence(Image *i) const

@@ -63,33 +63,33 @@ void testImageSeq::test()
 		ImageSeq seq(i1);
 		checkSequence("test 1", seq, "test/seq/test1.#.gif", "1", 2, 2, "GIF");
 		if (checkNotNULL("test 2a", i2)) {
-			seq.addImage(i2);
+			check("test 2b", seq.addImage(i2));
 			checkSequence("test 2", seq, "test/seq/test1.#.gif", "1-2", 2, 2, "GIF");
 		}
 		if (checkNotNULL("test 3a", i4)) {
-			seq.addImage(i4);
+			check("test 3b", seq.addImage(i4));
 			checkSequence("test 3", seq, "test/seq/test1.#.gif", "1-2,4", 2, 2, "GIF");
 		}
 		if (checkNotNULL("test 4a", i3)) {
-			seq.addImage(i3);
+			check("test 4b", seq.addImage(i3));
 			checkSequence("test 4", seq, "test/seq/test1.#.gif", "1-4", 2, 2, "GIF");
 		}
 		if (checkNotNULL("test 11a", i2)) {
-			seq.removeImage(i2);
+			check("test 11b", seq.removeImage(i2));
 			checkSequence("test 11", seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
 		}
 		// If we remove something that's not part of the sequence nothing should change
 		if (checkNotNULL("test 12a", i8)) {
-			seq.removeImage(i8);
+			check("test 12b", !seq.removeImage(i8));
 			checkSequence("test 12", seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
 		}
 		if (checkNotNULL("test 13a", i2)) {
-			seq.removeImage(i2);
+			check("test 13b", !seq.removeImage(i2));
 			checkSequence("test 13", seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
 		}
 		// Removing by giving a path
 		if (checkNotNULL("test 12a", i3)) {
-			seq.removeImage(path1c);
+			check("test 12b", seq.removeImage(path1c));
 			checkSequence("test 12", seq, "test/seq/test1.#.gif", "1,4", 2, 2, "GIF");
 		}
 			
@@ -109,12 +109,12 @@ void testImageSeq::test()
 		checkSequence("test 7", seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
 		if (checkNotNULL("test 8a", i5)) {
 			// Adding in an image with a different name should not work
-			seq4.addImage(i5);
+			check("test 8b", !seq4.addImage(i5));
 			checkSequence("test 8", seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
 		}
 		if (checkNotNULL("test 9a", i8)) {
 			// Adding in an image with a correct name but wrong image size should not work
-			seq4.addImage(i8);
+			check("test 9b", !seq4.addImage(i8));
 			checkSequence("test 9", seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
 		}
 	}
