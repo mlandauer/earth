@@ -22,41 +22,46 @@
 //
 // $Id$
 
-#ifndef _sptester_h_
-#define _sptester_h_
+#ifndef _testspdirmon_h_
+#define _testspdirmon_h_
 
-#include <string>
+#include "SpTester.h"
+#include "SpPath.h"
+#include "SpDirMon.h"
 
-class SpTester
+class SpDirMonEvent
 {
 	public:
-		SpTester(string className);
-		static void finish();
-		static void setVerbose(bool v) { verbose = v; };
-		static void setFloatDelta(float d) { floatDelta = d; };
-		static float getFloatDelta() { return floatDelta; };
-		virtual void test() = 0;
-	protected:
-		bool checkEqual(string testName, string a, string b);
-		bool checkEqual(string testName, int a, int b);
-		bool checkEqualBool(string testName, bool a, bool b);
-		bool checkEqual(string testName, float a, float b);
-		bool checkEqual(string testName, float a, float b, float delta);
-		bool check(string testName, bool a);
-		bool checkNULL(string testName, void *p);
-		bool checkNotNULL(string testName, void *p);
+		enum SpCode {null, changed, deleted, added};
+		enum SpType {file, dir};
+		SpDirMonEvent(SpCode c = null, SpType t = file, const SpPath &p = "") : code(c), type(t), path(p) { }
+		~SpDirMonEvent() { }
+		SpCode getCode() const { return code; }
+		SpType getType() const { return type; }
+		SpPath getPath() const { return path; }
+		bool operator==(const SpDirMonEvent &e) const {
+			return ((code == e.code) && (type == e.type) && (path == e.path));
+		}
 	private:
-		static bool verbose;
-		static int noFails, noSuccesses;
-		static float floatDelta;
-		string name;
-		string toString(int a);
-		string toStringBool(bool a);
-		string toString(float a);
-		bool check(string testName, bool a, string expected, string got);
-		void failMessage(string testName, string expected, string got);
-		void successMessage(string testName, string message);
+		SpCode code;
+		SpType type;
+		SpPath path;
+};
+
+class testSpDirMonitor : public SpTester, public SpDirMonObserver
+{
+private:
+	SpDirMonEvent nextEvent;
+public:
+	testSpDirMonitor();
+	void checkNextEvent(string testName, SpDirMon *m, const SpDirMonEvent &event);
+	SpDirMonEvent::SpType type(SpFsObject *o);
+
+	void notifyChanged(SpFsObject *o);
+	void notifyDeleted(SpFsObject *o);
+	void notifyAdded(SpFsObject *o);
+	
+	void test();
 };
 
 #endif
-

@@ -22,41 +22,37 @@
 //
 // $Id$
 
-#ifndef _sptester_h_
-#define _sptester_h_
+#include "testSpFsObject.h"
+#include "SpFsObject.h"
+#include "SpFile.h"
+#include "SpDir.h"
 
-#include <string>
-
-class SpTester
+testSpFsObject::testSpFsObject() : SpTester("SpFsObject")
 {
-	public:
-		SpTester(string className);
-		static void finish();
-		static void setVerbose(bool v) { verbose = v; };
-		static void setFloatDelta(float d) { floatDelta = d; };
-		static float getFloatDelta() { return floatDelta; };
-		virtual void test() = 0;
-	protected:
-		bool checkEqual(string testName, string a, string b);
-		bool checkEqual(string testName, int a, int b);
-		bool checkEqualBool(string testName, bool a, bool b);
-		bool checkEqual(string testName, float a, float b);
-		bool checkEqual(string testName, float a, float b, float delta);
-		bool check(string testName, bool a);
-		bool checkNULL(string testName, void *p);
-		bool checkNotNULL(string testName, void *p);
-	private:
-		static bool verbose;
-		static int noFails, noSuccesses;
-		static float floatDelta;
-		string name;
-		string toString(int a);
-		string toStringBool(bool a);
-		string toString(float a);
-		bool check(string testName, bool a, string expected, string got);
-		void failMessage(string testName, string expected, string got);
-		void successMessage(string testName, string message);
+	test();
 };
 
-#endif
-
+void testSpFsObject::test()
+{
+	SpFsObject *file = SpFsObject::construct("test/templateImages/8x8.tiff");
+	checkEqual("test 1", file->path().fullName(),
+		"test/templateImages/8x8.tiff");
+	SpUid u;
+	u.setCurrent();
+	SpGid g;
+	g.setCurrent();
+	checkEqual("test 2", file->uid().name(), u.name());
+	checkEqual("test 3", file->gid().name(), g.name());
+	checkNotNULL("test 4", dynamic_cast<SpFile *>(file));
+	checkNULL("test 5", dynamic_cast<SpDir *>(file));
+	delete file;
+	SpFsObject *file2 = SpFsObject::construct("test/templateImages/");
+	checkEqual("test 6", file2->path().fullName(), "test/templateImages");
+	// Find some way to test access, modification and change times
+	checkNULL("test 7", dynamic_cast<SpFile *>(file2));
+	checkNotNULL("test 8", dynamic_cast<SpDir *>(file2));
+	delete file2;
+	// Test opening a non-existing file or directory
+	SpFsObject *notExist = SpFsObject::construct("test/templateImages/no");
+	checkNULL("test 9", notExist);
+}

@@ -22,41 +22,32 @@
 //
 // $Id$
 
-#ifndef _sptester_h_
-#define _sptester_h_
+#include "testSpFile.h"
+#include "SpFile.h"
 
-#include <string>
-
-class SpTester
+testSpFile::testSpFile() : SpTester("SpFile")
 {
-	public:
-		SpTester(string className);
-		static void finish();
-		static void setVerbose(bool v) { verbose = v; };
-		static void setFloatDelta(float d) { floatDelta = d; };
-		static float getFloatDelta() { return floatDelta; };
-		virtual void test() = 0;
-	protected:
-		bool checkEqual(string testName, string a, string b);
-		bool checkEqual(string testName, int a, int b);
-		bool checkEqualBool(string testName, bool a, bool b);
-		bool checkEqual(string testName, float a, float b);
-		bool checkEqual(string testName, float a, float b, float delta);
-		bool check(string testName, bool a);
-		bool checkNULL(string testName, void *p);
-		bool checkNotNULL(string testName, void *p);
-	private:
-		static bool verbose;
-		static int noFails, noSuccesses;
-		static float floatDelta;
-		string name;
-		string toString(int a);
-		string toStringBool(bool a);
-		string toString(float a);
-		bool check(string testName, bool a, string expected, string got);
-		void failMessage(string testName, string expected, string got);
-		void successMessage(string testName, string message);
+	test();
 };
 
-#endif
-
+void testSpFile::test()
+{
+	SpFile file("test/templateImages/8x8.tiff");
+	checkEqualBool("test 0", file.valid(), true);
+	checkEqual("test 1", file.path().fullName(), "test/templateImages/8x8.tiff");
+	checkEqual("test 2", file.size().bytes(), 396.0);
+	checkEqual("test 3", file.size().kbytes(), 0.39);
+	file.open();
+	unsigned char buf[2];
+	int a;
+	checkEqual("test 4", file.read(buf, 2), 2);
+	checkEqual("test 5", buf[0], 0x49);
+	checkEqual("test 6", buf[1], 0x49);
+	file.seek(10);
+	file.read(buf, 1);
+	checkEqual("test 7", buf[0], 0xff);
+	file.seekForward(2);
+	file.read(buf, 1);
+	checkEqual("test 8", buf[0], 0xff);
+	file.close();
+}

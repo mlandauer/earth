@@ -22,41 +22,32 @@
 //
 // $Id$
 
-#ifndef _sptester_h_
-#define _sptester_h_
+#include "testSpSize.h"
+#include "SpSize.h"
 
-#include <string>
-
-class SpTester
+testSpSize::testSpSize() : SpTester("SpSize")
 {
-	public:
-		SpTester(string className);
-		static void finish();
-		static void setVerbose(bool v) { verbose = v; };
-		static void setFloatDelta(float d) { floatDelta = d; };
-		static float getFloatDelta() { return floatDelta; };
-		virtual void test() = 0;
-	protected:
-		bool checkEqual(string testName, string a, string b);
-		bool checkEqual(string testName, int a, int b);
-		bool checkEqualBool(string testName, bool a, bool b);
-		bool checkEqual(string testName, float a, float b);
-		bool checkEqual(string testName, float a, float b, float delta);
-		bool check(string testName, bool a);
-		bool checkNULL(string testName, void *p);
-		bool checkNotNULL(string testName, void *p);
-	private:
-		static bool verbose;
-		static int noFails, noSuccesses;
-		static float floatDelta;
-		string name;
-		string toString(int a);
-		string toStringBool(bool a);
-		string toString(float a);
-		bool check(string testName, bool a, string expected, string got);
-		void failMessage(string testName, string expected, string got);
-		void successMessage(string testName, string message);
+	test();
 };
 
-#endif
+void testSpSize::test() {
+	SpSize s;
+	s.setBytes(4097);
+	checkEqual("test 1", s.bytes(), 4097.0);
+	checkEqual("test 2", s.kbytes(), 4.0);
+	checkEqual("test 3", s.mbytes(), 0.0);
+	checkEqual("test 4", s.gbytes(), 0.0);
+
+	s.setGBytes(10);
+	checkEqual("test 5", s.gbytes(), 10.0);
+	checkEqual("test 6", s.mbytes(), 10240.0);
+	checkEqual("test 7", s.kbytes(), 10485760.0);
+	checkEqual("test 8", s.bytes(), 1.073741e10, 10e5);
+	
+	s.setBytes(0);
+	checkEqual("test 9", s.bytes(), 0.0);
+	checkEqual("test 10", s.kbytes(), 0.0);
+	checkEqual("test 11", s.mbytes(), 0.0);
+	checkEqual("test 12", s.gbytes(), 0.0);
+}
 
