@@ -51,6 +51,26 @@ void testSpFile()
 	cout << "last change = " << file.lastChange().string() << endl;
 	cout << "owner = " << file.uid().string() << endl;
 	cout << "group owner = " << file.gid().string() << endl;
+	file.open();
+	cout << "File opened" << endl;
+	unsigned char buf[2];
+	unsigned long int a = file.read(buf, 2);
+	cout << "Read in " << a << " characters" << endl;
+	a = buf[0];
+	cout << "First value in file = " << a << endl;
+	a = buf[1];
+	cout << "Second value in file = " << a << endl;
+	file.seek(10);
+	file.read(buf, 1);
+	a = buf[0];
+	cout << "Value at position 10 = " << a << endl;
+	file.seekForward(2);
+	cout << "Seek forward another 2" << endl;
+	file.read(buf, 1);
+	a = buf[0];
+	cout << "Value here = " << a << endl;
+	file.close();
+	cout << "File closed" << endl;
 }
 
 void space()
@@ -74,8 +94,8 @@ main()
 	space();
 	testSpTime();
 	space();
-	testSpFile();
-	space();
 	testSpUid();
+	space();
+	testSpFile();
 }
 

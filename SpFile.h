@@ -21,8 +21,14 @@ class SpFile
 		SpPathString path();
 		SpUid uid();
 		SpGid gid();
+		void open();
+		void close();
+		unsigned long int read(void *buf, unsigned long int count);
+		void seek(unsigned long int pos);
+		void seekForward(unsigned long int pos);
 	private:
 		SpPathString pathString;
+		int fd;
 };
 
 #endif

@@ -2,6 +2,7 @@
 
 #include <sys/stat.h>
 #include <unistd.h>
+#include <fcntl.h>
 
 #include <stream.h>
 
@@ -74,4 +75,30 @@ SpGid SpFile::gid()
 	lstat(pathString.fullName(), &fileStat);
 	g.setUnixGid(fileStat.st_gid);
 	return (g);
+}
+
+// Opens for read only at the moment
+void SpFile::open()
+{
+	fd = std::open(pathString.fullName(), O_RDONLY);
+}
+
+void SpFile::close()
+{
+	std::close(fd);
+}
+
+unsigned long int SpFile::read(void *buf, unsigned long int count)
+{
+	return (std::read(fd, buf, count));
+}
+
+void SpFile::seek(unsigned long int pos)
+{
+	lseek(fd, pos, SEEK_SET);
+}
+
+void SpFile::seekForward(unsigned long int pos)
+{
+	lseek(fd, pos, SEEK_CUR);
 }
