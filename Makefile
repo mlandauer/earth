@@ -4,8 +4,7 @@ CC = g++
 OPTION = -g
 INCLUDE = 
 
-SRCS = testCode.cpp \
-       Dir.cpp FsObject.cpp ImageFormat.cpp Size.cpp UserGroup.cpp \
+SRCS = Dir.cpp FsObject.cpp ImageFormat.cpp Size.cpp UserGroup.cpp \
 			 ImageSeq.cpp Tester.cpp  Image.cpp LibLoader.cpp DateTime.cpp \
 			 File.cpp ImageDim.cpp Path.cpp User.cpp Frames.cpp
 

@@ -21,46 +21,19 @@
 //  Temple Place - Suite 330, Boston MA 02111-1307, USA.
 //
 // $Id$
-// Some very simple test code
 
-#include <stream.h>
-#include <algorithm>
-#include <vector>
+#ifndef _testindexdirectory_h_
+#define _testindexdirectory_h_
 
-#include "File.h"
-#include "Image.h"
-#include "Dir.h"
 #include "Tester.h"
-#include "ImageSeq.h"
 
-#include "testSize.h"
-#include "testDateTime.h"
-#include "testDir.h"
-#include "testFile.h"
-#include "testImage.h"
-#include "testPath.h"
-#include "testImageSeq.h"
-#include "testIndexDirectory.h"
+using namespace Sp;
 
-int main(int argc, char **argv)
+class testIndexDirectory : public Tester
 {
-	// Register the plugins
-	ImageFormat::registerPlugins();
-	// Configure the tester
-	Tester::setVerbose(false);
-	Tester::setFloatDelta(0.1);
-	
-	testDir();
-	testSize();
-	testDateTime();
-	testFile();
-	testImage();
-	testPath();
-	testImageSeq();
+public:
 	testIndexDirectory();
-	
-	Tester::finish();
-	ImageFormat::deRegisterPlugins();
-}
+	void test();
+};
 
-
+#endif

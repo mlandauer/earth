@@ -4,28 +4,25 @@ CC = g++
 OPTION = -g
 INCLUDE = -I..
 
-SRCS = ../Dir.cpp ../FsObject.cpp ../ImageFormat.cpp ../Size.cpp \
-       ../testCode.cpp ../UserGroup.cpp ../ImageSeq.cpp ../Tester.cpp \
-       ../Image.cpp ../LibLoader.cpp ../DateTime.cpp \
-       ../File.cpp ../ImageDim.cpp ../Path.cpp ../User.cpp ../Frames.cpp\
-       testDir.cpp testFile.cpp \
-       testImage.cpp testImageSeq.cpp testPath.cpp testSize.cpp \
-       testDateTime.cpp
+SRCS = ../Dir.cpp ../FsObject.cpp ../ImageFormat.cpp ../Size.cpp ../UserGroup.cpp \
+			 ../ImageSeq.cpp ../Tester.cpp ../Image.cpp ../LibLoader.cpp ../DateTime.cpp \
+			 ../File.cpp ../ImageDim.cpp ../Path.cpp ../User.cpp ../Frames.cpp \
+       testCode.cpp testDir.cpp testFile.cpp testImage.cpp testImageSeq.cpp \
+			 testPath.cpp testSize.cpp testDateTime.cpp testIndexDirectory.cpp
 
-OBJECTS = ../Size.o ../File.o ../Path.o ../DateTime.o ../Tester.o \
-          ../LibLoader.o ../User.o ../UserGroup.o ../Image.o ../ImageFormat.o \
-	  ../ImageDim.o ../FsObject.o ../Dir.o ../ImageSeq.o ../Frames.o\
-          testDir.o testFile.o \
-          testImage.o testImageSeq.o testPath.o testSize.o \
-          testDateTime.o
+OBJECTS = ../Dir.o ../FsObject.o ../ImageFormat.o ../Size.o ../UserGroup.o \
+          ../ImageSeq.o ../Tester.o ../Image.o ../LibLoader.o ../DateTime.o \
+          ../File.o ../ImageDim.o ../Path.o ../User.o ../Frames.o \
+					testCode.o testDir.o testFile.o testImage.o testImageSeq.o \
+					testPath.o testSize.o testDateTime.o testIndexDirectory.o
 
 all: testCode
 	
 clean:
 	rm -fr *.o *.so testCode
 
-testCode: testCode.o $(OBJECTS)
-	$(CC) $(OPTION) -rdynamic -o testCode testCode.o $(OBJECTS) -ldl
+testCode: $(OBJECTS)
+	$(CC) $(OPTION) -rdynamic -o testCode $(OBJECTS) -ldl
 	
 depend:
 	cd imageFormats; make depend
