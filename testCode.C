@@ -275,7 +275,7 @@ void testSpPath()
 main()
 {
 	// Register the plugins
-	SpImage::registerPlugins();
+	SpImageFormat::registerPlugins();
 	// Configure the tester
 	SpTester::setVerbose(false);
 	SpTester::setFloatDelta(0.1);
@@ -290,6 +290,6 @@ main()
 	testSpPath();
 	
 	SpTester::finish();
-	SpImage::deRegisterPlugins();
+	SpImageFormat::deRegisterPlugins();
 }
 

@@ -12,24 +12,29 @@
 #include "SpCINEONImage.h"
 #include "SpPRTEXImage.h"
 
-list<SpImageFormat *> SpImage::plugins;
+list<SpImageFormat *> SpImageFormat::plugins;
 
 // Register all the supported image types
-void SpImage::registerPlugins()
+void SpImageFormat::registerPlugins()
 {
 	// Construct one of every image type. This is all leading up
 	// to some kind of nice plugin architecture
-	plugins.push_back(new SpTIFFImageFormat);
-	plugins.push_back(new SpIFFImageFormat);
-	plugins.push_back(new SpSGIImageFormat);
-	plugins.push_back(new SpFITImageFormat);
-	plugins.push_back(new SpGIFImageFormat);
-	plugins.push_back(new SpPRMANZImageFormat);
-	plugins.push_back(new SpCINEONImageFormat);
-	plugins.push_back(new SpPRTEXImageFormat);
+	addPlugin(new SpTIFFImageFormat);
+	addPlugin(new SpIFFImageFormat);
+	addPlugin(new SpSGIImageFormat);
+	addPlugin(new SpFITImageFormat);
+	addPlugin(new SpGIFImageFormat);
+	addPlugin(new SpPRMANZImageFormat);
+	addPlugin(new SpCINEONImageFormat);
+	addPlugin(new SpPRTEXImageFormat);
 }
 
-void SpImage::deRegisterPlugins()
+void SpImageFormat::addPlugin(SpImageFormat *plugin)
+{
+	plugins.push_back(plugin);
+}
+
+void SpImageFormat::deRegisterPlugins()
 {
 	// Iterate through all the objects and destroy
 	for (list<SpImageFormat *>::iterator a = plugins.begin();
@@ -39,6 +44,7 @@ void SpImage::deRegisterPlugins()
 
 SpImage* SpImage::construct(const SpPath &path)
 {
+	list<SpImageFormat *> plugins = SpImageFormat::getPlugins();
 	// Figure out what the greatest amount of the header that needs
 	// to be read so that all the plugins can recognise themselves.
 	int largestSizeToRecognise = 0;
