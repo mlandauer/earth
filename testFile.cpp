@@ -32,6 +32,20 @@ testFile::testFile() : Tester("File")
 
 void testFile::test()
 {
+	File file1("test/templateImages/8x8.tiff");
+  check("test 1", file1.valid());
+  File file2("test/templateImages/");
+  check("test 2", !file2.valid());
+  
+	checkEqual("test 3", file1.path().fullName(), "test/templateImages/8x8.tiff");
+	check("test 4", file1.user() == User::current());
+	check("test 5", file1.userGroup() == UserGroup::current());
+
+	// Find some way to test access, modification and change times
+	// Test opening a non-existing file or directory
+	File notExist("test/templateImages/no");
+	check("test 6", !notExist.valid());
+
 	File file("test/templateImages/8x8.tiff");
 	checkEqualBool("test 0", file.valid(), true);
 	checkEqual("test 1", file.path().fullName(), "test/templateImages/8x8.tiff");

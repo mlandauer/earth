@@ -33,6 +33,12 @@ testDir::testDir() : Tester("Dir")
 
 void testDir::test()
 {
+  Dir dir1("test/templateImages/8x8.tiff");
+  check("test 7", !dir1.valid());
+	Dir dir2("test/templateImages/");
+  check("test 8", dir2.valid());
+	checkEqual("test 9", dir2.path().fullName(), "test/templateImages");
+
 	Dir dir("test/templateImages/");
 	checkEqual("test 1", dir.path().fullName(),
 		"test/templateImages");

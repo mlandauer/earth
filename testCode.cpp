@@ -29,7 +29,6 @@
 
 #include "File.h"
 #include "Image.h"
-#include "FsObject.h"
 #include "Dir.h"
 #include "Tester.h"
 #include "ImageSeq.h"
@@ -39,7 +38,6 @@
 #include "testDir.h"
 #include "testFile.h"
 #include "testImage.h"
-#include "testFsObject.h"
 #include "testPath.h"
 #include "testImageSeq.h"
 #include "testFsObjectHandle.h"
@@ -60,7 +58,6 @@ int main(int argc, char **argv)
 	testDateTime();
 	testFile();
 	testImage();
-	testFsObject();
 	testPath();
 	testImageSeq();
 	testFsObjectHandle();
