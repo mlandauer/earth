@@ -1,14 +1,6 @@
 calc.add.req.xml
 calc.add.res.xml
-calc.div.req.xml
-calc.div.res.xml
-calc.mul.req.xml
-calc.mul.res.xml
 calc.nsmap
-calc.pow.req.xml
-calc.pow.res.xml
-calc.sub.req.xml
-calc.sub.res.xml
 calc.wsdl
 calcclient
 calcserver
