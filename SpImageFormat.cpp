@@ -34,6 +34,7 @@ SpLibLoader SpImageFormat::loader;
 // Register all the supported image types
 void SpImageFormat::registerPlugins()
 {
+  //#if 0
 	const char formatsFilename[] = "imageFormats.conf";
 	std::ifstream formats(formatsFilename);
 	if (!formats) {
@@ -46,6 +47,7 @@ void SpImageFormat::registerPlugins()
 		formats >> libraryFilename;
 		loader.load(libraryFilename);
 	}
+  //#endif
 }
 
 void SpImageFormat::addPlugin(SpImageFormat *plugin)
@@ -65,7 +67,9 @@ void SpImageFormat::removePlugin(SpImageFormat *plugin)
 
 void SpImageFormat::deRegisterPlugins()
 {
+  //#if 0
 	loader.releaseAll();
+  //#endif
 }
 
 SpImageFormat* SpImageFormat::recogniseByMagic(const SpPath &path)
