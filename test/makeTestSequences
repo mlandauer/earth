@@ -60,3 +60,12 @@ cp templateImages/8x8.cin seq/test3.0003
 mkdir -p seq
 cp templateImages/8x8.cin-invalid seq/test3.0002
 cp templateImages/8x8.cin-invalid seq/test3.0004
+
+# Cineon	8	8		seq/foo
+mkdir -p seq
+cp templateImages/8x8.cin seq/foo
+
+# Cineon	8	8		seq/bar
+mkdir -p seq
+cp templateImages/8x8.cin seq/bar
+
