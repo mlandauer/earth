@@ -65,6 +65,11 @@ bool SpTester::checkEqual(string testName, float a, float b, float delta)
 	return check(testName, fabs(a-b) <= delta, toString(b), toString(a));
 }
 
+bool SpTester::checkEqual(string testName, float a, float b)
+{
+	return checkEqual(testName, a, b, floatDelta);
+}
+
 bool SpTester::checkNotNULL(string testName, void *p)
 {
 	return check(testName, p != NULL, "non-null pointer", "null pointer");
@@ -75,17 +80,14 @@ bool SpTester::checkNULL(string testName, void *p)
 	return check(testName, p == NULL, "null pointer", "non-null pointer");
 }
 
-bool SpTester::checkEqual(string testName, float a, float b)
-{
-	return checkEqual(testName, a, b, floatDelta);
-}
-
 void SpTester::finish()
 {
 	cout << endl;
-	cout << "Tests: " << noFails + noSuccesses << ", Fails: " << noFails << endl;
+	cout << "Tests carried out: " << noFails + noSuccesses << endl;
 	if (noFails == 0)
 		cout << "All tests passed!" << endl;
+	else
+		cout << "Tests failed: " << noFails << endl;
 }
 
 string SpTester::toString(int a)
