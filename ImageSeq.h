@@ -33,71 +33,71 @@ namespace Sp {
 //! A sequence of image files
 class ImageSeq
 {
-	public:
-    //! Construct an image sequence from a single image
-		ImageSeq(Image *i);
-    
-    //! Add an image to current sequence
-    /*!
-      If the image is not part of the sequence nothing happens
-      \return true if the image was successfully added
-    */
-		bool addImage(Image *i);
-    
-    //! Remove an image from the current sequence
-    /*!
-      If the image is not part of the sequence nothing happens
-      \return true if the image was successfully removed
-    */
-		bool removeImage(Image *i);
-    
-    //! Remove an image from the current sequence
-    /*!
-      If the image is not part of the sequence nothing happens
-      \return true if the image was successfully removed
-    */
-		bool removeImage(const Path &p);
-    
-    //! Returns the path of the image sequence
-    /*!
-      A four padded frame number is represented by "#" and an arbitrary length
-      frame padding is represented by a number of "@".
-    */
-		Path path() const;
-    
-    //! Returns the size of the images in the sequence
-    /*!
-      For images to be part of the same sequence they all have to have the same dimensions.
-    */
-		ImageDim dim() const { return dimensions; };
-    
-    //! Returns the image format of the images in the sequence
-    /*!
-      For images to be part of the same sequence they all have to have the same image format.
-    */
-		ImageFormat* format() const { return imageFormat; };
-		
-		//! Returns a concise string containing the range of frames in this sequence
-		/*!
-			For example, a continuous frame range is written as "1-245" and a discontinuous
-			range is written as "1-145,147-240,242,245"
-		*/
-		std::string framesString() const;
-		
-	private:
-		Frames frames;
-		Path p;
-		Path pattern(const Path &a) const;
-		int frameNumber(const Path &a) const;
-		std::string hash(int size) const;
-		bool couldBePartOfSequence(Image *i) const;
-		bool couldBePartOfSequence(const Path &path) const;
-		bool partOfSequence(Image *i) const;
-		bool partOfSequence(const Path &p) const;
-		// Image/Sequence attributes
-		ImageFormat *imageFormat;
-		ImageDim dimensions;
-		bool valid;
+public:
+	//! Construct an image sequence from a single image
+	ImageSeq(Image *i);
+
+	//! Add an image to current sequence
+	/*!
+		If the image is not part of the sequence nothing happens
+		\return true if the image was successfully added
+	*/
+	bool addImage(Image *i);
+
+	//! Remove an image from the current sequence
+	/*!
+		If the image is not part of the sequence nothing happens
+		\return true if the image was successfully removed
+	*/
+	bool removeImage(Image *i);
+
+	//! Remove an image from the current sequence
+	/*!
+		If the image is not part of the sequence nothing happens
+		\return true if the image was successfully removed
+	*/
+	bool removeImage(const Path &p);
+
+	//! Returns the path of the image sequence
+	/*!
+		A four padded frame number is represented by "#" and an arbitrary length
+		frame padding is represented by a number of "@".
+	*/
+	Path path() const;
+
+	//! Returns the size of the images in the sequence
+	/*!
+		For images to be part of the same sequence they all have to have the same dimensions.
+	*/
+	ImageDim dim() const { return dimensions; };
+
+	//! Returns the image format of the images in the sequence
+	/*!
+		For images to be part of the same sequence they all have to have the same image format.
+	*/
+	ImageFormat* format() const { return imageFormat; };
+	
+	//! Returns a concise string containing the range of frames in this sequence
+	/*!
+		For example, a continuous frame range is written as "1-245" and a discontinuous
+		range is written as "1-145,147-240,242,245"
+	*/
+	std::string framesString() const;
+	
+private:
+	Frames frames;
+	Path p;
+	Path pattern(const Path &a) const;
+	int frameNumber(const Path &a) const;
+	std::string hash(int size) const;
+	bool couldBePartOfSequence(Image *i) const;
+	bool couldBePartOfSequence(const Path &path) const;
+	bool partOfSequence(Image *i) const;
+	bool partOfSequence(const Path &p) const;
+	// Image/Sequence attributes
+	ImageFormat *imageFormat;
+	ImageDim dimensions;
+	bool valid;
 };
 
 }

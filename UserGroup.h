@@ -36,18 +36,19 @@ namespace Sp {
 */
 class UserGroup
 {
-	public:
-		UserGroup();
-    //! Construct a group with a given POSIX group ID
-    static UserGroup unixGid(gid_t g);
-    //! Returns the owner of the current process
+public:
+	UserGroup();
+	//! Construct a group with a given POSIX group ID
+	static UserGroup unixGid(gid_t g);
+	//! Returns the owner of the current process
     static UserGroup current();
    
     //! Returns the human-readable name of the user group
-		std::string name() const;
-    bool operator==(const UserGroup &g) const;
-	private:
-		gid_t gid;
+	std::string name() const;
+	bool operator==(const UserGroup &g) const;
+	
+private:
+	gid_t gid;
 };
 
 }

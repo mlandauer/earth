@@ -32,34 +32,35 @@ namespace Sp {
 //! Store and manipulates paths to files
 class Path
 {
-	public:
-		Path(const std::string &a = "");
-		Path(const char *s);
-    //! Set the path
-		void set(const std::string a);
-    //! Return the full path as a string
-		std::string fullName() const;
-    //! Returns the path root as a string
-    /*!
-      For example, for a path "/home/foo/bar", returns "/home/foo/"
-    */
-		std::string root() const;
-    //! Returns the relative part of the path as a string
-    /*!
-      For example, for a path "/home/foo/bar", returns "bar"
-    */
-		std::string relative() const;
-    //! Returns an absolute version of the path as a string
-    /*!
-      for example, for a path "foo/bar" and a current working directory of "/home/fiddle", returns "/home/fiddle/foo/bar"
-    */
-		std::string absolute() const;
-    //! Add a string relative to a current path
-		void add(const std::string &a);
-		bool operator<(const Path &p) const;
-		bool operator==(const Path &p) const;
-	private:
-		std::string pathString;
+public:
+	Path(const std::string &a = "");
+	Path(const char *s);
+	//! Set the path
+	void set(const std::string a);
+	//! Return the full path as a string
+	std::string fullName() const;
+	//! Returns the path root as a string
+	/*!
+		For example, for a path "/home/foo/bar", returns "/home/foo/"
+	*/
+	std::string root() const;
+	//! Returns the relative part of the path as a string
+	/*!
+		For example, for a path "/home/foo/bar", returns "bar"
+	*/
+	std::string relative() const;
+	//! Returns an absolute version of the path as a string
+	/*!
+		for example, for a path "foo/bar" and a current working directory of "/home/fiddle", returns "/home/fiddle/foo/bar"
+	*/
+	std::string absolute() const;
+	//! Add a string relative to a current path
+	void add(const std::string &a);
+	bool operator<(const Path &p) const;
+	bool operator==(const Path &p) const;
+	
+private:
+	std::string pathString;
 };
 
 }

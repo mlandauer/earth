@@ -36,18 +36,19 @@ namespace Sp {
 */
 class User
 {
-	public:
-		User();
-    //! Construct a group with a given POSIX user ID
-    static User unixUid(uid_t u);
-    //! Returns the owner of the current process
-    static User current();
+public:
+	User();
+	//! Construct a group with a given POSIX user ID
+	static User unixUid(uid_t u);
+	//! Returns the owner of the current process
+	static User current();
 
-    //! Returns the human-readable name of the user
-		std::string name() const;
-    bool operator==(const User &u) const;
-	private:
-		uid_t uid;
+	//! Returns the human-readable name of the user
+	std::string name() const;
+	bool operator==(const User &u) const;
+	
+private:
+	uid_t uid;
 };
 
 }

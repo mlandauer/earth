@@ -37,70 +37,70 @@ namespace Sp {
 //! Get information and contents of a file
 class File : public FsObject
 {
-	public:
-		File(const Path &path);
-		virtual ~File() { };
-    
-		//! Open file
-		void open();
-    
-		//! Close file
-		void close();
-    
-		//! Read from file
-		/*!
-			Note that the buffer needs to be allocated before this call is made.
-			\param buf Buffer to read into
-			\param count Number of bytes to read
-		*/
-		unsigned long int read(void *buf, unsigned long int count) const;
-    
-		//! Read a single byte from file
-		unsigned char  readChar() const;
-    
-		//! Read a two byte short integer from file
-		/*!
-			By specifying the byte ordering of the file this method automatically does the necessary byte swapping
-			if the byte ordering (endianness) of the file and machine differ.
-			\param endian The byte ordering of the file
-		*/
-		unsigned short readShort(const int &endian) const;
-    
-		//! Read a four byte long integer from file
-		/*!
-			By specifying the byte ordering of the file this method automatically does the necessary byte swapping
-			if the byte ordering (endianness) of the file and machine differ.
-			\param endian The byte ordering of the file
-		*/
-		unsigned long  readLong(const int &endian) const;
-    
-		//! Seek to an absolute place in the file
-		/*!
-			This affects subsequent file access which will start at the position set here.
-		*/
-		void seek(unsigned long int pos) const;
-    
-		//! Seek relative to the current spot in the file
-		/*!
-			This affects subsequent file access which will start at the position set here.
-		*/
-		void seekForward(unsigned long int pos) const;
-    
-		//! Returns the file size
-		Size size() const;
-    
-		//! Returns the file size in bytes
-		long int sizeBytes() const;
-		
-		//! Is this a valid file?
-		bool valid() const;
-		
-	protected:
-		File() { };
-		
-	private:
-		int fd;
-		bool fileOpen;
+public:
+	File(const Path &path);
+	virtual ~File() { };
+
+	//! Open file
+	void open();
+
+	//! Close file
+	void close();
+
+	//! Read from file
+	/*!
+		Note that the buffer needs to be allocated before this call is made.
+		\param buf Buffer to read into
+		\param count Number of bytes to read
+	*/
+	unsigned long int read(void *buf, unsigned long int count) const;
+
+	//! Read a single byte from file
+	unsigned char  readChar() const;
+
+	//! Read a two byte short integer from file
+	/*!
+		By specifying the byte ordering of the file this method automatically does the necessary byte swapping
+		if the byte ordering (endianness) of the file and machine differ.
+		\param endian The byte ordering of the file
+	*/
+	unsigned short readShort(const int &endian) const;
+
+	//! Read a four byte long integer from file
+	/*!
+		By specifying the byte ordering of the file this method automatically does the necessary byte swapping
+		if the byte ordering (endianness) of the file and machine differ.
+		\param endian The byte ordering of the file
+	*/
+	unsigned long  readLong(const int &endian) const;
+
+	//! Seek to an absolute place in the file
+	/*!
+		This affects subsequent file access which will start at the position set here.
+	*/
+	void seek(unsigned long int pos) const;
+
+	//! Seek relative to the current spot in the file
+	/*!
+		This affects subsequent file access which will start at the position set here.
+	*/
+	void seekForward(unsigned long int pos) const;
+
+	//! Returns the file size
+	Size size() const;
+
+	//! Returns the file size in bytes
+	long int sizeBytes() const;
+	
+	//! Is this a valid file?
+	bool valid() const;
+	
+protected:
+	File() { };
+	
+private:
+	int fd;
+	bool fileOpen;
 };
 
 }
