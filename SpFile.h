@@ -13,7 +13,6 @@ class SpFile
 		//SpTime lastUpdateTime();
 		SpSize size();
 		SpPathString path();
-		//SpString fullName();
 	private:
 		SpPathString pathString;
 };

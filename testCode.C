@@ -37,6 +37,17 @@ void testSpTime()
 	SpTime t;
 	t.setCurrentTime();
 	cout << "Current time and date = " << t.string() << endl;
+	cout << "Year = " << t.year() << endl;
+	cout << "Hour = " << t.hour() << endl;
+	cout << "Minute = " << t.minute() << endl;
+	cout << "Second = " << t.second() << endl;
+	cout << "Day of the week = " << t.dayOfWeek() << endl;
+	cout << "Day of the month = " << t.dayOfMonth() << endl;
+	cout << "month = " << t.month() << endl;
+	cout << "monthStringShort = " << t.monthStringShort() << endl;
+	cout << "monthString = " << t.monthString() << endl;
+	cout << "dayOfWeekStringShort = " << t.dayOfWeekStringShort() << endl;
+	cout << "time = " << t.timeString() << endl;
 }
 
 void space()

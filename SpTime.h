@@ -18,6 +18,18 @@ class SpTime
 		void setUnixTime(time_t t);
 		SpString string();
 		void setCurrentTime();
+		int dayOfWeek();
+		int dayOfMonth();
+		int year();
+		int month();
+		int hour();
+		int minute();
+		int second();
+		SpString monthStringShort();
+		SpString monthString();
+		SpString dayOfWeekStringShort();
+		SpString dayOfWeekString();
+		SpString timeString();
 	private:
 		time_t time;
 };

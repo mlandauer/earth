@@ -8,6 +8,9 @@ OBJECTS = SpMisc.o SpFile.o SpPathString.o SpTime.o
 
 all: testCode
 	./testCode
+	
+clean:
+	rm -fr ii_files *.o testCode
 
 testCode: testCode.o $(OBJECTS) SpMisc.h SpFile.h
 	$(CC) $(OPTION) -o testCode testCode.o $(OBJECTS) -lqt
