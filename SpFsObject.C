@@ -7,28 +7,23 @@
 #include "SpDir.h"
 #include "SpImage.h"
 
+SpFsObject::SpFsObject(const SpPath &path) : p(path)
+{
+}
+
 SpFsObject::~SpFsObject()
 {
 }
 
 SpFsObject *SpFsObject::construct(const SpPath &path)
 {
-	SpFsObject *o = new SpFsObject;
-	o->setPath(path);
-	if (o->isDir()) {
-		delete o;
-		SpDir *d = new SpDir;
-		d->setPath(path);
-		return (d);
-	}
-	else if (o->isFile()) {
-		delete o;
+	SpFsObject o(path);
+	if (o.isDir())
+		return (new SpDir(path));
+	else if (o.isFile()) {
 		SpImage *i = SpImage::construct(path);
-		if (i == NULL) {
-			SpFile *f = new SpFile;
-			f->setPath(path);
-			return (f);
-		}
+		if (i == NULL)
+			return (new SpFile(path));
 		else
 			return (i);
 	}
