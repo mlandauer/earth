@@ -9,7 +9,7 @@
 class SpImage : public SpFile
 {
 	public:
-		static SpImage* construct(string path);
+		static SpImage* construct(const string &path);
 		virtual SpImageDim dim() = 0;
 		virtual string formatString() = 0;
 		virtual bool valid() = 0;

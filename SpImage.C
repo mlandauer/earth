@@ -9,7 +9,7 @@
 #include "SpPRMANZImage.h"
 #include "SpGIFImage.h"
 
-SpImage* SpImage::construct(string path)
+SpImage* SpImage::construct(const string &path)
 {
 	
 	// Figure out what the image type is by reading the first twelve bytes

@@ -14,7 +14,7 @@ class SpFile
 	public:
 		SpFile();
 		~SpFile();
-		SpFile(string path);
+		SpFile(const string &path);
 		SpTime lastAccess() const;
 		SpTime lastModification() const;
 		SpTime lastChange() const;
@@ -28,7 +28,7 @@ class SpFile
 		void seek(unsigned long int pos) const;
 		void seekForward(unsigned long int pos) const;
 	protected:
-		void setPath(string path);
+		void setPath(const string &path);
 	private:
 		SpPathString pathString;
 		int fd;

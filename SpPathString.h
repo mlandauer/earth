@@ -10,7 +10,7 @@ class SpPathString
 	public:
 		SpPathString();
 		~SpPathString();
-		void set(string a);
+		void set(const string &a);
 		string fullName() const;
 	private:
 		string pathString;

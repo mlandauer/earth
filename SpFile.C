@@ -13,7 +13,7 @@ SpFile::SpFile()
 {
 }
 
-SpFile::SpFile(string path)
+SpFile::SpFile(const string &path)
 {
 	setPath(path);
 }
@@ -22,7 +22,7 @@ SpFile::~SpFile()
 {
 }
 
-void SpFile::setPath(string path)
+void SpFile::setPath(const string &path)
 {
 	pathString.set(path);
 }

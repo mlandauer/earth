@@ -10,7 +10,7 @@ SpPathString::~SpPathString()
 {
 }
 
-void SpPathString::set(string a)
+void SpPathString::set(const string &a)
 {
 	pathString = a;
 }
