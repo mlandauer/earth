@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	
 	testSpDir();
 	testSpSize();
-	//testSpTime();
+	testSpTime();
 	testSpFile();
 	testSpImage();
 	testSpFsObject();

@@ -32,21 +32,24 @@ testSpTime::testSpTime() : SpTester("SpTime")
 
 void testSpTime::test()
 {
+  // Commented this test out because unit time zero (the epoch) is defined as a specific
+  // time in GMT. However, when you get the local time it will be different in different
+  // time zones and so the test will fail or work depending on which timezone you're in.
 	SpTime t1;
 	t1.setUnixTime(0);
-	checkEqual("test 1", t1.timeAndDateString(), "Wed Dec 31 16:00:00 1969");
-	checkEqual("test 2", t1.year(), 1969);
-	checkEqual("test 3", t1.hour(), 16);
-	checkEqual("test 4", t1.minute(), 0);
-	checkEqual("test 5", t1.second(), 0);
-	checkEqual("test 6", t1.dayOfWeek(), 3);
-	checkEqual("test 7", t1.dayOfMonth(), 31);
-	checkEqual("test 8", t1.month(), 12);
-	checkEqual("test 9", t1.monthStringShort(), "Dec");
-	checkEqual("test 10", t1.monthString(), "December");
-	checkEqual("test 11", t1.dayOfWeekStringShort(), "Wed");
-	checkEqual("test 12", t1.dayOfWeekString(), "Wednesday");
-	checkEqual("test 13", t1.timeString(), "16:00:00");
+	//checkEqual("test 1", t1.timeAndDateString(), "Wed Dec 31 16:00:00 1969");
+	//checkEqual("test 2", t1.year(), 1969);
+	//checkEqual("test 3", t1.hour(), 16);
+	//checkEqual("test 4", t1.minute(), 0);
+	//checkEqual("test 5", t1.second(), 0);
+	//checkEqual("test 6", t1.dayOfWeek(), 3);
+	//checkEqual("test 7", t1.dayOfMonth(), 31);
+	//checkEqual("test 8", t1.month(), 12);
+	//checkEqual("test 9", t1.monthStringShort(), "Dec");
+	//checkEqual("test 10", t1.monthString(), "December");
+	//checkEqual("test 11", t1.dayOfWeekStringShort(), "Wed");
+	//checkEqual("test 12", t1.dayOfWeekString(), "Wednesday");
+	//checkEqual("test 13", t1.timeString(), "16:00:00");
 	SpTime t2;
 	t2.setUnixTime(100);
 	SpTime t0;
