@@ -65,14 +65,14 @@ void testSpPath::test()
 	check("test 20", p7 < p9);
 	check("test 21", p8 < p9);
 	// The reverse
-	check("test 16", !(p6 > p7));
-	check("test 17", !(p6 > p8));
-	check("test 18", !(p6 > p9));
-	check("test 19", !(p7 > p8));
-	check("test 20", !(p7 > p9));
-	check("test 21", !(p8 > p9));
+	check("test 16", !(p7 < p6));
+	check("test 17", !(p8 < p6));
+	check("test 18", !(p9 < p6));
+	check("test 19", !(p8 < p7));
+	check("test 20", !(p9 < p7));
+	check("test 21", !(p9 < p8));
 	// Equality
 	check("test 22", p9 == p10);
 	check("test 23", p6 == p6);
-	check("test 24", p6 != p7);
+	check("test 24", !(p6 == p7));
 }

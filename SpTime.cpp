@@ -58,28 +58,28 @@ void SpTime::setUnixTime(time_t t)
 	time = t;
 }
 
-string SpTime::timeAndDateString() const
+std::string SpTime::timeAndDateString() const
 {
-	string s = dayOfWeekStringShort() + " " + monthStringShort() + " " +
+	std::string s = dayOfWeekStringShort() + " " + monthStringShort() + " " +
 		dayOfMonthString() + " " + timeString() + " " + yearString();
 	return s;
 }
 
-string SpTime::dayOfMonthString() const
+std::string SpTime::dayOfMonthString() const
 {
 	char buf[100];
-	string s;
-	strstream o(buf, 100);
+	std::string s;
+	std::strstream o(buf, 100);
 	o << dayOfMonth();
 	o >> s;
 	return (s);
 }
 
-string SpTime::yearString() const
+std::string SpTime::yearString() const
 {
-	string s;
+	std::string s;
 	char buf[100];
-	strstream o(buf, 100);
+	std::strstream o(buf, 100);
 	o << year();
 	o >> s;
 	return (s);
@@ -113,27 +113,27 @@ int SpTime::month() const
 	return (1 + localtime->tm_mon);
 }
 
-string SpTime::dayOfWeekStringShort() const
+std::string SpTime::dayOfWeekStringShort() const
 {
-	string s = dayOfWeekString();
+	std::string s = dayOfWeekString();
 	s.resize(3);
 	return (s);
 }
 
-string SpTime::timeString() const
+std::string SpTime::timeString() const
 {
-	string s;
+	std::string s;
 	char buf[100];
-	strstream o(buf, 100);
-	o << setfill('0')
-	  << setw(2) << hour() << ":"
-	  << setw(2) << minute() << ":"
-	  << setw(2) << second();
+	std::strstream o(buf, 100);
+	o << std::setfill('0')
+	  << std::setw(2) << hour() << ":"
+	  << std::setw(2) << minute() << ":"
+	  << std::setw(2) << second();
 	o >> s;
 	return (s);
 }
 
-string SpTime::dayOfWeekString() const
+std::string SpTime::dayOfWeekString() const
 {
 	switch (dayOfWeek())
 	{
@@ -154,14 +154,14 @@ string SpTime::dayOfWeekString() const
 	}
 }
 
-string SpTime::monthStringShort() const
+std::string SpTime::monthStringShort() const
 {
-	string s = monthString();
+	std::string s = monthString();
 	s.resize(3);
 	return (s);
 }
 
-string SpTime::monthString() const
+std::string SpTime::monthString() const
 {
 	switch (month()) {
 		case 1:

@@ -30,19 +30,19 @@
 class SpPath
 {
 	public:
-		SpPath(const string &a = "");
+		SpPath(const std::string &a = "");
 		SpPath(const char *s);
 		~SpPath();
-		void set(const string a);
-		string fullName() const;
-		string root() const;
-		string relative() const;
-		string absolute() const;
-		void add(const string &a);
+		void set(const std::string a);
+		std::string fullName() const;
+		std::string root() const;
+		std::string relative() const;
+		std::string absolute() const;
+		void add(const std::string &a);
 		bool operator<(const SpPath &p) const;
 		bool operator==(const SpPath &p) const;
 	private:
-		string pathString;
+		std::string pathString;
 };
 
 #endif

@@ -128,8 +128,8 @@ void testSpImageSeq::test()
 	delete i1, i2, i3, i4, i5, i6, i7, i8;
 }
 
-void testSpImageSeq::checkSequence(string testName, const SpImageSeq &seq,
-	string name, string frames, int width, int height, string format)
+void testSpImageSeq::checkSequence(std::string testName, const SpImageSeq &seq,
+	std::string name, std::string frames, int width, int height, std::string format)
 {
 	checkEqual(testName + "b", seq.path().fullName(), name);
 	checkEqual(testName + "c", seq.framesString(), frames);
@@ -140,11 +140,11 @@ void testSpImageSeq::checkSequence(string testName, const SpImageSeq &seq,
 
 void testSpImageSeq::copyFile(const SpPath &path1, const SpPath &path2)
 {
-	string command = "cp " + path1.fullName() + " " + path2.fullName();
+	std::string command = "cp " + path1.fullName() + " " + path2.fullName();
 	system (command.c_str());
 }
 void testSpImageSeq::makeDirectory(const SpPath &path)
 {
-	string command = "mkdir " + path.fullName();
+	std::string command = "mkdir " + path.fullName();
 	system (command.c_str());
 }

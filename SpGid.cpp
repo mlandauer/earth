@@ -46,8 +46,8 @@ void SpGid::setCurrent()
 	gid = getgid();
 }
 
-string SpGid::name() const
+std::string SpGid::name() const
 {
 	struct group *e = getgrgid(gid);
-	return (string(e->gr_name));
+	return (std::string(e->gr_name));
 }

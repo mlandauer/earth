@@ -33,8 +33,8 @@ class testSpImageSeq : public SpTester
 public:
 	testSpImageSeq();
 	void test();
-	void checkSequence(string testName, const SpImageSeq &seq,
-		string name, string frames, int width, int height, string format);
+	void checkSequence(std::string testName, const SpImageSeq &seq,
+		std::string name, std::string frames, int width, int height, std::string format);
 	void copyFile(const SpPath &path1, const SpPath &path2);
 	void makeDirectory(const SpPath &path);
 };

@@ -58,7 +58,7 @@ class SpDirMon
 		void notifyDeleted(SpFsObjectHandle o);
 		void notifyAdded(SpFsObjectHandle o);
 	private:
-		queue<SpDirMonEvent> eventQueue;
+		std::queue<SpDirMonEvent> eventQueue;
 };
 
 

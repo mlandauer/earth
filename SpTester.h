@@ -30,32 +30,32 @@
 class SpTester
 {
 	public:
-		SpTester(string className);
+		SpTester(std::string className);
 		static void finish();
 		static void setVerbose(bool v) { verbose = v; };
 		static void setFloatDelta(float d) { floatDelta = d; };
 		static float getFloatDelta() { return floatDelta; };
 		virtual void test() = 0;
 	protected:
-		bool checkEqual(string testName, string a, string b);
-		bool checkEqual(string testName, int a, int b);
-		bool checkEqualBool(string testName, bool a, bool b);
-		bool checkEqual(string testName, float a, float b);
-		bool checkEqual(string testName, float a, float b, float delta);
-		bool check(string testName, bool a);
-		bool checkNULL(string testName, void *p);
-		bool checkNotNULL(string testName, void *p);
+		bool checkEqual(std::string testName, std::string a, std::string b);
+		bool checkEqual(std::string testName, int a, int b);
+		bool checkEqualBool(std::string testName, bool a, bool b);
+		bool checkEqual(std::string testName, float a, float b);
+		bool checkEqual(std::string testName, float a, float b, float delta);
+		bool check(std::string testName, bool a);
+		bool checkNULL(std::string testName, void *p);
+		bool checkNotNULL(std::string testName, void *p);
 	private:
 		static bool verbose;
 		static int noFails, noSuccesses;
 		static float floatDelta;
-		string name;
-		string toString(int a);
-		string toStringBool(bool a);
-		string toString(float a);
-		bool check(string testName, bool a, string expected, string got);
-		void failMessage(string testName, string expected, string got);
-		void successMessage(string testName, string message);
+		std::string name;
+		std::string toString(int a);
+		std::string toStringBool(bool a);
+		std::string toString(float a);
+		bool check(std::string testName, bool a, std::string expected, std::string got);
+		void failMessage(std::string testName, std::string expected, std::string got);
+		void successMessage(std::string testName, std::string message);
 };
 
 #endif

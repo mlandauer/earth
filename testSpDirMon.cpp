@@ -29,7 +29,7 @@ testSpDirMon::testSpDirMon() : SpTester("SpDirMon")
 	test();
 };
 
-void testSpDirMon::checkNextEvent(string testName, SpDirMon *m, int code, const SpPath &p)
+void testSpDirMon::checkNextEvent(std::string testName, SpDirMon *m, int code, const SpPath &p)
 {
 	SpDirMonEvent e = m->getNextEvent();
 	checkEqual(testName + "a", e.getCode(), code);
@@ -38,7 +38,7 @@ void testSpDirMon::checkNextEvent(string testName, SpDirMon *m, int code, const 
 
 void testSpDirMon::test()
 {
-	cout << "Note: the following tests will take about 20 seconds" << endl;
+	std::cout << "Note: the following tests will take about 20 seconds" << std::endl;
 	// First create a directory with some test files
 	system ("rm -fr test/FsMonitor");
 	system ("mkdir test/FsMonitor");

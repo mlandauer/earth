@@ -45,8 +45,8 @@ void SpUid::setCurrent()
 	uid = getuid();
 }
 
-string SpUid::name() const
+std::string SpUid::name() const
 {
 	struct passwd *p = getpwuid(uid);
-	return (string(p->pw_name));
+	return (std::string(p->pw_name));
 }

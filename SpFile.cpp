@@ -26,6 +26,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <iostream>
 
 #include "SpFile.h"
 
@@ -43,10 +44,10 @@ bool SpFile::valid() const
 // Opens for read only at the moment
 void SpFile::open()
 {
-	fd = std::open(path().fullName().c_str(), O_RDONLY);
+	fd = ::open(path().fullName().c_str(), O_RDONLY);
 	// TEMPORARY HACK
 	if (fd == -1)
-		cerr << "Error opening file " << path().fullName().c_str() << endl;
+		std::cerr << "Error opening file " << path().fullName().c_str() << std::endl;
 	else
 		fileOpen = true;
 }
@@ -62,13 +63,13 @@ SpSize SpFile::size() const
 
 void SpFile::close()
 {
-	std::close(fd);
+	::close(fd);
 	fileOpen = false;
 }
 
 unsigned long int SpFile::read(void *buf, unsigned long int count) const
 {
-	return (std::read(fd, buf, count));
+	return (::read(fd, buf, count));
 }
 
 void SpFile::seek(unsigned long int pos) const

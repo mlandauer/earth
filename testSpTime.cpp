@@ -52,10 +52,10 @@ void testSpTime::test()
 	SpTime t0;
 	check("test 14",    t0 == t1);
 	check("test 15a",   t0 <  t2);
-	check("test 15b", !(t0 >  t2));
-	check("test 15c",   t0 != t2);
+	check("test 15b", !(t2 <  t0));
+	check("test 15c",   !(t0 == t2));
 	check("test 16a",   t1 <  t2);
-	check("test 16b", !(t1 >  t2));
-	check("test 16c",   t1 != t2);
+	check("test 16b", !(t2 <  t1));
+	check("test 16c",   !(t1 == t2));
 }
 

@@ -36,15 +36,15 @@ class SpImageSeq
 		void removeImage(SpImage *i);
 		void removeImage(const SpPath &p);
 		SpPath path() const;
-		string framesString() const;
+		std::string framesString() const;
 		SpImageDim dim() const { return dimensions; };
 		SpImageFormat* format() const { return imageFormat; };
 	private:
-		set<int> f;
+		std::set<int> f;
 		SpPath p;
 		SpPath pattern(const SpPath &a) const;
 		int frameNumber(const SpPath &a) const;
-		string hash(int size) const;
+		std::string hash(int size) const;
 		bool couldBePartOfSequence(SpImage *i) const;
 		bool partOfSequence(SpImage *i) const;
 		bool partOfSequence(const SpPath &p) const;

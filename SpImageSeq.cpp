@@ -61,10 +61,12 @@ bool SpImageSeq::partOfSequence(SpImage *i) const
 
 bool SpImageSeq::partOfSequence(const SpPath &path) const
 {
-	if (pattern(path) != p)
+	if (pattern(path) == p) {
+    int no = frameNumber(path);
+    return (f.find(no) != f.end());
+  }
+  else
 		return false;
-	int no = frameNumber(path);
-	return (f.find(no) != f.end());
 }
 
 bool SpImageSeq::couldBePartOfSequence(SpImage *i) const
@@ -74,12 +76,12 @@ bool SpImageSeq::couldBePartOfSequence(SpImage *i) const
 		&& (i->dim() == dimensions);
 }
 
-string SpImageSeq::framesString() const
+std::string SpImageSeq::framesString() const
 {
-	string r;
+	std::string r;
 	char buf[100];
 	int count = 0;
-	set<int>::iterator a = f.begin();
+	std::set<int>::iterator a = f.begin();
 	while (a != f.end()) {
 		int start = *a;
 		int current = *a;
@@ -95,7 +97,7 @@ string SpImageSeq::framesString() const
 			sprintf(buf, "%i-%i", start, end);
 		if (count > 0)
 			r += ",";
-		r += string(buf);
+		r += std::string(buf);
 		count++;
 	}
 	return r;
@@ -108,10 +110,10 @@ SpPath SpImageSeq::path() const
 
 SpPath SpImageSeq::pattern(const SpPath &a) const
 {
-	string s = a.fullName();
+	std::string s = a.fullName();
 	// Search backwards from the end for numbers
-	string::size_type last = s.find_last_of("0123456789");
-	string::size_type first = s.find_last_not_of("0123456789", last) + 1;
+	std::string::size_type last = s.find_last_of("0123456789");
+	std::string::size_type first = s.find_last_not_of("0123456789", last) + 1;
 	int size = last - first + 1;
 	s.replace(first, size, hash(size));
 	return SpPath(s);
@@ -119,12 +121,12 @@ SpPath SpImageSeq::pattern(const SpPath &a) const
 
 int SpImageSeq::frameNumber(const SpPath &a) const
 {
-	string s = a.fullName();
+	std::string s = a.fullName();
 	// Search backwards from the end for numbers
-	string::size_type last = s.find_last_of("0123456789");
-	string::size_type first = s.find_last_not_of("0123456789", last) + 1;
+	std::string::size_type last = s.find_last_of("0123456789");
+	std::string::size_type first = s.find_last_not_of("0123456789", last) + 1;
 	int size = last - first + 1;
-	string number = s.substr(first, size);
+	std::string number = s.substr(first, size);
 	unsigned int r;
 	sscanf(number.c_str(), "%u", &r);
 	return r;
@@ -132,10 +134,10 @@ int SpImageSeq::frameNumber(const SpPath &a) const
 
 // Returns the correct replacement for a number based on the number of
 // characters
-string SpImageSeq::hash(int size) const
+std::string SpImageSeq::hash(int size) const
 {
 	if (size == 4)
 		return "#";
 	else
-		return string(size, '@');	
+		return std::string(size, '@');	
 }

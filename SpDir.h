@@ -36,7 +36,7 @@ class SpDir : public SpFsObject
 		SpDir(const SpPath &path) : SpFsObject(path) { };
 		SpDir() { };
 		~SpDir() { };
-		vector<SpFsObjectHandle> ls() const;
+		std::vector<SpFsObjectHandle> ls() const;
 		bool valid() const;
 		static void setSortByPath(bool b) { sortByPath = b; };
 	private:

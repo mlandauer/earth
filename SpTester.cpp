@@ -25,6 +25,7 @@
 #include <string>
 #include <stdio.h>
 #include <math.h>
+#include <iostream>
 
 #include "SpTester.h"
 
@@ -33,31 +34,31 @@ int SpTester::noFails = 0;
 int SpTester::noSuccesses = 0;
 float SpTester::floatDelta = 0.1;
 
-SpTester::SpTester(string className) : name(className)
+SpTester::SpTester(std::string className) : name(className)
 {
-	cout << endl << "Testing " << name << ": ";
-	cout.flush();
+	std::cout << std::endl << "Testing " << name << ": ";
+	std::cout.flush();
 }
 
-void SpTester::failMessage(string testName, string expected, string got)
+void SpTester::failMessage(std::string testName, std::string expected, std::string got)
 {
-	cout << endl << "FAILED " << name << " " << testName << ": Expected "
+	std::cout << std::endl << "FAILED " << name << " " << testName << ": Expected "
 		<< expected << " but got " << got;
-	cout.flush();
+	std::cout.flush();
 }
 
-void SpTester::successMessage(string testName, string returned)
+void SpTester::successMessage(std::string testName, std::string returned)
 {
 	if (verbose) {
-		cout << endl << "SUCCESS " << name << " " << testName << ": Returned "
+		std::cout << std::endl << "SUCCESS " << name << " " << testName << ": Returned "
 			<< returned;
 	}
 	else
-		cout << ".";
-	cout.flush();
+		std::cout << ".";
+	std::cout.flush();
 }
 
-bool SpTester::check(string testName, bool a, string expected, string got)
+bool SpTester::check(std::string testName, bool a, std::string expected, std::string got)
 {
 	if (a) {
 		successMessage(testName, expected);
@@ -71,64 +72,64 @@ bool SpTester::check(string testName, bool a, string expected, string got)
 	}
 }
 
-bool SpTester::check(string testName, bool a)
+bool SpTester::check(std::string testName, bool a)
 {
 	return check(testName, a, "true", "false");
 }
 
-bool SpTester::checkEqual(string testName, string a, string b)
+bool SpTester::checkEqual(std::string testName, std::string a, std::string b)
 {
 	return check(testName, a == b, b, a);
 }
 
-bool SpTester::checkEqual(string testName, int a, int b)
+bool SpTester::checkEqual(std::string testName, int a, int b)
 {
 	return check(testName, a == b, toString(b), toString(a));
 }
 
-bool SpTester::checkEqualBool(string testName, bool a, bool b)
+bool SpTester::checkEqualBool(std::string testName, bool a, bool b)
 {
 	return check(testName, a == b, toStringBool(b), toStringBool(a));
 }
 
-bool SpTester::checkEqual(string testName, float a, float b, float delta)
+bool SpTester::checkEqual(std::string testName, float a, float b, float delta)
 {
 	return check(testName, fabs(a-b) <= delta, toString(b), toString(a));
 }
 
-bool SpTester::checkEqual(string testName, float a, float b)
+bool SpTester::checkEqual(std::string testName, float a, float b)
 {
 	return checkEqual(testName, a, b, floatDelta);
 }
 
-bool SpTester::checkNotNULL(string testName, void *p)
+bool SpTester::checkNotNULL(std::string testName, void *p)
 {
 	return check(testName, p != NULL, "non-null pointer", "null pointer");
 }
 
-bool SpTester::checkNULL(string testName, void *p)
+bool SpTester::checkNULL(std::string testName, void *p)
 {
 	return check(testName, p == NULL, "null pointer", "non-null pointer");
 }
 
 void SpTester::finish()
 {
-	cout << endl;
-	cout << "Tests carried out: " << noFails + noSuccesses << endl;
+	std::cout << std::endl;
+	std::cout << "Tests carried out: " << noFails + noSuccesses << std::endl;
 	if (noFails == 0)
-		cout << "All tests passed!" << endl;
+		std::cout << "All tests passed!" << std::endl;
 	else
-		cout << "Tests failed: " << noFails << endl;
+		std::cout << "Tests failed: " << noFails << std::endl;
 }
 
-string SpTester::toString(int a)
+std::string SpTester::toString(int a)
 {
 	char buf[500];
 	sprintf(buf, "%i", a);
-	return string(buf);
+	return std::string(buf);
 }
 
-string SpTester::toStringBool(bool a)
+std::string SpTester::toStringBool(bool a)
 {
 	if (a)
 		return "true";
@@ -136,9 +137,9 @@ string SpTester::toStringBool(bool a)
 		return "false";
 }
 
-string SpTester::toString(float a)
+std::string SpTester::toString(float a)
 {
 	char buf[500];
 	sprintf(buf, "%f", a);
-	return string(buf);
+	return std::string(buf);
 }

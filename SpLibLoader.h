@@ -36,10 +36,10 @@ class SpLibLoader
 	public:
 		SpLibLoader() { };
 		~SpLibLoader() { };
-		void load(string fileName);
+		void load(std::string fileName);
 		void releaseAll();
 	private:
-		list<void *> handles;	
+		std::list<void *> handles;	
 };
 
 #endif

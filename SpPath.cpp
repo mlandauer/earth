@@ -23,9 +23,11 @@
 // $Id$
 
 #include <unistd.h>
+#include <iostream>
+
 #include "SpPath.h"
 
-SpPath::SpPath(const string &a)
+SpPath::SpPath(const std::string &a)
 {
 	set(a);
 }
@@ -49,7 +51,7 @@ bool SpPath::operator==(const SpPath &p) const
 	return (pathString == p.pathString);
 }
 
-void SpPath::set(const string a)
+void SpPath::set(const std::string a)
 {
 	pathString = a;
 	// Remove trailing "/" characters
@@ -60,9 +62,9 @@ void SpPath::set(const string a)
 	}
 }
 
-string SpPath::root() const
+std::string SpPath::root() const
 {
-	string a = pathString;
+	std::string a = pathString;
 	int f = pathString.rfind('/');
 	if (f < pathString.length()) {
 		a.resize(f);
@@ -73,9 +75,9 @@ string SpPath::root() const
 	return (a);
 }
 
-string SpPath::relative() const
+std::string SpPath::relative() const
 {
-	string a = pathString;
+	std::string a = pathString;
 	int f = pathString.rfind('/');
 	if (f < pathString.length()) {
 		a = a.substr(f+1);
@@ -85,24 +87,24 @@ string SpPath::relative() const
 
 // Returns an absolute version of the path
 // i.e. foo/blah.tif -> /home/fiddle/foo/blah.tif
-string SpPath::absolute() const
+std::string SpPath::absolute() const
 {
 	if (pathString[0] == '/')
 		return pathString;
 	char workingDirectory[512];
 	if (getcwd(workingDirectory, 512) == NULL) {
-		cerr << "SpPath::absolute() getcwd buffer overflow!" << endl;
+		std::cerr << "SpPath::absolute() getcwd buffer overflow!" << std::endl;
 		exit(1);
 	}
-	return (string(workingDirectory) + "/" + pathString);
+	return (std::string(workingDirectory) + "/" + pathString);
 }
 
-string SpPath::fullName() const
+std::string SpPath::fullName() const
 {
 	return (pathString);
 }
 
-void SpPath::add(const string &a)
+void SpPath::add(const std::string &a)
 {
 	pathString += "/" + a;
 }

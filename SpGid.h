@@ -35,7 +35,7 @@ class SpGid
 		~SpGid();
 		void setUnixGid(gid_t g);
 		void setCurrent();
-		string name() const;
+		std::string name() const;
 	private:
 		gid_t gid;
 };

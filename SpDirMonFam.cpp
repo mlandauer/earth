@@ -28,22 +28,22 @@
 bool SpDirMonFam::start(const SpDir &d) {
 	dir = d;
 	if (FAMOpen(&fc) != 0) {
-		cerr << "Could not connect to fam daemon" << endl;
+		std::cerr << "Could not connect to fam daemon" << std::endl;
 		return false;
 	}
 	// Start monitoring the requested directory
-	string dirName = dir.path().absolute();
+	std::string dirName = dir.path().absolute();
 	FAMMonitorDirectory(&fc, dirName.c_str(), &fr, NULL);
 	return true;	
 }
 	
 bool SpDirMonFam::stop() {
 	if (FAMCancelMonitor(&fc, &fr) == -1) {
-		cerr << "SpDirMonitor::~SpDirMonitor() FAMCancelMonitor failed" << endl;
+		std::cerr << "SpDirMonitor::~SpDirMonitor() FAMCancelMonitor failed" << std::endl;
 		return false;
 	}
 	if (FAMClose(&fc)) {
-		cerr << "SpDirMonitor::~SpDirMonitor() FAMClose failed!" << endl;
+		std::cerr << "SpDirMonitor::~SpDirMonitor() FAMClose failed!" << std::endl;
 		return false;
 	}
 	return true;
@@ -53,13 +53,13 @@ void SpDirMonFam::update() {
 	while (FAMPending(&fc) == 1) {
 		FAMEvent fe;
 		if (FAMNextEvent(&fc, &fe) == -1) {
-			cerr << "SpDirMonitor::update() FAMNextEvent failed" << endl;
+			std::cerr << "SpDirMonitor::update() FAMNextEvent failed" << std::endl;
 			exit(1);
 		}
 		SpPath fileNamePath = dir.path();
 		fileNamePath.add(fe.filename);
 		// Ignore messages about the directory itself
-		if (string(fe.filename) != dir.path().absolute())	
+		if (std::string(fe.filename) != dir.path().absolute())	
 			switch (fe.code) {
 				case FAMChanged:
 					changed(fileNamePath);

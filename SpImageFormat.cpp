@@ -23,25 +23,26 @@
 // $Id$
 
 #include <fstream>
+#include <iostream>
 
 #include "SpImageFormat.h"
 #include "SpFile.h"
 
-list<SpImageFormat *> SpImageFormat::plugins;
+std::list<SpImageFormat *> SpImageFormat::plugins;
 SpLibLoader SpImageFormat::loader;
 
 // Register all the supported image types
 void SpImageFormat::registerPlugins()
 {
 	const char formatsFilename[] = "imageFormats.conf";
-	ifstream formats(formatsFilename);
+	std::ifstream formats(formatsFilename);
 	if (!formats) {
-		cerr << "SpImageFormat::registerPlugins(): Could not open image formats file: "
-			<< formatsFilename << endl;
+		std::cerr << "SpImageFormat::registerPlugins(): Could not open image formats file: "
+			<< formatsFilename << std::endl;
 		return;
 	}
 	while (formats) {
-		string libraryFilename, formatString;
+		std::string libraryFilename, formatString;
 		formats >> libraryFilename;
 		formats >> formatString;
 		loader.load(libraryFilename);
@@ -70,7 +71,7 @@ void SpImageFormat::deRegisterPlugins()
 	loader.releaseAll();
 }
 
-void SpImageFormat::setFormatString(string n)
+void SpImageFormat::setFormatString(std::string n)
 {
 	shortFormat = n;
 }
@@ -80,7 +81,7 @@ SpImageFormat* SpImageFormat::recogniseByMagic(const SpPath &path)
 	// Figure out what the greatest amount of the header that needs
 	// to be read so that all the plugins can recognise themselves.
 	int largestSizeToRecognise = 0;
-	for (list<SpImageFormat *>::iterator a = plugins.begin();
+	for (std::list<SpImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
 		if ((*a)->sizeToRecognise() > largestSizeToRecognise)
 			largestSizeToRecognise = (*a)->sizeToRecognise();
@@ -93,7 +94,7 @@ SpImageFormat* SpImageFormat::recogniseByMagic(const SpPath &path)
 	f.close();
 	
 	// See if any of the plugins recognise themselves.
-	for (list<SpImageFormat *>::iterator a = plugins.begin();
+	for (std::list<SpImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
 		if ((*a)->recognise(buf)) {
 			delete buf;

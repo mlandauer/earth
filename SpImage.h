@@ -39,7 +39,7 @@ class SpImage : public SpFile
 		static void deRegisterPlugins();
 		virtual SpImageDim dim() = 0;
 		virtual bool valid() = 0;
-		string formatString() { return getFormat()->formatString(); };
+		std::string formatString() { return getFormat()->formatString(); };
 		SpImageFormat* getFormat() { return format; };
 	private:
 		SpImageFormat *format;

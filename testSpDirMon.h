@@ -33,7 +33,7 @@ class testSpDirMon : public SpTester
 {
 public:
 	testSpDirMon();
-	void checkNextEvent(string testName, SpDirMon *m, int code, const SpPath &p);	
+	void checkNextEvent(std::string testName, SpDirMon *m, int code, const SpPath &p);	
 	void test();
 };
 

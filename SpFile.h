@@ -60,7 +60,7 @@ class SpFileTime : public SpFile
 	public:
 		SpFileTime(const SpFile &file) : SpFile(file) { }
 		bool changed() {
-			if (lastChange() > cachedChange) {
+			if (cachedChange < lastChange()) {
 				cachedChange = lastChange();
 				return true;
 			}
