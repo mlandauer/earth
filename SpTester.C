@@ -24,6 +24,7 @@
 
 #include <string>
 #include <stdio.h>
+#include <math.h>
 
 #include "SpTester.h"
 
