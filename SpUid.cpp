@@ -27,7 +27,7 @@
 
 #include "SpUid.h"
 
-SpUid::SpUid()
+SpUid::SpUid() : uid(0)
 {
 }
 
@@ -48,5 +48,6 @@ void SpUid::setCurrent()
 std::string SpUid::name() const
 {
 	struct passwd *p = getpwuid(uid);
+  assert(p != NULL);
 	return (std::string(p->pw_name));
 }
