@@ -10,11 +10,14 @@ class SpTester
 		static float getFloatDelta() { return floatDelta; };
 		virtual void test() = 0;
 	protected:
-		void checkEqual(string testName, string a, string b);
-		void checkEqual(string testName, bool a, bool b);
-		void checkEqual(string testName, int a, int b);
-		void checkEqual(string testName, float a, float b);
-		void check(string testName, bool a);
+		bool checkEqual(string testName, string a, string b);
+		bool checkEqual(string testName, bool a, bool b);
+		bool checkEqual(string testName, int a, int b);
+		bool checkEqual(string testName, float a, float b);
+		bool checkEqual(string testName, float a, float b, float delta);
+		bool check(string testName, bool a);
+		bool checkNULL(string testName, void *p);
+		bool checkNotNULL(string testName, void *p);
 	private:
 		static bool verbose;
 		static int noErrors;
