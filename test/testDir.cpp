@@ -29,9 +29,19 @@ class testDir : public CppUnit::TestFixture
 public:
 	CPPUNIT_TEST_SUITE(testDir);
 	CPPUNIT_TEST(test);
+	CPPUNIT_TEST(testValid);
+	CPPUNIT_TEST(testRecursiveListing);
+	CPPUNIT_TEST(testListFiles);
+	CPPUNIT_TEST(testListDirectories);
+	CPPUNIT_TEST(testListNonExistantDirectory);
 	CPPUNIT_TEST_SUITE_END();
 	
 	void test();
+	void testValid();
+	void testRecursiveListing();
+	void testListFiles();
+	void testListDirectories();
+	void testListNonExistantDirectory();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testDir);
@@ -42,21 +52,43 @@ using namespace Sp;
 
 void testDir::test()
 {
-	Dir dir1("test/templateImages/8x8.tiff");
-	CPPUNIT_ASSERT(!dir1.valid());
-	Dir dir2("test/templateImages/");
-	CPPUNIT_ASSERT(dir2.valid());
-	CPPUNIT_ASSERT(dir2.path().fullName() == "test/templateImages");
-
 	Dir dir("test/templateImages/");
 	CPPUNIT_ASSERT(dir.path().fullName() == "test/templateImages");
 	// Think of some way to test the modification dates automatically
 	// Check that this user owns the files
 	CPPUNIT_ASSERT(dir.user() == User::current());
 	CPPUNIT_ASSERT(dir.userGroup() == UserGroup::current());
-	CPPUNIT_ASSERT(dir.valid());
+}
+
+void testDir::testValid()
+{
+	Dir dir1("test/templateImages/8x8.tiff");
+	CPPUNIT_ASSERT(!dir1.valid());
+	Dir dir2("test/whatASillyFella");
+	CPPUNIT_ASSERT(!dir2.valid());
+	Dir dir3("test/templateImages/");
+	CPPUNIT_ASSERT(dir3.valid());
+}
+
+void testDir::testListDirectories()
+{
+	Dir dir("test/templateImages/");
+	std::vector<Dir> dirs = dir.listDirs(true);
+	CPPUNIT_ASSERT(dirs.size() == 1);
+	CPPUNIT_ASSERT(dirs[0].path().fullName() == "test/templateImages/CVS");
+}
+
+void testDir::testListNonExistantDirectory()
+{
+	Dir dirNotExist("test/whatASillyFella");
+	std::vector<File> lsNotExist = dirNotExist.listFiles();
+	CPPUNIT_ASSERT(lsNotExist.size() == 0);
+}
+
+void testDir::testListFiles()
+{
+	Dir dir("test/templateImages/");
 	std::vector<File> files = dir.listFiles(true);
-	
 	CPPUNIT_ASSERT(files.size() == 19);
 	CPPUNIT_ASSERT(files[0].path().fullName() == "test/templateImages/2x2.cin");
 	CPPUNIT_ASSERT(files[1].path().fullName() == "test/templateImages/2x2.gif");
@@ -77,19 +109,12 @@ void testDir::test()
 	CPPUNIT_ASSERT(files[16].path().fullName() == "test/templateImages/8x8.jpg");		
 	CPPUNIT_ASSERT(files[17].path().fullName() == "test/templateImages/8x8.sgi");		
 	CPPUNIT_ASSERT(files[18].path().fullName() == "test/templateImages/8x8.tiff");
-  
-	std::vector<Dir> dirs = dir.listDirs(true);
-	CPPUNIT_ASSERT(dirs.size() == 1);
-	CPPUNIT_ASSERT(dirs[0].path().fullName() == "test/templateImages/CVS");
-  
-	// Try doing an ls on a non-existant directory
-	Dir dirNotExist("test/whatASillyFella");
-	CPPUNIT_ASSERT(!dirNotExist.valid());
-	std::vector<File> lsNotExist = dirNotExist.listFiles();
-	CPPUNIT_ASSERT(lsNotExist.size() == 0);
-	
-	// Test a recursive listing
-	files = dir.listFilesRecursive(true);
+}
+
+void testDir::testRecursiveListing()
+{
+	Dir dir("test/templateImages/");
+	std::vector<File> files = dir.listFilesRecursive(true);
 	CPPUNIT_ASSERT(files.size() == 22);
 	CPPUNIT_ASSERT(files[0].path().fullName() == "test/templateImages/2x2.cin");
 	CPPUNIT_ASSERT(files[1].path().fullName() == "test/templateImages/2x2.gif");
