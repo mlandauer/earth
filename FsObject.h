@@ -78,6 +78,7 @@ public:
 	Path path() const { return p; };
 	
 	bool operator<(const FsObject &o) const { return path() < o.path(); }
+	bool operator==(const FsObject &o) const { return path() == o.path(); }
 
 protected:
 	void setPath(const Path &path) { p = path; };

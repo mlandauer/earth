@@ -41,9 +41,12 @@ class DirMonEvent
 		File o;
 		
 	public:
-		DirMonEvent(Code c = null, const File &h = File()) : code(c), o(h) { }
-		Code getCode() { return code; }
-		File getFile() { return o; }
+		DirMonEvent(Code c, const File &h) : code(c), o(h) { }
+		Code getCode() const { return code; }
+		File getFile() const { return o; }
+		bool operator==(const DirMonEvent &e) const {
+			return ((getCode() == e.getCode()) && (getFile() == e.getFile()));
+		}
 };
 
 class CachedDir
