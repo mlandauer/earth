@@ -35,6 +35,9 @@ bool PRTEXImage::valid()
 
 ImageDim PRTEXImage::dim()
 {
+	if (!valid())
+		return ImageDim(0, 0);
+		
 	open();
 	seek(13);
 	unsigned int width = (unsigned int) pow(2, readChar());

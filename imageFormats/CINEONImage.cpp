@@ -35,6 +35,9 @@ bool CINEONImage::valid()
 
 ImageDim CINEONImage::dim()
 {
+	if (!valid())
+		return ImageDim(0, 0);
+		
 	open();
 	seek(192);
 	unsigned char orientation = readChar();

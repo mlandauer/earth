@@ -33,6 +33,9 @@ bool SGIImage::valid()
 
 ImageDim SGIImage::dim()
 {
+	if (!valid())
+		return ImageDim(0, 0);
+		
 	open();
 	seek(6);
 	unsigned int width = readShort(1);

@@ -33,6 +33,9 @@ bool PRMANZImage::valid()
 
 ImageDim PRMANZImage::dim()
 {
+	if (!valid())
+		return ImageDim(0, 0);
+		
 	open();
 	seek(4);
 	unsigned int width = readShort(1);

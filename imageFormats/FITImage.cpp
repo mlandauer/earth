@@ -34,6 +34,9 @@ bool FITImage::valid()
 
 ImageDim FITImage::dim()
 {
+	if (!valid())
+		return ImageDim(0, 0);
+
 	open();
 	seek(4);
 	unsigned int width = readLong(1);
