@@ -52,6 +52,8 @@ public:
 	static void deRegisterPlugins();
 	//! Deduce the image format of a file from the magic number
 	static ImageFormat* recogniseByMagic(const Path &path);
+	//! Returns the image format from the name of the format
+	static ImageFormat* recogniseByFormatString(const std::string &formatString);
 
 private:
 	//! Does the header come from a file of this format?

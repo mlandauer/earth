@@ -87,6 +87,22 @@ void ImageFormat::deRegisterPlugins()
   #endif
 }
 
+ImageFormat* ImageFormat::recogniseByFormatString(const std::string &formatString)
+{
+	// Just checking that there are some plugins loaded
+	assert(plugins.size() > 0);
+	ImageFormat *format = NULL;
+	// See if any of the plugins match the name
+	for (std::list<ImageFormat *>::iterator a = plugins.begin();
+		a != plugins.end(); ++a) {
+		if ((*a)->getFormatString() == formatString) {
+			format = *a;
+			break;
+		}
+	}
+	return format;
+}
+
 ImageFormat* ImageFormat::recogniseByMagic(const Path &path)
 {
 	// Just checking that there are some plugins loaded

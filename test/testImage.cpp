@@ -42,6 +42,7 @@ public:
 	CPPUNIT_TEST(testIFFImage);
 	CPPUNIT_TEST(testNotFile);
 	CPPUNIT_TEST(testInvalidCineonImage);
+	CPPUNIT_TEST(testImageFormat);
 	CPPUNIT_TEST_SUITE_END();
 	
 	void testSGIImage();
@@ -52,6 +53,7 @@ public:
 	
 	void testNotFile();
 	void testInvalidCineonImage();
+	void testImageFormat();
 	
 private:
 	void checkImage(Image *image, bool valid, const std::string &name, float sizeKb,
@@ -108,6 +110,17 @@ void testImage::testNotFile()
 	// A file that doesn't exist
 	Image *image = Image::construct("test/templateImages/foo.blah");
 	CPPUNIT_ASSERT(image == NULL);
+}
+
+void testImage::testImageFormat()
+{
+	// Check that we can find image formats by name
+	ImageFormat *format = ImageFormat::recogniseByFormatString("Cineon");
+	CPPUNIT_ASSERT(ImageFormat::recogniseByFormatString("Cineon") != NULL);
+	CPPUNIT_ASSERT(ImageFormat::recogniseByFormatString("Cineon")->getFormatString() == "Cineon");
+	CPPUNIT_ASSERT(ImageFormat::recogniseByFormatString("TIFF") != NULL);
+	CPPUNIT_ASSERT(ImageFormat::recogniseByFormatString("TIFF")->getFormatString() == "TIFF");
+	CPPUNIT_ASSERT(ImageFormat::recogniseByFormatString("Non-existant file format") == NULL);
 }
 
 void testImage::checkImage(Image *image, bool valid, const std::string &name, float sizeKb,
