@@ -5,8 +5,12 @@
 
 SpDirMonitor * SpDirMonitor::construct(const SpDir &d) {
 	SpDirMonitor *m = new SpDirMonitorFam;
-	m->start(d);
-	return m;
+	if (!m->start(d)) {
+		delete m;
+		return NULL;
+	}
+	else 
+		return m;
 }
 
 bool SpDirMonitor::pendingEvent() {

@@ -15,8 +15,8 @@ class SpDirMonitorFam : public SpDirMonitor
 		~SpDirMonitorFam() { stop(); }
 		void update();
 	private:
-		void start(const SpDir &d);
-		void stop();
+		bool start(const SpDir &d);
+		bool stop();
 		FAMConnection fc;
 		FAMRequest fr;
 		SpDir dir;

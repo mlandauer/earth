@@ -310,33 +310,35 @@ public:
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0003.gif");
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0004.gif");
 		SpDirMonitor *m = SpDirMonitor::construct(SpDir("test/FsMonitor"));
-		checkEqual("test 1", m->pendingEvent(), true);
-		checkNextEvent("test 2", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0001.gif");
-		checkNextEvent("test 3", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0002.gif");
-		checkNextEvent("test 4", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0003.gif");
-		checkNextEvent("test 5", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0004.gif");
-		checkEqual("test 1j", m->pendingEvent(), false);
-		
-		system ("rm test/FsMonitor/test.0001.gif");
-		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0005.gif");
-		system ("mkdir test/FsMonitor/subdirectory");
-		SpTime::sleep(6);
-		checkEqual("test 6", m->pendingEvent(), true);
-		checkNextEvent("test 7", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0005.gif");
-		checkNextEvent("test 8", m, SpDirMonitorEvent::added, "test/FsMonitor/subdirectory");
-		checkNextEvent("test 9", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0001.gif");
-		checkEqual("test 10", m->pendingEvent(), false);
+		if (checkNotNULL("test 0", m)) {
+			checkEqual("test 1", m->pendingEvent(), true);
+			checkNextEvent("test 2", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0001.gif");
+			checkNextEvent("test 3", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0002.gif");
+			checkNextEvent("test 4", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0003.gif");
+			checkNextEvent("test 5", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0004.gif");
+			checkEqual("test 1j", m->pendingEvent(), false);
+			
+			system ("rm test/FsMonitor/test.0001.gif");
+			system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0005.gif");
+			system ("mkdir test/FsMonitor/subdirectory");
+			SpTime::sleep(6);
+			checkEqual("test 6", m->pendingEvent(), true);
+			checkNextEvent("test 7", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0005.gif");
+			checkNextEvent("test 8", m, SpDirMonitorEvent::added, "test/FsMonitor/subdirectory");
+			checkNextEvent("test 9", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0001.gif");
+			checkEqual("test 10", m->pendingEvent(), false);
 
-		system ("rm -fr test/FsMonitor");
-		SpTime::sleep(6);
-		checkEqual("test 11", m->pendingEvent(), true);
-		checkNextEvent("test 12", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0005.gif");
-		checkNextEvent("test 13", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0002.gif");
-		checkNextEvent("test 14", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0003.gif");
-		checkNextEvent("test 15", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0004.gif");
-		checkNextEvent("test 16", m, SpDirMonitorEvent::deleted, "test/FsMonitor/subdirectory");
-		checkEqual("test 17", m->pendingEvent(), false);
-		delete m;
+			system ("rm -fr test/FsMonitor");
+			SpTime::sleep(6);
+			checkEqual("test 11", m->pendingEvent(), true);
+			checkNextEvent("test 12", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0005.gif");
+			checkNextEvent("test 13", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0002.gif");
+			checkNextEvent("test 14", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0003.gif");
+			checkNextEvent("test 15", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0004.gif");
+			checkNextEvent("test 16", m, SpDirMonitorEvent::deleted, "test/FsMonitor/subdirectory");
+			checkEqual("test 17", m->pendingEvent(), false);
+			delete m;
+		}
 	}
 };
 

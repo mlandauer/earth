@@ -31,8 +31,8 @@ class SpDirMonitor
 		bool pendingEvent();
 		SpDirMonitorEvent getNextEvent();
 	protected:
-		virtual void start(const SpDir &d) = 0;
-		virtual void stop() = 0;
+		virtual bool start(const SpDir &d) = 0;
+		virtual bool stop() = 0;
 		virtual void update() = 0;
 		void notifyChanged(const SpPath &path);
 		void notifyDeleted(const SpPath &path);

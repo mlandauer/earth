@@ -3,26 +3,28 @@
 #include <fam.h>
 #include "SpDirMonitorFam.h"
 
-void SpDirMonitorFam::start(const SpDir &d) {
+bool SpDirMonitorFam::start(const SpDir &d) {
 	dir = d;
 	if (FAMOpen(&fc) != 0) {
 		cerr << "Could not connect to fam daemon" << endl;
-		exit(1);
+		return false;
 	}
 	// Start monitoring the requested directory
 	string dirName = dir.path().absolute();
-	FAMMonitorDirectory(&fc, dirName.c_str(), &fr, NULL);		
+	FAMMonitorDirectory(&fc, dirName.c_str(), &fr, NULL);
+	return true;	
 }
 	
-void SpDirMonitorFam::stop() {
+bool SpDirMonitorFam::stop() {
 	if (FAMCancelMonitor(&fc, &fr) == -1) {
 		cerr << "SpDirMonitor::~SpDirMonitor() FAMCancelMonitor failed" << endl;
-		exit(1);
+		return false;
 	}
 	if (FAMClose(&fc)) {
 		cerr << "SpDirMonitor::~SpDirMonitor() FAMClose failed!" << endl;
-		exit(1);
+		return false;
 	}
+	return true;
 }
 	
 void SpDirMonitorFam::update() {
