@@ -17,12 +17,15 @@ class SpTester
 		bool check(string testName, bool a);
 		bool checkNULL(string testName, void *p);
 		bool checkNotNULL(string testName, void *p);
-		void failMessage(string testName);
-		void successMessage(string testName);
 	private:
 		static bool verbose;
-		static int noErrors;
+		static int noFails, noSuccesses;
 		static float floatDelta;
 		string name;
+		string toString(int a);
+		string toString(float a);
+		bool check(string testName, bool a, string expected, string got);
+		void failMessage(string testName, string expected, string got);
+		void successMessage(string testName, string message);
 };
 

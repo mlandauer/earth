@@ -1,11 +1,13 @@
 // $Id$
 
 #include <string>
+#include <stdio.h>
 
 #include "SpTester.h"
 
 bool SpTester::verbose = false;
-int SpTester::noErrors = 0;
+int SpTester::noFails = 0;
+int SpTester::noSuccesses = 0;
 float SpTester::floatDelta = 0.1;
 
 SpTester::SpTester(string className) : name(className)
@@ -13,140 +15,64 @@ SpTester::SpTester(string className) : name(className)
 	cout << endl << "Testing " << name << ": ";
 }
 
-void SpTester::failMessage(string testName)
+void SpTester::failMessage(string testName, string expected, string got)
 {
-	cout << endl << "FAILED " << name << " " << testName;
+	cout << endl << "FAILED " << name << " " << testName << ": Expected " << expected << " but got " << got << endl;
 }
 
-void SpTester::successMessage(string testName)
+void SpTester::successMessage(string testName, string returned)
 {
-	cout << "SUCCESS " << name << " " << testName;
+	if (verbose) {
+		cout << "SUCCESS " << name << " " << testName << ": Returned " << returned << endl;
+	}
+	else  {
+		cout << ".";
+		cout.flush();
+	}
+}
+
+bool SpTester::check(string testName, bool a, string expected, string got)
+{
+	if (a) {
+		successMessage(testName, expected);
+		noSuccesses++;
+		return true;
+	}
+	else {
+		failMessage(testName, expected, got);
+		noFails++;
+		return false;
+	}
 }
 
 bool SpTester::check(string testName, bool a)
 {
-	if (!a) {
-		failMessage(testName);
-		cout << endl;
-		noErrors++;
-		return false;
-	}
-	else {
-		if (verbose) {
-			successMessage(testName);
-			cout << endl;
-		}
-		else {
-			cout << ".";
-			cout.flush();
-		}
-		return true;
-	}
+	return check(testName, a, "true", "false");
 }
 
 bool SpTester::checkEqual(string testName, string a, string b)
 {
-	if (a != b) {
-		failMessage(testName);
-		cout << ": Expected " << b << " but got " << a << endl;
-		noErrors++;
-		return false;
-	}
-	else {
-		if (verbose) {
-			successMessage(testName);
-			cout << ": returned " << a << endl;
-		}
-		else {
-			cout << ".";
-			cout.flush();
-		}
-		return true;
-	}
+	return check(testName, a == b, b, a);
 }
 
 bool SpTester::checkEqual(string testName, int a, int b)
 {
-	if (a != b) {
-		failMessage(testName);
-		cout << ": Expected " << b << " but got " << a << endl;
-		noErrors++;
-		return false;
-	}
-	else {
-		if (verbose) {
-			successMessage(testName);
-			cout << ": returned " << a << endl;
-		}
-		else {
-			cout << ".";
-			cout.flush();
-		}
-		return true;
-	}
+	return check(testName, a == b, toString(b), toString(a));
 }
 
 bool SpTester::checkEqual(string testName, float a, float b, float delta)
 {
-	if (fabs(a-b) > delta) {
-		failMessage(testName);
-		cout << ": Expected " << b << " but got " << a << endl;
-		noErrors++;
-		return false;
-	}
-	else {
-		if (verbose) {
-			successMessage(testName);
-			cout << ": returned " << a << endl;
-		}
-		else {
-			cout << ".";
-			cout.flush();
-		}
-		return true;
-	}
+	return check(testName, fabs(a-b) <= delta, toString(b), toString(a));
 }
 
 bool SpTester::checkNotNULL(string testName, void *p)
 {
-	if (p == NULL) {
-		failMessage(testName);
-		cout << ": Expected non-null pointer" << endl;
-		noErrors++;
-		return false;
-	}
-	else {
-		if (verbose) {
-			successMessage(testName);
-			cout << ": returned non-null pointer" << endl;
-		}
-		else {
-			cout << ".";
-			cout.flush();
-		}
-		return true;
-	}
+	return check(testName, p != NULL, "non-null pointer", "null pointer");
 }
 
 bool SpTester::checkNULL(string testName, void *p)
 {
-	if (p != NULL) {
-		failMessage(testName);
-		cout << ": Expected null pointer" << endl;
-		noErrors++;
-		return false;
-	}
-	else {
-		if (verbose) {
-			successMessage(testName);
-			cout << ": returned null pointer" << endl;
-		}
-		else {
-			cout << ".";
-			cout.flush();
-		}
-		return true;
-	}
+	return check(testName, p == NULL, "null pointer", "non-null pointer");
 }
 
 bool SpTester::checkEqual(string testName, float a, float b)
@@ -157,6 +83,21 @@ bool SpTester::checkEqual(string testName, float a, float b)
 void SpTester::finish()
 {
 	cout << endl;
-	if (noErrors == 0)
+	cout << "Tests: " << noFails + noSuccesses << ", Fails: " << noFails << endl;
+	if (noFails == 0)
 		cout << "All tests passed!" << endl;
+}
+
+string SpTester::toString(int a)
+{
+	char buf[500];
+	sprintf(buf, "%i", a);
+	return string(buf);
+}
+
+string SpTester::toString(float a)
+{
+	char buf[500];
+	sprintf(buf, "%f", a);
+	return string(buf);
 }

@@ -293,7 +293,7 @@ public:
 class testSpDirMonitor : public SpTester
 {
 public:
-	testSpDirMonitor() : SpTester("SpFsMonitor") { test(); };
+	testSpDirMonitor() : SpTester("SpDirMonitor") { test(); };
 	void checkNextEvent(string testName, SpDirMonitor *m, int code, string pathName) {
 		SpDirMonitorEvent e = m->getNextEvent();
 		checkEqual(testName + "a", e.getCode(), code);
