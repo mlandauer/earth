@@ -26,6 +26,11 @@
 
 namespace Sp {
 
+bool SGIImage::valid()
+{
+	return (sizeBytes() >= 10);
+};
+
 ImageDim SGIImage::dim()
 {
 	open();

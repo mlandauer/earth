@@ -55,7 +55,7 @@ class PRTEXImage : public Image
 		PRTEXImage() { };
 		~PRTEXImage() { };
 		ImageDim dim();
-		bool valid() { return (true); };
+		bool valid();
 	private:
 };
 

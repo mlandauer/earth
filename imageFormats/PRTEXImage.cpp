@@ -28,6 +28,11 @@
 
 namespace Sp {
 
+bool PRTEXImage::valid()
+{
+	return (sizeBytes() >= 15);
+};
+
 ImageDim PRTEXImage::dim()
 {
 	open();

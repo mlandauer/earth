@@ -57,7 +57,7 @@ class FITImage : public Image
 		FITImage() { };
 		~FITImage() { };
 		ImageDim dim();
-		bool valid() { return true; };
+		bool valid();
 	private:
 };
 

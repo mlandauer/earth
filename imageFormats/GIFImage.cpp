@@ -26,6 +26,11 @@
 
 namespace Sp {
 
+bool GIFImage::valid()
+{
+	return (sizeBytes() >= 10);
+};
+
 ImageDim GIFImage::dim()
 {
 	open();

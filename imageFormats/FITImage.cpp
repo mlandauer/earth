@@ -27,6 +27,11 @@
 
 namespace Sp {
 
+bool FITImage::valid()
+{
+	return (sizeBytes() >= 12);
+};
+
 ImageDim FITImage::dim()
 {
 	open();

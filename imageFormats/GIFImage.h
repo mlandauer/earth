@@ -55,7 +55,7 @@ class GIFImage : public Image
 		GIFImage() { };
 		~GIFImage() { };
 		ImageDim dim();
-		bool valid() { return (true); };
+		bool valid();
 	private:
 };
 

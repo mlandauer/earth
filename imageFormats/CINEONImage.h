@@ -57,7 +57,7 @@ class CINEONImage : public Image
 		CINEONImage() { };
 		~CINEONImage() { };
 		ImageDim dim();
-		bool valid() { return true; };
+		bool valid();
 	private:
 };
 

@@ -56,7 +56,7 @@ class SGIImage : public Image
 		SGIImage() { };
 		~SGIImage() { };
 		ImageDim dim();
-		bool valid() { return true; };
+		bool valid();
 	private:
 };
 

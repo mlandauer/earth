@@ -26,6 +26,11 @@
 
 namespace Sp {
 
+bool PRMANZImage::valid()
+{
+	return (sizeBytes() >= 8);
+};
+
 ImageDim PRMANZImage::dim()
 {
 	open();

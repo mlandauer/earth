@@ -55,7 +55,7 @@ class PRMANZImage : public Image
 		PRMANZImage() { };
 		~PRMANZImage() { };
 		ImageDim dim();
-		bool valid() { return (true); };
+		bool valid();
 	private:
 };
 
