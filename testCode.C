@@ -25,10 +25,10 @@ void testSpSize()
 	SpTester::checkEqual("SpSize test 5", s.gbytes(), 10.0);
 	SpTester::checkEqual("SpSize test 6", s.mbytes(), 10240.0);
 	SpTester::checkEqual("SpSize test 7", s.kbytes(), 10485760.0);
-	float temp = SpTester::floatDelta;
-	SpTester::floatDelta = 10e5;
+	float temp = SpTester::getFloatDelta();
+	SpTester::setFloatDelta(10e5);
 	SpTester::checkEqual("SpSize test 8", s.bytes(), 1.073741e10);
-	SpTester::floatDelta = temp;
+	SpTester::setFloatDelta(temp);
 	
 	s.setBytes(0);
 	SpTester::checkEqual("SpSize test 9", s.bytes(), 0.0);
@@ -257,8 +257,8 @@ main()
 	// Register the plugins
 	SpImage::registerPlugins();
 	
-	SpTester::verbose = false;
-	SpTester::floatDelta = 0.1;
+	SpTester::setVerbose(false);
+	SpTester::setFloatDelta(0.1);
 	testSpSize();
 	testSpTime();
 	testSpUid();
