@@ -4,12 +4,12 @@
 #define _spfitimage_h_
 
 #include "SpImage.h"
+#include "SpImageDim.h"
 
 class SpFITImage : public SpImage
 {
 	public:
-		unsigned int width();
-		unsigned int height();
+		SpImageDim dim();
 		string formatString();
 		bool valid();
 		SpFITImage();

@@ -4,14 +4,14 @@
 #define _sptiffimage_h_
 
 #include "SpImage.h"
+#include "SpImageDim.h"
 
 class SpTIFFImage : public SpImage
 {
 	public:
 		SpTIFFImage();
 		~SpTIFFImage();
-		unsigned int width();
-		unsigned int height();
+		SpImageDim dim();
 		string formatString();
 		bool valid();
 	private:

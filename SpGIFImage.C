@@ -11,16 +11,12 @@ SpGIFImage::~SpGIFImage()
 {
 }
 
-unsigned int SpGIFImage::width()
+SpImageDim SpGIFImage::dim()
 {
 	file.seek(6);
-	return (readShort(0));
-}
-
-unsigned int SpGIFImage::height()
-{
-	file.seek(8);
-	return (readShort(0));
+	unsigned int width = readShort(0);
+	unsigned int height = readShort(0);
+	return (SpImageDim(width, height));
 }
 
 string SpGIFImage::formatString()

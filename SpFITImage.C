@@ -11,16 +11,12 @@ SpFITImage::~SpFITImage()
 {
 }
 
-unsigned int SpFITImage::width()
+SpImageDim SpFITImage::dim()
 {
 	file.seek(4);
-	return (readLong(1));
-}
-
-unsigned int SpFITImage::height()
-{
-	file.seek(8);
-	return (readLong(1));
+	unsigned int width = readLong(1);
+	unsigned int height = readLong(1);
+	return (SpImageDim(width, height));
 }
 
 string SpFITImage::formatString()

@@ -11,16 +11,12 @@ SpSGIImage::~SpSGIImage()
 {
 }
 
-unsigned int SpSGIImage::width()
+SpImageDim SpSGIImage::dim()
 {
 	file.seek(6);
-	return (readShort(1));
-}
-
-unsigned int SpSGIImage::height()
-{
-	file.seek(8);
-	return (readShort(1));
+	unsigned int width = readShort(1);
+	unsigned int height = readShort(1);
+	return (SpImageDim(width, height));
 }
 
 string SpSGIImage::formatString()

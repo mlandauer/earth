@@ -4,6 +4,7 @@
 #define _spimage_h_
 
 #include "SpFile.h"
+#include "SpImageDim.h"
 
 class SpImage
 {
@@ -11,8 +12,7 @@ class SpImage
 		static SpImage* open(SpFile f);
 		SpImage();
 		~SpImage();
-		virtual unsigned int width() = 0;
-		virtual unsigned int height() = 0;
+		virtual SpImageDim dim() = 0;
 		virtual string formatString() = 0;
 		virtual bool valid() = 0;
 		void close();

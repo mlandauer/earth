@@ -14,22 +14,13 @@ SpTIFFImage::~SpTIFFImage()
 {
 }
 
-unsigned int SpTIFFImage::width()
+SpImageDim SpTIFFImage::dim()
 {
 	readHeader();
 	if (validHeader)
-		return (w);
+		return (SpImageDim(w, h));
 	else
-		return (0);
-}
-
-unsigned int SpTIFFImage::height()
-{
-	readHeader();
-	if (validHeader)
-		return (h);
-	else
-		return (0);
+		return (SpImageDim(0, 0));
 }
 
 string SpTIFFImage::formatString()

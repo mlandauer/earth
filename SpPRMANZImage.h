@@ -4,12 +4,12 @@
 #define _spprmanzimage_h_
 
 #include "SpImage.h"
+#include "SpImageDim.h"
 
 class SpPRMANZImage : public SpImage
 {
 	public:
-		unsigned int width();
-		unsigned int height();
+		SpImageDim dim();
 		string formatString();
 		bool valid();
 		SpPRMANZImage();

@@ -80,15 +80,15 @@ void testSpImage()
 	SpImage *image1 = SpImage::open(file1);
 	cout << "Opened image " << file1.path().fullName() << endl;
 	cout << "Image format = " << image1->formatString() << endl;
-	cout << "Image width = " << image1->width() << endl;
-	cout << "Image height = " << image1->height() << endl;
+	cout << "Image width = " << image1->dim().width() << endl;
+	cout << "Image height = " << image1->dim().height() << endl;
 	image1->close();
 	SpFile file2("/home/matthew/images/blah1.tiff");
 	SpImage *image2 = SpImage::open(file2);
 	cout << "Opened image " << file2.path().fullName() << endl;
 	cout << "Image format = " << image2->formatString() << endl;
-	cout << "Image width = " << image2->width() << endl;
-	cout << "Image height = " << image2->height() << endl;
+	cout << "Image width = " << image2->dim().width() << endl;
+	cout << "Image height = " << image2->dim().height() << endl;
 	image2->close();
 	// *** FIT File format currently untested ****
 	// *** PRMANZ File format currently untested ****
@@ -96,8 +96,8 @@ void testSpImage()
 	SpImage *image3 = SpImage::open(file3);
 	cout << "Opened image " << file3.path().fullName() << endl;
 	cout << "Image format = " << image3->formatString() << endl;
-	cout << "Image width = " << image3->width() << endl;
-	cout << "Image height = " << image3->height() << endl;
+	cout << "Image width = " << image3->dim().width() << endl;
+	cout << "Image height = " << image3->dim().height() << endl;
 	image3->close();
 }
 
