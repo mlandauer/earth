@@ -35,12 +35,14 @@ float SpTester::floatDelta = 0.1;
 SpTester::SpTester(string className) : name(className)
 {
 	cout << endl << "Testing " << name << ": ";
+	cout.flush();
 }
 
 void SpTester::failMessage(string testName, string expected, string got)
 {
 	cout << endl << "FAILED " << name << " " << testName << ": Expected "
 		<< expected << " but got " << got;
+	cout.flush();
 }
 
 void SpTester::successMessage(string testName, string returned)
@@ -49,10 +51,9 @@ void SpTester::successMessage(string testName, string returned)
 		cout << endl << "SUCCESS " << name << " " << testName << ": Returned "
 			<< returned;
 	}
-	else  {
+	else
 		cout << ".";
-		cout.flush();
-	}
+	cout.flush();
 }
 
 bool SpTester::check(string testName, bool a, string expected, string got)
