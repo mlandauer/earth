@@ -5,25 +5,25 @@ OPTION = -g
 INCLUDE = `xml++-config --cflags` `xml-config --cflags`
 LIBS = -ldl `xml++-config --libs` -lfam
 
-SRCS = Dir.cpp FsObject.cpp ImageFormat.cpp Size.cpp UserGroup.cpp \
-			 ImageSeq.cpp Image.cpp LibLoader.cpp DateTime.cpp \
-			 File.cpp ImageDim.cpp Path.cpp User.cpp Frames.cpp \
-			 IndexDirectory.cpp ImageMon.cpp CachedDir.cpp ImageEventLogger.cpp \
-			 ImageSeqMon.cpp \
-			 earth.cpp
+SRCS = src/Dir.cpp src/FsObject.cpp src/ImageFormat.cpp src/Size.cpp src/UserGroup.cpp \
+			 src/ImageSeq.cpp src/Image.cpp src/LibLoader.cpp src/DateTime.cpp \
+			 src/File.cpp src/ImageDim.cpp src/Path.cpp src/User.cpp src/Frames.cpp \
+			 src/IndexDirectory.cpp src/ImageMon.cpp src/CachedDir.cpp src/ImageEventLogger.cpp \
+			 src/ImageSeqMon.cpp \
+			 src/earth.cpp
 
-OBJECTS = Dir.o FsObject.o ImageFormat.o Size.o UserGroup.o \
-					ImageSeq.o Image.o LibLoader.o DateTime.o \
-					File.o ImageDim.o Path.o User.o Frames.o \
-					IndexDirectory.o ImageMon.o CachedDir.o ImageEventLogger.o \
-					ImageSeqMon.o \
-					earth.o
+OBJECTS = src/Dir.o src/FsObject.o src/ImageFormat.o src/Size.o src/UserGroup.o \
+					src/ImageSeq.o src/Image.o src/LibLoader.o src/DateTime.o \
+					src/File.o src/ImageDim.o src/Path.o src/User.o src/Frames.o \
+					src/IndexDirectory.o src/ImageMon.o src/CachedDir.o src/ImageEventLogger.o \
+					src/ImageSeqMon.o \
+					src/earth.o
 					
-EARTH_OBJECTS = Dir.o FsObject.o ImageFormat.o Size.o UserGroup.o \
-					ImageSeq.o Image.o LibLoader.o DateTime.o \
-					File.o ImageDim.o Path.o User.o Frames.o \
-					IndexDirectory.o \
-					earth.o
+EARTH_OBJECTS = src/Dir.o src/FsObject.o src/ImageFormat.o src/Size.o src/UserGroup.o \
+					src/ImageSeq.o src/Image.o src/LibLoader.o src/DateTime.o \
+					src/File.o src/ImageDim.o src/Path.o src/User.o src/Frames.o \
+					src/IndexDirectory.o \
+					src/earth.o
 
 all: $(OBJECTS)
 	cd imageFormats; make all

@@ -4,21 +4,21 @@ CC = g++
 OPTION = -g
 INCLUDE = -I..
 
-SRCS = ../Dir.cpp ../FsObject.cpp ../ImageFormat.cpp ../Size.cpp ../UserGroup.cpp \
-			 ../ImageSeq.cpp ../Image.cpp ../LibLoader.cpp ../DateTime.cpp \
-			 ../File.cpp ../ImageDim.cpp ../Path.cpp ../User.cpp ../Frames.cpp \
-			 ../IndexDirectory.cpp ../ImageMon.cpp ../ImageSeqMon.cpp ../CachedDir.cpp \
-			 ../ImageEventLogger.cpp \
+SRCS = ../src/Dir.cpp ../src/FsObject.cpp ../src/ImageFormat.cpp ../src/Size.cpp ../src/UserGroup.cpp \
+			 ../src/ImageSeq.cpp ../src/Image.cpp ../src/LibLoader.cpp ../src/DateTime.cpp \
+			 ../src/File.cpp ../src/ImageDim.cpp ../src/Path.cpp ../src/User.cpp ../src/Frames.cpp \
+			 ../src/IndexDirectory.cpp ../src/ImageMon.cpp ../src/ImageSeqMon.cpp ../src/CachedDir.cpp \
+			 ../src/ImageEventLogger.cpp \
        testCode.cpp \
 			 testImageMon.cpp testImageSeqMon.cpp \
        testDir.cpp testFile.cpp testImage.cpp testImageSeq.cpp \
 			 testPath.cpp testSize.cpp testDateTime.cpp testIndexDirectory.cpp
 
-OBJECTS = ../Dir.o ../FsObject.o ../ImageFormat.o ../Size.o ../UserGroup.o \
-          ../ImageSeq.o ../Image.o ../LibLoader.o ../DateTime.o \
-          ../File.o ../ImageDim.o ../Path.o ../User.o ../Frames.o \
-					../IndexDirectory.o ../ImageMon.o ../ImageSeqMon.o ../CachedDir.o \
-					../ImageEventLogger.o \
+OBJECTS = ../src/Dir.o ../src/FsObject.o ../src/ImageFormat.o ../src/Size.o ../src/UserGroup.o \
+          ../src/ImageSeq.o ../src/Image.o ../src/LibLoader.o ../src/DateTime.o \
+          ../src/File.o ../src/ImageDim.o ../src/Path.o ../src/User.o ../src/Frames.o \
+					../src/IndexDirectory.o ../src/ImageMon.o ../src/ImageSeqMon.o ../src/CachedDir.o \
+					../src/ImageEventLogger.o \
 					testCode.o \
 					testImageMon.o testImageSeqMon.o \
 					testDir.o testFile.o testImage.o testImageSeq.o \
