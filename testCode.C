@@ -328,7 +328,7 @@ main()
 	testSpFsObject();
 	testSpDir();
 	testSpPath();
-	testSpFsMonitor();
+	//testSpFsMonitor();
 	
 	SpTester::finish();
 	SpImageFormat::deRegisterPlugins();

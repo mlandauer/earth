@@ -8,6 +8,7 @@ File Monitor class
 Sequence Monitor class
 Make testCode verbosity switchable on command line
 ImageFormat names stored in imageFormats.conf
+Clean up SpTester class
 
 Done
 ====
