@@ -21,55 +21,17 @@
 //  Temple Place - Suite 330, Boston MA 02111-1307, USA.
 //
 // $Id$
-// Some very simple test code
 
-#include <stream.h>
-#include <algorithm>
-#include <vector>
+#ifndef _testspfsobjecthandle_h_
+#define _testspfsobjecthandle_h_
 
-#include "SpFile.h"
-#include "SpImage.h"
-#include "SpFsObject.h"
-#include "SpDir.h"
 #include "SpTester.h"
-#include "SpDirMon.h"
-#include "SpImageSequence.h"
 
-#include "testSpSize.h"
-#include "testSpTime.h"
-#include "testSpDir.h"
-#include "testSpFile.h"
-#include "testSpImage.h"
-#include "testSpFsObject.h"
-#include "testSpPath.h"
-#include "testSpImageSequence.h"
-#include "testSpDirMon.h"
-#include "testSpFsObjectHandle.h"
-
-main()
+class testSpFsObjectHandle : public SpTester
 {
-	// Register the plugins
-	SpImageFormat::registerPlugins();
-	// Configure the tester
-	SpTester::setVerbose(false);
-	SpTester::setFloatDelta(0.1);
-	// To make tests reliable have to ensure that ls() always
-	// returns things in alphabetical order.
-	SpDir::setSortByPath(true);
-	
-	testSpDir();
-	testSpSize();
-	testSpTime();
-	testSpFile();
-	testSpImage();
-	testSpFsObject();
-	testSpPath();
-	testSpImageSequence();
+public:
 	testSpFsObjectHandle();
-	//testSpDirMonitor();
-	
-	SpTester::finish();
-	SpImageFormat::deRegisterPlugins();
-}
+	void test();
+};
 
-
+#endif

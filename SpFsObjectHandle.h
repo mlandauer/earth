@@ -21,55 +21,40 @@
 //  Temple Place - Suite 330, Boston MA 02111-1307, USA.
 //
 // $Id$
-// Some very simple test code
 
-#include <stream.h>
-#include <algorithm>
-#include <vector>
+#ifndef _spfsobjecthandle_h_
+#define _spfsobjecthandle_h_
 
-#include "SpFile.h"
-#include "SpImage.h"
-#include "SpFsObject.h"
-#include "SpDir.h"
-#include "SpTester.h"
-#include "SpDirMon.h"
-#include "SpImageSequence.h"
-
-#include "testSpSize.h"
-#include "testSpTime.h"
-#include "testSpDir.h"
-#include "testSpFile.h"
-#include "testSpImage.h"
-#include "testSpFsObject.h"
-#include "testSpPath.h"
-#include "testSpImageSequence.h"
-#include "testSpDirMon.h"
-#include "testSpFsObjectHandle.h"
-
-main()
+template<class C> class SpHandle
 {
-	// Register the plugins
-	SpImageFormat::registerPlugins();
-	// Configure the tester
-	SpTester::setVerbose(false);
-	SpTester::setFloatDelta(0.1);
-	// To make tests reliable have to ensure that ls() always
-	// returns things in alphabetical order.
-	SpDir::setSortByPath(true);
-	
-	testSpDir();
-	testSpSize();
-	testSpTime();
-	testSpFile();
-	testSpImage();
-	testSpFsObject();
-	testSpPath();
-	testSpImageSequence();
-	testSpFsObjectHandle();
-	//testSpDirMonitor();
-	
-	SpTester::finish();
-	SpImageFormat::deRegisterPlugins();
-}
+	private:
+		C *ptr;
+		int *count;
+	public:
+		SpHandle(C *o) : ptr(o), count(new int(1)) { };
+		SpHandle(const SpHandle &h) : ptr(h.ptr), count(h.count) {
+			(*count)++;
+		}
+		SpHandle& operator=(const SpHandle &h) {
+			if (ptr != h.ptr) {
+				decreaseReferenceCount();
+				ptr = h.ptr;
+				count = h.count;
+				(*count)++;
+			}
+			return *this;
+		}
+		~SpHandle() { decreaseReferenceCount(); }
+		SpFsObject *operator->() { return ptr; };
+	private:
+		void decreaseReferenceCount() {
+			if (--(*count) == 0) {
+				delete ptr;
+				delete count;
+			}
+		}
+};
 
+typedef SpHandle<SpFsObject> SpFsObjectHandle;
 
+#endif

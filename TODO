@@ -3,15 +3,18 @@ Todo
 Have to do error checking on file access
 Start Sequence class
 Write shell script that generates fake image sequences (from image Templates)
-Make Makefile actually work and concise
 File Monitor class
 Sequence Monitor class
 Make testCode verbosity switchable on command line
 ImageFormat names stored in imageFormats.conf
 Clean up SpTester class
+Move over unit tests to CppUnit
+Use Handles instead of pointers to SpFsObject
+Use Sp namespace
 
 Done
 ====
+Make Makefile actually work and concise
 Actually compile so's that get read in (finalise plugins)
 Figure out what to do with the multiple versions of ls in SpDir
 	Got rid of them.

@@ -10,7 +10,7 @@ SRCS = SpDir.C SpFsObject.C SpImageFormat.C SpSize.C testCode.C \
        SpFile.C SpImageDim.C SpPath.C SpUid.C \
        testSpDir.C testSpDirMon.C testSpFile.C testSpFsObject.C \
        testSpImage.C testSpImageSequence.C testSpPath.C testSpSize.C \
-       testSpTime.C    
+       testSpTime.C testSpFsObjectHandle.C
 
 OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o SpLibLoader.o \
           SpUid.o SpGid.o SpImage.o SpImageFormat.o SpImageDim.o \
@@ -18,7 +18,7 @@ OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o SpLibLoader.o \
 		  SpImageSequence.o \
           testSpDir.o testSpDirMon.o testSpFile.o testSpFsObject.o \
           testSpImage.o testSpImageSequence.o testSpPath.o testSpSize.o \
-          testSpTime.o    
+          testSpTime.o testSpFsObjectHandle.o
 
 all: testCode
 	cd imageFormats; make all
@@ -214,7 +214,7 @@ testCode.o: SpTester.h SpDirMon.h SpImageSequence.h /usr/include/g++/set
 testCode.o: /usr/include/g++/stl_set.h /usr/include/g++/stl_multiset.h
 testCode.o: testSpSize.h testSpTime.h testSpDir.h testSpFile.h testSpImage.h
 testCode.o: testSpFsObject.h testSpPath.h testSpImageSequence.h
-testCode.o: testSpDirMon.h
+testCode.o: testSpDirMon.h testSpFsObjectHandle.h
 SpDirMon.o: SpDirMon.h SpDir.h /usr/include/g++/vector
 SpDirMon.o: /usr/include/g++/stl_algobase.h /usr/include/g++/stl_config.h
 SpDirMon.o: /usr/include/_G_config.h /usr/include/bits/types.h
@@ -815,3 +815,30 @@ testSpTime.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stdarg.h
 testSpTime.o: /usr/include/g++/stl_iterator.h /usr/include/g++/cassert
 testSpTime.o: /usr/include/assert.h /usr/include/g++/std/bastring.cc SpTime.h
 testSpTime.o: /usr/include/time.h
+testSpFsObjectHandle.o: testSpFsObjectHandle.h SpTester.h
+testSpFsObjectHandle.o: /usr/include/g++/string
+testSpFsObjectHandle.o: /usr/include/g++/std/bastring.h
+testSpFsObjectHandle.o: /usr/include/g++/cstddef
+testSpFsObjectHandle.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stddef.h
+testSpFsObjectHandle.o: /usr/include/g++/std/straits.h
+testSpFsObjectHandle.o: /usr/include/g++/cctype /usr/include/ctype.h
+testSpFsObjectHandle.o: /usr/include/features.h /usr/include/sys/cdefs.h
+testSpFsObjectHandle.o: /usr/include/gnu/stubs.h /usr/include/bits/types.h
+testSpFsObjectHandle.o: /usr/include/endian.h /usr/include/bits/endian.h
+testSpFsObjectHandle.o: /usr/include/g++/cstring /usr/include/string.h
+testSpFsObjectHandle.o: /usr/include/g++/alloc.h /usr/include/g++/iterator
+testSpFsObjectHandle.o: /usr/include/g++/stl_config.h
+testSpFsObjectHandle.o: /usr/include/_G_config.h
+testSpFsObjectHandle.o: /usr/include/g++/stl_relops.h
+testSpFsObjectHandle.o: /usr/include/g++/iostream.h
+testSpFsObjectHandle.o: /usr/include/g++/streambuf.h /usr/include/libio.h
+testSpFsObjectHandle.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stdarg.h
+testSpFsObjectHandle.o: /usr/include/g++/stl_iterator.h
+testSpFsObjectHandle.o: /usr/include/g++/cassert /usr/include/assert.h
+testSpFsObjectHandle.o: /usr/include/g++/std/bastring.cc SpFile.h SpPath.h
+testSpFsObjectHandle.o: SpTime.h /usr/include/time.h SpSize.h SpUid.h
+testSpFsObjectHandle.o: /usr/include/sys/types.h /usr/include/sys/select.h
+testSpFsObjectHandle.o: /usr/include/bits/select.h /usr/include/bits/sigset.h
+testSpFsObjectHandle.o: /usr/include/sys/sysmacros.h SpGid.h SpFsObject.h
+testSpFsObjectHandle.o: /usr/include/sys/stat.h /usr/include/bits/stat.h
+testSpFsObjectHandle.o: SpFsObjectHandle.h
