@@ -34,13 +34,13 @@ namespace Sp {
 class ImageEventLogger : public ImageEventObserver
 {
 public:
-	std::list<File> getPendingEventsAdded();
-	std::list<File> getPendingEventsDeleted();
-	virtual void fileAdded(const File &file);
+	std::list<Path> getPendingEventsAdded();
+	std::list<Path> getPendingEventsDeleted();
+	virtual void imageAdded(const Image *image);
 	virtual void fileDeleted(const File &file);
 
 private:
-	std::list<File> eventsAdded, eventsDeleted;
+	std::list<Path> eventsAdded, eventsDeleted;
 };
 
 }

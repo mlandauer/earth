@@ -127,7 +127,10 @@ void ImageMon::notifyDeleted(const File &o)
 void ImageMon::notifyAdded(const File &o)
 {
 	assert(observer != NULL);
-	observer->fileAdded(o);
+	// Make an image
+	Image *image = Image::construct(o.getPath());
+	if (image != NULL)
+		observer->imageAdded(image);
 }
 
 }

@@ -43,10 +43,10 @@ public:
 	void test();
 	
 private:
-	void addExpectedAdded(std::string name);
-	void addExpectedDeleted(std::string name);
+	void addExpectedAdded(const std::string &name);
+	void addExpectedDeleted(const std::string &name);
 	void checkNextEvents(ImageEventLogger &logger, CppUnit::SourceLine sourceLine);
-	std::list<File> expectedEventsAdded, expectedEventsDeleted;
+	std::list<Path> expectedEventsAdded, expectedEventsDeleted;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testImageMon);
@@ -55,43 +55,31 @@ CPPUNIT_TEST_SUITE_REGISTRATION(testImageMon);
 
 void testImageMon::checkNextEvents(ImageEventLogger &logger, CppUnit::SourceLine sourceLine)
 {
-	std::list<File> actualEventsAdded = logger.getPendingEventsAdded();
-	std::list<File> actualEventsDeleted = logger.getPendingEventsDeleted();
+	std::list<Path> actualEventsAdded = logger.getPendingEventsAdded();
+	std::list<Path> actualEventsDeleted = logger.getPendingEventsDeleted();
 
-	// The lists must be sorted for set_symmetric_difference
+	// The lists must be sorted
 	actualEventsAdded.sort();
 	actualEventsDeleted.sort();
 	expectedEventsAdded.sort();
 	expectedEventsDeleted.sort();
-	std::list<File> differenceAdded, differenceDeleted;
-	std::set_symmetric_difference(actualEventsAdded.begin(), actualEventsAdded.end(),
-		expectedEventsAdded.begin(), expectedEventsAdded.end(),
-		std::back_inserter(differenceAdded));
-	std::set_symmetric_difference(actualEventsDeleted.begin(), actualEventsDeleted.end(),
-		expectedEventsDeleted.begin(), expectedEventsDeleted.end(),
-		std::back_inserter(differenceDeleted));
 	
-	// First check the respective sizes
-	CppUnit::Asserter::failIf(actualEventsAdded.size() < expectedEventsAdded.size(), "fewer added events than expected", sourceLine);
-	CppUnit::Asserter::failIf(actualEventsAdded.size() > expectedEventsAdded.size(), "more added events than expected", sourceLine);		
-	CppUnit::Asserter::failIf(!differenceAdded.empty(), "unexpected added event", sourceLine);
-	CppUnit::Asserter::failIf(actualEventsDeleted.size() < expectedEventsDeleted.size(), "fewer deleted events than expected", sourceLine);
-	CppUnit::Asserter::failIf(actualEventsDeleted.size() > expectedEventsDeleted.size(), "more deleted events than expected", sourceLine);		
-	CppUnit::Asserter::failIf(!differenceDeleted.empty(), "unexpected deleted event", sourceLine);
+	CppUnit::Asserter::failIf(actualEventsAdded != expectedEventsAdded, "added events different than expected", sourceLine);
+	CppUnit::Asserter::failIf(actualEventsDeleted != expectedEventsDeleted, "deleted events different than expected", sourceLine);
 	
 	// Clear lists if succesful
 	expectedEventsAdded.clear();
 	expectedEventsDeleted.clear();
 }
 
-void testImageMon::addExpectedAdded(std::string name)
+void testImageMon::addExpectedAdded(const std::string &name)
 {
-	expectedEventsAdded.push_back(File(name));
+	expectedEventsAdded.push_back(Path(name));
 }
 
-void testImageMon::addExpectedDeleted(std::string name)
+void testImageMon::addExpectedDeleted(const std::string &name)
 {
-	expectedEventsDeleted.push_back(File(name));
+	expectedEventsDeleted.push_back(Path(name));
 }
 
 void testImageMon::test()

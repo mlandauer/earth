@@ -26,26 +26,27 @@
 
 namespace Sp {
 	
-void ImageEventLogger::fileAdded(const File &file)
+void ImageEventLogger::imageAdded(const Image *image)
 {
-	eventsAdded.push_back(file);
+	assert(image != NULL);
+	eventsAdded.push_back(image->getPath());
 }
 
 void ImageEventLogger::fileDeleted(const File &file)
 {
-	eventsDeleted.push_back(file);
+	eventsDeleted.push_back(file.getPath());
 }
 
-std::list<File> ImageEventLogger::getPendingEventsAdded()
+std::list<Path> ImageEventLogger::getPendingEventsAdded()
 {
-	std::list<File> ret(eventsAdded);
+	std::list<Path> ret(eventsAdded);
 	eventsAdded.clear();
 	return ret;
 }
 
-std::list<File> ImageEventLogger::getPendingEventsDeleted()
+std::list<Path> ImageEventLogger::getPendingEventsDeleted()
 {
-	std::list<File> ret(eventsDeleted);
+	std::list<Path> ret(eventsDeleted);
 	eventsDeleted.clear();
 	return ret;
 }
