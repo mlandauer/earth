@@ -85,18 +85,21 @@ unsigned long int File::read(void *buf, unsigned long int count) const
 
 void File::seek(unsigned long int pos) const
 {
-	lseek(fd, pos, SEEK_SET);
+	off_t offset = lseek(fd, pos, SEEK_SET);
+	assert(offset != -1);
 }
 
 void File::seekForward(unsigned long int pos) const
 {
-	lseek(fd, pos, SEEK_CUR);
+	off_t offset = lseek(fd, pos, SEEK_CUR);
+	assert(offset != -1);
 }
 
 unsigned char File::readChar() const
 {
 	unsigned char value;
-	read(&value, 1);
+	unsigned long no = read(&value, 1);
+	assert(no == 1);
 	return (value);
 }
 
@@ -104,8 +107,9 @@ unsigned short File::readShort(const int &endian) const
 {
 	unsigned short value;
 	unsigned char temp[2];
-	read(temp, 2);
-
+	unsigned long no = read(temp, 2);
+	assert (no == 2);
+	
 	// If small endian
 	if (endian == 0)
 		value = (temp[0]<<0) + (temp[1]<<8);
@@ -117,8 +121,9 @@ unsigned short File::readShort(const int &endian) const
 unsigned long File::readLong(const int &endian) const
 {
 	unsigned char temp[4];
-	read(temp, 4);
-
+	unsigned long no = read(temp, 4);
+	assert (no == 4);
+	
 	unsigned long value;
 	if (endian == 0)
 		value = (temp[0]<<0) + (temp[1]<<8) + (temp[2]<<16) + (temp[3]<<24);
