@@ -7,7 +7,7 @@ INCLUDE = -I..
 SRCS = ../Dir.cpp ../FsObject.cpp ../ImageFormat.cpp ../Size.cpp ../UserGroup.cpp \
 			 ../ImageSeq.cpp ../Image.cpp ../LibLoader.cpp ../DateTime.cpp \
 			 ../File.cpp ../ImageDim.cpp ../Path.cpp ../User.cpp ../Frames.cpp \
-			 ../IndexDirectory.cpp ../FileMon.cpp \
+			 ../IndexDirectory.cpp ../FileMon.cpp ../FileEventLogger.cpp \
        testCode.cpp \
 			 testFileMon.cpp \
        testDir.cpp testFile.cpp testImage.cpp testImageSeq.cpp \
@@ -16,7 +16,7 @@ SRCS = ../Dir.cpp ../FsObject.cpp ../ImageFormat.cpp ../Size.cpp ../UserGroup.cp
 OBJECTS = ../Dir.o ../FsObject.o ../ImageFormat.o ../Size.o ../UserGroup.o \
           ../ImageSeq.o ../Image.o ../LibLoader.o ../DateTime.o \
           ../File.o ../ImageDim.o ../Path.o ../User.o ../Frames.o \
-					../IndexDirectory.o ../FileMon.o \
+					../IndexDirectory.o ../FileMon.o ../FileEventLogger.o \
 					testCode.o \
 					testFileMon.o \
 					testDir.o testFile.o testImage.o testImageSeq.o \

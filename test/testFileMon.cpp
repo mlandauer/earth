@@ -29,32 +29,32 @@
 #include "FileMon.h"
 #include "Path.h"
 #include "FileEventObserver.h"
+#include "FileEventLogger.h"
 
 using namespace Sp;
 
-class testFileMon : public CppUnit::TestFixture, public FileEventObserver
+class testFileMon : public CppUnit::TestFixture
 {
 public:
 	CPPUNIT_TEST_SUITE(testFileMon);
 	CPPUNIT_TEST(test);
 	CPPUNIT_TEST_SUITE_END();
 	
-	virtual void fileAdded(const File &file);
-	virtual void fileDeleted(const File &file);
 	void test();
 	
 private:
+	FileEventLogger logger;
 	void addExpectedAdded(std::string name);
 	void addExpectedDeleted(std::string name);
-	void checkNextEvents(std::list<File> &actualEventsAdded, std::list<File> &actualEventsDeleted, std::list<File> &expectedEventsAdded, std::list<File> &expectedEventsDeleted, CppUnit::SourceLine sourceLine);
-	std::list<File> eventsAdded, eventsDeleted, expectedEventsAdded, expectedEventsDeleted;
+	void checkNextEvents(std::list<File> actualEventsAdded, std::list<File> actualEventsDeleted, std::list<File> &expectedEventsAdded, std::list<File> &expectedEventsDeleted, CppUnit::SourceLine sourceLine);
+	std::list<File> expectedEventsAdded, expectedEventsDeleted;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testFileMon);
 
 #define CPPUNIT_CHECK_NEXT_EVENTS( actualEventsAdded, actualEventsDeleted, expectedEventsAdded, expectedEventsDeleted ) checkNextEvents( actualEventsAdded, actualEventsDeleted, expectedEventsAdded, expectedEventsDeleted,  CPPUNIT_SOURCELINE() )
 
-void testFileMon::checkNextEvents(std::list<File> &actualEventsAdded, std::list<File> &actualEventsDeleted, std::list<File> &expectedEventsAdded, std::list<File> &expectedEventsDeleted, CppUnit::SourceLine sourceLine)
+void testFileMon::checkNextEvents(std::list<File> actualEventsAdded, std::list<File> actualEventsDeleted, std::list<File> &expectedEventsAdded, std::list<File> &expectedEventsDeleted, CppUnit::SourceLine sourceLine)
 {
 	// The lists must be sorted for set_symmetric_difference
 	actualEventsAdded.sort();
@@ -78,20 +78,8 @@ void testFileMon::checkNextEvents(std::list<File> &actualEventsAdded, std::list<
 	CppUnit::Asserter::failIf(!differenceDeleted.empty(), "unexpected deleted event", sourceLine);
 	
 	// Clear lists if succesful
-	actualEventsAdded.clear();
-	actualEventsDeleted.clear();
 	expectedEventsAdded.clear();
 	expectedEventsDeleted.clear();
-}
-
-void testFileMon::fileAdded(const File &file)
-{
-	eventsAdded.push_back(file);
-}
-
-void testFileMon::fileDeleted(const File &file)
-{
-	eventsDeleted.push_back(file);
 }
 
 void testFileMon::addExpectedAdded(std::string name)
@@ -117,7 +105,7 @@ void testFileMon::test()
 
 	// Test initial startup
 	FileMon m;
-	m.registerObserver(this);
+	m.registerObserver(&logger);
 	m.startMonitorDirectory(Dir("test/FsMonitor"));
 	
 	// I'm putting these tests out of order as these events are not guaranteed to come in any
@@ -126,7 +114,7 @@ void testFileMon::test()
 	addExpectedAdded("test/FsMonitor/test.0004.gif");
 	addExpectedAdded("test/FsMonitor/test.0002.gif");
 	addExpectedAdded("test/FsMonitor/test.0003.gif");
-	CPPUNIT_CHECK_NEXT_EVENTS(eventsAdded, eventsDeleted,
+	CPPUNIT_CHECK_NEXT_EVENTS(logger.getPendingEventsAdded(), logger.getPendingEventsDeleted(),
 		expectedEventsAdded, expectedEventsDeleted);
 	
 	// Test adding files
@@ -141,12 +129,12 @@ void testFileMon::test()
 	m.update();
 	addExpectedAdded("test/FsMonitor/test.0005.gif");
 	addExpectedAdded("test/FsMonitor/test.0006.gif");
-	CPPUNIT_CHECK_NEXT_EVENTS(eventsAdded, eventsDeleted,
+	CPPUNIT_CHECK_NEXT_EVENTS(logger.getPendingEventsAdded(), logger.getPendingEventsDeleted(),
 		expectedEventsAdded, expectedEventsDeleted);
 	
 	// Test changing nothing
 	m.update();
-	CPPUNIT_CHECK_NEXT_EVENTS(eventsAdded, eventsDeleted,
+	CPPUNIT_CHECK_NEXT_EVENTS(logger.getPendingEventsAdded(), logger.getPendingEventsDeleted(),
 		expectedEventsAdded, expectedEventsDeleted);
 	
 	// Test deleting files
@@ -156,12 +144,12 @@ void testFileMon::test()
 	m.update();
 	addExpectedDeleted("test/FsMonitor/test.0001.gif");
 	addExpectedDeleted("test/FsMonitor/test.0006.gif");
-	CPPUNIT_CHECK_NEXT_EVENTS(eventsAdded, eventsDeleted,
+	CPPUNIT_CHECK_NEXT_EVENTS(logger.getPendingEventsAdded(), logger.getPendingEventsDeleted(),
 		expectedEventsAdded, expectedEventsDeleted);
 	
 	// Test changing nothing
 	m.update();
-	CPPUNIT_CHECK_NEXT_EVENTS(eventsAdded, eventsDeleted,
+	CPPUNIT_CHECK_NEXT_EVENTS(logger.getPendingEventsAdded(), logger.getPendingEventsDeleted(),
 		expectedEventsAdded, expectedEventsDeleted);
 
 	// Test adding subdirectory
@@ -170,12 +158,12 @@ void testFileMon::test()
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/subdirectory/test.0001.gif");
 	m.update();
 	addExpectedAdded("test/FsMonitor/subdirectory/test.0001.gif");
-	CPPUNIT_CHECK_NEXT_EVENTS(eventsAdded, eventsDeleted,
+	CPPUNIT_CHECK_NEXT_EVENTS(logger.getPendingEventsAdded(), logger.getPendingEventsDeleted(),
 		expectedEventsAdded, expectedEventsDeleted);
 	
 	// Test changing nothing
 	m.update();
-	CPPUNIT_CHECK_NEXT_EVENTS(eventsAdded, eventsDeleted,
+	CPPUNIT_CHECK_NEXT_EVENTS(logger.getPendingEventsAdded(), logger.getPendingEventsDeleted(),
 		expectedEventsAdded, expectedEventsDeleted);
 
 	// Test adding in both directories
@@ -185,12 +173,12 @@ void testFileMon::test()
 	m.update();
 	addExpectedAdded("test/FsMonitor/test.0006.gif");
 	addExpectedAdded("test/FsMonitor/subdirectory/test.0002.gif");
-	CPPUNIT_CHECK_NEXT_EVENTS(eventsAdded, eventsDeleted,
+	CPPUNIT_CHECK_NEXT_EVENTS(logger.getPendingEventsAdded(), logger.getPendingEventsDeleted(),
 		expectedEventsAdded, expectedEventsDeleted);
 
 	// Test changing nothing
 	m.update();
-	CPPUNIT_CHECK_NEXT_EVENTS(eventsAdded, eventsDeleted,
+	CPPUNIT_CHECK_NEXT_EVENTS(logger.getPendingEventsAdded(), logger.getPendingEventsDeleted(),
 		expectedEventsAdded, expectedEventsDeleted);
 	
 	// Test removing a directory
@@ -199,7 +187,7 @@ void testFileMon::test()
 	m.update();
 	addExpectedDeleted("test/FsMonitor/subdirectory/test.0001.gif");
 	addExpectedDeleted("test/FsMonitor/subdirectory/test.0002.gif");
-	CPPUNIT_CHECK_NEXT_EVENTS(eventsAdded, eventsDeleted,
+	CPPUNIT_CHECK_NEXT_EVENTS(logger.getPendingEventsAdded(), logger.getPendingEventsDeleted(),
 		expectedEventsAdded, expectedEventsDeleted);
 
 	// Test removing the rest
@@ -211,7 +199,7 @@ void testFileMon::test()
 	addExpectedDeleted("test/FsMonitor/test.0004.gif");
 	addExpectedDeleted("test/FsMonitor/test.0005.gif");
 	addExpectedDeleted("test/FsMonitor/test.0006.gif");
-	CPPUNIT_CHECK_NEXT_EVENTS(eventsAdded, eventsDeleted,
+	CPPUNIT_CHECK_NEXT_EVENTS(logger.getPendingEventsAdded(), logger.getPendingEventsDeleted(),
 		expectedEventsAdded, expectedEventsDeleted);
 	
 	// We're stopping watching. So we can delete the top level directory
