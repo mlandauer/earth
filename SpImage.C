@@ -62,7 +62,8 @@ SpImage* SpImage::construct(const string &path)
 	else if (prtexImage.recognise(buf))
 		image = new SpPRTEXImage;
 	else
-		cout << "I don't know what's going on here!" << endl;
+		// This signals an error or an unrecognised image type
+		return (NULL);
 
 	image->setPath(path);
 	return (image);
