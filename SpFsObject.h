@@ -15,9 +15,8 @@
 class SpFsObject
 {
 	public:
-		SpFsObject();
 		~SpFsObject();
-		SpFsObject(const SpPath &path);
+		static SpFsObject *construct(const SpPath &path);
 		bool isDir() const;
 		bool isFile() const;
 		SpTime lastAccess() const;

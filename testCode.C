@@ -153,23 +153,25 @@ void testSpUid()
 void testSpFsObject()
 {
 	cout << endl << "Testing SpFsObject: ";
-	SpFsObject file("test/templateImages/8x8.tiff");
-	SpTester::checkEqual("SpFsObject test 1", file.path().fullName(),
+	SpFsObject *file = SpFsObject::construct("test/templateImages/8x8.tiff");
+	SpTester::checkEqual("SpFsObject test 1", file->path().fullName(),
 		"test/templateImages/8x8.tiff");
 	SpUid u;
 	u.setCurrent();
 	SpGid g;
 	g.setCurrent();
-	SpTester::checkEqual("SpFsObject test 2", file.uid().name(), u.name());
-	SpTester::checkEqual("SpFsObject test 3", file.gid().name(), g.name());
-	SpTester::checkEqual("SpFsObject test 4", file.isFile(), true);
-	SpTester::checkEqual("SpFsObject test 5", file.isDir(), false);
-	SpFsObject file2("test/templateImages/");
-	SpTester::checkEqual("SpFsObject test 6", file2.path().fullName(),
+	SpTester::checkEqual("SpFsObject test 2", file->uid().name(), u.name());
+	SpTester::checkEqual("SpFsObject test 3", file->gid().name(), g.name());
+	SpTester::checkEqual("SpFsObject test 4", file->isFile(), true);
+	SpTester::checkEqual("SpFsObject test 5", file->isDir(), false);
+	SpFsObject *file2 = SpFsObject::construct("test/templateImages/");
+	SpTester::checkEqual("SpFsObject test 6", file2->path().fullName(),
 		"test/templateImages");
 	// Find some way to test access, modification and change times
-	SpTester::checkEqual("SpFsObject test 7", file2.isFile(), false);
-	SpTester::checkEqual("SpFsObject test 8", file2.isDir(), true);
+	SpTester::checkEqual("SpFsObject test 7", file2->isFile(), false);
+	SpTester::checkEqual("SpFsObject test 8", file2->isDir(), true);
+	delete file;
+	delete file2;
 }
 
 void testSpDir()
@@ -188,40 +190,38 @@ void testSpDir()
 	SpTester::checkEqual("SpDir test 3", dir.gid().name(), g.name());
 	SpTester::checkEqual("SpDir test 4", dir.isFile(), false);
 	SpTester::checkEqual("SpDir test 5", dir.isDir(), true);
-	vector<SpFsObject *> ls = dir.lsSortedByPath();
-	// Create a vector of just the filenames
-	//vector<string> names;
-	//for (vector<SpFsObject *>::iterator a = ls.begin(); a != ls.end(); ++a) {
-	//	names.push_back((*a)->path().fullName());
-	//}
-	//sort(names.begin(), names.end());
-	vector<SpFsObject *>::iterator a = ls.begin();
-	SpTester::checkEqual("SpDir ls test 1",  (*a++)->path().fullName(),
+	vector<SpImage *> ls = dir.lsImagesSortedByPath();
+	vector<SpImage *>::iterator a = ls.begin();
+	SpTester::checkEqual("SpDir ls test 1a",  (*a)->path().fullName(),
 		"test/templateImages/2x2.gif");
-	SpTester::checkEqual("SpDir ls test 2",  (*a++)->path().fullName(),
-		"test/templateImages/2x2.jpg");
-	SpTester::checkEqual("SpDir ls test 3",  (*a++)->path().fullName(),
+	SpTester::checkEqual("SpDir ls test 1b",  (*a++)->formatString(), "GIF");
+	SpTester::checkEqual("SpDir ls test 3a",  (*a)->path().fullName(),
 		"test/templateImages/2x2.sgi");
-	SpTester::checkEqual("SpDir ls test 4",  (*a++)->path().fullName(),
+	SpTester::checkEqual("SpDir ls test 3b",  (*a++)->formatString(), "SGI");
+	SpTester::checkEqual("SpDir ls test 4a",  (*a)->path().fullName(),
 		"test/templateImages/2x2.tiff");
-	SpTester::checkEqual("SpDir ls test 5",  (*a++)->path().fullName(),
+	SpTester::checkEqual("SpDir ls test 4b",  (*a++)->formatString(), "TIFF");
+	SpTester::checkEqual("SpDir ls test 5a",  (*a)->path().fullName(),
 		"test/templateImages/4x4.gif");
-	SpTester::checkEqual("SpDir ls test 6",  (*a++)->path().fullName(),
-		"test/templateImages/4x4.jpg");
-	SpTester::checkEqual("SpDir ls test 7",  (*a++)->path().fullName(),
+	SpTester::checkEqual("SpDir ls test 5b",  (*a++)->formatString(), "GIF");
+	SpTester::checkEqual("SpDir ls test 7a",  (*a)->path().fullName(),
 		"test/templateImages/4x4.sgi");
-	SpTester::checkEqual("SpDir ls test 8",  (*a++)->path().fullName(),
+	SpTester::checkEqual("SpDir ls test 7b",  (*a++)->formatString(), "SGI");
+	SpTester::checkEqual("SpDir ls test 8a",  (*a)->path().fullName(),
 		"test/templateImages/4x4.tiff");
-	SpTester::checkEqual("SpDir ls test 9",  (*a++)->path().fullName(),
+	SpTester::checkEqual("SpDir ls test 8b",  (*a++)->formatString(), "TIFF");
+	SpTester::checkEqual("SpDir ls test 9a",  (*a)->path().fullName(),
 		"test/templateImages/8x8.gif");
-	SpTester::checkEqual("SpDir ls test 10", (*a++)->path().fullName(),
-		"test/templateImages/8x8.jpg");
-	SpTester::checkEqual("SpDir ls test 11", (*a++)->path().fullName(),
+	SpTester::checkEqual("SpDir ls test 9b",  (*a++)->formatString(), "GIF");
+	SpTester::checkEqual("SpDir ls test 11a", (*a)->path().fullName(),
 		"test/templateImages/8x8.sgi");
-	SpTester::checkEqual("SpDir ls test 12", (*a++)->path().fullName(),
+	SpTester::checkEqual("SpDir ls test 11b", (*a++)->formatString(), "SGI");
+	SpTester::checkEqual("SpDir ls test 12a", (*a)->path().fullName(),
 		"test/templateImages/8x8.tiff");
-	SpTester::checkEqual("SpDir ls test 13", (*a++)->path().fullName(),
-		"test/templateImages/CVS");
+	SpTester::checkEqual("SpDir ls test 12b", (*a++)->formatString(), "TIFF");
+	
+	//SpTester::checkEqual("SpDir ls test 13",  (*a)->path().fullName(),
+	//	"test/templateImages/CVS");
 }
 
 void testSpPath()

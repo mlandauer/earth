@@ -18,8 +18,9 @@ SpDir::~SpDir()
 {
 }
 
-SpDir::SpDir(const SpPath &path) : SpFsObject(path)
+SpDir::SpDir(const SpPath &path)
 {
+	setPath(path);
 }
 
 // Overrides default implementation in SpFsObject for efficiency
@@ -41,16 +42,34 @@ vector<SpFsObject *> SpDir::ls() const
 	struct dirent *entry;
 	vector<SpFsObject *> l;
 	while ((entry = readdir(d)) != NULL) {
-		SpFsObject *o = new SpFsObject;
 		string pathString = entry->d_name;
 		if ((pathString != ".") && (pathString != "..")) {
 			SpPath p = path();
 			p.add(pathString);
-			o->setPath(p);
+			SpFsObject *o = SpFsObject::construct(p);
 			l.push_back(o);
 		}
 	}
 	return (l);
+}
+
+vector<SpImage *> SpDir::lsImages() const
+{
+	// First open a directory stream
+	DIR *d = opendir(path().fullName().c_str());
+	struct dirent *entry;
+	vector<SpImage *> images;
+	while ((entry = readdir(d)) != NULL) {
+		string pathString = entry->d_name;
+		if ((pathString != ".") && (pathString != "..")) {
+			SpPath p = path();
+			p.add(pathString);
+			SpImage *i = SpImage::construct(p);
+			if (i != NULL)
+				images.push_back(i);
+		}
+	}
+	return (images);
 }
 
 class SpCompareFsObjectPaths
@@ -63,6 +82,13 @@ class SpCompareFsObjectPaths
 vector<SpFsObject *> SpDir::lsSortedByPath() const
 {
 	vector<SpFsObject *> l = ls();
+	sort(l.begin(), l.end(), SpCompareFsObjectPaths());
+	return(l);
+}
+
+vector<SpImage *> SpDir::lsImagesSortedByPath() const
+{
+	vector<SpImage *> l = lsImages();
 	sort(l.begin(), l.end(), SpCompareFsObjectPaths());
 	return(l);
 }

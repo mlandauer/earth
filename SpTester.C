@@ -16,7 +16,7 @@ void SpTester::check(string testName, bool a)
 	}
 	else
 		if (verbose)
-			cout << endl << "SUCCESS " << testName;
+			cout << "SUCCESS " << testName << endl;
 		else
 			cout << ".";
 }
@@ -30,7 +30,7 @@ void SpTester::checkEqual(string testName, string a, string b)
 	}
 	else
 		if (verbose)
-			cout << endl << "SUCCESS " << testName << ": returned " << a;
+			cout << "SUCCESS " << testName << ": returned " << a << endl;
 		else
 			cout << ".";
 }
@@ -44,7 +44,7 @@ void SpTester::checkEqual(string testName, bool a, bool b)
 	}
 	else
 		if (verbose)
-			cout << endl << "SUCCESS " << testName << ": returned " << a;
+			cout << "SUCCESS " << testName << ": returned " << a << endl;
 		else
 			cout << ".";
 }
@@ -58,7 +58,7 @@ void SpTester::checkEqual(string testName, int a, int b)
 	}
 	else
 		if (verbose)
-			cout << endl << "SUCCESS " << testName << ": returned " << a;
+			cout << "SUCCESS " << testName << ": returned " << a << endl;
 		else
 			cout << ".";
 }
@@ -72,7 +72,7 @@ void SpTester::checkEqual(string testName, float a, float b)
 	}
 	else
 		if (verbose)
-			cout << endl << "SUCCESS " << testName << ": returned " << a;
+			cout << "SUCCESS " << testName << ": returned " << a << endl;
 		else
 			cout << ".";
 }

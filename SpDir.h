@@ -5,6 +5,7 @@
 
 #include <vector>
 #include "SpFsObject.h"
+#include "SpImage.h"
 
 class SpDir : public SpFsObject
 {
@@ -13,7 +14,9 @@ class SpDir : public SpFsObject
 		~SpDir();
 		SpDir(const SpPath &path);
 		vector<SpFsObject *> ls() const;
+		vector<SpImage *> lsImages() const;
 		vector<SpFsObject *> lsSortedByPath() const;
+		vector<SpImage *> lsImagesSortedByPath() const;
 		bool isFile() const;
 		bool isDir() const;
 	private:

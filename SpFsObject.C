@@ -4,17 +4,35 @@
 #include <unistd.h>
 
 #include "SpFsObject.h"
-
-SpFsObject::SpFsObject()
-{
-}
-
-SpFsObject::SpFsObject(const SpPath &path) : p(path)
-{
-}
+#include "SpDir.h"
+#include "SpImage.h"
 
 SpFsObject::~SpFsObject()
 {
+}
+
+SpFsObject *SpFsObject::construct(const SpPath &path)
+{
+	SpFsObject *o = new SpFsObject;
+	o->setPath(path);
+	if (o->isDir()) {
+		delete o;
+		SpDir *d = new SpDir;
+		d->setPath(path);
+		return (d);
+	}
+	else if (o->isFile()) {
+		delete o;
+		SpImage *i = SpImage::construct(path);
+		if (i == NULL) {
+			SpFile *f = new SpFile;
+			f->setPath(path);
+			return (f);
+		}
+		else
+			return (i);
+	}
+	return (NULL);
 }
 
 void SpFsObject::setPath(const SpPath &path)
