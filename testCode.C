@@ -6,6 +6,7 @@
 #include "SpFile.h"
 #include "SpImage.h"
 #include "SpFsObject.h"
+#include "SpDir.h"
 
 void testSpSize()
 {
@@ -148,9 +149,20 @@ void testSpFsObject()
 	cout << "is a directory? = " << file2.isDir() << endl;
 }
 
-
-
-
+void testSpDir()
+{
+	cout << "Test Directory Class" << endl;
+	SpDir dir("/home/matthew/images/");
+	cout << "path = " << dir.path().fullName() << endl;
+	cout << "size = " << dir.size().kbytes() << " Kbytes" << endl;
+	cout << "last access = " << dir.lastAccess().timeAndDateString() << endl;
+	cout << "last modification = " << dir.lastModification().timeAndDateString() << endl;
+	cout << "last change = " << dir.lastChange().timeAndDateString() << endl;
+	cout << "owner = " << dir.uid().name() << endl;
+	cout << "group owner = " << dir.gid().name() << endl;
+	cout << "is a file? = " << dir.isFile() << endl;
+	cout << "is a directory? = " << dir.isDir() << endl;
+}
 
 main()
 {
@@ -165,5 +177,7 @@ main()
 	testSpImage();
 	space();
 	testSpFsObject();
+	space();
+	testSpDir();
 }
 

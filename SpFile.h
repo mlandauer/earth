@@ -16,8 +16,8 @@ class SpFile : public SpFsObject
 		SpFile();
 		~SpFile();
 		SpFile(const string &path);
-		bool isFile() const;
-		bool isDir() const;
+		inline bool isFile() const;
+		inline bool isDir() const;
 		void open();
 		void close();
 		unsigned long int read(void *buf, unsigned long int count) const;

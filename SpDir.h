@@ -3,19 +3,18 @@
 #ifndef _spdir_h_
 #define _spdir_h_
 
-class SpDir
+#include "SpFsObject.h"
+
+class SpDir : public SpFsObject
 {
 	public:
 		SpDir();
 		~SpDir();
 		SpDir(const string &path);
-		void setParent(SpDirectory *parent);
-		SpTime getLastUpdateTime();
-		string getName();
-	protected:
-		void setPath(const string &path);
+		bool isFile() const;
+		bool isDir() const;
 	private:
-}
+};
 
 #endif
 
