@@ -51,12 +51,12 @@ void testDateTime::test()
 	//checkEqual("test 13", t1.timeString(), "16:00:00");
 	DateTime t2 = DateTime::unixDateTime(100);
 	DateTime t0;
-	check("test 14",    t0 == t1);
-	check("test 15a",   t0 <  t2);
-	check("test 15b", !(t2 <  t0));
-	check("test 15c",   !(t0 == t2));
-	check("test 16a",   t1 <  t2);
-	check("test 16b", !(t2 <  t1));
-	check("test 16c",   !(t1 == t2));
+	check(t0 == t1);
+	check(t0 <  t2);
+	check(!(t2 <  t0));
+	check(!(t0 == t2));
+	check(t1 <  t2);
+	check(!(t2 <  t1));
+	check(!(t1 == t2));
 }
 

@@ -38,7 +38,7 @@ public:
 	void test();
 	
 private:
-	void checkSequence(const std::string &name, const ImageSeq &sequence,
+	void checkSequence(const ImageSeq &sequence,
 		const std::string &format, int width, int height, const std::string &path, const std::string &frames);
 };
 

@@ -35,7 +35,7 @@ class testImageSeq : public Tester
 public:
 	testImageSeq();
 	void test();
-	void checkSequence(std::string testName, const ImageSeq &seq,
+	void checkSequence(const ImageSeq &seq,
 		std::string name, std::string frames, int width, int height, std::string format);
 	void copyFile(const Path &path1, const Path &path2);
 	void makeDirectory(const Path &path);

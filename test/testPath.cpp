@@ -33,46 +33,46 @@ testPath::testPath() : Tester("Path")
 void testPath::test()
 {
 	Path p("/home/blah/foo.tif");
-	checkEqual("test 1", p.fullName(), "/home/blah/foo.tif");
-	checkEqual("test 2", p.root(),     "/home/blah/");
-	checkEqual("test 3", p.relative(), "foo.tif");
+	checkEqual(p.fullName(), "/home/blah/foo.tif");
+	checkEqual(p.root(),     "/home/blah/");
+	checkEqual(p.relative(), "foo.tif");
 	Path p2("/home/blah/");
-	checkEqual("test 4", p2.fullName(), "/home/blah");
-	checkEqual("test 5", p2.root(),     "/home/");
-	checkEqual("test 6", p2.relative(), "blah");
+	checkEqual(p2.fullName(), "/home/blah");
+	checkEqual(p2.root(),     "/home/");
+	checkEqual(p2.relative(), "blah");
 	Path p3("blah");
-	checkEqual("test 7", p3.fullName(), "blah");
-	checkEqual("test 8", p3.root(),     "");
-	checkEqual("test 9", p3.relative(), "blah");
+	checkEqual(p3.fullName(), "blah");
+	checkEqual(p3.root(),     "");
+	checkEqual(p3.relative(), "blah");
 	Path p4("/home/blah///");
-	checkEqual("test 10", p4.fullName(), "/home/blah");
-	checkEqual("test 11", p4.root(),     "/home/");
-	checkEqual("test 12", p4.relative(), "blah");
+	checkEqual(p4.fullName(), "/home/blah");
+	checkEqual(p4.root(),     "/home/");
+	checkEqual(p4.relative(), "blah");
 	Path p5("/blah");
-	checkEqual("test 13", p5.fullName(), "/blah");
-	checkEqual("test 14", p5.root(),     "/");
-	checkEqual("test 15", p5.relative(), "blah");
+	checkEqual(p5.fullName(), "/blah");
+	checkEqual(p5.root(),     "/");
+	checkEqual(p5.relative(), "blah");
 	// Check that paths can be ordered alphabetically
 	Path p6("alpha");
 	Path p7("beta");
 	Path p8("gamma");
 	Path p9("gammb");
 	Path p10("gammb");
-	check("test 16", p6 < p7);
-	check("test 17", p6 < p8);
-	check("test 18", p6 < p9);
-	check("test 19", p7 < p8);
-	check("test 20", p7 < p9);
-	check("test 21", p8 < p9);
+	check(p6 < p7);
+	check(p6 < p8);
+	check(p6 < p9);
+	check(p7 < p8);
+	check(p7 < p9);
+	check(p8 < p9);
 	// The reverse
-	check("test 16", !(p7 < p6));
-	check("test 17", !(p8 < p6));
-	check("test 18", !(p9 < p6));
-	check("test 19", !(p8 < p7));
-	check("test 20", !(p9 < p7));
-	check("test 21", !(p9 < p8));
+	check(!(p7 < p6));
+	check(!(p8 < p6));
+	check(!(p9 < p6));
+	check(!(p8 < p7));
+	check(!(p9 < p7));
+	check(!(p9 < p8));
 	// Equality
-	check("test 22", p9 == p10);
-	check("test 23", p6 == p6);
-	check("test 24", !(p6 == p7));
+	check(p9 == p10);
+	check(p6 == p6);
+	check(!(p6 == p7));
 }

@@ -29,12 +29,12 @@
 
 namespace Sp {
 
-#define checkEqual(testName, a, b) checkEqualInternal(a, b, __FILE__, __LINE__)
-#define checkEqualDelta(testName, a, b, delta) checkEqualInternal(a, b, delta, __FILE__, __LINE__)
-#define checkEqualBool(testName, a, b) checkEqualBoolInternal(a, b, __FILE__, __LINE__)
-#define check(testName, a) checkInternal(a, __FILE__, __LINE__)
-#define checkNULL(testName, a) checkNULLInternal(a, __FILE__, __LINE__)
-#define checkNotNULL(testName, a) checkNotNULLInternal(a, __FILE__, __LINE__)
+#define checkEqual(a, b) checkEqualInternal(a, b, __FILE__, __LINE__)
+#define checkEqualDelta(a, b, delta) checkEqualInternal(a, b, delta, __FILE__, __LINE__)
+#define checkEqualBool(a, b) checkEqualBoolInternal(a, b, __FILE__, __LINE__)
+#define check(a) checkInternal(a, __FILE__, __LINE__)
+#define checkNULL(a) checkNULLInternal(a, __FILE__, __LINE__)
+#define checkNotNULL(a) checkNotNULLInternal(a, __FILE__, __LINE__)
 
 class Tester
 {

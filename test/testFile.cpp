@@ -33,34 +33,34 @@ testFile::testFile() : Tester("File")
 void testFile::test()
 {
 	File file1("test/templateImages/8x8.tiff");
-  check("test 1", file1.valid());
+  check(file1.valid());
   File file2("test/templateImages/");
-  check("test 2", !file2.valid());
+  check(!file2.valid());
   
-	checkEqual("test 3", file1.path().fullName(), "test/templateImages/8x8.tiff");
-	check("test 4", file1.user() == User::current());
-	check("test 5", file1.userGroup() == UserGroup::current());
+	checkEqual(file1.path().fullName(), "test/templateImages/8x8.tiff");
+	check(file1.user() == User::current());
+	check(file1.userGroup() == UserGroup::current());
 
 	// Find some way to test access, modification and change times
 	// Test opening a non-existing file or directory
 	File notExist("test/templateImages/no");
-	check("test 6", !notExist.valid());
+	check(!notExist.valid());
 
 	File file("test/templateImages/8x8.tiff");
-	checkEqualBool("test 0", file.valid(), true);
-	checkEqual("test 1", file.path().fullName(), "test/templateImages/8x8.tiff");
-	checkEqual("test 2", file.size().getBytes(), 396.0);
-	checkEqual("test 3", file.size().getKBytes(), 0.39);
+	checkEqualBool(file.valid(), true);
+	checkEqual(file.path().fullName(), "test/templateImages/8x8.tiff");
+	checkEqual(file.size().getBytes(), 396.0);
+	checkEqual(file.size().getKBytes(), 0.39);
 	file.open();
 	unsigned char buf[2];
-	checkEqual("test 4", file.read(buf, 2), 2);
-	checkEqual("test 5", buf[0], 0x49);
-	checkEqual("test 6", buf[1], 0x49);
+	checkEqual(file.read(buf, 2), 2);
+	checkEqual(buf[0], 0x49);
+	checkEqual(buf[1], 0x49);
 	file.seek(10);
 	file.read(buf, 1);
-	checkEqual("test 7", buf[0], 0xff);
+	checkEqual(buf[0], 0xff);
 	file.seekForward(2);
 	file.read(buf, 1);
-	checkEqual("test 8", buf[0], 0xff);
+	checkEqual(buf[0], 0xff);
 	file.close();
 }
