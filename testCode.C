@@ -8,6 +8,41 @@
 #include "SpFsObject.h"
 #include "SpDir.h"
 
+int noErrors = 0;
+
+void checkEqual(string testName, string a, string b)
+{
+	if (a != b) {
+		cout << endl << "FAILED " << testName << ": Expected " << b
+			<< " but got " << a << endl;
+		noErrors++;
+	}
+	else
+		cout << ".";
+}
+
+void checkEqual(string testName, bool a, bool b)
+{
+	if (a != b) {
+		cout << endl << "FAILED " << testName << ": Expected " << b
+			<< " but got " << a << endl;
+		noErrors++;
+	}
+	else
+		cout << ".";
+}
+
+void checkEqual(string testName, int a, int b)
+{
+	if (a != b) {
+		cout << endl << "FAILED " << testName << ": Expected " << b
+			<< " but got " << a << endl;
+		noErrors++;
+	}
+	else
+		cout << ".";
+}
+
 void testSpSize()
 {
 	SpSize s;
@@ -179,48 +214,75 @@ void testSpFsObject()
 
 void testSpDir()
 {
-	cout << "Test Directory Class" << endl;
 	SpDir dir("test/templateImages/");
-	cout << "path = " << dir.path().fullName() << endl;
-	cout << "size = " << dir.size().kbytes() << " Kbytes" << endl;
-	cout << "last access = " << dir.lastAccess().timeAndDateString() << endl;
-	cout << "last modification = " << dir.lastModification().timeAndDateString() << endl;
-	cout << "last change = " << dir.lastChange().timeAndDateString() << endl;
-	cout << "owner = " << dir.uid().name() << endl;
-	cout << "group owner = " << dir.gid().name() << endl;
-	cout << "is a file? = " << dir.isFile() << endl;
-	cout << "is a directory? = " << dir.isDir() << endl;
+	checkEqual("SpDir test 1", dir.path().fullName(), "test/templateImages");
+	checkEqual("SpDir test 2", dir.size().kbytes(), 1);
+	checkEqual("SpDir test 4", dir.lastModification().timeAndDateString(),
+		"Fri Apr 13 10:24:01 2001");
+	checkEqual("SpDir test 5", dir.lastChange().timeAndDateString(),
+		"Fri Apr 13 10:24:01 2001");
+	// Check that this user owns the files
+	SpUid u;
+	u.setCurrent();
+	checkEqual("SpDir test 6", dir.uid().name(), u.name());
+	SpGid g;
+	g.setCurrent();
+	checkEqual("SpDir test 7", dir.gid().name(), g.name());
+	checkEqual("SpDir test 8", dir.isFile(), false);
+	checkEqual("SpDir test 9", dir.isDir(), true);
 	list<SpFsObject *> ls = dir.ls();
-	// Just print out the names
-	cout << "Contents of directory " << dir.path().fullName() << ":" << endl;
-	for (list<SpFsObject *>::iterator a = ls.begin(); a != ls.end(); ++a) {
-		cout << (*a)->path().fullName() << endl;
-	}
+	list<SpFsObject *>::iterator a = ls.begin();
+	checkEqual("SpDir ls test 1", (*a++)->path().fullName(),
+		"test/templateImages/8x8.jpg");
+	checkEqual("SpDir ls test 2", (*a++)->path().fullName(),
+		"test/templateImages/8x8.tiff");
+	checkEqual("SpDir ls test 3", (*a++)->path().fullName(),
+		"test/templateImages/8x8.sgi");
+	checkEqual("SpDir ls test 4", (*a++)->path().fullName(),
+		"test/templateImages/8x8.gif");
+	checkEqual("SpDir ls test 5", (*a++)->path().fullName(),
+		"test/templateImages/4x4.gif");
+	checkEqual("SpDir ls test 6", (*a++)->path().fullName(),
+		"test/templateImages/2x2.gif");
+	checkEqual("SpDir ls test 7", (*a++)->path().fullName(),
+		"test/templateImages/4x4.jpg");
+	checkEqual("SpDir ls test 8", (*a++)->path().fullName(),
+		"test/templateImages/2x2.jpg");
+	checkEqual("SpDir ls test 9", (*a++)->path().fullName(),
+		"test/templateImages/4x4.sgi");
+	checkEqual("SpDir ls test 10", (*a++)->path().fullName(),
+		"test/templateImages/2x2.sgi");
+	checkEqual("SpDir ls test 11", (*a++)->path().fullName(),
+		"test/templateImages/4x4.tiff");
+	checkEqual("SpDir ls test 12", (*a++)->path().fullName(),
+		"test/templateImages/2x2.tiff");
+	checkEqual("SpDir ls test 13", (*a++)->path().fullName(),
+		"test/templateImages/CVS");
+	
 }
 
 void testSpPath()
 {
-	cout << "*** Testing SpPath" << endl;
 	SpPath p("/home/blah/foo.tif");
-	cout << "/home/blah/foo.tif --> " << p.fullName() << endl;
-	cout << "root = " << p.root() << endl;
-	cout << "relative = " << p.relative() << endl;
+	checkEqual("SpPath test 1", p.fullName(), "/home/blah/foo.tif");
+	checkEqual("SpPath test 2", p.root(),     "/home/blah/");
+	checkEqual("SpPath test 3", p.relative(), "foo.tif");
 	SpPath p2("/home/blah/");
-	cout << "/home/blah/ --> " << p2.fullName() << endl;
-	cout << "root = " << p2.root() << endl;
-	cout << "relative = " << p2.relative() << endl;
+	checkEqual("SpPath test 4", p2.fullName(), "/home/blah");
+	checkEqual("SpPath test 5", p2.root(),     "/home/");
+	checkEqual("SpPath test 6", p2.relative(), "blah");
 	SpPath p3("blah");
-	cout << "blah --> " << p3.fullName() << endl;
-	cout << "root = " << p3.root() << endl;
-	cout << "relative = " << p3.relative() << endl;
+	checkEqual("SpPath test 7", p3.fullName(), "blah");
+	checkEqual("SpPath test 8", p3.root(),     "");
+	checkEqual("SpPath test 9", p3.relative(), "blah");
 	SpPath p4("/home/blah///");
-	cout << "/home/blah/// --> " << p4.fullName() << endl;
-	cout << "root = " << p4.root() << endl;
-	cout << "relative = " << p4.relative() << endl;
+	checkEqual("SpPath test 10", p4.fullName(), "/home/blah");
+	checkEqual("SpPath test 11", p4.root(),     "/home/");
+	checkEqual("SpPath test 12", p4.relative(), "blah");
 	SpPath p5("/blah");
-	cout << "/blah --> " << p5.fullName() << endl;
-	cout << "root = " << p5.root() << endl;
-	cout << "relative = " << p5.relative() << endl;	
+	checkEqual("SpPath test 13", p5.fullName(), "/blah");
+	checkEqual("SpPath test 14", p5.root(),     "/");
+	checkEqual("SpPath test 15", p5.relative(), "blah");
 }
 
 main()
@@ -239,10 +301,11 @@ main()
 	testSpImage();
 	space();
 	testSpFsObject();
-	space();
 	testSpDir();
-	space();
 	testSpPath();
+	
+	if (noErrors == 0)
+		cout << endl << "All tests passed" << endl;
 	
 	SpImage::deRegisterPlugins();
 }
