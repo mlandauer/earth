@@ -1,7 +1,7 @@
 #include "soapH.h"
 #include "calc.nsmap"
 
-const char server[] = "http://websrv.cs.fsu.edu/~engelen/calcserver.cgi";
+const char server[] = "http://localhost:8080";
 
 int main(int argc, char **argv)
 { struct soap soap;
