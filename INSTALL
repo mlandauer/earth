@@ -1,0 +1,2 @@
+Before this will compile under Linux you need to install FAM (file access
+monitor) which can be downloaded from ftp://oss.sgi.com/projects/fam/download/

@@ -6,20 +6,20 @@ INCLUDE =
 
 OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o SpLibLoader.o \
           SpUid.o SpGid.o SpImage.o SpImageFormat.o SpImageDim.o \
-          SpFsObject.o SpDir.o
+          SpFsObject.o SpDir.o SpDirMonitor.o SpDirMonitorFam.o
 
 all: testCode
 	cd imageFormats; make all
-	LD_LIBRARY_PATH=imageFormats ./testCode
+	LD_LIBRARY_PATH=/usr/local/lib:imageFormats ./testCode
 	
 clean:
 	cd imageFormats; make clean
 	rm -fr *.o *.so testCode
 
 testCode: testCode.o $(OBJECTS)
-	$(CC) $(OPTION) -rdynamic -o testCode testCode.o $(OBJECTS) -ldl
+	$(CC) $(OPTION) -rdynamic -o testCode testCode.o $(OBJECTS) -ldl -lfam
 
-testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h SpFsObject.h SpFsMonitor.h SpDir.h SpFile.h
+testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h SpFsObject.h SpDir.h SpFile.h
 	$(CC) $(OPTION) -c testCode.C $(INCLUDE)
 
 SpTester.o: SpTester.C SpTester.h
@@ -57,6 +57,12 @@ SpFsObject.o: SpFsObject.C SpFsObject.h SpTime.h SpPath.h SpUid.h SpGid.h
 
 SpDir.o: SpDir.C SpDir.h SpFsObject.h
 	$(CC) $(OPTION) -c SpDir.C $(INCLUDE)
+
+SpDirMonitor.o: SpDirMonitor.C SpDirMonitor.h
+	$(CC) $(OPTION) -c SpDirMonitor.C $(INCLUDE)
+
+SpDirMonitorFam.o: SpDirMonitorFam.C SpDirMonitorFam.h SpDirMonitor.h
+	$(CC) $(OPTION) -c SpDirMonitorFam.C $(INCLUDE)
 
 SpLibLoader.o: SpLibLoader.C SpLibLoader.h
 	$(CC) $(OPTION) -c SpLibLoader.C $(INCLUDE)

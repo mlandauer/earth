@@ -10,7 +10,7 @@
 #include "SpFsObject.h"
 #include "SpDir.h"
 #include "SpTester.h"
-#include "SpFsMonitor.h"
+#include "SpDirMonitor.h"
 
 class testSpSize : public SpTester
 {
@@ -177,6 +177,9 @@ public:
 		checkNotNULL("test 8", dynamic_cast<SpDir *>(file2));
 		delete file;
 		delete file2;
+		// Test opening a non-existing file or directory
+		SpFsObject *notExist = SpFsObject::construct("test/templateImages/no");
+		checkNULL("test 9", notExist);
 	}
 };
 
@@ -287,11 +290,13 @@ public:
 	}
 };
 
-class testSpFsMonitor : public SpTester
+class testSpDirMonitor : public SpTester
 {
 public:
-	testSpFsMonitor() : SpTester("SpFsMonitor") { test(); };
+	testSpDirMonitor() : SpTester("SpFsMonitor") { test(); };
 	void test() {
+		SpDirMonitorEvent e;
+		cout << "Note: the following tests will take about 20 seconds" << endl;
 		// First create a directory with some test files
 		system ("rm -fr test/FsMonitor");
 		system ("mkdir test/FsMonitor");
@@ -299,13 +304,58 @@ public:
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0002.gif");
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0003.gif");
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0004.gif");
-		SpDirMonitor m(SpDir("test/FsMonitor"));
-		m.update();
-		m.update();
-		SpTime::sleep(1);
+		SpDirMonitor *m = SpDirMonitor::construct(SpDir("test/FsMonitor"));
+		checkEqual("test 1a", m->pendingEvent(), true);
+		e = m->getNextEvent();
+		checkEqual("test 1b", e.getCode(), SpDirMonitorEvent::added);
+		checkEqual("test 1c", e.getPath().fullName(), "test/FsMonitor/test.0001.gif");
+		e = m->getNextEvent();
+		checkEqual("test 1d", e.getCode(), SpDirMonitorEvent::added);
+		checkEqual("test 1e", e.getPath().fullName(), "test/FsMonitor/test.0002.gif");
+		e = m->getNextEvent();
+		checkEqual("test 1f", e.getCode(), SpDirMonitorEvent::added);
+		checkEqual("test 1g", e.getPath().fullName(), "test/FsMonitor/test.0003.gif");
+		e = m->getNextEvent();
+		checkEqual("test 1h", e.getCode(), SpDirMonitorEvent::added);
+		checkEqual("test 1i", e.getPath().fullName(), "test/FsMonitor/test.0004.gif");
+		checkEqual("test 1j", m->pendingEvent(), false);
+		
+		system ("rm test/FsMonitor/test.0001.gif");
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0005.gif");
-		m.update();
+		system ("mkdir test/FsMonitor/subdirectory");
+		SpTime::sleep(6);
+		checkEqual("test 3a", m->pendingEvent(), true);
+		e = m->getNextEvent();
+		checkEqual("test 3b", e.getCode(), SpDirMonitorEvent::added);
+		checkEqual("test 3c", e.getPath().fullName(), "test/FsMonitor/test.0005.gif");
+		e = m->getNextEvent();
+		checkEqual("test 3d", e.getCode(), SpDirMonitorEvent::added);
+		checkEqual("test 3e", e.getPath().fullName(), "test/FsMonitor/subdirectory");
+		e = m->getNextEvent();
+		checkEqual("test 3f", e.getCode(), SpDirMonitorEvent::deleted);
+		checkEqual("test 3g", e.getPath().fullName(), "test/FsMonitor/test.0001.gif");
+		checkEqual("test 3h", m->pendingEvent(), false);
+
 		system ("rm -fr test/FsMonitor");
+		SpTime::sleep(6);
+		checkEqual("test 4a", m->pendingEvent(), true);
+		e = m->getNextEvent();
+		checkEqual("test 4b", e.getCode(), SpDirMonitorEvent::deleted);
+		checkEqual("test 4c", e.getPath().fullName(), "test/FsMonitor/test.0005.gif");
+		e = m->getNextEvent();
+		checkEqual("test 4d", e.getCode(), SpDirMonitorEvent::deleted);
+		checkEqual("test 4e", e.getPath().fullName(), "test/FsMonitor/test.0002.gif");
+		e = m->getNextEvent();
+		checkEqual("test 4f", e.getCode(), SpDirMonitorEvent::deleted);
+		checkEqual("test 4g", e.getPath().fullName(), "test/FsMonitor/test.0003.gif");
+		e = m->getNextEvent();
+		checkEqual("test 4h", e.getCode(), SpDirMonitorEvent::deleted);
+		checkEqual("test 4i", e.getPath().fullName(), "test/FsMonitor/test.0004.gif");
+		e = m->getNextEvent();
+		checkEqual("test 4j", e.getCode(), SpDirMonitorEvent::deleted);
+		checkEqual("test 4k", e.getPath().fullName(), "test/FsMonitor/subdirectory");
+		checkEqual("test 4l", m->pendingEvent(), false);
+		delete m;
 	}
 };
 
@@ -328,7 +378,7 @@ main()
 	testSpFsObject();
 	testSpDir();
 	testSpPath();
-	//testSpFsMonitor();
+	testSpDirMonitor();
 	
 	SpTester::finish();
 	SpImageFormat::deRegisterPlugins();
