@@ -34,7 +34,6 @@ namespace Sp {
 bool Tester::verbose = false;
 int Tester::noFails = 0;
 int Tester::noSuccesses = 0;
-float Tester::floatDelta = 0.1;
 
 Tester::Tester(std::string className) : name(className)
 {
@@ -91,14 +90,9 @@ bool Tester::checkEqualInternal(int a, int b, const std::string &filename, int l
 	return checkInternal(a == b, toString(b), toString(a), filename, lineNumber);
 }
 
-bool Tester::checkEqualInternal(float a, float b, float delta, const std::string &filename, int lineNumber)
+bool Tester::checkEqualFloatInternal(float a, float b, float delta, const std::string &filename, int lineNumber)
 {
 	return checkInternal(fabs(a-b) <= delta, toString(b), toString(a), filename, lineNumber);
-}
-
-bool Tester::checkEqualInternal(float a, float b, const std::string &filename, int lineNumber)
-{
-	return checkEqualInternal(a, b, floatDelta, filename, lineNumber);
 }
 
 void Tester::finish()

@@ -49,8 +49,8 @@ void testFile::test()
 	File file("test/templateImages/8x8.tiff");
 	check(file.valid());
 	checkEqual(file.path().fullName(), "test/templateImages/8x8.tiff");
-	checkEqual(file.size().getBytes(), 396.0);
-	checkEqual(file.size().getKBytes(), 0.39);
+	checkEqualFloat(file.size().getBytes(), 396.0, 0.1);
+	checkEqualFloat(file.size().getKBytes(), 0.39, 0.1);
 	file.open();
 	unsigned char buf[2];
 	checkEqual(file.read(buf, 2), 2);

@@ -48,7 +48,6 @@ int main(int argc, char **argv)
 	ImageFormat::registerPlugins();
 	// Configure the tester
 	Tester::setVerbose(false);
-	Tester::setFloatDelta(0.1);
 	
 	testDir();
 	testSize();

@@ -30,7 +30,7 @@
 namespace Sp {
 
 #define checkEqual(a, b) checkEqualInternal(a, b, __FILE__, __LINE__)
-#define checkEqualDelta(a, b, delta) checkEqualInternal(a, b, delta, __FILE__, __LINE__)
+#define checkEqualFloat(a, b, delta) checkEqualFloatInternal(a, b, delta, __FILE__, __LINE__)
 #define check(a) checkInternal(a, __FILE__, __LINE__)
 
 class Tester
@@ -40,19 +40,15 @@ class Tester
     virtual ~Tester();
 		static void finish();
 		static void setVerbose(bool v) { verbose = v; };
-		static void setFloatDelta(float d) { floatDelta = d; };
-		static float getFloatDelta() { return floatDelta; };
 		virtual void test() = 0;
 	protected:
 		bool checkEqualInternal(std::string a, std::string b, const std::string &filename, int lineNumber);
 		bool checkEqualInternal(int a, int b, const std::string &filename, int lineNumber);
-		bool checkEqualInternal(float a, float b, const std::string &filename, int lineNumber);
-		bool checkEqualInternal(float a, float b, float delta, const std::string &filename, int lineNumber);
+		bool checkEqualFloatInternal(float a, float b, float delta, const std::string &filename, int lineNumber);
 		bool checkInternal(bool a, const std::string &filename, int lineNumber);
 	private:
 		static bool verbose;
 		static int noFails, noSuccesses;
-		static float floatDelta;
 		std::string name;
 		std::string toString(int a);
 		std::string toStringBool(bool a);

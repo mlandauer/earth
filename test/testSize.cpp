@@ -32,21 +32,21 @@ testSize::testSize() : Tester("Size")
 
 void testSize::test() {
 	Size s = Size::Bytes(4097);
-	checkEqual(s.getBytes(), 4097.0);
-	checkEqual(s.getKBytes(), 4.0);
-	checkEqual(s.getMBytes(), 0.0);
-	checkEqual(s.getGBytes(), 0.0);
+	checkEqualFloat(s.getBytes(), 4097.0, 0.1);
+	checkEqualFloat(s.getKBytes(), 4.0, 0.1);
+	checkEqualFloat(s.getMBytes(), 0.0, 0.1);
+	checkEqualFloat(s.getGBytes(), 0.0, 0.1);
 
 	s = Size::GBytes(10);
-	checkEqual(s.getGBytes(), 10.0);
-	checkEqual(s.getMBytes(), 10240.0);
-	checkEqual(s.getKBytes(), 10485760.0);
-	checkEqualDelta(s.getBytes(), 1.073741e10, 10e5);
+	checkEqualFloat(s.getGBytes(), 10.0, 0.1);
+	checkEqualFloat(s.getMBytes(), 10240.0, 0.1);
+	checkEqualFloat(s.getKBytes(), 10485760.0, 0.1);
+	checkEqualFloat(s.getBytes(), 1.073741e10, 10e5);
 	
 	s = Size::Bytes(0);
-	checkEqual(s.getBytes(), 0.0);
-	checkEqual(s.getKBytes(), 0.0);
-	checkEqual(s.getMBytes(), 0.0);
-	checkEqual(s.getGBytes(), 0.0);
+	checkEqualFloat(s.getBytes(), 0.0, 0.1);
+	checkEqualFloat(s.getKBytes(), 0.0, 0.1);
+	checkEqualFloat(s.getMBytes(), 0.0, 0.1);
+	checkEqualFloat(s.getGBytes(), 0.0, 0.1);
 }
 
