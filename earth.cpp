@@ -48,11 +48,13 @@ void index(std::string directoryName)
 {
 	IndexDirectory i;
 	std::vector<ImageSeq> s = i.getImageSequences(directoryName);
-	std::cout << "path\twidth x height\tformat\tframes" << std::endl;
+	std::cout << "<image format>\t<image size>\t<path>\t<frames>" << std::endl;
 	std::cout << std::endl;
 	for (std::vector<ImageSeq>::iterator i = s.begin(); i != s.end(); ++i) {
-		std::cout << i->path().fullName() << "\t" << i->dim().width() << "x" << i->dim().height() << "\t"
-			<< i->format()->formatString() << "\t" << i->framesString() << std::endl;
+		std::cout << i->format()->formatString() << "\t"
+			<< i->dim().width() << "x" << i->dim().height() << "\t"
+			<< i->path().fullName() << "\t"
+			<< i->framesString() << std::endl;
 	}
 }
 
