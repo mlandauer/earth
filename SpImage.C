@@ -54,11 +54,8 @@ SpImage* SpImage::construct(const string &path)
 		image = new SpFITImage;
 
 	else if ((buf[0] == 'G') && (buf[1] == 'I') &&
-		(buf[2] == 'F') && (buf[3] == '8')) {
-		cout << "About to create GIF image object" << endl;
+		(buf[2] == 'F') && (buf[3] == '8'))
 		image = new SpGIFImage;
-		cout << "Created GIF image object" << endl;
-	}
 
 	else if ((buf[0] == 0x2f) && (buf[1] == 0x08) &&
 		(buf[2] == 0x67) && (buf[3] == 0xab))

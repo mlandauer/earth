@@ -5,7 +5,6 @@
 
 SpTIFFImage::SpTIFFImage()
 {
-	cout << "SpTIFFImage constructor" << endl;
 	// Assume the worst case to start with
 	headerRead = false;
 	validHeader = false;
@@ -13,7 +12,6 @@ SpTIFFImage::SpTIFFImage()
 
 SpTIFFImage::~SpTIFFImage()
 {
-	cout << "SpSGIImage destructor" << endl;
 }
 
 SpImageDim SpTIFFImage::dim()

@@ -4,12 +4,10 @@
 
 SpGIFImage::SpGIFImage()
 {
-	cout << "SpGIFImage constructor" << endl;
 }
 
 SpGIFImage::~SpGIFImage()
 {
-	cout << "SpGIFImage destructor" << endl;
 }
 
 SpImageDim SpGIFImage::dim()

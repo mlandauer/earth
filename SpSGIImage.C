@@ -4,12 +4,10 @@
 
 SpSGIImage::SpSGIImage()
 {
-	cout << "SpSGIImage constructor" << endl;
 }
 
 SpSGIImage::~SpSGIImage()
 {
-	cout << "SpSGIImage destructor" << endl;
 }
 
 SpImageDim SpSGIImage::dim()
