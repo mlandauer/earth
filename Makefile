@@ -5,7 +5,7 @@ OPTION = -g
 INCLUDE = 
 
 OBJECTS = SpSize.o SpFile.o SpPathString.o SpTime.o \
-          SpUid.o SpGid.o SpImage.o SpImageDim.o \
+          SpUid.o SpGid.o SpImage.o SpImageDim.o SpFsObject.o \
 		  SpSGIImage.o SpTIFFImage.o SpFITImage.o SpPRMANZImage.o \
 		  SpGIFImage.o
 
@@ -18,7 +18,7 @@ clean:
 testCode: testCode.o $(OBJECTS)
 	$(CC) $(OPTION) -o testCode testCode.o $(OBJECTS) -lqt
 
-testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h
+testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h SpFsObject.h
 	$(CC) $(OPTION) -c testCode.C $(INCLUDE)
 
 SpSize.o: SpSize.C SpSize.h
@@ -59,4 +59,7 @@ SpGIFImage.o: SpGIFImage.C SpGIFImage.h SpImage.h
 
 SpImageDim.o: SpImageDim.C SpImageDim.h
 	$(CC) $(OPTION) -c SpImageDim.C $(INCLUDE)
+
+SpFsObject.o: SpFsObject.C SpFsObject.h SpTime.h SpPathString.h SpUid.h SpGid.h
+	$(CC) $(OPTION) -c SpFsObject.C $(INCLUDE)
 

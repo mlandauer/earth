@@ -5,6 +5,7 @@
 
 #include "SpFile.h"
 #include "SpImage.h"
+#include "SpFsObject.h"
 
 void testSpSize()
 {
@@ -122,6 +123,29 @@ void testSpUid()
 	cout << "current group = " << g.name() << endl;
 }
 
+void testSpFsObject()
+{
+	cout << "Test Filesystem Object" << endl;
+	SpFsObject file("/home/matthew/images/blah1.tiff");
+	cout << "path = " << file.path().fullName() << endl;
+	cout << "last access = " << file.lastAccess().timeAndDateString() << endl;
+	cout << "last modification = " << file.lastModification().timeAndDateString() << endl;
+	cout << "last change = " << file.lastChange().timeAndDateString() << endl;
+	cout << "owner = " << file.uid().name() << endl;
+	cout << "group owner = " << file.gid().name() << endl;
+	SpFsObject file2("/home/matthew/images/");
+	cout << "path = " << file2.path().fullName() << endl;
+	cout << "last access = " << file2.lastAccess().timeAndDateString() << endl;
+	cout << "last modification = " << file2.lastModification().timeAndDateString() << endl;
+	cout << "last change = " << file2.lastChange().timeAndDateString() << endl;
+	cout << "owner = " << file2.uid().name() << endl;
+	cout << "group owner = " << file2.gid().name() << endl;
+}
+
+
+
+
+
 main()
 {
 	testSpSize();
@@ -133,5 +157,7 @@ main()
 	testSpFile();
 	space();
 	testSpImage();
+	space();
+	testSpFsObject();
 }
 

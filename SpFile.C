@@ -22,77 +22,22 @@ SpFile::~SpFile()
 {
 }
 
-void SpFile::setPath(const string &path)
-{
-	pathString.set(path);
-}
-
-SpPathString SpFile::path() const
-{
-	return pathString;
-}
-
 SpSize SpFile::size() const
 {
 	struct stat fileStat;
 	SpSize s;
-	lstat(pathString.fullName().c_str(), &fileStat);
+	lstat(path().fullName().c_str(), &fileStat);
 	s.setBytes(fileStat.st_size);
 	return (s);
-}
-
-SpTime SpFile::lastModification() const
-{
-	struct stat fileStat;
-	SpTime t;
-	lstat(pathString.fullName().c_str(), &fileStat);
-	t.setUnixTime(fileStat.st_mtime);
-	return (t);
-}
-
-SpTime SpFile::lastAccess() const
-{
-	struct stat fileStat;
-	SpTime t;
-	lstat(pathString.fullName().c_str(), &fileStat);
-	t.setUnixTime(fileStat.st_atime);
-	return (t);
-}
-
-SpTime SpFile::lastChange() const
-{
-	struct stat fileStat;
-	SpTime t;
-	lstat(pathString.fullName().c_str(), &fileStat);
-	t.setUnixTime(fileStat.st_ctime);
-	return (t);
-}
-
-SpUid SpFile::uid() const
-{
-	struct stat fileStat;
-	SpUid u;
-	lstat(pathString.fullName().c_str(), &fileStat);
-	u.setUnixUid(fileStat.st_uid);
-	return (u);
-}
-
-SpGid SpFile::gid() const
-{
-	struct stat fileStat;
-	SpGid g;
-	lstat(pathString.fullName().c_str(), &fileStat);
-	g.setUnixGid(fileStat.st_gid);
-	return (g);
 }
 
 // Opens for read only at the moment
 void SpFile::open()
 {
-	fd = std::open(pathString.fullName().c_str(), O_RDONLY);
+	fd = std::open(path().fullName().c_str(), O_RDONLY);
 	// TEMPORARY HACK
 	if (fd == -1)
-		cerr << "Error opening file " << pathString.fullName().c_str() << endl;
+		cerr << "Error opening file " << path().fullName().c_str() << endl;
 }
 
 void SpFile::close()
