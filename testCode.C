@@ -5,6 +5,7 @@
 
 #include "SpMisc.h"
 #include "SpFile.h"
+#include "SpTime.h"
 
 void testSpSize()
 {
@@ -31,9 +32,24 @@ void testSpFile()
 	cout << "size = " << file.size().kbytes() << " Kbytes" << endl;
 }
 
+void testSpTime()
+{
+	SpTime t;
+	t.setCurrentTime();
+	cout << "Current time and date = " << t.string() << endl;
+}
+
+void space()
+{
+	cout << "=========================" << endl;
+}
+
 main()
 {
 	testSpSize();
+	space();
 	testSpFile();
+	space();
+	testSpTime();
 }
 

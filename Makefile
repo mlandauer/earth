@@ -4,11 +4,13 @@ CC = g++
 OPTION = -g
 INCLUDE = -I/usr/lib/qt/include
 
+OBJECTS = SpMisc.o SpFile.o SpPathString.o SpTime.o
+
 all: testCode
 	./testCode
 
-testCode: testCode.o SpMisc.o SpFile.o SpPathString.o
-	$(CC) $(OPTION) -o testCode testCode.o SpMisc.o SpFile.o SpPathString.o -lqt
+testCode: testCode.o $(OBJECTS) SpMisc.h SpFile.h
+	$(CC) $(OPTION) -o testCode testCode.o $(OBJECTS) -lqt
 
 testCode.o: testCode.C SpMisc.h SpFile.h
 	$(CC) $(OPTION) -c testCode.C $(INCLUDE)
@@ -21,4 +23,7 @@ SpFile.o: SpFile.C SpFile.h SpPathString.h
 
 SpPathString.o: SpPathString.C SpPathString.h SpMisc.h
 	$(CC) $(OPTION) -c SpPathString.C $(INCLUDE)
+
+SpTime.o: SpTime.C SpTime.h SpMisc.h
+	$(CC) $(OPTION) -c SpTime.C $(INCLUDE)
 
