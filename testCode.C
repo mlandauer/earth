@@ -200,88 +200,34 @@ public:
 		if (checkEqual("ls test 0", ls.size(), 13)) {
 			SpImage *i;
 			vector<SpFsObject *>::iterator a = ls.begin();
-			checkEqual("ls test 1a",  (*a)->path().fullName(),
-				"test/templateImages/2x2.gif");
-			i = dynamic_cast<SpImage *>(*a);
-			if (SpTester::checkNotNULL("ls test 1b", i))
-				checkEqual("ls test 1c",  i->formatString(), "GIF");
-			a++;
-			
-			checkEqual("ls test 2a",  (*a)->path().fullName(),
-				"test/templateImages/2x2.jpg");
-			checkNULL("ls test 2c",  dynamic_cast<SpImage *>(*a));
-			a++;
-	
-			checkEqual("ls test 3a",  (*a)->path().fullName(),
-				"test/templateImages/2x2.sgi");
-			i = dynamic_cast<SpImage *>(*a);
-			if (SpTester::checkNotNULL("ls test 3b", i))
-				checkEqual("ls test 3c",  i->formatString(), "SGI");
-			a++;
-			
-			checkEqual("ls test 4a",  (*a)->path().fullName(),
-				"test/templateImages/2x2.tiff");
-			i = dynamic_cast<SpImage *>(*a);
-			if (SpTester::checkNotNULL("ls test 4b", i))
-				checkEqual("ls test 4c",  i->formatString(), "TIFF");
-			a++;
-			
-			checkEqual("ls test 5a",  (*a)->path().fullName(),
-				"test/templateImages/4x4.gif");
-			i = dynamic_cast<SpImage *>(*a);
-			if (SpTester::checkNotNULL("ls test 5b", i))
-				checkEqual("ls test 5c",  i->formatString(), "GIF");
-			a++;
-			
-			checkEqual("ls test 6a",  (*a)->path().fullName(),
-				"test/templateImages/4x4.jpg");
-			checkNULL("ls test 6c",  dynamic_cast<SpImage *>(*a));
-			a++;
-			
-			checkEqual("ls test 7a",  (*a)->path().fullName(),
-				"test/templateImages/4x4.sgi");
-			i = dynamic_cast<SpImage *>(*a);
-			if (SpTester::checkNotNULL("ls test 7b", i))
-				checkEqual("ls test 7c",  i->formatString(), "SGI");
-			a++;
-			
-			checkEqual("ls test 8a",  (*a)->path().fullName(),
-				"test/templateImages/4x4.tiff");
-			i = dynamic_cast<SpImage *>(*a);
-			if (SpTester::checkNotNULL("ls test 8b", i))
-				checkEqual("ls test 8c",  i->formatString(), "TIFF");
-			a++;
-			
-			checkEqual("ls test 9a",  (*a)->path().fullName(),
-				"test/templateImages/8x8.gif");
-			i = dynamic_cast<SpImage *>(*a);
-			if (SpTester::checkNotNULL("ls test 9b", i))
-				checkEqual("ls test 9c",  i->formatString(), "GIF");
-			a++;
-			
-			checkEqual("ls test 10a",  (*a)->path().fullName(),
-				"test/templateImages/8x8.jpg");
-			checkNULL("ls test 10c",  dynamic_cast<SpImage *>(*a));
-			a++;
-			
-			checkEqual("ls test 11a", (*a)->path().fullName(),
-				"test/templateImages/8x8.sgi");
-			i = dynamic_cast<SpImage *>(*a);
-			if (SpTester::checkNotNULL("ls test 11b", i))
-				checkEqual("ls test 11c", i->formatString(), "SGI");
-			a++;
-			
-			checkEqual("ls test 12a", (*a)->path().fullName(),
-				"test/templateImages/8x8.tiff");
-			i = dynamic_cast<SpImage *>(*a);
-			if (SpTester::checkNotNULL("ls test 12b", i))
-				checkEqual("ls test 12c", i->formatString(), "TIFF");
-			a++;
-			
-			checkEqual("ls test 13a", (*a)->path().fullName(),
-				"test/templateImages/CVS");
-			checkNotNULL("ls test 13b", dynamic_cast<SpDir *>(*a));
+			checkImage("ls test 1", *(a++), "test/templateImages/2x2.gif", "GIF");
+			checkNotImage("ls test 2", *(a++), "test/templateImages/2x2.jpg");
+			checkImage("ls test 3", *(a++), "test/templateImages/2x2.sgi", "SGI");
+			checkImage("ls test 4", *(a++), "test/templateImages/2x2.tiff", "TIFF");
+			checkImage("ls test 5", *(a++), "test/templateImages/4x4.gif", "GIF");		
+			checkNotImage("ls test 6", *(a++), "test/templateImages/4x4.jpg");						
+			checkImage("ls test 7", *(a++), "test/templateImages/4x4.sgi", "SGI");		
+			checkImage("ls test 8", *(a++), "test/templateImages/4x4.tiff", "TIFF");		
+			checkImage("ls test 9", *(a++), "test/templateImages/8x8.gif", "GIF");		
+			checkNotImage("ls test 10", *(a++), "test/templateImages/8x8.jpg");		
+			checkImage("ls test 11", *(a++), "test/templateImages/8x8.sgi", "SGI");		
+			checkImage("ls test 12", *(a++), "test/templateImages/8x8.tiff", "TIFF");		
+			checkDir("ls test 13", *(a++), "test/templateImages/CVS");		
 		}
+	}
+	void checkImage(string n, SpFsObject *o, string fileName, string formatString) {
+		checkEqual(n + "a",  o->path().fullName(), fileName);
+		SpImage *i = dynamic_cast<SpImage *>(o);
+		if (SpTester::checkNotNULL(n + "b", i))
+			checkEqual(n + "c",  i->formatString(), formatString);		
+	}
+	void checkNotImage(string n, SpFsObject *o, string fileName) {
+		checkEqual(n + "a",  o->path().fullName(), fileName);
+		checkNULL(n + "b",  dynamic_cast<SpImage *>(o));
+	}
+	void checkDir(string n, SpFsObject *o, string fileName) {
+		checkEqual(n + "a",  o->path().fullName(), fileName);
+		checkNotNULL(n + "b",  dynamic_cast<SpDir *>(o));
 	}
 };
 
