@@ -8,10 +8,12 @@
 class SpPath
 {
 	public:
-		SpPath();
+		SpPath(const string &a = "");
 		~SpPath();
 		void set(const string &a);
 		string fullName() const;
+		string root() const;
+		string relative() const;
 	private:
 		string pathString;
 };

@@ -198,6 +198,31 @@ void testSpDir()
 	}
 }
 
+void testSpPath()
+{
+	cout << "*** Testing SpPath" << endl;
+	SpPath p("/home/blah/foo.tif");
+	cout << "/home/blah/foo.tif --> " << p.fullName() << endl;
+	cout << "root = " << p.root() << endl;
+	cout << "relative = " << p.relative() << endl;
+	SpPath p2("/home/blah/");
+	cout << "/home/blah/ --> " << p2.fullName() << endl;
+	cout << "root = " << p2.root() << endl;
+	cout << "relative = " << p2.relative() << endl;
+	SpPath p3("blah");
+	cout << "blah --> " << p3.fullName() << endl;
+	cout << "root = " << p3.root() << endl;
+	cout << "relative = " << p3.relative() << endl;
+	SpPath p4("/home/blah///");
+	cout << "/home/blah/// --> " << p4.fullName() << endl;
+	cout << "root = " << p4.root() << endl;
+	cout << "relative = " << p4.relative() << endl;
+	SpPath p5("/blah");
+	cout << "/blah --> " << p5.fullName() << endl;
+	cout << "root = " << p5.root() << endl;
+	cout << "relative = " << p5.relative() << endl;	
+}
+
 main()
 {
 	// Register the plugins
@@ -216,6 +241,8 @@ main()
 	testSpFsObject();
 	space();
 	testSpDir();
+	space();
+	testSpPath();
 	
 	SpImage::deRegisterPlugins();
 }
