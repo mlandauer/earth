@@ -70,6 +70,7 @@ std::vector<SpFsObjectHandle> SpDir::ls() const
 			l.push_back(SpFsObject::construct(p));
 		}
 	}
+	closedir(d);
 	if (sortByPath)
 		sort(l.begin(), l.end(), SpCompareFsObjectPaths());
 	return (l);
