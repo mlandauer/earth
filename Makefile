@@ -8,13 +8,13 @@ LIBS = -ldl `xml++-config --libs` -lfam
 SRCS = Dir.cpp FsObject.cpp ImageFormat.cpp Size.cpp UserGroup.cpp \
 			 ImageSeq.cpp Image.cpp LibLoader.cpp DateTime.cpp \
 			 File.cpp ImageDim.cpp Path.cpp User.cpp Frames.cpp \
-			 IndexDirectory.cpp FileMon.cpp FileEventLogger.cpp \
+			 IndexDirectory.cpp ImageMon.cpp ImageEventLogger.cpp \
 			 earth.cpp
 
 OBJECTS = Dir.o FsObject.o ImageFormat.o Size.o UserGroup.o \
 					ImageSeq.o Image.o LibLoader.o DateTime.o \
 					File.o ImageDim.o Path.o User.o Frames.o \
-					IndexDirectory.o FileMon.o FileEventLogger.o \
+					IndexDirectory.o ImageMon.o ImageEventLogger.o \
 					earth.o
 					
 EARTH_OBJECTS = Dir.o FsObject.o ImageFormat.o Size.o UserGroup.o \

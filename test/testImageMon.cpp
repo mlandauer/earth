@@ -26,17 +26,17 @@
 #include <cppunit/SourceLine.h>
 #include <cppunit/TestAssert.h>
 #include <algorithm>
-#include "FileMon.h"
+#include "ImageMon.h"
 #include "Path.h"
-#include "FileEventObserver.h"
-#include "FileEventLogger.h"
+#include "ImageEventObserver.h"
+#include "ImageEventLogger.h"
 
 using namespace Sp;
 
-class testFileMon : public CppUnit::TestFixture
+class testImageMon : public CppUnit::TestFixture
 {
 public:
-	CPPUNIT_TEST_SUITE(testFileMon);
+	CPPUNIT_TEST_SUITE(testImageMon);
 	CPPUNIT_TEST(test);
 	CPPUNIT_TEST_SUITE_END();
 	
@@ -45,15 +45,15 @@ public:
 private:
 	void addExpectedAdded(std::string name);
 	void addExpectedDeleted(std::string name);
-	void checkNextEvents(FileEventLogger &logger, CppUnit::SourceLine sourceLine);
+	void checkNextEvents(ImageEventLogger &logger, CppUnit::SourceLine sourceLine);
 	std::list<File> expectedEventsAdded, expectedEventsDeleted;
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(testFileMon);
+CPPUNIT_TEST_SUITE_REGISTRATION(testImageMon);
 
 #define CPPUNIT_CHECK_NEXT_EVENTS( logger ) checkNextEvents( logger,  CPPUNIT_SOURCELINE() )
 
-void testFileMon::checkNextEvents(FileEventLogger &logger, CppUnit::SourceLine sourceLine)
+void testImageMon::checkNextEvents(ImageEventLogger &logger, CppUnit::SourceLine sourceLine)
 {
 	std::list<File> actualEventsAdded = logger.getPendingEventsAdded();
 	std::list<File> actualEventsDeleted = logger.getPendingEventsDeleted();
@@ -84,17 +84,17 @@ void testFileMon::checkNextEvents(FileEventLogger &logger, CppUnit::SourceLine s
 	expectedEventsDeleted.clear();
 }
 
-void testFileMon::addExpectedAdded(std::string name)
+void testImageMon::addExpectedAdded(std::string name)
 {
 	expectedEventsAdded.push_back(File(name));
 }
 
-void testFileMon::addExpectedDeleted(std::string name)
+void testImageMon::addExpectedDeleted(std::string name)
 {
 	expectedEventsDeleted.push_back(File(name));
 }
 
-void testFileMon::test()
+void testImageMon::test()
 {
 	std::cout << "Note: the following tests will take about 10 seconds" << std::endl;
 	// First create a directory with some test files
@@ -106,8 +106,8 @@ void testFileMon::test()
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0004.gif");
 
 	// Test initial startup
-	FileMon m;
-	FileEventLogger logger;
+	ImageMon m;
+	ImageEventLogger logger;
 	m.registerObserver(&logger);
 	m.startMonitorDirectory(Dir("test/FsMonitor"));
 	

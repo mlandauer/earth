@@ -23,15 +23,15 @@
 // $Id$
 
 #include <algorithm>
-#include "FileMon.h"
+#include "ImageMon.h"
 
 namespace Sp {
 	
-FileMon::FileMon() : observer(NULL)
+ImageMon::ImageMon() : observer(NULL)
 {
 }
 
-void FileMon::startMonitorDirectory(const Dir &d)
+void ImageMon::startMonitorDirectory(const Dir &d)
 {
 	CachedDir c(d);
 	dirs.push_back(c);
@@ -45,7 +45,7 @@ void FileMon::startMonitorDirectory(const Dir &d)
 		startMonitorDirectory(*i);
 }
 
-void FileMon::stopMonitorDirectory(const Dir &d)
+void ImageMon::stopMonitorDirectory(const Dir &d)
 {
 	// Find the directory
 	for (std::list<CachedDir>::iterator i = dirs.begin(); i != dirs.end(); ++i) {
@@ -64,12 +64,12 @@ void FileMon::stopMonitorDirectory(const Dir &d)
 	}
 }
 
-void FileMon::registerObserver(FileEventObserver *o)
+void ImageMon::registerObserver(ImageEventObserver *o)
 {
 	observer = o;
 }
 
-void FileMon::update()
+void ImageMon::update()
 {
 	// Go through the cached directories and check if any of them have been updated
 	for (std::list<CachedDir>::iterator i = dirs.begin(); i != dirs.end(); ++i ) {
@@ -119,12 +119,12 @@ void FileMon::update()
 	}
 }
 
-void FileMon::notifyDeleted(const File &o)
+void ImageMon::notifyDeleted(const File &o)
 {
 	assert(observer != NULL);
 	observer->fileDeleted(o);
 }	
-void FileMon::notifyAdded(const File &o)
+void ImageMon::notifyAdded(const File &o)
 {
 	assert(observer != NULL);
 	observer->fileAdded(o);

@@ -22,28 +22,28 @@
 //
 // $Id$
 
-#include "FileEventLogger.h"
+#include "ImageEventLogger.h"
 
 namespace Sp {
 	
-void FileEventLogger::fileAdded(const File &file)
+void ImageEventLogger::fileAdded(const File &file)
 {
 	eventsAdded.push_back(file);
 }
 
-void FileEventLogger::fileDeleted(const File &file)
+void ImageEventLogger::fileDeleted(const File &file)
 {
 	eventsDeleted.push_back(file);
 }
 
-std::list<File> FileEventLogger::getPendingEventsAdded()
+std::list<File> ImageEventLogger::getPendingEventsAdded()
 {
 	std::list<File> ret(eventsAdded);
 	eventsAdded.clear();
 	return ret;
 }
 
-std::list<File> FileEventLogger::getPendingEventsDeleted()
+std::list<File> ImageEventLogger::getPendingEventsDeleted()
 {
 	std::list<File> ret(eventsDeleted);
 	eventsDeleted.clear();

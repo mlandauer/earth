@@ -22,13 +22,13 @@
 //
 // $Id$
 
-#ifndef _FileMon_h_
-#define _FileMon_h_
+#ifndef _ImageMon_h_
+#define _ImageMon_h_
 
 #include <queue>
 #include "Dir.h"
 #include "File.h"
-#include "FileEventObserver.h"
+#include "ImageEventObserver.h"
 
 namespace Sp {
 	
@@ -64,14 +64,14 @@ private:
 	\todo Refactor: extract superclass when we add more monitoring types
 	\todo add change (different from deleted or added) notification when it is appropriate
 */
-class FileMon
+class ImageMon
 {
 	public:
-		FileMon();
+		ImageMon();
 		void startMonitorDirectory(const Dir &d);
 		void stopMonitorDirectory(const Dir &d);
 		
-		void registerObserver(FileEventObserver *o);
+		void registerObserver(ImageEventObserver *o);
 		
 		void update();
 		
@@ -79,7 +79,7 @@ class FileMon
 		void notifyDeleted(const File &o);
 		void notifyAdded(const File &o);
 		std::list<CachedDir> dirs;
-		FileEventObserver *observer;
+		ImageEventObserver *observer;
 };
 
 }

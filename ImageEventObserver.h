@@ -22,25 +22,18 @@
 //
 // $Id$
 
-#ifndef _FILEEVENTLOGGER_H_
-#define _FILEEVENTLOGGER_H_
+#ifndef _IMAGEEVENTOBSERVER_H_
+#define _IMAGEEVENTOBSERVER_H_
 
-#include <list>
-#include "FileEventObserver.h"
 #include "File.h"
 
 namespace Sp {
 	
-class FileEventLogger : public FileEventObserver
+class ImageEventObserver
 {
 public:
-	std::list<File> getPendingEventsAdded();
-	std::list<File> getPendingEventsDeleted();
-	virtual void fileAdded(const File &file);
-	virtual void fileDeleted(const File &file);
-
-private:
-	std::list<File> eventsAdded, eventsDeleted;
+	virtual void fileAdded(const File &file) = 0;
+	virtual void fileDeleted(const File &file) = 0;
 };
 
 }
