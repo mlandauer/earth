@@ -86,7 +86,7 @@ std::string ImageSeq::framesString() const
 		int start = *a;
 		int current = *a;
 		a++;
-		while ((*a == current + 1) && (a != f.end())) {
+		while ((a != f.end()) && (*a == current + 1)) {
 			current = *a;
 			a++;
 		}

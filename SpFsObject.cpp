@@ -24,6 +24,7 @@
 
 #include <sys/stat.h>
 #include <unistd.h>
+#include <iostream>
 
 #include "SpFsObject.h"
 #include "SpDir.h"

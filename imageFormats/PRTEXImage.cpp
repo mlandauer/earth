@@ -22,29 +22,36 @@
 //
 // $Id$
 
-#include "SpSGIImage.h"
+#include <math.h>
 
-ImageDim SGIImage::dim()
+#include "PRTEXImage.h"
+
+ImageDim PRTEXImage::dim()
 {
 	open();
-	seek(6);
-	unsigned int width = readShort(1);
-	unsigned int height = readShort(1);
+	seek(13);
+	unsigned int width = (unsigned int) pow(2, readChar());
+	seekForward(1);
+	unsigned int height = (unsigned int) pow(2, readChar());
 	close();
 	return (ImageDim(width, height));
 }
 
-bool SGIImageFormat::recognise(unsigned char *buf)
+bool PRTEXImageFormat::recognise(unsigned char *buf)
 {
-	if ((buf[0] == 0x01) && (buf[1] == 0xda))
+	if ((buf[0] == 0xce) && (buf[1] == 0xfa) &&
+		(buf[2] == 0x03) && (buf[3] == 0x00))
+		return (true);		
+	else if ((buf[0] == 0xfa) && (buf[1] == 0xce) &&
+		(buf[2] == 0x00) && (buf[3] == 0x03))
 		return (true);
 	else
 		return (false);
 }
 
-Image* SGIImageFormat::constructImage()
+Image* PRTEXImageFormat::constructImage()
 {
-	return (new SGIImage);
+	return (new PRTEXImage);
 }
 
-static SGIImageFormat thisSGIImageFormat;
+PRTEXImageFormat thisPRTEXImageFormat;

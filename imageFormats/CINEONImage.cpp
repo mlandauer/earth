@@ -22,36 +22,39 @@
 //
 // $Id$
 
-#include <math.h>
+#include "CINEONImage.h"
 
-#include "SpPRTEXImage.h"
-
-ImageDim PRTEXImage::dim()
+ImageDim CINEONImage::dim()
 {
 	open();
-	seek(13);
-	unsigned int width = (unsigned int) pow(2, readChar());
-	seekForward(1);
-	unsigned int height = (unsigned int) pow(2, readChar());
+	seek(192);
+	unsigned char orientation = readChar();
+	seek(200);
+	unsigned long width = readLong(1);
+	unsigned long height = readLong(1);
+	if (orientation > 3) {
+		// Swap width and height
+		unsigned long temp = width;
+		width = height;
+		height = temp;
+	}
 	close();
 	return (ImageDim(width, height));
 }
 
-bool PRTEXImageFormat::recognise(unsigned char *buf)
+bool CINEONImageFormat::recognise(unsigned char *buf)
 {
-	if ((buf[0] == 0xce) && (buf[1] == 0xfa) &&
-		(buf[2] == 0x03) && (buf[3] == 0x00))
-		return (true);		
-	else if ((buf[0] == 0xfa) && (buf[1] == 0xce) &&
-		(buf[2] == 0x00) && (buf[3] == 0x03))
+	if ((buf[0] == 0x80) && (buf[1] == 0x2a) &&
+		(buf[2] == 0x5f) && (buf[3] == 0xd7))
 		return (true);
 	else
 		return (false);
 }
 
-Image* PRTEXImageFormat::constructImage()
+Image* CINEONImageFormat::constructImage()
 {
-	return (new PRTEXImage);
-}
+	return (new CINEONImage);
+};
 
-PRTEXImageFormat thisPRTEXImageFormat;
+static CINEONImageFormat thisCINEONImageFormat;
+

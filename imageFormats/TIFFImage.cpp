@@ -22,7 +22,7 @@
 //
 // $Id$
 
-#include "SpTIFFImage.h"
+#include "TIFFImage.h"
 #include <stream.h>
 
 ImageDim TIFFImage::dim()

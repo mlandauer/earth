@@ -4,11 +4,11 @@ CC = g++
 OPTION = -g
 INCLUDE = -I..
 
-SRCS = SpCINEONImage.cpp SpGIFImage.cpp SpPRMANZImage.cpp SpSGIImage.cpp \
-       SpFITImage.cpp SpIFFImage.cpp SpPRTEXImage.cpp SpTIFFImage.cpp 
+SRCS = CINEONImage.cpp GIFImage.cpp PRMANZImage.cpp SGIImage.cpp \
+       FITImage.cpp IFFImage.cpp PRTEXImage.cpp TIFFImage.cpp 
 
-SO_OBJECTS = SpTIFFImage.so SpFITImage.so SpPRMANZImage.so SpSGIImage.so\
-		  SpGIFImage.so SpCINEONImage.so SpIFFImage.so SpPRTEXImage.so
+SO_OBJECTS = TIFFImage.so FITImage.so PRMANZImage.so SGIImage.so\
+		  GIFImage.so CINEONImage.so IFFImage.so PRTEXImage.so
 		  
 all: $(SO_OBJECTS)
 	

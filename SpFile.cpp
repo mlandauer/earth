@@ -37,8 +37,11 @@ File::File(const Path &path) : FsObject(path), fileOpen(false)
 bool File::valid() const
 {
 	struct stat fileStat;
-	lstat(path().fullName().c_str(), &fileStat);
-	return(S_ISREG(fileStat.st_mode));
+	int ret = lstat(path().fullName().c_str(), &fileStat);
+	if (ret == 0)
+		return(S_ISREG(fileStat.st_mode));
+	else
+		return false;
 }
 
 // Opens for read only at the moment

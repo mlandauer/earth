@@ -22,7 +22,7 @@
 //
 // $Id$
 
-#include "SpFITImage.h"
+#include "FITImage.h"
 #include <stream.h>
 
 ImageDim FITImage::dim()

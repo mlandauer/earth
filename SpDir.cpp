@@ -39,8 +39,11 @@ bool Dir::sortByPath = false;
 bool Dir::valid() const
 {
 	struct stat fileStat;
-	lstat(path().fullName().c_str(), &fileStat);
-	return(S_ISDIR(fileStat.st_mode));
+	int ret = lstat(path().fullName().c_str(), &fileStat);
+	if (ret == 0)
+		return(S_ISDIR(fileStat.st_mode));
+	else
+		return false;
 }
 
 class CompareFsObjectPaths
@@ -66,6 +69,7 @@ std::vector<FsObjectHandle> Dir::ls() const
 			l.push_back(FsObject::construct(p));
 		}
 	}
+	closedir(d);
 	if (sortByPath)
 		sort(l.begin(), l.end(), CompareFsObjectPaths());
 	return (l);

@@ -22,30 +22,29 @@
 //
 // $Id$
 
-#include "SpPRMANZImage.h"
+#include "SGIImage.h"
 
-ImageDim PRMANZImage::dim()
+ImageDim SGIImage::dim()
 {
 	open();
-	seek(4);
+	seek(6);
 	unsigned int width = readShort(1);
 	unsigned int height = readShort(1);
 	close();
 	return (ImageDim(width, height));
 }
 
-bool PRMANZImageFormat::recognise(unsigned char *buf)
+bool SGIImageFormat::recognise(unsigned char *buf)
 {
-	if ((buf[0] == 0x2f) && (buf[1] == 0x08) &&
-		(buf[2] == 0x67) && (buf[3] == 0xab))
+	if ((buf[0] == 0x01) && (buf[1] == 0xda))
 		return (true);
 	else
 		return (false);
 }
 
-Image* PRMANZImageFormat::constructImage()
+Image* SGIImageFormat::constructImage()
 {
-	return (new PRMANZImage);
+	return (new SGIImage);
 }
 
-PRMANZImageFormat thisPRMANZImageFormat;
+static SGIImageFormat thisSGIImageFormat;

@@ -22,31 +22,30 @@
 //
 // $Id$
 
-#include "SpGIFImage.h"
+#include "PRMANZImage.h"
 
-ImageDim GIFImage::dim()
+ImageDim PRMANZImage::dim()
 {
 	open();
-	seek(6);
-	unsigned int width = readShort(0);
-	unsigned int height = readShort(0);
+	seek(4);
+	unsigned int width = readShort(1);
+	unsigned int height = readShort(1);
 	close();
 	return (ImageDim(width, height));
 }
 
-bool GIFImageFormat::recognise(unsigned char *buf)
+bool PRMANZImageFormat::recognise(unsigned char *buf)
 {
-	if ((buf[0] == 'G') && (buf[1] == 'I') &&
-		(buf[2] == 'F') && (buf[3] == '8'))
+	if ((buf[0] == 0x2f) && (buf[1] == 0x08) &&
+		(buf[2] == 0x67) && (buf[3] == 0xab))
 		return (true);
 	else
 		return (false);
 }
 
-Image* GIFImageFormat::constructImage()
+Image* PRMANZImageFormat::constructImage()
 {
-	return (new GIFImage);
+	return (new PRMANZImage);
 }
 
-static GIFImageFormat thisGIFImageFormat;
-
+PRMANZImageFormat thisPRMANZImageFormat;

@@ -22,39 +22,31 @@
 //
 // $Id$
 
-#include "SpCINEONImage.h"
+#include "GIFImage.h"
 
-ImageDim CINEONImage::dim()
+ImageDim GIFImage::dim()
 {
 	open();
-	seek(192);
-	unsigned char orientation = readChar();
-	seek(200);
-	unsigned long width = readLong(1);
-	unsigned long height = readLong(1);
-	if (orientation > 3) {
-		// Swap width and height
-		unsigned long temp = width;
-		width = height;
-		height = temp;
-	}
+	seek(6);
+	unsigned int width = readShort(0);
+	unsigned int height = readShort(0);
 	close();
 	return (ImageDim(width, height));
 }
 
-bool CINEONImageFormat::recognise(unsigned char *buf)
+bool GIFImageFormat::recognise(unsigned char *buf)
 {
-	if ((buf[0] == 0x80) && (buf[1] == 0x2a) &&
-		(buf[2] == 0x5f) && (buf[3] == 0xd7))
+	if ((buf[0] == 'G') && (buf[1] == 'I') &&
+		(buf[2] == 'F') && (buf[3] == '8'))
 		return (true);
 	else
 		return (false);
 }
 
-Image* CINEONImageFormat::constructImage()
+Image* GIFImageFormat::constructImage()
 {
-	return (new CINEONImage);
-};
+	return (new GIFImage);
+}
 
-static CINEONImageFormat thisCINEONImageFormat;
+static GIFImageFormat thisGIFImageFormat;
 

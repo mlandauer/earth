@@ -22,7 +22,7 @@
 //
 // $Id$
 
-#include "SpIFFImage.h"
+#include "IFFImage.h"
 
 ImageDim IFFImage::dim()
 {
