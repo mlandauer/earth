@@ -171,15 +171,6 @@ void testImageSeq::testStrangeName()
 	
 	ImageSeq one(i1);
 	
-	std::cout << "Finished construction..." << std::endl;
-	std::cout << "one.path().fullName() = " << one.path().fullName() << std::endl;
-	std::cout << "one.frames().text() = " << one.frames().text() << std::endl;
-	std::cout << "one.dim().width() = " << one.dim().width() << std::endl;
-	std::cout << "one.dim().height() = " << one.dim().height() << std::endl;
-	std::cout << "one.format() = " << one.format() << std::endl;
-	std::cout << "one.format()->formatString() = " << one.format()->formatString() << std::endl;
-	std::cout << "one.valid() = " << one.valid() << std::endl;
-
 	checkSequence(one, "test/seq/foo", "", 8, 8, "Cineon", true);
 	CPPUNIT_ASSERT(!one.addImage(i2));
 	
