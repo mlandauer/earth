@@ -22,17 +22,6 @@ void testSpSize()
 	        s.gbytes() << " Gb" << endl;
 }
 
-void testSpFile()
-{
-	SpFile file("/home/matthew/images/blah1.tiff");
-	cout << "filename = " << file.path().fullName() << endl;
-	cout << "size = " << file.size().bytes() << " bytes" << endl;
-	cout << "size = " << file.size().kbytes() << " Kbytes" << endl;
-	cout << "last access = " << file.lastAccess().string() << endl;
-	cout << "last modification = " << file.lastModification().string() << endl;
-	cout << "last change = " << file.lastChange().string() << endl;
-}
-
 void testSpTime()
 {
 	SpTime t;
@@ -49,6 +38,19 @@ void testSpTime()
 	cout << "monthString = " << t.monthString() << endl;
 	cout << "dayOfWeekStringShort = " << t.dayOfWeekStringShort() << endl;
 	cout << "time = " << t.timeString() << endl;
+}
+
+void testSpFile()
+{
+	SpFile file("/home/matthew/images/blah1.tiff");
+	cout << "filename = " << file.path().fullName() << endl;
+	cout << "size = " << file.size().bytes() << " bytes" << endl;
+	cout << "size = " << file.size().kbytes() << " Kbytes" << endl;
+	cout << "last access = " << file.lastAccess().string() << endl;
+	cout << "last modification = " << file.lastModification().string() << endl;
+	cout << "last change = " << file.lastChange().string() << endl;
+	cout << "owner = " << file.uid().string() << endl;
+	cout << "group owner = " << file.gid().string() << endl;
 }
 
 void space()

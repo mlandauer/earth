@@ -57,3 +57,21 @@ SpTime SpFile::lastChange()
 	t.setUnixTime(fileStat.st_ctime);
 	return (t);
 }
+
+SpUid SpFile::uid()
+{
+	struct stat fileStat;
+	SpUid u;
+	lstat(pathString.fullName(), &fileStat);
+	u.setUnixUid(fileStat.st_uid);
+	return (u);
+}
+
+SpGid SpFile::gid()
+{
+	struct stat fileStat;
+	SpGid g;
+	lstat(pathString.fullName(), &fileStat);
+	g.setUnixGid(fileStat.st_gid);
+	return (g);
+}

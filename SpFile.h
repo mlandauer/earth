@@ -6,6 +6,8 @@
 #include "SpPathString.h"
 #include "SpTime.h"
 #include "SpSize.h"
+#include "SpUid.h"
+#include "SpGid.h"
 
 class SpFile
 {
@@ -17,6 +19,8 @@ class SpFile
 		SpTime lastChange();
 		SpSize size();
 		SpPathString path();
+		SpUid uid();
+		SpGid gid();
 	private:
 		SpPathString pathString;
 };
