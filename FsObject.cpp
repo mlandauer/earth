@@ -31,24 +31,6 @@
 
 namespace Sp {
 
-FsObjectHandle FsObject::construct(const Path &path)
-{
-	FsObject *o;
-	o = new Dir(path);
-	if (o->valid())
-		return FsObjectHandle(o);
-	else
-		delete o;
-		
-	o = new File(path);
-	if (o->valid())
-    return FsObjectHandle(o);
-	else
-		delete o;
-    
-	return FsObjectHandle(NULL);
-}
-
 struct stat FsObject::unixStat() const
 {
 	struct stat s;

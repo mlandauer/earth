@@ -35,15 +35,15 @@
 #include "User.h"
 #include "UserGroup.h"
 #include "Size.h"
-#include "FsObjectHandle.h"
 
 namespace Sp {
 
 class FsObject
 {
 	public:
+		FsObject(const Path &path) : p(path) { };
+		FsObject() { };
 		virtual ~FsObject() { };
-		static FsObjectHandle construct(const Path &path);
 		DateTime lastAccess() const;
 		DateTime lastModification() const;
 		DateTime lastChange() const;
@@ -51,10 +51,10 @@ class FsObject
 		UserGroup userGroup() const;
 		Path path() const { return p; };
 		virtual bool valid() const = 0;
+    
 	protected:
-		FsObject(const Path &path) : p(path) { };
-		FsObject() { };
 		void setPath(const Path &path) { p = path; };
+    
 	private:
 		struct stat unixStat() const;
 		Path p;
