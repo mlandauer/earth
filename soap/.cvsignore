@@ -13,9 +13,9 @@ calc.wsdl
 calcclient
 calcserver
 ns.xsd
-soapC.c
 soapcalcProxy.h
-soapClient.c
 soapH.h
-soapServer.c
 soapStub.h
+soapC.cpp
+soapClient.cpp
+soapServer.cpp
