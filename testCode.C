@@ -312,6 +312,9 @@ public:
 		SpDirMonitor m(SpDir("test/FsMonitor"));
 		m.update();
 		m.update();
+		SpTime::sleep(1);
+		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0005.gif");
+		m.update();
 		system ("rm -fr test/FsMonitor");
 	}
 };

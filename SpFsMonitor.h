@@ -11,23 +11,19 @@ public:
 	SpDirMonitor(SpDir d) : dir(d) { };
 	~SpDirMonitor() { };
 	void update() {
-		vector<SpFsObject *> l = dir.ls();
-		for (vector<SpFsObject *>::iterator a = l.begin(); a != l.end(); a++) {
-			newFsObject(*a);
+		cout << "SpDirMonitor::update()" << endl;
+		cout << "data last cached:       " << lastChanged.timeAndDateString() << endl;
+		cout << "directory modification: " << dir.lastModification().timeAndDateString() << endl;
+		cout << "directory change:       " << dir.lastChange().timeAndDateString() << endl;
+		if (dir.lastChange() > lastChanged) {
+			lastChanged = dir.lastChange();
+			vector<SpFsObject *> l = dir.ls();
+			for (vector<SpFsObject *>::iterator a = l.begin(); a != l.end(); a++) {
+				newFsObject(*a);
+			}
 		}
 	}
 	void newFsObject(SpFsObject *o) {
-		if (dynamic_cast<SpFile *>(o))
-			newFile(dynamic_cast<SpFile *>(o));
-		else if (dynamic_cast<SpDir *>(o))
-			newDirectory(dynamic_cast<SpDir *>(o));
-		else
-			cerr << "newFsObject:: unknown SpFsObject" << endl;
-	}
-	void newFile(SpFile *f) {
-		cout << "New file: " << f->path().fullName() << endl;
-	}
-	void newDirectory(SpDir *d) {
-		cout << "New directory: " << d->path().fullName() << endl;
+		cout << "New Filesystem object: " << o->path().fullName() << endl;
 	}
 };
