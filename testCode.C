@@ -315,14 +315,60 @@ public:
 	}
 };
 
-class testSpDirMonitor : public SpTester
+class SpDirMonEvent
 {
+	public:
+		enum SpCode {null, changed, deleted, added};
+		enum SpType {file, dir};
+		SpDirMonEvent(SpCode c = null, SpType t = file, const SpPath &p = "") : code(c), type(t), path(p) { }
+		~SpDirMonEvent() { }
+		SpCode getCode() const { return code; }
+		SpType getType() const { return type; }
+		SpPath getPath() const { return path; }
+		bool operator==(const SpDirMonEvent &e) const {
+			return ((code == e.code) && (type == e.type) && (path == e.path));
+		}
+	private:
+		SpCode code;
+		SpType type;
+		SpPath path;
+};
+
+class testSpDirMonitor : public SpTester, public SpDirMonObserver
+{
+private:
+	SpDirMonEvent nextEvent;
+	string nextTestName;
 public:
 	testSpDirMonitor() : SpTester("SpDirMonitor") { test(); };
-	void checkNextEvent(string testName, SpDirMon *m, int code, string pathName) {
-		SpDirMonEvent e = m->getNextEvent();
-		checkEqual(testName + "a", e.getCode(), code);
-		checkEqual(testName + "b", e.getPath().fullName(), pathName);
+	void checkNextEvent(string testName, SpDirMon *m, const SpDirMonEvent &event) {
+		nextEvent = event;
+		nextTestName = testName;
+		m->update();
+	}
+	void notifyChanged(SpFsObject *o) {
+		SpDirMonEvent e;
+		if (dynamic_cast<SpDir *>(o))
+			e = SpDirMonEvent(SpDirMonEvent::changed, SpDirMonEvent::dir, o->path());
+		else
+			e = SpDirMonEvent(SpDirMonEvent::changed, SpDirMonEvent::file, o->path());
+		check(nextTestName + "a", e == nextEvent);		
+	}
+	void notifyDeleted(SpFsObject *o) {
+		SpDirMonEvent e;
+		if (dynamic_cast<SpDir *>(o))
+			e = SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::dir, o->path());
+		else
+			e = SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, o->path());
+		check(nextTestName + "b", e == nextEvent);		
+	}
+	void notifyAdded(SpFsObject *o) {
+		SpDirMonEvent e;
+		if (dynamic_cast<SpDir *>(o))
+			e = SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::dir, o->path());
+		else
+			e = SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::file, o->path());
+		check(nextTestName + "c", e == nextEvent);		
 	}
 	void test() {
 		SpDirMonEvent e;
@@ -334,38 +380,88 @@ public:
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0002.gif");
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0003.gif");
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0004.gif");
-		SpDirMon *m = SpDirMon::construct(SpDir("test/FsMonitor"));
+		SpDirMon *m = SpDirMon::construct(SpDir("test/FsMonitor"), this);
+		m->setMaxEvents(1);
 		if (checkNotNULL("test 0", m)) {
-			checkEqualBool("test 1", m->pendingEvent(), true);
-			checkNextEvent("test 2", m, SpDirMonEvent::added, "test/FsMonitor/test.0001.gif");
-			checkNextEvent("test 3", m, SpDirMonEvent::added, "test/FsMonitor/test.0002.gif");
-			checkNextEvent("test 4", m, SpDirMonEvent::added, "test/FsMonitor/test.0003.gif");
-			checkNextEvent("test 5", m, SpDirMonEvent::added, "test/FsMonitor/test.0004.gif");
-			checkEqualBool("test 1j", m->pendingEvent(), false);
+			checkNextEvent("test 1", m, SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::file, "test/FsMonitor/test.0001.gif"));
+			checkNextEvent("test 2", m, SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::file, "test/FsMonitor/test.0002.gif"));
+			checkNextEvent("test 3", m, SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::file, "test/FsMonitor/test.0003.gif"));
+			checkNextEvent("test 4", m, SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::file, "test/FsMonitor/test.0004.gif"));
 			
 			system ("rm test/FsMonitor/test.0001.gif");
 			system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0005.gif");
 			system ("mkdir test/FsMonitor/subdirectory");
 			SpTime::sleep(6);
-			checkEqualBool("test 6", m->pendingEvent(), true);
-			checkNextEvent("test 7", m, SpDirMonEvent::added, "test/FsMonitor/test.0005.gif");
-			checkNextEvent("test 8", m, SpDirMonEvent::added, "test/FsMonitor/subdirectory");
-			checkNextEvent("test 9", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0001.gif");
-			checkEqualBool("test 10", m->pendingEvent(), false);
+			checkNextEvent("test 6", m, SpDirMonEvent(SpDirMonEvent::added,   SpDirMonEvent::file, "test/FsMonitor/test.0005.gif"));
+			checkNextEvent("test 7", m, SpDirMonEvent(SpDirMonEvent::added,   SpDirMonEvent::dir,  "test/FsMonitor/subdirectory"));
+			checkNextEvent("test 8", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, "test/FsMonitor/test.0001.gif"));
 
 			system ("rm -fr test/FsMonitor");
 			SpTime::sleep(6);
+			checkNextEvent("test 10", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, "test/FsMonitor/test.0005.gif"));
+			checkNextEvent("test 11", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, "test/FsMonitor/test.0002.gif"));
+			checkNextEvent("test 12", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, "test/FsMonitor/test.0003.gif"));
+			checkNextEvent("test 13", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, "test/FsMonitor/test.0004.gif"));
+			checkNextEvent("test 14", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::dir,  "test/FsMonitor/subdirectory"));
+
+			delete m;
+		}
+	}
+};
+
+/*
+class testSpImageSeqDirMon : public SpTester
+{
+public:
+	testSpImageSeqDirMon() : SpTester("SpImageSeqDirMon") { test(); };
+	void checkNextEvent(string testName, SpDirMon *m, int code, string pathName) {
+		SpDirMonEvent e = m->getNextEvent();
+		checkEqual(testName + "a", e.getCode(), code);
+		checkEqual(testName + "b", e.getPath().fullName(), pathName);
+	}
+	void test() {
+		cout << "Note: the following tests will take about 20 seconds" << endl;
+		// First create a directory with some test files
+		system ("rm -fr test/ImageSeqDirMon");
+		system ("mkdir test/ImageSeqDirMon");
+		system ("cp test/templateImages/2x2.gif test/ImageSeqDirMon/test.0001.gif");
+		system ("cp test/templateImages/2x2.gif test/ImageSeqDirMon/test.0002.gif");
+		system ("cp test/templateImages/2x2.gif test/ImageSeqDirMon/test.0003.gif");
+		system ("cp test/templateImages/2x2.gif test/ImageSeqDirMon/test.0004.gif");
+		SpDirMon *m = SpImageSeqDirMon::construct(SpDir("test/ImageSeqDirMon"));
+		if (checkNotNULL("test 0", m)) {
+			checkEqualBool("test 1", m->pendingEvent(), true);
+			//checkNextEvent("test 2", m, SpImageSeqDirMonEvent::added
+			checkNextEvent("test 2", m, SpDirMonEvent::added, "test/ImageSeqDirMon/test.0001.gif");
+			checkNextEvent("test 3", m, SpDirMonEvent::added, "test/ImageSeqDirMon/test.0002.gif");
+			checkNextEvent("test 4", m, SpDirMonEvent::added, "test/ImageSeqDirMon/test.0003.gif");
+			checkNextEvent("test 5", m, SpDirMonEvent::added, "test/ImageSeqDirMon/test.0004.gif");
+			checkEqualBool("test 1j", m->pendingEvent(), false);
+			
+			system ("rm test/ImageSeqDirMon/test.0001.gif");
+			system ("cp test/templateImages/2x2.gif test/ImageSeqDirMon/test.0005.gif");
+			system ("mkdir test/ImageSeqDirMon/subdirectory");
+			SpTime::sleep(6);
+			checkEqualBool("test 6", m->pendingEvent(), true);
+			checkNextEvent("test 7", m, SpDirMonEvent::added, "test/ImageSeqDirMon/test.0005.gif");
+			checkNextEvent("test 8", m, SpDirMonEvent::added, "test/ImageSeqDirMon/subdirectory");
+			checkNextEvent("test 9", m, SpDirMonEvent::deleted, "test/ImageSeqDirMon/test.0001.gif");
+			checkEqualBool("test 10", m->pendingEvent(), false);
+
+			system ("rm -fr test/ImageSeqDirMon");
+			SpTime::sleep(6);
 			checkEqualBool("test 11", m->pendingEvent(), true);
-			checkNextEvent("test 12", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0005.gif");
-			checkNextEvent("test 13", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0002.gif");
-			checkNextEvent("test 14", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0003.gif");
-			checkNextEvent("test 15", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0004.gif");
-			checkNextEvent("test 16", m, SpDirMonEvent::deleted, "test/FsMonitor/subdirectory");
+			checkNextEvent("test 12", m, SpDirMonEvent::deleted, "test/ImageSeqDirMon/test.0005.gif");
+			checkNextEvent("test 13", m, SpDirMonEvent::deleted, "test/ImageSeqDirMon/test.0002.gif");
+			checkNextEvent("test 14", m, SpDirMonEvent::deleted, "test/ImageSeqDirMon/test.0003.gif");
+			checkNextEvent("test 15", m, SpDirMonEvent::deleted, "test/ImageSeqDirMon/test.0004.gif");
+			checkNextEvent("test 16", m, SpDirMonEvent::deleted, "test/ImageSeqDirMon/subdirectory");
 			checkEqualBool("test 17", m->pendingEvent(), false);
 			delete m;
 		}
 	}
 };
+*/
 
 class testSpImageSequence : public SpTester
 {
@@ -505,7 +601,8 @@ main()
 	testSpFsObject();
 	testSpPath();
 	testSpImageSequence();
-	//testSpDirMonitor();
+	testSpDirMonitor();
+	//testSpImageSeqDirMon();
 	
 	SpTester::finish();
 	SpImageFormat::deRegisterPlugins();

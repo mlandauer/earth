@@ -25,23 +25,14 @@
 #ifndef _spdirmon_h_
 #define _spdirmon_h_
 
-#include <queue>
 #include "SpDir.h"
 
-class SpDirMonEvent
+class SpDirMonObserver
 {
 	public:
-		enum SpCode {changed, deleted, added, null};
-		SpDirMonEvent(SpCode c = null, const SpPath &p = "") : code(c), path(p) { }
-		~SpDirMonEvent() { }
-		SpCode getCode() const { return code; }
-		SpPath getPath() const { return path; }
-		bool operator==(const SpDirMonEvent &e) const {
-			return ((code == e.code) && (path == e.path));
-		}
-	private:
-		SpCode code;
-		SpPath path;
+		virtual void notifyChanged(SpFsObject *o) = 0;
+		virtual void notifyDeleted(SpFsObject *o) = 0;
+		virtual void notifyAdded(SpFsObject *o) = 0;
 };
 
 // This class monitors just one directory and its contents
@@ -49,18 +40,20 @@ class SpDirMon
 {
 	public:
 		~SpDirMon() { }
-		static SpDirMon * construct(const SpDir &d);
-		bool pendingEvent();
-		SpDirMonEvent getNextEvent();
+		static SpDirMon * construct(const SpDir &d, SpDirMonObserver *o);
+		virtual void update() = 0;
+		void setMaxEvents(int number) { maxEvents = number; };
+		int getMaxEvents() { return maxEvents; };
 	protected:
+		SpDirMon() : maxEvents(1000) { }
 		virtual bool start(const SpDir &d) = 0;
 		virtual bool stop() = 0;
-		virtual void update() = 0;
-		void notifyChanged(const SpPath &path);
-		void notifyDeleted(const SpPath &path);
-		void notifyAdded(const SpPath &path);
+		void notifyChanged(SpFsObject *o);
+		void notifyDeleted(SpFsObject *o);
+		void notifyAdded(SpFsObject *o);
+		int maxEvents;
 	private:
-		queue<SpDirMonEvent> eventQueue;
+		SpDirMonObserver *observer;
 };
 
 

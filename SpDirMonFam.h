@@ -39,9 +39,13 @@ class SpDirMonFam : public SpDirMon
 	private:
 		bool start(const SpDir &d);
 		bool stop();
+		void changed(const SpPath &path);
+		void deleted(const SpPath &path);
+		void added(const SpPath &path);
 		FAMConnection fc;
 		FAMRequest fr;
 		SpDir dir;
+		map<SpPath, SpFsObject *> known;
 };
 
 #endif

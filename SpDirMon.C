@@ -25,40 +25,22 @@
 #include "SpDirMon.h"
 #include "SpDirMonFam.h"
 
-SpDirMon * SpDirMon::construct(const SpDir &d) {
+SpDirMon * SpDirMon::construct(const SpDir &d, SpDirMonObserver *o) {
 	SpDirMon *m = new SpDirMonFam;
 	if (!m->start(d)) {
 		delete m;
 		return NULL;
 	}
-	else 
-		return m;
+	m->observer = o;
+	return m;
 }
 
-bool SpDirMon::pendingEvent() {
-	update();
-	return (!eventQueue.empty());
+void SpDirMon::notifyChanged(SpFsObject *o) {
+	observer->notifyChanged(o);
+}	
+void SpDirMon::notifyDeleted(SpFsObject *o) {
+	observer->notifyDeleted(o);
+}	
+void SpDirMon::notifyAdded(SpFsObject *o) {
+	observer->notifyAdded(o);
 }
-
-SpDirMonEvent SpDirMon::getNextEvent() {
-	if (eventQueue.empty())
-		return SpDirMonEvent(SpDirMonEvent::null);
-	else {
-		SpDirMonEvent e = eventQueue.front();
-		eventQueue.pop();
-		return e;
-	}
-}
-
-void SpDirMon::notifyChanged(const SpPath &path) {
-	eventQueue.push(SpDirMonEvent(SpDirMonEvent::changed, path));
-}
-	
-void SpDirMon::notifyDeleted(const SpPath &path) {
-	eventQueue.push(SpDirMonEvent(SpDirMonEvent::deleted, path));
-}
-	
-void SpDirMon::notifyAdded(const SpPath &path) {
-	eventQueue.push(SpDirMonEvent(SpDirMonEvent::added, path));
-}
-
