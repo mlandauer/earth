@@ -29,6 +29,7 @@ class SpFsObject
 		SpGid gid() const;
 		SpSize size() const;
 		void setPath(const string &pathString);
+		void setPath(const SpPath &path);
 	private:
 		SpPath p;
 };

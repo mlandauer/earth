@@ -41,7 +41,9 @@ list<SpFsObject *> SpDir::ls() const
 		SpFsObject *o = new SpFsObject;
 		string pathString = entry->d_name;
 		if ((pathString != ".") && (pathString != "..")) {
-			o->setPath(pathString);
+			SpPath p = path();
+			p.add(pathString);
+			o->setPath(p);
 			l.push_back(o);
 		}
 	}

@@ -14,6 +14,7 @@ class SpPath
 		string fullName() const;
 		string root() const;
 		string relative() const;
+		void add(const string &a);
 	private:
 		string pathString;
 };

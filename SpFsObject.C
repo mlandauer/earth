@@ -23,6 +23,11 @@ void SpFsObject::setPath(const string &pathString)
 	p.set(pathString);
 }
 
+void SpFsObject::setPath(const SpPath &path)
+{
+	p = path;
+}
+
 SpTime SpFsObject::lastModification() const
 {
 	struct stat fileStat;

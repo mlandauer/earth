@@ -50,3 +50,8 @@ string SpPath::fullName() const
 {
 	return (pathString);
 }
+
+void SpPath::add(const string &a)
+{
+	pathString += "/" + a;
+}
