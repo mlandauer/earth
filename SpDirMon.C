@@ -35,12 +35,12 @@ SpDirMon * SpDirMon::construct(const SpDir &d, SpDirMonObserver *o) {
 	return m;
 }
 
-void SpDirMon::notifyChanged(SpFsObject *o) {
+void SpDirMon::notifyChanged(SpFsObjectHandle o) {
 	observer->notifyChanged(o);
 }	
-void SpDirMon::notifyDeleted(SpFsObject *o) {
+void SpDirMon::notifyDeleted(SpFsObjectHandle o) {
 	observer->notifyDeleted(o);
 }	
-void SpDirMon::notifyAdded(SpFsObject *o) {
+void SpDirMon::notifyAdded(SpFsObjectHandle o) {
 	observer->notifyAdded(o);
 }

@@ -55,11 +55,11 @@ private:
 public:
 	testSpDirMonitor();
 	void checkNextEvent(string testName, SpDirMon *m, const SpDirMonEvent &event);
-	SpDirMonEvent::SpType type(SpFsObject *o);
+	SpDirMonEvent::SpType type(SpFsObjectHandle o);
 
-	void notifyChanged(SpFsObject *o);
-	void notifyDeleted(SpFsObject *o);
-	void notifyAdded(SpFsObject *o);
+	void notifyChanged(SpFsObjectHandle o);
+	void notifyDeleted(SpFsObjectHandle o);
+	void notifyAdded(SpFsObjectHandle o);
 	
 	void test();
 };

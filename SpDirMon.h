@@ -30,9 +30,9 @@
 class SpDirMonObserver
 {
 	public:
-		virtual void notifyChanged(SpFsObject *o) = 0;
-		virtual void notifyDeleted(SpFsObject *o) = 0;
-		virtual void notifyAdded(SpFsObject *o) = 0;
+		virtual void notifyChanged(SpFsObjectHandle o) = 0;
+		virtual void notifyDeleted(SpFsObjectHandle o) = 0;
+		virtual void notifyAdded(SpFsObjectHandle o) = 0;
 };
 
 // This class monitors just one directory and its contents
@@ -48,9 +48,9 @@ class SpDirMon
 		SpDirMon() : maxEvents(1000) { }
 		virtual bool start(const SpDir &d) = 0;
 		virtual bool stop() = 0;
-		void notifyChanged(SpFsObject *o);
-		void notifyDeleted(SpFsObject *o);
-		void notifyAdded(SpFsObject *o);
+		void notifyChanged(SpFsObjectHandle o);
+		void notifyDeleted(SpFsObjectHandle o);
+		void notifyAdded(SpFsObjectHandle o);
 		int maxEvents;
 	private:
 		SpDirMonObserver *observer;

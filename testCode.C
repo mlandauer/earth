@@ -66,7 +66,7 @@ main()
 	testSpPath();
 	testSpImageSequence();
 	testSpFsObjectHandle();
-	//testSpDirMonitor();
+	testSpDirMonitor();
 	
 	SpTester::finish();
 	SpImageFormat::deRegisterPlugins();

@@ -44,9 +44,9 @@ void testSpDir::test()
 	g.setCurrent();
 	checkEqual("test 3", dir.gid().name(), g.name());
 	checkEqualBool("test 4", dir.valid(), true);
-	vector<SpFsObject *> ls = dir.ls();
+	vector<SpFsObjectHandle> ls = dir.ls();
 	if (checkEqual("ls test 0", ls.size(), 13)) {
-		vector<SpFsObject *>::iterator a = ls.begin();
+		vector<SpFsObjectHandle>::iterator a = ls.begin();
 		checkImage("ls test 1", *(a++), "test/templateImages/2x2.gif", "GIF");
 		checkNotImage("ls test 2", *(a++), "test/templateImages/2x2.jpg");
 		checkImage("ls test 3", *(a++), "test/templateImages/2x2.sgi", "SGI");
@@ -61,28 +61,26 @@ void testSpDir::test()
 		checkImage("ls test 12", *(a++), "test/templateImages/8x8.tiff", "TIFF");		
 		checkDir("ls test 13", *(a++), "test/templateImages/CVS");		
 	}
-	for (vector<SpFsObject *>::iterator a=ls.begin(); a!=ls.end(); ++a)
-		delete *a;
 	// Try doing an ls on a non-existant directory
 	SpDir dirNotExist("test/whatASillyFella");
 	checkEqualBool("non-existant test 1", dirNotExist.valid(), false);
-	vector<SpFsObject *> lsNotExist = dirNotExist.ls();
+	vector<SpFsObjectHandle> lsNotExist = dirNotExist.ls();
 	checkEqual("non-existant test 2", lsNotExist.size(), 0);
 }
 
-void testSpDir::checkImage(string n, SpFsObject *o, string fileName, string formatString) {
+void testSpDir::checkImage(string n, SpFsObjectHandle o, string fileName, string formatString) {
 	checkEqual(n + "a",  o->path().fullName(), fileName);
-	SpImage *i = dynamic_cast<SpImage *>(o);
+	SpImage *i = dynamic_cast<SpImage *>(o.pointer());
 	if (SpTester::checkNotNULL(n + "b", i))
 		checkEqual(n + "c",  i->formatString(), formatString);		
 }
 
-void testSpDir::checkNotImage(string n, SpFsObject *o, string fileName) {
+void testSpDir::checkNotImage(string n, SpFsObjectHandle o, string fileName) {
 	checkEqual(n + "a",  o->path().fullName(), fileName);
-	checkNULL(n + "b",  dynamic_cast<SpImage *>(o));
+	checkNULL(n + "b",  dynamic_cast<SpImage *>(o.pointer()));
 }
 
-void testSpDir::checkDir(string n, SpFsObject *o, string fileName) {
+void testSpDir::checkDir(string n, SpFsObjectHandle o, string fileName) {
 	checkEqual(n + "a",  o->path().fullName(), fileName);
-	checkNotNULL(n + "b",  dynamic_cast<SpDir *>(o));
+	checkNotNULL(n + "b",  dynamic_cast<SpDir *>(o.pointer()));
 }

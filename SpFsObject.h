@@ -35,12 +35,13 @@
 #include "SpUid.h"
 #include "SpGid.h"
 #include "SpSize.h"
+#include "SpFsObjectHandle.h"
 
 class SpFsObject
 {
 	public:
 		~SpFsObject() { };
-		static SpFsObject * construct(const SpPath &path);
+		static SpFsObjectHandle construct(const SpPath &path);
 		SpTime lastAccess() const;
 		SpTime lastModification() const;
 		SpTime lastChange() const;

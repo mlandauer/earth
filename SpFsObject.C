@@ -29,12 +29,12 @@
 #include "SpDir.h"
 #include "SpImage.h"
 
-SpFsObject *SpFsObject::construct(const SpPath &path)
+SpFsObjectHandle SpFsObject::construct(const SpPath &path)
 {
 	SpFsObject *o;
 	o = new SpDir(path);
 	if (o->valid())
-		return (o);
+		return SpFsObjectHandle(o);
 	else
 		delete o;
 		
@@ -42,15 +42,15 @@ SpFsObject *SpFsObject::construct(const SpPath &path)
 	if (o->valid()) {
 		SpImage *i = SpImage::construct(path);
 		if (i == NULL)
-			return (o);
+			return SpFsObjectHandle(o);
 		else {
 			delete o;
-			return (i);
+			return SpFsObjectHandle(i);
 		}
 	}
 	else
 		delete o;
-	return (NULL);
+	return SpFsObjectHandle(NULL);
 }
 
 struct stat SpFsObject::unixStat() const

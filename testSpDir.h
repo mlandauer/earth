@@ -33,9 +33,9 @@ class testSpDir : public SpTester
 public:
 	testSpDir();
 	void test();
-	void checkImage(string n, SpFsObject *o, string fileName, string formatString);
-	void checkNotImage(string n, SpFsObject *o, string fileName);
-	void checkDir(string n, SpFsObject *o, string fileName);
+	void checkImage(string n, SpFsObjectHandle o, string fileName, string formatString);
+	void checkNotImage(string n, SpFsObjectHandle o, string fileName);
+	void checkDir(string n, SpFsObjectHandle o, string fileName);
 };
 
 #endif

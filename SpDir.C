@@ -46,13 +46,13 @@ bool SpDir::valid() const
 class SpCompareFsObjectPaths
 {
 	public:
-		bool operator()(const SpFsObject *s1, const SpFsObject *s2) const
+		bool operator()(SpFsObjectHandle s1, SpFsObjectHandle s2) const
 			{ return s1->path() < s2->path(); }
 };
 
-vector<SpFsObject *> SpDir::ls() const
+vector<SpFsObjectHandle> SpDir::ls() const
 {
-	vector<SpFsObject *> l;
+	vector<SpFsObjectHandle> l;
 	if (!valid())
 		return l;
 	// First open a directory stream
@@ -63,31 +63,10 @@ vector<SpFsObject *> SpDir::ls() const
 		if ((pathString != ".") && (pathString != "..")) {
 			SpPath p = path();
 			p.add(pathString);
-			SpFsObject *o = SpFsObject::construct(p);
-			l.push_back(o);
+			l.push_back(SpFsObject::construct(p));
 		}
 	}
 	if (sortByPath)
 		sort(l.begin(), l.end(), SpCompareFsObjectPaths());
-	return (l);
-}
-
-map<SpPath, SpFsObject *> SpDir::lsMap() const
-{
-	map<SpPath, SpFsObject *> l;
-	if (!valid())
-		return l;
-	// First open a directory stream
-	DIR *d = opendir(path().fullName().c_str());
-	struct dirent *entry;
-	while ((entry = readdir(d)) != NULL) {
-		string pathString = entry->d_name;
-		if ((pathString != ".") && (pathString != "..")) {
-			SpPath p = path();
-			p.add(pathString);
-			SpFsObject *o = SpFsObject::construct(p);
-			l[p] = o;
-		}
-	}
 	return (l);
 }

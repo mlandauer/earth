@@ -38,10 +38,10 @@ void testSpFsObjectHandle::test()
 	SpFile *f = new SpFile("testName");
 	SpFsObject *o = f;
 
-	SpFsObjectHandle h(o);
+	SpHandle<SpFsObject> h(o);
 	checkEqual("test 1", h->path().fullName(), "testName");
 	{
-	SpFsObjectHandle h2(h);
+	SpHandle<SpFsObject> h2(h);
 	checkEqual("test 2", h2->path().fullName(), "testName");
 	}
 }

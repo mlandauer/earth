@@ -31,7 +31,7 @@ template<class C> class SpHandle
 		C *ptr;
 		int *count;
 	public:
-		SpHandle(C *o) : ptr(o), count(new int(1)) { };
+		SpHandle(C *o = NULL) : ptr(o), count(new int(1)) { };
 		SpHandle(const SpHandle &h) : ptr(h.ptr), count(h.count) {
 			(*count)++;
 		}
@@ -45,7 +45,9 @@ template<class C> class SpHandle
 			return *this;
 		}
 		~SpHandle() { decreaseReferenceCount(); }
-		SpFsObject *operator->() { return ptr; };
+		C *operator->() { return ptr; };
+		C *pointer() { return ptr; };
+		bool null() { return (ptr == NULL); };
 	private:
 		void decreaseReferenceCount() {
 			if (--(*count) == 0) {
@@ -54,6 +56,8 @@ template<class C> class SpHandle
 			}
 		}
 };
+
+class SpFsObject;
 
 typedef SpHandle<SpFsObject> SpFsObjectHandle;
 

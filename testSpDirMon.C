@@ -35,25 +35,25 @@ void testSpDirMonitor::checkNextEvent(string testName, SpDirMon *m, const SpDirM
 	check(testName + "a", event == nextEvent);
 }
 
-SpDirMonEvent::SpType testSpDirMonitor::type(SpFsObject *o)
+SpDirMonEvent::SpType testSpDirMonitor::type(SpFsObjectHandle o)
 {
-	if (dynamic_cast<SpDir *>(o))
+	if (dynamic_cast<SpDir *>(o.pointer()))
 		return SpDirMonEvent::dir;
 	else
 		return SpDirMonEvent::file;
 }
 
-void testSpDirMonitor::notifyChanged(SpFsObject *o)
+void testSpDirMonitor::notifyChanged(SpFsObjectHandle o)
 {
 	nextEvent = SpDirMonEvent(SpDirMonEvent::changed, type(o), o->path());
 }
 
-void testSpDirMonitor::notifyDeleted(SpFsObject *o)
+void testSpDirMonitor::notifyDeleted(SpFsObjectHandle o)
 {
 	nextEvent = SpDirMonEvent(SpDirMonEvent::deleted, type(o), o->path());
 }
 
-void testSpDirMonitor::notifyAdded(SpFsObject *o)
+void testSpDirMonitor::notifyAdded(SpFsObjectHandle o)
 {
 	nextEvent = SpDirMonEvent(SpDirMonEvent::added, type(o), o->path());
 }

@@ -36,31 +36,12 @@ class SpDir : public SpFsObject
 		SpDir(const SpPath &path) : SpFsObject(path) { };
 		SpDir() { };
 		~SpDir() { };
-		vector<SpFsObject *> ls() const;
-		map<SpPath, SpFsObject *> lsMap() const;
+		vector<SpFsObjectHandle> ls() const;
 		bool valid() const;
 		static void setSortByPath(bool b) { sortByPath = b; };
 	private:
 		static bool sortByPath;
 };
-
-// Stores a directory with its time stamps
-class SpDirTime : public SpDir
-{
-	public:
-		SpDirTime(const SpDir &dir) : SpDir(dir) { }
-		bool changed() {
-			if (lastChange() > cachedChange) {
-				cachedChange = lastChange();
-				return true;
-			}
-			else
-				return false;
-		}
-	protected:
-		SpTime cachedChange;
-};
-
 
 #endif
 

@@ -65,8 +65,9 @@ SpCINEONImage.o: /usr/include/g++/iterator /usr/include/g++/cassert
 SpCINEONImage.o: /usr/include/g++/std/bastring.cc ../SpTime.h ../SpSize.h
 SpCINEONImage.o: ../SpUid.h ../SpGid.h ../SpFsObject.h
 SpCINEONImage.o: /usr/include/sys/stat.h /usr/include/bits/stat.h
-SpCINEONImage.o: ../SpImageDim.h ../SpImageFormat.h ../SpLibLoader.h
-SpCINEONImage.o: /usr/include/dlfcn.h /usr/include/bits/dlfcn.h
+SpCINEONImage.o: ../SpFsObjectHandle.h ../SpImageDim.h ../SpImageFormat.h
+SpCINEONImage.o: ../SpLibLoader.h /usr/include/dlfcn.h
+SpCINEONImage.o: /usr/include/bits/dlfcn.h
 SpGIFImage.o: SpGIFImage.h ../SpImage.h /usr/include/g++/list
 SpGIFImage.o: /usr/include/g++/stl_algobase.h /usr/include/g++/stl_config.h
 SpGIFImage.o: /usr/include/_G_config.h /usr/include/bits/types.h
@@ -103,8 +104,9 @@ SpGIFImage.o: /usr/include/g++/cstring /usr/include/g++/alloc.h
 SpGIFImage.o: /usr/include/g++/iterator /usr/include/g++/cassert
 SpGIFImage.o: /usr/include/g++/std/bastring.cc ../SpTime.h ../SpSize.h
 SpGIFImage.o: ../SpUid.h ../SpGid.h ../SpFsObject.h /usr/include/sys/stat.h
-SpGIFImage.o: /usr/include/bits/stat.h ../SpImageDim.h ../SpImageFormat.h
-SpGIFImage.o: ../SpLibLoader.h /usr/include/dlfcn.h /usr/include/bits/dlfcn.h
+SpGIFImage.o: /usr/include/bits/stat.h ../SpFsObjectHandle.h ../SpImageDim.h
+SpGIFImage.o: ../SpImageFormat.h ../SpLibLoader.h /usr/include/dlfcn.h
+SpGIFImage.o: /usr/include/bits/dlfcn.h
 SpPRMANZImage.o: SpPRMANZImage.h ../SpImage.h /usr/include/g++/list
 SpPRMANZImage.o: /usr/include/g++/stl_algobase.h
 SpPRMANZImage.o: /usr/include/g++/stl_config.h /usr/include/_G_config.h
@@ -143,8 +145,9 @@ SpPRMANZImage.o: /usr/include/g++/iterator /usr/include/g++/cassert
 SpPRMANZImage.o: /usr/include/g++/std/bastring.cc ../SpTime.h ../SpSize.h
 SpPRMANZImage.o: ../SpUid.h ../SpGid.h ../SpFsObject.h
 SpPRMANZImage.o: /usr/include/sys/stat.h /usr/include/bits/stat.h
-SpPRMANZImage.o: ../SpImageDim.h ../SpImageFormat.h ../SpLibLoader.h
-SpPRMANZImage.o: /usr/include/dlfcn.h /usr/include/bits/dlfcn.h
+SpPRMANZImage.o: ../SpFsObjectHandle.h ../SpImageDim.h ../SpImageFormat.h
+SpPRMANZImage.o: ../SpLibLoader.h /usr/include/dlfcn.h
+SpPRMANZImage.o: /usr/include/bits/dlfcn.h
 SpSGIImage.o: SpSGIImage.h ../SpImage.h /usr/include/g++/list
 SpSGIImage.o: /usr/include/g++/stl_algobase.h /usr/include/g++/stl_config.h
 SpSGIImage.o: /usr/include/_G_config.h /usr/include/bits/types.h
@@ -181,8 +184,9 @@ SpSGIImage.o: /usr/include/g++/cstring /usr/include/g++/alloc.h
 SpSGIImage.o: /usr/include/g++/iterator /usr/include/g++/cassert
 SpSGIImage.o: /usr/include/g++/std/bastring.cc ../SpTime.h ../SpSize.h
 SpSGIImage.o: ../SpUid.h ../SpGid.h ../SpFsObject.h /usr/include/sys/stat.h
-SpSGIImage.o: /usr/include/bits/stat.h ../SpImageDim.h ../SpImageFormat.h
-SpSGIImage.o: ../SpLibLoader.h /usr/include/dlfcn.h /usr/include/bits/dlfcn.h
+SpSGIImage.o: /usr/include/bits/stat.h ../SpFsObjectHandle.h ../SpImageDim.h
+SpSGIImage.o: ../SpImageFormat.h ../SpLibLoader.h /usr/include/dlfcn.h
+SpSGIImage.o: /usr/include/bits/dlfcn.h
 SpFITImage.o: SpFITImage.h ../SpImage.h /usr/include/g++/list
 SpFITImage.o: /usr/include/g++/stl_algobase.h /usr/include/g++/stl_config.h
 SpFITImage.o: /usr/include/_G_config.h /usr/include/bits/types.h
@@ -219,9 +223,9 @@ SpFITImage.o: /usr/include/g++/cstring /usr/include/g++/alloc.h
 SpFITImage.o: /usr/include/g++/iterator /usr/include/g++/cassert
 SpFITImage.o: /usr/include/g++/std/bastring.cc ../SpTime.h ../SpSize.h
 SpFITImage.o: ../SpUid.h ../SpGid.h ../SpFsObject.h /usr/include/sys/stat.h
-SpFITImage.o: /usr/include/bits/stat.h ../SpImageDim.h ../SpImageFormat.h
-SpFITImage.o: ../SpLibLoader.h /usr/include/dlfcn.h /usr/include/bits/dlfcn.h
-SpFITImage.o: /usr/include/g++/stream.h
+SpFITImage.o: /usr/include/bits/stat.h ../SpFsObjectHandle.h ../SpImageDim.h
+SpFITImage.o: ../SpImageFormat.h ../SpLibLoader.h /usr/include/dlfcn.h
+SpFITImage.o: /usr/include/bits/dlfcn.h /usr/include/g++/stream.h
 SpIFFImage.o: SpIFFImage.h ../SpImage.h /usr/include/g++/list
 SpIFFImage.o: /usr/include/g++/stl_algobase.h /usr/include/g++/stl_config.h
 SpIFFImage.o: /usr/include/_G_config.h /usr/include/bits/types.h
@@ -258,8 +262,9 @@ SpIFFImage.o: /usr/include/g++/cstring /usr/include/g++/alloc.h
 SpIFFImage.o: /usr/include/g++/iterator /usr/include/g++/cassert
 SpIFFImage.o: /usr/include/g++/std/bastring.cc ../SpTime.h ../SpSize.h
 SpIFFImage.o: ../SpUid.h ../SpGid.h ../SpFsObject.h /usr/include/sys/stat.h
-SpIFFImage.o: /usr/include/bits/stat.h ../SpImageDim.h ../SpImageFormat.h
-SpIFFImage.o: ../SpLibLoader.h /usr/include/dlfcn.h /usr/include/bits/dlfcn.h
+SpIFFImage.o: /usr/include/bits/stat.h ../SpFsObjectHandle.h ../SpImageDim.h
+SpIFFImage.o: ../SpImageFormat.h ../SpLibLoader.h /usr/include/dlfcn.h
+SpIFFImage.o: /usr/include/bits/dlfcn.h
 SpPRTEXImage.o: /usr/include/math.h /usr/include/features.h
 SpPRTEXImage.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
 SpPRTEXImage.o: /usr/include/bits/huge_val.h /usr/include/bits/mathdef.h
@@ -300,9 +305,9 @@ SpPRTEXImage.o: /usr/include/g++/cstring /usr/include/g++/alloc.h
 SpPRTEXImage.o: /usr/include/g++/iterator /usr/include/g++/cassert
 SpPRTEXImage.o: /usr/include/g++/std/bastring.cc ../SpTime.h ../SpSize.h
 SpPRTEXImage.o: ../SpUid.h ../SpGid.h ../SpFsObject.h /usr/include/sys/stat.h
-SpPRTEXImage.o: /usr/include/bits/stat.h ../SpImageDim.h ../SpImageFormat.h
-SpPRTEXImage.o: ../SpLibLoader.h /usr/include/dlfcn.h
-SpPRTEXImage.o: /usr/include/bits/dlfcn.h
+SpPRTEXImage.o: /usr/include/bits/stat.h ../SpFsObjectHandle.h
+SpPRTEXImage.o: ../SpImageDim.h ../SpImageFormat.h ../SpLibLoader.h
+SpPRTEXImage.o: /usr/include/dlfcn.h /usr/include/bits/dlfcn.h
 SpTIFFImage.o: SpTIFFImage.h ../SpImage.h /usr/include/g++/list
 SpTIFFImage.o: /usr/include/g++/stl_algobase.h /usr/include/g++/stl_config.h
 SpTIFFImage.o: /usr/include/_G_config.h /usr/include/bits/types.h
@@ -339,6 +344,6 @@ SpTIFFImage.o: /usr/include/g++/cstring /usr/include/g++/alloc.h
 SpTIFFImage.o: /usr/include/g++/iterator /usr/include/g++/cassert
 SpTIFFImage.o: /usr/include/g++/std/bastring.cc ../SpTime.h ../SpSize.h
 SpTIFFImage.o: ../SpUid.h ../SpGid.h ../SpFsObject.h /usr/include/sys/stat.h
-SpTIFFImage.o: /usr/include/bits/stat.h ../SpImageDim.h ../SpImageFormat.h
-SpTIFFImage.o: ../SpLibLoader.h /usr/include/dlfcn.h
+SpTIFFImage.o: /usr/include/bits/stat.h ../SpFsObjectHandle.h ../SpImageDim.h
+SpTIFFImage.o: ../SpImageFormat.h ../SpLibLoader.h /usr/include/dlfcn.h
 SpTIFFImage.o: /usr/include/bits/dlfcn.h /usr/include/g++/stream.h

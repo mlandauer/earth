@@ -45,7 +45,7 @@ class SpDirMonFam : public SpDirMon
 		FAMConnection fc;
 		FAMRequest fr;
 		SpDir dir;
-		map<SpPath, SpFsObject *> known;
+		map<SpPath, SpFsObjectHandle> known;
 };
 
 #endif

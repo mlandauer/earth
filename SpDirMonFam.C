@@ -96,13 +96,12 @@ void SpDirMonFam::changed(const SpPath &path)
 void SpDirMonFam::deleted(const SpPath &path)
 {
 	notifyDeleted(known[path]);
-	delete known[path];
 	known.erase(path);
 }
 
 void SpDirMonFam::added(const SpPath &path)
 {
-	SpFsObject *o = SpFsObject::construct(path);
+	SpFsObjectHandle o = SpFsObject::construct(path);
 	known[path] = o;
 	notifyAdded(o);
 }

@@ -11,6 +11,7 @@ Clean up SpTester class
 Move over unit tests to CppUnit
 Use Handles instead of pointers to SpFsObject
 Use Sp namespace
+Redo SpFsObject::construct
 
 Done
 ====
