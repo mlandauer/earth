@@ -1,1 +1,2 @@
 Cache lstats in SpFsObject
+Have to do error checking on file access

@@ -5,6 +5,7 @@
 #include "SpImage.h"
 #include "SpSGIImage.h"
 #include "SpTIFFImage.h"
+#include "SpIFFImage.h"
 #include "SpFITImage.h"
 #include "SpPRMANZImage.h"
 #include "SpGIFImage.h"
@@ -28,6 +29,7 @@ SpImage* SpImage::construct(const string &path)
 	// Construct one of every image type. This is all leading up
 	// to some kind of nice plugin architecture
 	SpTIFFImage tiffImage;
+	SpIFFImage iffImage;
 	SpSGIImage sgiImage;
 	SpFITImage fitImage;
 	SpGIFImage gifImage;
@@ -43,11 +45,8 @@ SpImage* SpImage::construct(const string &path)
 	else if (sgiImage.recognise(buf))
 		image = new SpSGIImage;
 		
-	else if ((buf[0]  == 'F') && (buf[1]  == 'O') &&
-		(buf[2]  == 'R') && (buf[3]  == '4') &&
-		(buf[8]  == 'C') && (buf[9]  == 'I') &&
-		(buf[10] == 'M') && (buf[11] == 'G'))
-		cout << "IFF" << endl;
+	else if (iffImage.recognise(buf))
+		image = new SpIFFImage;
 		
 	else if (fitImage.recognise(buf))
 		image = new SpFITImage;

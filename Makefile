@@ -7,7 +7,7 @@ INCLUDE =
 OBJECTS = SpSize.o SpFile.o SpPathString.o SpTime.o \
           SpUid.o SpGid.o SpImage.o SpImageDim.o SpFsObject.o SpDir.o \
 		  SpSGIImage.o SpTIFFImage.o SpFITImage.o SpPRMANZImage.o \
-		  SpGIFImage.o SpCINEONImage.o
+		  SpGIFImage.o SpCINEONImage.o SpIFFImage.o
 
 all: testCode
 	./testCode
@@ -47,6 +47,9 @@ SpSGIImage.o: SpSGIImage.C SpSGIImage.h SpImage.h
 
 SpTIFFImage.o: SpTIFFImage.C SpTIFFImage.h SpImage.h
 	$(CC) $(OPTION) -c SpTIFFImage.C $(INCLUDE)
+
+SpIFFImage.o: SpIFFImage.C SpIFFImage.h SpImage.h
+	$(CC) $(OPTION) -c SpIFFImage.C $(INCLUDE)
 
 SpFITImage.o: SpFITImage.C SpFITImage.h SpImage.h
 	$(CC) $(OPTION) -c SpFITImage.C $(INCLUDE)
