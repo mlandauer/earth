@@ -17,12 +17,23 @@ void SpTime::setUnixTime(time_t t)
 
 SpString SpTime::string()
 {
-	SpString dayOfMonthString, yearString;
-	dayOfMonthString.setNum(dayOfMonth());
-	yearString.setNum(year());
 	SpString s = dayOfWeekStringShort() + " " + monthStringShort() + " " +
-		dayOfMonthString + " " + timeString() + " " + yearString;
+		dayOfMonthString() + " " + timeString() + " " + yearString();
 	return s;
+}
+
+SpString SpTime::dayOfMonthString()
+{
+	SpString s;
+	s.setNum(dayOfMonth());
+	return (s);
+}
+
+SpString SpTime::yearString()
+{
+	SpString s;
+	s.setNum(year());
+	return (s);
 }
 
 // What happens to all these pointers that are returned??

@@ -30,6 +30,8 @@ class SpTime
 		SpString dayOfWeekStringShort();
 		SpString dayOfWeekString();
 		SpString timeString();
+		SpString dayOfMonthString();
+		SpString yearString();
 	private:
 		time_t time;
 };
