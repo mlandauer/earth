@@ -36,13 +36,13 @@ namespace Sp {
 class CachedFsObject
 {
 public:
-	CachedFsObject(const Path &p) : path(p) {
-		FsObject o(path);
+	CachedFsObject(const FsObject &o) {
 		lastAccess = o.getLastAccess();
 		lastModification = o.getLastModification();
 		lastChange = o.getLastChange();
 		user = o.getUser();
 		userGroup = o.getUserGroup();
+		path = o.getPath();
 	};
 
 	DateTime getLastAccess() const { return lastAccess; }

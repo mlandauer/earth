@@ -34,7 +34,7 @@ namespace Sp {
 class CachedDir : public CachedFsObject
 {
 public:
-	CachedDir(const Path &p);
+	CachedDir(const Dir &dir);
 	
 	//! Returns all the files in this directory
 	std::vector<File> listFiles(bool sortByPath = false) const;

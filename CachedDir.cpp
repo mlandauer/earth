@@ -27,10 +27,9 @@
 
 namespace Sp {
 	
-CachedDir::CachedDir(const Path &path) : CachedFsObject(path),
+CachedDir::CachedDir(const Dir &dir) : CachedFsObject(dir),
 	filesSorted(false), dirsSorted(false)
 {
-	Dir dir(path);
 	// Really the following should be an atomic operation
 	files = dir.listFiles(false);
 	dirs = dir.listDirs(false);
