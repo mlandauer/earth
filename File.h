@@ -95,7 +95,6 @@ public:
 	//! Is this a valid file?
 	bool valid() const;
 	
-protected:
 	File() { };
 	
 private:
