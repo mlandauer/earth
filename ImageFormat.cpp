@@ -101,6 +101,10 @@ ImageFormat* ImageFormat::recogniseByMagic(const Path &path)
 			largestSizeToRecognise = (*a)->sizeToRecognise();
 			
 	File f(path);
+	// If it's not a valid file then it can't be an image!
+	if (!f.valid())
+		return NULL;
+		
 	// Make sure we don't read beyond the end of the file
 	long int bufferSize = std::min(f.sizeBytes(), largestSizeToRecognise);
 	

@@ -29,9 +29,11 @@ class testImage : public CppUnit::TestFixture
 public:
 	CPPUNIT_TEST_SUITE(testImage);
 	CPPUNIT_TEST(test);
+	CPPUNIT_TEST(testNotFile);
 	CPPUNIT_TEST_SUITE_END();
 	
 	void test();
+	void testNotFile();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testImage);
@@ -90,5 +92,12 @@ void testImage::test()
 	CPPUNIT_ASSERT(image5->dim().width() == 8);
 	CPPUNIT_ASSERT(image5->dim().height() == 8);
 	delete image5;	
+}
+
+void testImage::testNotFile()
+{
+	// A file that doesn't exist
+	Image *image = Image::construct("test/templateImages/foo.blah");
+	CPPUNIT_ASSERT(image == NULL);
 }
 
