@@ -90,6 +90,12 @@ void testSpImage()
 	cout << "Image height = " << image2->height() << endl;
 	// *** FIT File format currently untested ****
 	// *** PRMANZ File format currently untested ****
+	SpFile file3("/home/matthew/images/foo1.gif");
+	SpImage *image3 = SpImage::open(file3);
+	cout << "Opened image " << file3.path().fullName() << endl;
+	cout << "Image format = " << image3->formatString() << endl;
+	cout << "Image width = " << image3->width() << endl;
+	cout << "Image height = " << image3->height() << endl;
 }
 
 void space()

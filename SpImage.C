@@ -7,6 +7,7 @@
 #include "SpTIFFImage.h"
 #include "SpFITImage.h"
 #include "SpPRMANZImage.h"
+#include "SpGIFImage.h"
 
 SpImage::SpImage()
 {
@@ -65,8 +66,11 @@ SpImage* SpImage::open(SpFile f)
 		return (image);
 	}
 	else if ((buf[0] == 'G') && (buf[1] == 'I') &&
-		(buf[2] == 'F') && (buf[3] == '8'))
-		cout << "GIF" << endl;
+		(buf[2] == 'F') && (buf[3] == '8')) {
+		image = new SpGIFImage;
+		image->file = f;
+		return (image);
+	}
 	else if ((buf[0] == 0x2f) && (buf[1] == 0x08) &&
 		(buf[2] == 0x67) && (buf[3] == 0xab)) {
 		image = new SpPRMANZImage;
