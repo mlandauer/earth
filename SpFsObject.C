@@ -31,12 +31,10 @@ SpFsObject *SpFsObject::construct(const SpPath &path)
 	return (NULL);
 }
 
-struct stat & SpFsObject::unixStat() const
+struct stat SpFsObject::unixStat() const
 {
-	//if (!statCached) {
-		lstat(path().fullName().c_str(), &s);
-		//statCached = true;
-	//}
+	struct stat s;
+	lstat(path().fullName().c_str(), &s);
 	return (s);
 }
 

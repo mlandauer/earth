@@ -27,14 +27,12 @@ class SpFsObject
 		SpPath path() const { return p; };
 		virtual bool valid() const = 0;
 	protected:
-		SpFsObject(const SpPath &path) : statCached(false), p(path) { };
-		SpFsObject() : statCached(false) { };
+		SpFsObject(const SpPath &path) : p(path) { };
+		SpFsObject() { };
 		void setPath(const SpPath &path) { p = path; };
 	private:
-		struct stat & SpFsObject::unixStat() const;
+		struct stat unixStat() const;
 		SpPath p;
-		mutable struct stat s;
-		mutable bool statCached;
 };
 
 #endif
