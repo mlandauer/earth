@@ -47,9 +47,7 @@ namespace Sp {
 class FsObject
 {
 public:
-	FsObject(const Path &path) : p(path) { };
-	FsObject() { };
-	virtual ~FsObject() { };
+	FsObject(const Path &path = Path()) : p(path) { };
 
 	//! Returns the date and time of the last access to the filesystem object
 	/*!
@@ -78,6 +76,8 @@ public:
 	UserGroup userGroup() const;
 	//! Returns the path to the filesystem object
 	Path path() const { return p; };
+	
+	bool operator<(const FsObject &o) const { return path() < o.path(); }
 
 protected:
 	void setPath(const Path &path) { p = path; };

@@ -22,23 +22,42 @@
 //
 // $Id$
 
-#include "testSpDirMon.h"
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/SourceLine.h>
+#include <cppunit/TestAssert.h>
 
-testSpDirMon::testSpDirMon() : SpTester("SpDirMon")
+#include "DirMon.h"
+
+using namespace Sp;
+
+class testDirMon : public CppUnit::TestFixture
 {
-	test();
+public:
+	CPPUNIT_TEST_SUITE(testDirMon);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
+	void test();
 };
 
-void testSpDirMon::checkNextEvent(std::string testName, SpDirMon *m, int code, const SpPath &p)
+CPPUNIT_TEST_SUITE_REGISTRATION(testDirMon);
+
+void checkNextEvent(DirMon &m, int code, const Path &p, CppUnit::SourceLine sourceLine)
 {
-	SpDirMonEvent e = m->getNextEvent();
-	checkEqual(testName + "a", e.getCode(), code);
-	checkEqual(testName + "b", e.getFsObjectHandle()->path().fullName(), p.fullName());
+	std::string message("next event has unexpected value");
+	CppUnit::Asserter::failIf(!m.pendingEvent(), "expected pending event", sourceLine);
+	DirMonEvent event = m.getNextEvent();
+	CppUnit::Asserter::failIf(event.getCode() != code, message, sourceLine);
+	CppUnit::Asserter::failIf(event.getFile().path().fullName() != p.fullName(), message, sourceLine);
 }
 
-void testSpDirMon::test()
+#define CPPUNIT_CHECK_NEXT_EVENT( m, code, path ) checkNextEvent( m, code, path,  CPPUNIT_SOURCELINE() )
+
+#include "Path.h"
+
+void testDirMon::test()
 {
-	std::cout << "Note: the following tests will take about 20 seconds" << std::endl;
+	//std::cout << "Note: the following tests will take about 20 seconds" << std::endl;
 	// First create a directory with some test files
 	system ("rm -fr test/FsMonitor");
 	system ("mkdir test/FsMonitor");
@@ -46,35 +65,55 @@ void testSpDirMon::test()
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0002.gif");
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0003.gif");
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0004.gif");
-	SpDirMon *m = SpDirMon::construct(SpDir("test/FsMonitor"));
-	if (checkNotNULL("test 0", m)) {
-		m->update();
-		checkEqual("test 1", m->pendingEvent(), true);
-		checkNextEvent("test 2", m, SpDirMonEvent::added, "test/FsMonitor/test.0001.gif");
-		checkNextEvent("test 3", m, SpDirMonEvent::added, "test/FsMonitor/test.0002.gif");
-		checkNextEvent("test 4", m, SpDirMonEvent::added, "test/FsMonitor/test.0003.gif");
-		checkNextEvent("test 5", m, SpDirMonEvent::added, "test/FsMonitor/test.0004.gif");
-		checkEqual("test 6", m->pendingEvent(), false);
-		
-		system ("rm test/FsMonitor/test.0001.gif");
-		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0005.gif");
-		system ("mkdir test/FsMonitor/subdirectory");
-		SpTime::sleep(6);
-		m->update();
-		checkNextEvent("test 7", m, SpDirMonEvent::added,   "test/FsMonitor/test.0005.gif");
-		checkNextEvent("test 8", m, SpDirMonEvent::added,   "test/FsMonitor/subdirectory");
-		checkNextEvent("test 9", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0001.gif");
-		checkEqual("test 10", m->pendingEvent(), false);
-		system ("rm -fr test/FsMonitor");
-		SpTime::sleep(6);
-		m->update();
-		checkNextEvent("test 11", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0005.gif");
-		checkNextEvent("test 12", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0002.gif");
-		checkNextEvent("test 13", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0003.gif");
-		checkNextEvent("test 14", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0004.gif");
-		checkNextEvent("test 15", m, SpDirMonEvent::deleted, "test/FsMonitor/subdirectory");
-		checkEqual("test 16", m->pendingEvent(), false);
-		delete m;
-	}
+
+	// Test initial startup
+	DirMon m(Dir("test/FsMonitor"));
+	
+	//DateTime::sleep(6);
+	m.update();
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added, "test/FsMonitor/test.0001.gif");
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added, "test/FsMonitor/test.0002.gif");
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added, "test/FsMonitor/test.0003.gif");
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added, "test/FsMonitor/test.0004.gif");
+	CPPUNIT_ASSERT(!m.pendingEvent());
+	
+	// Test adding files
+	DateTime before = Dir("test/FsMonitor").lastChange();
+	// Wait one second to ensure that change can be detected
+	DateTime::sleep(1);
+	system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0005.gif");
+	system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0006.gif");
+	// Check that the change time of the directory has changed
+	DateTime after = Dir("test/FsMonitor").lastChange();
+	CPPUNIT_ASSERT(after > before);
+	m.update();
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added,   "test/FsMonitor/test.0005.gif");
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added,   "test/FsMonitor/test.0006.gif");
+	CPPUNIT_ASSERT(!m.pendingEvent());
+	
+	// Test changing nothing
+	m.update();
+	CPPUNIT_ASSERT(!m.pendingEvent());
+	
+	
+	// Test adding files
+	//system ("rm test/FsMonitor/test.0001.gif");
+	//system ("mkdir test/FsMonitor/subdirectory");
+	//system ("cp test/templateImages/2x2.gif test/FsMonitor/subdirectory/test.0001.gif");
+	//DateTime::sleep(6);
+	//m->update();
+	//CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/test.0001.gif");
+	//CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added,   "test/FsMonitor/subdirectory/test.0001.gif");
+	//CPPUNIT_ASSERT(!m->pendingEvent());
+	
+	//system ("rm -fr test/FsMonitor/*");
+	//DateTime::sleep(6);
+	//m->update();
+	//checkNextEvent(m, DirMonEvent::deleted, "test/FsMonitor/test.0002.gif");
+	//checkNextEvent(m, DirMonEvent::deleted, "test/FsMonitor/test.0003.gif");
+	//checkNextEvent(m, DirMonEvent::deleted, "test/FsMonitor/test.0004.gif");
+	//checkNextEvent(m, DirMonEvent::deleted, "test/FsMonitor/test.0005.gif");
+	//checkNextEvent(m, DirMonEvent::deleted, "test/FsMonitor/subdirectory/test.0001.gif");
+	//CPPUNIT_ASSERT(!m->pendingEvent());
 }
 

@@ -22,44 +22,78 @@
 //
 // $Id$
 
-#ifndef _spdirmon_h_
-#define _spdirmon_h_
+#ifndef _dirmon_h_
+#define _dirmon_h_
 
 #include <queue>
-#include "SpDir.h"
+#include "Dir.h"
+#include "File.h"
 
-class SpDirMonEvent
+namespace Sp {
+	
+class DirMonEvent
 {
 	public:
-		enum SpCode {null, changed, deleted, added};
-		SpDirMonEvent(SpCode c = null, SpFsObjectHandle h = SpFsObjectHandle(NULL)) : code(c), o(h) { }
-		~SpDirMonEvent() { }
-		SpCode getCode() { return code; }
-		SpFsObjectHandle getFsObjectHandle() { return o; }
+		enum Code {null, deleted, added};
+
 	private:
-		SpCode code;
-		SpFsObjectHandle o;
+		Code code;
+		File o;
+		
+	public:
+		DirMonEvent(Code c = null, const File &h = File()) : code(c), o(h) { }
+		Code getCode() { return code; }
+		File getFile() { return o; }
 };
 
-// This class monitors just one directory and its contents
-class SpDirMon
+class CachedDir
+{
+public:
+	CachedDir(const Dir &d) : dir(d) {
+		// Really the following should be an automatic operation
+		files = dir.listFiles();
+		dirs = dir.listDirs();
+		change = dir.lastChange();
+	}
+	
+	//! Returns all the files in this directory
+	std::vector<File> listFiles() const { return files; }
+	//! Returns all the directories immediately under this directory
+	std::vector<Dir> listDirs() const { return dirs; }
+	DateTime lastChange() const { return change; }
+	Dir getDir() const { return dir; }
+	
+private:
+	std::vector<File> files;
+	std::vector<Dir> dirs;
+	DateTime change;
+	Dir dir;
+};
+
+//! This class monitors just one directory and its contents
+/*!
+	This assumes a POSIX type filesystem which we can monitor using update
+	times of the directories.
+	\todo Refactor: extract superclass when we add more monitoring types
+	\todo add change (different from deleted or added) notification when it is appropriate
+*/
+class DirMon
 {
 	public:
-		virtual ~SpDirMon() { }
-		static SpDirMon * construct(const SpDir &d);
-		virtual void update() = 0;
-		bool pendingEvent();
-		SpDirMonEvent getNextEvent();
+		DirMon(const Dir &d);
+		void update();
+		bool pendingEvent() const;
+		DirMonEvent getNextEvent();
+		
 	protected:
-		SpDirMon() { }
-		virtual bool start(const SpDir &d) = 0;
-		virtual bool stop() = 0;
-		void notifyChanged(SpFsObjectHandle o);
-		void notifyDeleted(SpFsObjectHandle o);
-		void notifyAdded(SpFsObjectHandle o);
+		void notifyDeleted(const File &o);
+		void notifyAdded(const File &o);
+		
 	private:
-		std::queue<SpDirMonEvent> eventQueue;
+		std::queue<DirMonEvent> eventQueue;
+		std::list<CachedDir> dirs;
 };
 
+}
 
 #endif

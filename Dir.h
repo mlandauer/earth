@@ -36,8 +36,7 @@ namespace Sp {
 class Dir : public FsObject
 {
 public:
-	Dir(const Path &path) : FsObject(path) { };
-	Dir() { };
+	Dir(const Path &path = Path());
 
 	//! Returns all the files in this directory
 	/*!
@@ -61,11 +60,14 @@ public:
 
 	//! Is this a valid directory?
 	bool valid() const;
+	
+	bool operator==(const Dir &d) const;
 
 private:
 	std::vector<Path> listPaths(bool sortByPath) const;
 };
 
 }
+
 #endif
 

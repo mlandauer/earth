@@ -22,44 +22,71 @@
 //
 // $Id$
 
-#include "SpDirMon.h"
-#include "SpDirMonFam.h"
+#include <algorithm>
+#include "DirMon.h"
+#include "DirMonFam.h"
 
-SpDirMon * SpDirMon::construct(const SpDir &d)
+namespace Sp {
+	
+DirMon::DirMon(const Dir &d)
 {
-	SpDirMon *m = new SpDirMonFam;
-	if (!m->start(d)) {
-		delete m;
-		return NULL;
-	}
-	return m;
+	CachedDir c(d);
+	dirs.push_back(c);
+	std::vector<File> files = c.listFiles();
+	// Tell the world about the files we've found
+	for (std::vector<File>::iterator i = files.begin(); i != files.end(); ++i)
+		notifyAdded(*i);
 }
 
-bool SpDirMon::pendingEvent()
+void DirMon::update()
+{
+	// Go through the cached directories and check if any of them have been updated
+	for (std::list<CachedDir>::iterator i = dirs.begin(); i != dirs.end(); ++i ) {
+		DateTime cachedTime = i->lastChange();
+		DateTime currentTime = i->getDir().lastChange();
+		if (currentTime > cachedTime) {
+			CachedDir currentDir(i->getDir());
+			
+			// Directory has changed
+			std::vector<File> cachedFiles = i->listFiles();
+			std::vector<File> currentFiles = currentDir.listFiles();
+			std::vector<File> addedFiles;
+			std::set_difference(currentFiles.begin(), currentFiles.end(),
+				cachedFiles.begin(), cachedFiles.end(),
+				std::back_inserter(addedFiles));
+			for (std::vector<File>::iterator j = addedFiles.begin(); j != addedFiles.end(); ++j) {
+				notifyAdded(*j);
+			}
+			// Replace stored cached directory
+			*i = currentDir;
+		}
+	}
+}
+
+bool DirMon::pendingEvent() const
 {
 	return (!eventQueue.empty());
 }
 
-SpDirMonEvent SpDirMon::getNextEvent()
+DirMonEvent DirMon::getNextEvent()
 {
 	if (pendingEvent()) {
-		SpDirMonEvent e = eventQueue.front();
+		DirMonEvent e = eventQueue.front();
 		eventQueue.pop();
 		return e;
 	}
 	else
-		return SpDirMonEvent(SpDirMonEvent::null);
+		return DirMonEvent(DirMonEvent::null);
 }
 
-void SpDirMon::notifyChanged(SpFsObjectHandle o)
+void DirMon::notifyDeleted(const File &o)
 {
-	eventQueue.push(SpDirMonEvent(SpDirMonEvent::changed, o));
+	eventQueue.push(DirMonEvent(DirMonEvent::deleted, o));
 }	
-void SpDirMon::notifyDeleted(SpFsObjectHandle o)
+void DirMon::notifyAdded(const File &o)
 {
-	eventQueue.push(SpDirMonEvent(SpDirMonEvent::deleted, o));
-}	
-void SpDirMon::notifyAdded(SpFsObjectHandle o)
-{
-	eventQueue.push(SpDirMonEvent(SpDirMonEvent::added, o));
+	eventQueue.push(DirMonEvent(DirMonEvent::added, o));
 }
+
+}
+

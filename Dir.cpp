@@ -36,6 +36,10 @@
 
 namespace Sp {
 
+Dir::Dir(const Path &path) : FsObject(path)
+{
+}
+
 bool Dir::valid() const
 {
 	struct stat fileStat;
@@ -108,4 +112,11 @@ std::vector<Path> Dir::listPaths(bool sortByPath) const
 	return (l);
 }
 
+bool Dir::operator==(const Dir &d) const
+{
+	return (d.path() == path());
 }
+
+}
+
+
