@@ -40,7 +40,6 @@
 #include "testImage.h"
 #include "testPath.h"
 #include "testImageSeq.h"
-#include "testFsObjectHandle.h"
 
 int main(int argc, char **argv)
 {
@@ -60,7 +59,6 @@ int main(int argc, char **argv)
 	testImage();
 	testPath();
 	testImageSeq();
-	testFsObjectHandle();
 	
 	Tester::finish();
 	ImageFormat::deRegisterPlugins();

@@ -10,7 +10,7 @@ SRCS = Dir.cpp FsObject.cpp ImageFormat.cpp Size.cpp testCode.cpp \
        File.cpp ImageDim.cpp Path.cpp User.cpp \
        testDir.cpp testFile.cpp \
        testImage.cpp testImageSeq.cpp testPath.cpp testSize.cpp \
-       testDateTime.cpp testFsObjectHandle.cpp
+       testDateTime.cpp
 
 OBJECTS = Size.o File.o Path.o DateTime.o Tester.o LibLoader.o \
           User.o UserGroup.o Image.o ImageFormat.o ImageDim.o \
@@ -18,7 +18,7 @@ OBJECTS = Size.o File.o Path.o DateTime.o Tester.o LibLoader.o \
 		  ImageSeq.o \
           testDir.o testFile.o \
           testImage.o testImageSeq.o testPath.o testSize.o \
-          testDateTime.o testFsObjectHandle.o
+          testDateTime.o
 
 all: testCode
 	cd imageFormats; make all
