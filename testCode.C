@@ -346,32 +346,27 @@ public:
 		nextTestName = testName;
 		m->update();
 	}
-	void notifyChanged(SpFsObject *o) {
-		SpDirMonEvent e;
+	
+	SpDirMonEvent::SpType type(SpFsObject *o) {
 		if (dynamic_cast<SpDir *>(o))
-			e = SpDirMonEvent(SpDirMonEvent::changed, SpDirMonEvent::dir, o->path());
+			return SpDirMonEvent::dir;
 		else
-			e = SpDirMonEvent(SpDirMonEvent::changed, SpDirMonEvent::file, o->path());
+			return SpDirMonEvent::file;
+	}
+
+	void notifyChanged(SpFsObject *o) {
+		SpDirMonEvent e = SpDirMonEvent(SpDirMonEvent::changed, type(o), o->path());
 		check(nextTestName + "a", e == nextEvent);		
 	}
 	void notifyDeleted(SpFsObject *o) {
-		SpDirMonEvent e;
-		if (dynamic_cast<SpDir *>(o))
-			e = SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::dir, o->path());
-		else
-			e = SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, o->path());
+		SpDirMonEvent e = SpDirMonEvent(SpDirMonEvent::deleted, type(o), o->path());
 		check(nextTestName + "b", e == nextEvent);		
 	}
 	void notifyAdded(SpFsObject *o) {
-		SpDirMonEvent e;
-		if (dynamic_cast<SpDir *>(o))
-			e = SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::dir, o->path());
-		else
-			e = SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::file, o->path());
+		SpDirMonEvent e = SpDirMonEvent(SpDirMonEvent::added, type(o), o->path());
 		check(nextTestName + "c", e == nextEvent);		
 	}
 	void test() {
-		SpDirMonEvent e;
 		cout << "Note: the following tests will take about 20 seconds" << endl;
 		// First create a directory with some test files
 		system ("rm -fr test/FsMonitor");
