@@ -8,9 +8,9 @@ SpPath::SpPath(const string &a)
 	set(a);
 }
 
-SpPath::SpPath(char *s)
+SpPath::SpPath(const char *s)
 {
-	 set(string(s));
+	 set(s);
 }
 
 SpPath::~SpPath()
@@ -27,16 +27,15 @@ bool SpPath::operator==(const SpPath &p) const
 	return (pathString == p.pathString);
 }
 
-void SpPath::set(const string &a)
+void SpPath::set(const string a)
 {
 	pathString = a;
 	// Remove trailing "/" characters
 	int length = pathString.length();
-	if (length > 0)
-		while (pathString[length-1] == '/') {
-			pathString.resize(length - 1);
-			length--;
-		}
+	while ((length > 0) && (pathString[length-1] == '/')) {
+		pathString.resize(length - 1);
+		length--;
+	}
 }
 
 string SpPath::root() const

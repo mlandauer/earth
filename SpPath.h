@@ -9,9 +9,9 @@ class SpPath
 {
 	public:
 		SpPath(const string &a = "");
-		SpPath(char *s);
+		SpPath(const char *s);
 		~SpPath();
-		void set(const string &a);
+		void set(const string a);
 		string fullName() const;
 		string root() const;
 		string relative() const;
