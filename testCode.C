@@ -197,7 +197,7 @@ public:
 		g.setCurrent();
 		checkEqual("test 3", dir.gid().name(), g.name());
 		checkEqual("test 4", dir.valid(), true);
-		vector<SpFsObject *> ls = dir.lsSortedByPath();
+		vector<SpFsObject *> ls = dir.ls();
 		if (checkEqual("ls test 0", ls.size(), 13)) {
 			vector<SpFsObject *>::iterator a = ls.begin();
 			checkImage("ls test 1", *(a++), "test/templateImages/2x2.gif", "GIF");
@@ -310,8 +310,11 @@ main()
 	// Register the plugins
 	SpImageFormat::registerPlugins();
 	// Configure the tester
-	SpTester::setVerbose(true);
+	SpTester::setVerbose(false);
 	SpTester::setFloatDelta(0.1);
+	// To make tests reliable have to ensure that ls() always
+	// returns things in alphabetical order.
+	SpDir::setSortByPath(true);
 	
 	testSpSize();
 	testSpTime();

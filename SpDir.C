@@ -12,6 +12,8 @@
 
 #include "SpFsObject.h"
 
+bool SpDir::sortByPath = false;
+
 bool SpDir::valid() const
 {
 	struct stat fileStat;
@@ -22,6 +24,13 @@ bool SpDir::valid() const
 SpDir::SpDir(const SpPath &path) : SpFsObject(path)
 {
 }
+
+class SpCompareFsObjectPaths
+{
+	public:
+		bool operator()(const SpFsObject *s1, const SpFsObject *s2) const
+			{ return s1->path() < s2->path(); }
+};
 
 vector<SpFsObject *> SpDir::ls() const
 {
@@ -40,19 +49,7 @@ vector<SpFsObject *> SpDir::ls() const
 			l.push_back(o);
 		}
 	}
+	if (sortByPath)
+		sort(l.begin(), l.end(), SpCompareFsObjectPaths());
 	return (l);
-}
-
-class SpCompareFsObjectPaths
-{
-	public:
-		bool operator()(const SpFsObject *s1, const SpFsObject *s2) const
-			{ return s1->path() < s2->path(); }
-};
-
-vector<SpFsObject *> SpDir::lsSortedByPath() const
-{
-	vector<SpFsObject *> l = ls();
-	sort(l.begin(), l.end(), SpCompareFsObjectPaths());
-	return(l);
 }

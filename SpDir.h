@@ -14,9 +14,10 @@ class SpDir : public SpFsObject
 		~SpDir() { };
 		SpDir(const SpPath &path);
 		vector<SpFsObject *> ls() const;
-		vector<SpFsObject *> lsSortedByPath() const;
 		bool valid() const;
+		static void setSortByPath(bool b) { sortByPath = b; };
 	private:
+		static bool sortByPath;
 };
 
 #endif
