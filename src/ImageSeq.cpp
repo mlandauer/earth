@@ -62,27 +62,14 @@ void ImageSeq::removeImage(const Path &p)
 bool ImageSeq::partOfSequence(const Path &path) const
 {
 	// Does the name of the image match the name of the sequence?
-	if (pattern(path) == p) {
-		return (m_frames.partOfSequence(frameNumber(path)));
-	}
-	else
-		return false;
+	return (pattern(path) == p) && m_frames.partOfSequence(frameNumber(path));
 }
 
 bool ImageSeq::couldBePartOfSequence(const CachedImage &image) const
 {
-	// Check that the name of the image matches the name of the sequence
-	if ((pattern(image.getPath()) == p) && (image.valid() == m_valid)) {
-		if (m_valid) {
-			return (image.getFormat() == imageFormat) && (image.getDim() == dimensions);
-		}
-		else {
-			return true;
-		}
-	}
-	else {
-		return false;
-	}
+	// Check that all the properties match up
+	return (pattern(image.getPath()) == p) && (image.valid() == m_valid)
+		&& (image.getFormat() == imageFormat) && (image.getDim() == dimensions);
 }
 
 Frames ImageSeq::getFrames() const
