@@ -89,6 +89,9 @@ void ImageFormat::deRegisterPlugins()
 
 ImageFormat* ImageFormat::recogniseByMagic(const Path &path)
 {
+	// Just checking that there are some plugins loaded
+	assert(plugins.size() > 0);
+	
 	// Figure out what the greatest amount of the header that needs
 	// to be read so that all the plugins can recognise themselves.
 	long int largestSizeToRecognise = 0;
