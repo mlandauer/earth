@@ -24,12 +24,15 @@
 
 #include <iostream>
 #include "SpLibLoader.h"
+//#include <mach-o/dyld.h>
 
 void SpLibLoader::load(std::string fileName)
 {
-	void *handle = dlopen(fileName.c_str(), RTLD_LAZY);
+  //const struct mach_header *handle = NSAddImage(fileName.c_str(), NSADDIMAGE_OPTION_RETURN_ON_ERROR);
+  void *handle = dlopen(fileName.c_str(), RTLD_LAZY);
 	if (handle == NULL)
 		std::cerr << "SpLibLoader: dlopen failed: " << dlerror() << std::endl;
+		//std::cerr << "SpLibLoader: NSAddImage failed " << std::endl;
 	else
 		handles.push_back(handle);
 }
