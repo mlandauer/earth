@@ -80,4 +80,3 @@ SpImageFormat* SpImageFormat::recogniseByMagic(const SpPath &path)
 	delete buf;
 	return (NULL);
 }
-

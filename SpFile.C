@@ -18,14 +18,6 @@ bool SpFile::valid() const
 	return(S_ISREG(fileStat.st_mode));
 }
 
-void SpFile::setPath(const SpPath &path)
-{
-	if (!fileOpen)
-		SpFsObject::setPath(path);
-	//else 
-	//	cerr << "Cannot setPath for file when it is open!" << endl;
-}
-
 // Opens for read only at the moment
 void SpFile::open()
 {

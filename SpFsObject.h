@@ -24,11 +24,12 @@ class SpFsObject
 		SpTime lastChange() const;
 		SpUid uid() const;
 		SpGid gid() const;
-		void setPath(const SpPath &path) { p = path; };
 		SpPath path() const { return p; };
 		virtual bool valid() const = 0;
 	protected:
-		SpFsObject(const SpPath &path = "") : statCached(false), p(path) { };
+		SpFsObject(const SpPath &path) : statCached(false), p(path) { };
+		SpFsObject() : statCached(false) { };
+		void setPath(const SpPath &path) { p = path; };
 	private:
 		struct stat & SpFsObject::unixStat() const;
 		SpPath p;

@@ -94,16 +94,6 @@ public:
 		file.read(buf, 1);
 		checkEqual("test 8", buf[0], 0xff);
 		file.close();
-	
-		SpFile f;
-		f.setPath("test/templateImages/8x8.tiff");
-		checkEqual("test 9", f.path().fullName(), "test/templateImages/8x8.tiff");
-		f.open();
-		f.setPath("test/templateImages/4x4.tiff");
-		checkEqual("test 10", f.path().fullName(), "test/templateImages/8x8.tiff");
-		f.close();
-		f.setPath("test/templateImages/2x2.tiff");	
-		checkEqual("test 11", f.path().fullName(), "test/templateImages/2x2.tiff");
 	}
 };
 

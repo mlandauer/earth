@@ -21,10 +21,6 @@ bool SpDir::valid() const
 	return(S_ISDIR(fileStat.st_mode));
 }
 
-SpDir::SpDir(const SpPath &path) : SpFsObject(path)
-{
-}
-
 class SpCompareFsObjectPaths
 {
 	public:

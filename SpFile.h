@@ -13,7 +13,7 @@
 class SpFile : public SpFsObject
 {
 	public:
-		SpFile(const SpPath &path = "");
+		SpFile(const SpPath &path);
 		~SpFile() { };
 		void open();
 		void close();
@@ -23,9 +23,10 @@ class SpFile : public SpFsObject
 		unsigned long  readLong(const int &endian) const;
 		void seek(unsigned long int pos) const;
 		void seekForward(unsigned long int pos) const;
-		void setPath(const SpPath &path);
 		SpSize size() const;
 		bool valid() const;
+	protected:
+		SpFile() { };
 	private:
 		int fd;
 		bool fileOpen;

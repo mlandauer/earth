@@ -10,9 +10,8 @@
 class SpDir : public SpFsObject
 {
 	public:
-		SpDir() { };
+		SpDir(const SpPath &path) : SpFsObject(path) { };
 		~SpDir() { };
-		SpDir(const SpPath &path);
 		vector<SpFsObject *> ls() const;
 		bool valid() const;
 		static void setSortByPath(bool b) { sortByPath = b; };
