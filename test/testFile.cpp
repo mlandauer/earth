@@ -29,9 +29,11 @@ class testFile : public CppUnit::TestFixture
 public:
 	CPPUNIT_TEST_SUITE(testFile);
 	CPPUNIT_TEST(test);
+	CPPUNIT_TEST(testValid);
+	CPPUNIT_TEST(testRead);
 	CPPUNIT_TEST_SUITE_END();
 	
-	void test();
+	void test(), testValid(), testRead();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testFile);
@@ -43,24 +45,33 @@ using namespace Sp;
 void testFile::test()
 {
 	File file1("test/templateImages/8x8.tiff");
-	CPPUNIT_ASSERT(file1.valid());
 	File file2("test/templateImages/");
-	CPPUNIT_ASSERT(!file2.valid());
-  
+ 
 	CPPUNIT_ASSERT(file1.path().fullName() == "test/templateImages/8x8.tiff");
 	CPPUNIT_ASSERT(file1.user() == User::current());
 	CPPUNIT_ASSERT(file1.userGroup() == UserGroup::current());
 
 	// Find some way to test access, modification and change times
-	// Test opening a non-existing file or directory
-	File notExist("test/templateImages/no");
-	CPPUNIT_ASSERT(!notExist.valid());
 
 	File file("test/templateImages/8x8.tiff");
-	CPPUNIT_ASSERT(file.valid());
 	CPPUNIT_ASSERT(file.path().fullName() == "test/templateImages/8x8.tiff");
 	CPPUNIT_ASSERT_DOUBLES_EQUAL(file.size().getBytes(), 396.0, 0.1);
 	CPPUNIT_ASSERT_DOUBLES_EQUAL(file.size().getKBytes(), 0.39, 0.1);
+}
+
+void testFile::testValid()
+{
+	File file1("test/templateImages/8x8.tiff");
+	CPPUNIT_ASSERT(file1.valid());
+	File file2("test/templateImages/");
+	CPPUNIT_ASSERT(!file2.valid());
+	File notExist("test/templateImages/no");
+	CPPUNIT_ASSERT(!notExist.valid());
+}
+
+void testFile::testRead()
+{
+	File file("test/templateImages/8x8.tiff");
 	file.open();
 	unsigned char buf[2];
 	CPPUNIT_ASSERT(file.read(buf, 2) == 2);
