@@ -12,6 +12,7 @@ class SpTester
 	protected:
 		bool checkEqual(string testName, string a, string b);
 		bool checkEqual(string testName, int a, int b);
+		bool checkEqualBool(string testName, bool a, bool b);
 		bool checkEqual(string testName, float a, float b);
 		bool checkEqual(string testName, float a, float b, float delta);
 		bool check(string testName, bool a);
@@ -23,6 +24,7 @@ class SpTester
 		static float floatDelta;
 		string name;
 		string toString(int a);
+		string toStringBool(bool a);
 		string toString(float a);
 		bool check(string testName, bool a, string expected, string got);
 		void failMessage(string testName, string expected, string got);

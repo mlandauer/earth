@@ -17,13 +17,15 @@ SpTester::SpTester(string className) : name(className)
 
 void SpTester::failMessage(string testName, string expected, string got)
 {
-	cout << endl << "FAILED " << name << " " << testName << ": Expected " << expected << " but got " << got << endl;
+	cout << endl << "FAILED " << name << " " << testName << ": Expected "
+		<< expected << " but got " << got;
 }
 
 void SpTester::successMessage(string testName, string returned)
 {
 	if (verbose) {
-		cout << "SUCCESS " << name << " " << testName << ": Returned " << returned << endl;
+		cout << endl << "SUCCESS " << name << " " << testName << ": Returned "
+			<< returned;
 	}
 	else  {
 		cout << ".";
@@ -58,6 +60,11 @@ bool SpTester::checkEqual(string testName, string a, string b)
 bool SpTester::checkEqual(string testName, int a, int b)
 {
 	return check(testName, a == b, toString(b), toString(a));
+}
+
+bool SpTester::checkEqualBool(string testName, bool a, bool b)
+{
+	return check(testName, a == b, toStringBool(b), toStringBool(a));
 }
 
 bool SpTester::checkEqual(string testName, float a, float b, float delta)
@@ -95,6 +102,14 @@ string SpTester::toString(int a)
 	char buf[500];
 	sprintf(buf, "%i", a);
 	return string(buf);
+}
+
+string SpTester::toStringBool(bool a)
+{
+	if (a)
+		return "true";
+	else
+		return "false";
 }
 
 string SpTester::toString(float a)
