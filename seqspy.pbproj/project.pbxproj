@@ -6,6 +6,7 @@
 	objectVersion = 38;
 	objects = {
 		DC16799703AE9A460BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Frames.cpp;
 			refType = 4;
@@ -17,6 +18,7 @@
 			};
 		};
 		DC16799903AE9A530BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Frames.h;
 			refType = 4;
@@ -28,6 +30,7 @@
 			};
 		};
 		DC16799B03AEA7990BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testIndexDirectory.cpp;
 			refType = 4;
@@ -39,6 +42,7 @@
 			};
 		};
 		DC16799D03AEA7B20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testIndexDirectory.h;
 			refType = 4;
@@ -84,6 +88,7 @@
 				DC42343A03AEB4270BFEE61B,
 				DC42343C03AEB4270BFEE61B,
 				DC42343E03AEB4270BFEE61B,
+				DCA7700503B00B1E0B02001F,
 			);
 			isa = PBXGroup;
 			name = Cineon;
@@ -141,6 +146,7 @@
 			refType = 4;
 		};
 		DC42344603AEDFE60BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = IndexDirectory.h;
 			refType = 4;
@@ -152,6 +158,7 @@
 			};
 		};
 		DC42344803AEDFF10BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = IndexDirectory.cpp;
 			refType = 4;
@@ -163,81 +170,97 @@
 			};
 		};
 		DC4D498203A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = CINEONImage.cpp;
 			refType = 4;
 		};
 		DC4D498303A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = CINEONImage.h;
 			refType = 4;
 		};
 		DC4D498403A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FITImage.cpp;
 			refType = 4;
 		};
 		DC4D498503A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FITImage.h;
 			refType = 4;
 		};
 		DC4D498603A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = GIFImage.cpp;
 			refType = 4;
 		};
 		DC4D498703A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = GIFImage.h;
 			refType = 4;
 		};
 		DC4D498803A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = IFFImage.cpp;
 			refType = 4;
 		};
 		DC4D498903A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = IFFImage.h;
 			refType = 4;
 		};
 		DC4D498A03A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PRMANZImage.cpp;
 			refType = 4;
 		};
 		DC4D498B03A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PRMANZImage.h;
 			refType = 4;
 		};
 		DC4D498C03A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PRTEXImage.cpp;
 			refType = 4;
 		};
 		DC4D498D03A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = PRTEXImage.h;
 			refType = 4;
 		};
 		DC4D498E03A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SGIImage.cpp;
 			refType = 4;
 		};
 		DC4D498F03A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = SGIImage.h;
 			refType = 4;
 		};
 		DC4D499003A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TIFFImage.cpp;
 			refType = 4;
 		};
 		DC4D499103A71F200BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = TIFFImage.h;
 			refType = 4;
@@ -326,18 +349,6 @@
 			settings = {
 			};
 		};
-		DC4D49A003A71F200BFEE61B = {
-			fileRef = DC4D499003A71F200BFEE61B;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		DC4D49A103A71F200BFEE61B = {
-			fileRef = DC4D499103A71F200BFEE61B;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		DC8E4239039D630F0B02001F = {
 			children = (
 				DCCD6F6803AD64C80BFEE61B,
@@ -406,6 +417,7 @@
 				DC8E423B039D630F0B02001F,
 				DC8E423C039D630F0B02001F,
 			);
+			hasScannedForEncodings = 1;
 			isa = PBXProject;
 			mainGroup = DC8E4239039D630F0B02001F;
 			productRefGroup = DC8E42CA039D64C60B02001F;
@@ -441,156 +453,187 @@
 			refType = 4;
 		};
 		DC8E4240039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Makefile;
 			refType = 4;
 		};
 		DC8E4258039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = imageFormats.conf;
 			refType = 2;
 		};
 		DC8E425A039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Makefile;
 			refType = 4;
 		};
 		DC8E425E039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Dir.cpp;
 			refType = 4;
 		};
 		DC8E425F039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Dir.h;
 			refType = 4;
 		};
 		DC8E4267039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = File.cpp;
 			refType = 4;
 		};
 		DC8E4268039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = File.h;
 			refType = 4;
 		};
 		DC8E426A039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FsObject.cpp;
 			refType = 4;
 		};
 		DC8E426B039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = FsObject.h;
 			refType = 4;
 		};
 		DC8E426E039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = UserGroup.cpp;
 			refType = 4;
 		};
 		DC8E426F039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = UserGroup.h;
 			refType = 4;
 		};
 		DC8E4271039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Image.cpp;
 			refType = 4;
 		};
 		DC8E4272039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Image.h;
 			refType = 4;
 		};
 		DC8E4274039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ImageDim.cpp;
 			refType = 4;
 		};
 		DC8E4275039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ImageDim.h;
 			refType = 4;
 		};
 		DC8E4277039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ImageFormat.cpp;
 			refType = 4;
 		};
 		DC8E4278039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ImageFormat.h;
 			refType = 4;
 		};
 		DC8E427A039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ImageSeq.cpp;
 			refType = 4;
 		};
 		DC8E427B039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = ImageSeq.h;
 			refType = 4;
 		};
 		DC8E427D039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = LibLoader.cpp;
 			refType = 4;
 		};
 		DC8E427E039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = LibLoader.h;
 			refType = 4;
 		};
 		DC8E4280039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Path.cpp;
 			refType = 4;
 		};
 		DC8E4281039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Path.h;
 			refType = 4;
 		};
 		DC8E4283039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Size.cpp;
 			refType = 4;
 		};
 		DC8E4284039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Size.h;
 			refType = 4;
 		};
 		DC8E4286039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Tester.cpp;
 			refType = 4;
 		};
 		DC8E4287039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Tester.h;
 			refType = 4;
 		};
 		DC8E4289039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = DateTime.cpp;
 			refType = 4;
 		};
 		DC8E428A039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = DateTime.h;
 			refType = 4;
 		};
 		DC8E428C039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = User.cpp;
 			refType = 4;
 		};
 		DC8E428D039D637F0B02001F = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = User.h;
 			refType = 4;
@@ -618,7 +661,6 @@
 				DC4D499B03A71F200BFEE61B,
 				DC4D499D03A71F200BFEE61B,
 				DC4D499F03A71F200BFEE61B,
-				DC4D49A103A71F200BFEE61B,
 				DCCAC7E503A98CC20BFEE61B,
 				DCCAC7F703A98CC20BFEE61B,
 				DCCD6FE103ADAE1D0BFEE61B,
@@ -630,6 +672,7 @@
 				DC16799A03AE9A530BFEE61B,
 				DC16799E03AEA7B20BFEE61B,
 				DC42344703AEDFE60BFEE61B,
+				DCA7700403AFFC3D0B02001F,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -657,7 +700,6 @@
 				DC4D499A03A71F200BFEE61B,
 				DC4D499C03A71F200BFEE61B,
 				DC4D499E03A71F200BFEE61B,
-				DC4D49A003A71F200BFEE61B,
 				DCCAC7E703A98CC20BFEE61B,
 				DCCAC7EA03A98CC20BFEE61B,
 				DCCAC7EB03A98CC20BFEE61B,
@@ -670,6 +712,7 @@
 				DC16799803AE9A460BFEE61B,
 				DC16799C03AEA7990BFEE61B,
 				DC42344903AEDFF10BFEE61B,
+				DCA7700303AFFC3C0B02001F,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -696,7 +739,7 @@
 				DC8E42C7039D64C60B02001F,
 			);
 			buildSettings = {
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = "/usr/local/lib /home/matthewl/cvs/seqspy/build";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				OTHER_REZFLAGS = "";
@@ -712,7 +755,6 @@
 			productInstallPath = /usr/local/bin;
 			productName = unitTests;
 			productReference = DC8E42C9039D64C60B02001F;
-			shouldUseHeadermap = 0;
 		};
 		DC8E42C9039D64C60B02001F = {
 			isa = PBXExecutableFileReference;
@@ -883,6 +925,23 @@
 			settings = {
 			};
 		};
+		DCA7700303AFFC3C0B02001F = {
+			fileRef = DC4D499003A71F200BFEE61B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		DCA7700403AFFC3D0B02001F = {
+			fileRef = DC4D499103A71F200BFEE61B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		DCA7700503B00B1E0B02001F = {
+			isa = PBXFileReference;
+			path = "8x8.cin-invalid";
+			refType = 4;
+		};
 		DCCAC74803A9518C0BFEE61B = {
 			children = (
 				DCCAC74903A9518C0BFEE61B,
@@ -892,6 +951,7 @@
 			refType = 4;
 		};
 		DCCAC74903A9518C0BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Doxyfile;
 			refType = 4;
@@ -914,11 +974,11 @@
 			);
 			isa = PBXLegacyTarget;
 			name = documentation;
+			passBuildSettingsInEnvironment = 1;
 			productName = documentation;
 			settingsToExpand = 6;
 			settingsToPassInEnvironment = 287;
 			settingsToPassOnCommandLine = 280;
-			shouldUseHeadermap = 0;
 		};
 		DCCAC7BE03A98CC20BFEE61B = {
 			children = (
@@ -947,16 +1007,19 @@
 			refType = 4;
 		};
 		DCCAC7BF03A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = Makefile;
 			refType = 4;
 		};
 		DCCAC7C103A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testImage.h;
 			refType = 4;
 		};
 		DCCAC7C303A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testDir.cpp;
 			refType = 4;
@@ -1035,66 +1098,79 @@
 			refType = 4;
 		};
 		DCCAC7D103A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testImageSeq.cpp;
 			refType = 4;
 		};
 		DCCAC7D303A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testImage.cpp;
 			refType = 4;
 		};
 		DCCAC7D403A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testCode.cpp;
 			refType = 4;
 		};
 		DCCAC7D503A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testFile.h;
 			refType = 4;
 		};
 		DCCAC7D703A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testFile.cpp;
 			refType = 4;
 		};
 		DCCAC7D803A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testDateTime.h;
 			refType = 4;
 		};
 		DCCAC7DA03A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testPath.cpp;
 			refType = 4;
 		};
 		DCCAC7DB03A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testSize.cpp;
 			refType = 4;
 		};
 		DCCAC7DC03A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testPath.h;
 			refType = 4;
 		};
 		DCCAC7DE03A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testImageSeq.h;
 			refType = 4;
 		};
 		DCCAC7E003A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testDir.h;
 			refType = 4;
 		};
 		DCCAC7E203A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testSize.h;
 			refType = 4;
 		};
 		DCCAC7E403A98CC20BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			path = testDateTime.cpp;
 			refType = 4;
@@ -1130,12 +1206,14 @@
 			};
 		};
 		DCCD6F6803AD64C80BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = INSTALL;
 			path = doc/INSTALL;
 			refType = 4;
 		};
 		DCCD6F6903AD64C80BFEE61B = {
+			fileEncoding = 30;
 			isa = PBXFileReference;
 			name = TODO;
 			path = doc/TODO;
