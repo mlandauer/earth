@@ -16,6 +16,7 @@ class SpGIFImage : public SpImage
 		~SpGIFImage();
 		int sizeToRecognise();
 		bool recognise(unsigned char *buf);
+		SpImage* clone();
 	private:
 };
 

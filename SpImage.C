@@ -39,28 +39,28 @@ SpImage* SpImage::construct(const string &path)
 	SpPRTEXImage prtexImage;
 	
 	if (cineonImage.recognise(buf))
-		image = new SpCINEONImage;
+		image = cineonImage.clone();
 		
 	else if (tiffImage.recognise(buf))
-		image = new SpTIFFImage;
+		image = tiffImage.clone();
 		
 	else if (sgiImage.recognise(buf))
-		image = new SpSGIImage;
+		image = sgiImage.clone();
 		
 	else if (iffImage.recognise(buf))
-		image = new SpIFFImage;
+		image = iffImage.clone();
 		
 	else if (fitImage.recognise(buf))
-		image = new SpFITImage;
+		image = fitImage.clone();
 		
 	else if (gifImage.recognise(buf))
-		image = new SpGIFImage;
+		image = gifImage.clone();
 
 	else if (prmanzImage.recognise(buf))
-		image = new SpPRMANZImage;
+		image = prmanzImage.clone();
 
 	else if (prtexImage.recognise(buf))
-		image = new SpPRTEXImage;
+		image = prtexImage.clone();
 	else
 		// This signals an error or an unrecognised image type
 		return (NULL);

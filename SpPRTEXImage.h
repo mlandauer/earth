@@ -16,6 +16,7 @@ class SpPRTEXImage : public SpImage
 		bool valid();
 		int sizeToRecognise();
 		bool recognise(unsigned char *buf);
+		SpImage* clone();
 	private:
 };
 

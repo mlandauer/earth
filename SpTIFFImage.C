@@ -135,3 +135,9 @@ bool SpTIFFImage::recognise(unsigned char *buf)
 	else
 		return (false);
 }
+
+SpImage* SpTIFFImage::clone()
+{
+	return (new SpTIFFImage);
+}
+

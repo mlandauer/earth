@@ -43,3 +43,9 @@ bool SpPRMANZImage::recognise(unsigned char *buf)
 	else
 		return (false);
 }
+
+SpImage* SpPRMANZImage::clone()
+{
+	return (new SpPRMANZImage);
+}
+

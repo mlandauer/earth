@@ -16,6 +16,7 @@ class SpSGIImage : public SpImage
 		~SpSGIImage();
 		bool recognise(unsigned char *buf);
 		int sizeToRecognise();		
+		SpImage* clone();
 	private:
 };
 

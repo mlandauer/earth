@@ -16,6 +16,7 @@ class SpFITImage : public SpImage
 		~SpFITImage();
 		int sizeToRecognise();
 		bool recognise(unsigned char *buf);
+		SpImage* clone();
 	private:
 };
 

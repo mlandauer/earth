@@ -51,3 +51,8 @@ bool SpCINEONImage::recognise(unsigned char *buf)
 	else
 		return (false);
 }
+
+SpImage* SpCINEONImage::clone()
+{
+	return (new SpCINEONImage);
+}

@@ -16,6 +16,7 @@ class SpPRMANZImage : public SpImage
 		~SpPRMANZImage();
 		int sizeToRecognise();
 		bool recognise(unsigned char *buf);
+		SpImage* clone();
 	private:
 };
 

@@ -82,3 +82,8 @@ bool SpIFFImage::recognise(unsigned char *buf)
 	else
 		return (false);
 }
+
+SpImage* SpIFFImage::clone()
+{
+	return (new SpIFFImage);
+}

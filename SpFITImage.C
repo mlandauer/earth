@@ -47,3 +47,8 @@ bool SpFITImage::recognise(unsigned char *buf)
 	else
 		return (false);
 }
+
+SpImage* SpFITImage::clone()
+{
+	return (new SpFITImage);
+}

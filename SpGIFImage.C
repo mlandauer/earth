@@ -43,3 +43,8 @@ bool SpGIFImage::recognise(unsigned char *buf)
 	else
 		return (false);
 }
+
+SpImage* SpGIFImage::clone()
+{
+	return (new SpGIFImage);
+}

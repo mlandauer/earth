@@ -42,3 +42,9 @@ bool SpSGIImage::recognise(unsigned char *buf)
 	else
 		return (false);
 }
+
+SpImage* SpSGIImage::clone()
+{
+	return (new SpSGIImage);
+}
+

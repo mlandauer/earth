@@ -49,3 +49,8 @@ bool SpPRTEXImage::recognise(unsigned char *buf)
 	else
 		return (false);
 }
+
+SpImage* SpPRTEXImage::clone()
+{
+	return (new SpPRTEXImage);
+}

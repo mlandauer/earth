@@ -15,6 +15,7 @@ class SpImage : public SpFile
 		virtual bool valid() = 0;
 		virtual bool recognise(unsigned char *buf) = 0;
 		virtual int sizeToRecognise() = 0;
+		virtual SpImage* clone() = 0;
 	protected:
 		unsigned char  readChar() const;
 		unsigned short readShort(const int &endian) const;
