@@ -6,7 +6,7 @@ INCLUDE =
 
 OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o SpLibLoader.o \
           SpUid.o SpGid.o SpImage.o SpImageFormat.o SpImageDim.o \
-          SpFsObject.o SpDir.o SpDirMonitor.o SpDirMonitorFam.o \
+          SpFsObject.o SpDir.o SpDirMon.o SpDirMonFam.o \
 		  SpImageSequence.o
 
 all: testCode
@@ -62,11 +62,11 @@ SpFsObject.o: SpFsObject.C SpFsObject.h SpTime.h SpPath.h SpUid.h SpGid.h
 SpDir.o: SpDir.C SpDir.h SpFsObject.h
 	$(CC) $(OPTION) -c SpDir.C $(INCLUDE)
 
-SpDirMonitor.o: SpDirMonitor.C SpDirMonitor.h
-	$(CC) $(OPTION) -c SpDirMonitor.C $(INCLUDE)
+SpDirMon.o: SpDirMon.C SpDirMon.h
+	$(CC) $(OPTION) -c SpDirMon.C $(INCLUDE)
 
-SpDirMonitorFam.o: SpDirMonitorFam.C SpDirMonitorFam.h SpDirMonitor.h
-	$(CC) $(OPTION) -c SpDirMonitorFam.C $(INCLUDE)
+SpDirMonFam.o: SpDirMonFam.C SpDirMonFam.h SpDirMon.h
+	$(CC) $(OPTION) -c SpDirMonFam.C $(INCLUDE)
 
 SpLibLoader.o: SpLibLoader.C SpLibLoader.h
 	$(CC) $(OPTION) -c SpLibLoader.C $(INCLUDE)

@@ -32,7 +32,7 @@
 #include "SpFsObject.h"
 #include "SpDir.h"
 #include "SpTester.h"
-#include "SpDirMonitor.h"
+#include "SpDirMon.h"
 #include "SpImageSequence.h"
 
 class testSpSize : public SpTester

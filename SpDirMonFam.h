@@ -26,7 +26,7 @@
 #define _spdirmonitorfam_h_
 
 #include <fam.h>
-#include "SpDirMonitor.h"
+#include "SpDirMon.h"
 
 // This class monitors just one directory and its contents
 // This implementation uses FAM in its entirety (VERY costly)

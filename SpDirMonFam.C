@@ -23,7 +23,7 @@
 // $Id$
 
 #include <fam.h>
-#include "SpDirMonitorFam.h"
+#include "SpDirMonFam.h"
 
 bool SpDirMonitorFam::start(const SpDir &d) {
 	dir = d;

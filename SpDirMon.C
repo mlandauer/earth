@@ -22,8 +22,8 @@
 //
 // $Id$
 
-#include "SpDirMonitor.h"
-#include "SpDirMonitorFam.h"
+#include "SpDirMon.h"
+#include "SpDirMonFam.h"
 
 SpDirMonitor * SpDirMonitor::construct(const SpDir &d) {
 	SpDirMonitor *m = new SpDirMonitorFam;
