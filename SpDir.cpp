@@ -1,4 +1,4 @@
-//  Copyright (C) 2001 Matthew Landauer. All Rights Reserved.
+//  Copyright (C) 2001, 2002 Matthew Landauer. All Rights Reserved.
 //  
 //  This program is free software; you can redistribute it and/or modify it
 //  under the terms of version 2 of the GNU General Public License as
@@ -31,7 +31,6 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include <iostream>
 
 #include "SpFsObject.h"
 
@@ -40,11 +39,8 @@ bool SpDir::sortByPath = false;
 bool SpDir::valid() const
 {
 	struct stat fileStat;
-	int ret = lstat(path().fullName().c_str(), &fileStat);
-	if (ret == 0)
-		return(S_ISDIR(fileStat.st_mode));
-	else
-		return false;
+	lstat(path().fullName().c_str(), &fileStat);
+	return(S_ISDIR(fileStat.st_mode));
 }
 
 class SpCompareFsObjectPaths
@@ -70,7 +66,6 @@ std::vector<SpFsObjectHandle> SpDir::ls() const
 			l.push_back(SpFsObject::construct(p));
 		}
 	}
-	closedir(d);
 	if (sortByPath)
 		sort(l.begin(), l.end(), SpCompareFsObjectPaths());
 	return (l);

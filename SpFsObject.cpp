@@ -1,4 +1,4 @@
-//  Copyright (C) 2001 Matthew Landauer. All Rights Reserved.
+//  Copyright (C) 2001, 2002 Matthew Landauer. All Rights Reserved.
 //  
 //  This program is free software; you can redistribute it and/or modify it
 //  under the terms of version 2 of the GNU General Public License as
@@ -33,14 +33,12 @@ SpFsObjectHandle SpFsObject::construct(const SpPath &path)
 {
 	SpFsObject *o;
 	o = new SpDir(path);
-	assert(o != NULL);
 	if (o->valid())
 		return SpFsObjectHandle(o);
 	else
 		delete o;
 		
 	o = new SpFile(path);
-	assert(o != NULL);
 	if (o->valid()) {
 		SpImage *i = SpImage::construct(path);
 		if (i == NULL)

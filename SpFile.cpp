@@ -1,4 +1,4 @@
-//  Copyright (C) 2001 Matthew Landauer. All Rights Reserved.
+//  Copyright (C) 2001, 2002 Matthew Landauer. All Rights Reserved.
 //  
 //  This program is free software; you can redistribute it and/or modify it
 //  under the terms of version 2 of the GNU General Public License as
@@ -37,11 +37,8 @@ SpFile::SpFile(const SpPath &path) : SpFsObject(path), fileOpen(false)
 bool SpFile::valid() const
 {
 	struct stat fileStat;
-	int ret = lstat(path().fullName().c_str(), &fileStat);
-	if (ret == 0)
-		return(S_ISREG(fileStat.st_mode));
-	else
-		return false;
+	lstat(path().fullName().c_str(), &fileStat);
+	return(S_ISREG(fileStat.st_mode));
 }
 
 // Opens for read only at the moment

@@ -1,4 +1,4 @@
-//  Copyright (C) 2001 Matthew Landauer. All Rights Reserved.
+//  Copyright (C) 2001, 2002 Matthew Landauer. All Rights Reserved.
 //  
 //  This program is free software; you can redistribute it and/or modify it
 //  under the terms of version 2 of the GNU General Public License as
@@ -24,31 +24,28 @@
 
 #include <iostream>
 #include "SpLibLoader.h"
-
-#ifdef __APPLE__
-	#include <mach-o/dyld.h>
-#endif
+#include <mach-o/dyld.h>
 
 void SpLibLoader::load(std::string fileName)
 {
-	#ifndef __APPLE__
-  	void *handle = dlopen(fileName.c_str(), RTLD_LAZY);
-		if (handle == NULL)
-			std::cerr << "SpLibLoader: dlopen failed: " << dlerror() << std::endl;
-		else
-			handles.push_back(handle);
-	#else
-  	const struct mach_header *handle = NSAddImage(fileName.c_str(), NSADDIMAGE_OPTION_RETURN_ON_ERROR);
-		if (handle == NULL)
-			std::cerr << "SpLibLoader: NSAddImage failed " << std::endl;
-	#endif
+  #ifndef __APPLE__
+    void *handle = dlopen(fileName.c_str(), RTLD_LAZY);
+    if (handle == NULL)
+      std::cerr << "SpLibLoader: dlopen failed: " << dlerror() << std::endl;
+    else
+    	handles.push_back(handle);
+  #else
+    const struct mach_header *handle = NSAddImage(fileName.c_str(), NSADDIMAGE_OPTION_RETURN_ON_ERROR);
+    if (handle == NULL)
+      std::cerr << "SpLibLoader: NSAddImage failed " << std::endl;
+  #endif
 }
 
 void SpLibLoader::releaseAll()
 {
-	#ifndef __APPLE__
-		for (std::list<void *>::iterator a = handles.begin(); a != handles.end(); ++a)
-			dlclose((*a));
-	#endif
+  #ifndef __APPLE__
+    for (std::list<void *>::iterator a = handles.begin(); a != handles.end(); ++a)
+      dlclose((*a));
+  #endif
 }
 
