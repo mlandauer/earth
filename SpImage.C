@@ -6,6 +6,7 @@
 #include "SpSGIImage.h"
 #include "SpTIFFImage.h"
 #include "SpFITImage.h"
+#include "SpPRMANZImage.h"
 
 SpImage::SpImage()
 {
@@ -67,8 +68,11 @@ SpImage* SpImage::open(SpFile f)
 		(buf[2] == 'F') && (buf[3] == '8'))
 		cout << "GIF" << endl;
 	else if ((buf[0] == 0x2f) && (buf[1] == 0x08) &&
-		(buf[2] == 0x67) && (buf[3] == 0xab))
-		cout << "PRMANZ" << endl;
+		(buf[2] == 0x67) && (buf[3] == 0xab)) {
+		image = new SpPRMANZImage;
+		image->file = f;
+		return (image);
+	}
 	else if ((buf[0] == 0xce) && (buf[1] == 0xfa) &&
 		(buf[2] == 0x03) && (buf[3] == 0x00))
 		cout << "PRTEX" << endl;

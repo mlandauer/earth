@@ -88,6 +88,8 @@ void testSpImage()
 	cout << "Image format = " << image2->formatString() << endl;
 	cout << "Image width = " << image2->width() << endl;
 	cout << "Image height = " << image2->height() << endl;
+	// *** FIT File format currently untested ****
+	// *** PRMANZ File format currently untested ****
 }
 
 void space()
