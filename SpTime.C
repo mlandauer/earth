@@ -6,12 +6,22 @@
 
 #include "SpTime.h"
 
-SpTime::SpTime()
+SpTime::SpTime() : time(0)
 {
 }
 
 SpTime::~SpTime()
 {
+}
+
+bool SpTime::operator<(const SpTime &t) const
+{
+	return (time < t.time);
+}
+
+bool SpTime::operator==(const SpTime &t) const
+{
+	return (time == t.time);
 }
 
 void SpTime::setUnixTime(time_t t)

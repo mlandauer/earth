@@ -32,6 +32,8 @@ class SpTime
 		string timeString() const;
 		string dayOfMonthString() const;
 		string yearString() const;
+		bool operator<(const SpTime &t) const;
+		bool operator==(const SpTime &t) const;
 	private:
 		time_t time;
 };
