@@ -85,6 +85,12 @@ SpImage* SpImage::open(SpFile f)
 		cout << "PRTEX" << endl;
 }
 
+void SpImage::close()
+{
+	file.close();
+	delete this;
+}
+
 unsigned char SpImage::readChar() const
 {
 	unsigned char value;
