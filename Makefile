@@ -4,13 +4,13 @@ CC = g++
 OPTION = -g
 INCLUDE = 
 
-SRCS = SpDir.C SpFsObject.C SpImageFormat.C SpSize.C testCode.C \
-       SpDirMon.C SpGid.C SpImageSeq.C SpTester.C \
-       SpDirMonFam.C SpImage.C SpLibLoader.C SpTime.C \
-       SpFile.C SpImageDim.C SpPath.C SpUid.C \
-       testSpDir.C testSpDirMon.C testSpFile.C testSpFsObject.C \
-       testSpImage.C testSpImageSeq.C testSpPath.C testSpSize.C \
-       testSpTime.C testSpFsObjectHandle.C
+SRCS = SpDir.cpp SpFsObject.cpp SpImageFormat.cpp SpSize.cpp testCode.cpp \
+       SpDirMon.cpp SpGid.cpp SpImageSeq.cpp SpTester.cpp \
+       SpDirMonFam.cpp SpImage.cpp SpLibLoader.cpp SpTime.cpp \
+       SpFile.cpp SpImageDim.cpp SpPath.cpp SpUid.cpp \
+       testSpDir.cpp testSpDirMon.cpp testSpFile.cpp testSpFsObject.cpp \
+       testSpImage.cpp testSpImageSeq.cpp testSpPath.cpp testSpSize.cpp \
+       testSpTime.cpp testSpFsObjectHandle.cpp
 
 OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o SpLibLoader.o \
           SpUid.o SpGid.o SpImage.o SpImageFormat.o SpImageDim.o \
@@ -35,5 +35,5 @@ depend:
 	cd imageFormats; make depend
 	makedepend -I/usr/include/g++ -I/usr/local/include -- $(OPTION) -- $(SRCS)
 
-%.o : %.C
+%.o : %.cpp
 	$(CC) $(OPTION) $(INCLUDE) -c $< -o $@

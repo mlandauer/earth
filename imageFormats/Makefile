@@ -4,8 +4,8 @@ CC = g++
 OPTION = -g
 INCLUDE = -I..
 
-SRCS = SpCINEONImage.C SpGIFImage.C SpPRMANZImage.C SpSGIImage.C \
-       SpFITImage.C SpIFFImage.C SpPRTEXImage.C SpTIFFImage.C 
+SRCS = SpCINEONImage.cpp SpGIFImage.cpp SpPRMANZImage.cpp SpSGIImage.cpp \
+       SpFITImage.cpp SpIFFImage.cpp SpPRTEXImage.cpp SpTIFFImage.cpp 
 
 SO_OBJECTS = SpTIFFImage.so SpFITImage.so SpPRMANZImage.so SpSGIImage.so\
 		  SpGIFImage.so SpCINEONImage.so SpIFFImage.so SpPRTEXImage.so
@@ -18,7 +18,7 @@ clean:
 depend:
 	makedepend -I/usr/include/g++ -I.. -- $(OPTION) -- $(SRCS)
 
-%.o : %.C
+%.o : %.cpp
 	$(CC) -fPIC $(OPTION) -c $< $(INCLUDE) -o $@
 
 # Make the shared objects
