@@ -4,6 +4,7 @@
 #include <stream.h>
 
 #include "SpFile.h"
+#include "SpImage.h"
 
 void testSpSize()
 {
@@ -71,6 +72,13 @@ void testSpFile()
 	cout << "Value here = " << a << endl;
 	file.close();
 	cout << "File closed" << endl;
+	
+	SpFile file2("/home/matthew/images/dibble1.sgi");
+	SpImage *image = SpImage::open(file2);
+	cout << "Opened image " << file2.path().fullName() << endl;
+	cout << "Image format = " << image->formatString() << endl;
+	cout << "Image width = " << image->width() << endl;
+	cout << "Image height = " << image->height() << endl;
 }
 
 void space()

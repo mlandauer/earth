@@ -11,7 +11,7 @@ class SpPathString
 		SpPathString();
 		~SpPathString();
 		void set(SpString a);
-		SpString fullName();
+		SpString fullName() const;
 	private:
 		SpString pathString;
 };

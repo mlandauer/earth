@@ -9,6 +9,10 @@
 #include "SpFile.h"
 #include "SpPathString.h"
 
+SpFile::SpFile()
+{
+}
+
 SpFile::SpFile(SpString path)
 {
 	pathString.set(path);
@@ -18,12 +22,12 @@ SpFile::~SpFile()
 {
 }
 
-SpPathString SpFile::path()
+SpPathString SpFile::path() const
 {
 	return pathString;
 }
 
-SpSize SpFile::size()
+SpSize SpFile::size() const
 {
 	struct stat fileStat;
 	SpSize s;
@@ -32,7 +36,7 @@ SpSize SpFile::size()
 	return (s);
 }
 
-SpTime SpFile::lastModification()
+SpTime SpFile::lastModification() const
 {
 	struct stat fileStat;
 	SpTime t;
@@ -41,7 +45,7 @@ SpTime SpFile::lastModification()
 	return (t);
 }
 
-SpTime SpFile::lastAccess()
+SpTime SpFile::lastAccess() const
 {
 	struct stat fileStat;
 	SpTime t;
@@ -50,7 +54,7 @@ SpTime SpFile::lastAccess()
 	return (t);
 }
 
-SpTime SpFile::lastChange()
+SpTime SpFile::lastChange() const
 {
 	struct stat fileStat;
 	SpTime t;
@@ -59,7 +63,7 @@ SpTime SpFile::lastChange()
 	return (t);
 }
 
-SpUid SpFile::uid()
+SpUid SpFile::uid() const
 {
 	struct stat fileStat;
 	SpUid u;
@@ -68,7 +72,7 @@ SpUid SpFile::uid()
 	return (u);
 }
 
-SpGid SpFile::gid()
+SpGid SpFile::gid() const
 {
 	struct stat fileStat;
 	SpGid g;
@@ -88,17 +92,17 @@ void SpFile::close()
 	std::close(fd);
 }
 
-unsigned long int SpFile::read(void *buf, unsigned long int count)
+unsigned long int SpFile::read(void *buf, unsigned long int count) const
 {
 	return (std::read(fd, buf, count));
 }
 
-void SpFile::seek(unsigned long int pos)
+void SpFile::seek(unsigned long int pos) const
 {
 	lseek(fd, pos, SEEK_SET);
 }
 
-void SpFile::seekForward(unsigned long int pos)
+void SpFile::seekForward(unsigned long int pos) const
 {
 	lseek(fd, pos, SEEK_CUR);
 }

@@ -12,20 +12,21 @@
 class SpFile
 {
 	public:
-		SpFile(SpString path);
+		SpFile();
 		~SpFile();
-		SpTime lastAccess();
-		SpTime lastModification();
-		SpTime lastChange();
-		SpSize size();
-		SpPathString path();
-		SpUid uid();
-		SpGid gid();
+		SpFile(SpString path);
+		SpTime lastAccess() const;
+		SpTime lastModification() const;
+		SpTime lastChange() const;
+		SpSize size() const;
+		SpPathString path() const;
+		SpUid uid() const;
+		SpGid gid() const;
 		void open();
 		void close();
-		unsigned long int read(void *buf, unsigned long int count);
-		void seek(unsigned long int pos);
-		void seekForward(unsigned long int pos);
+		unsigned long int read(void *buf, unsigned long int count) const;
+		void seek(unsigned long int pos) const;
+		void seekForward(unsigned long int pos) const;
 	private:
 		SpPathString pathString;
 		int fd;

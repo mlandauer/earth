@@ -15,7 +15,7 @@ void SpPathString::set(SpString a)
 	pathString = a;
 }
 
-SpString SpPathString::fullName()
+SpString SpPathString::fullName() const
 {
 	return (pathString);
 }
