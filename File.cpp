@@ -46,7 +46,9 @@ bool File::valid() const
 		return false;
 }
 
-// Opens for read only at the moment
+/*!
+  \todo Opens for read only at the moment
+*/
 void File::open()
 {
 	fd = ::open(path().fullName().c_str(), O_RDONLY);

@@ -87,8 +87,6 @@ std::string Path::relative() const
 	return (a);
 }
 
-// Returns an absolute version of the path
-// i.e. foo/blah.tif -> /home/fiddle/foo/blah.tif
 std::string Path::absolute() const
 {
 	if (pathString[0] == '/')
