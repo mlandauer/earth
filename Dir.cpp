@@ -59,6 +59,20 @@ std::vector<File> Dir::listFiles(bool sortByPath) const
   return l;
 }
 
+std::vector<File> Dir::listFilesRecursive(bool sortByPath) const
+{
+	std::vector<File> l = listFiles(sortByPath);
+	std::vector<Dir> d = listDirs(sortByPath);
+	// My use of STL will improve!
+	for (std::vector<Dir>::iterator i = d.begin(); i != d.end(); ++i) {
+		std::vector<File> l2 = i->listFilesRecursive(sortByPath);
+		for (std::vector<File>::iterator j = l2.begin(); j != l2.end(); ++j) {
+			l.push_back(*j);
+		}
+	}
+	return l;
+}
+
 std::vector<Dir> Dir::listDirs(bool sortByPath) const
 {
 	std::vector<Dir> l;

@@ -140,6 +140,28 @@
 			name = IFF;
 			refType = 4;
 		};
+		DC42344603AEDFE60BFEE61B = {
+			isa = PBXFileReference;
+			path = IndexDirectory.h;
+			refType = 4;
+		};
+		DC42344703AEDFE60BFEE61B = {
+			fileRef = DC42344603AEDFE60BFEE61B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		DC42344803AEDFF10BFEE61B = {
+			isa = PBXFileReference;
+			path = IndexDirectory.cpp;
+			refType = 4;
+		};
+		DC42344903AEDFF10BFEE61B = {
+			fileRef = DC42344803AEDFF10BFEE61B;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		DC4D498203A71F200BFEE61B = {
 			isa = PBXFileReference;
 			path = CINEONImage.cpp;
@@ -354,6 +376,8 @@
 				DC8E428A039D637F0B02001F,
 				DC8E428C039D637F0B02001F,
 				DC8E428D039D637F0B02001F,
+				DC42344603AEDFE60BFEE61B,
+				DC42344803AEDFF10BFEE61B,
 				DC8E42CA039D64C60B02001F,
 			);
 			isa = PBXGroup;
@@ -605,6 +629,7 @@
 				DCCD6FEB03ADAE240BFEE61B,
 				DC16799A03AE9A530BFEE61B,
 				DC16799E03AEA7B20BFEE61B,
+				DC42344703AEDFE60BFEE61B,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -644,6 +669,7 @@
 				DCCD6FEA03ADAE230BFEE61B,
 				DC16799803AE9A460BFEE61B,
 				DC16799C03AEA7990BFEE61B,
+				DC42344903AEDFF10BFEE61B,
 			);
 			isa = PBXSourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;

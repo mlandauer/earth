@@ -51,6 +51,15 @@ class Dir : public FsObject
       \param sortByPath If true the returned files are sorted alphabetically by path
     */
     std::vector<Dir> listDirs(bool sortByPath = false) const;
+		
+		//! Returns all the files in this directory or all directories below 
+    /*!
+			The files at each directory level are sorted separately. The files at the top
+			level are returned first.
+      \param sortByPath If true the returned files are sorted alphabetically by path
+    */
+		std::vector<File> listFilesRecursive(bool sortByPath = false) const;
+	
     //! Is this a valid directory?
 		bool valid() const;
     
