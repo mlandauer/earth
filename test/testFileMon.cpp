@@ -27,6 +27,7 @@
 #include <cppunit/TestAssert.h>
 #include <algorithm>
 #include "FileMon.h"
+#include "Path.h"
 
 using namespace Sp;
 
@@ -40,13 +41,16 @@ public:
 	void test();
 	
 private:
+	void checkNextEvents(std::list<FileMonEvent> &actualEvents, std::list<FileMonEvent> &expectedEvents, CppUnit::SourceLine sourceLine);
 	void grabQueuedEvents(FileMon &m);
 	std::list<FileMonEvent> events;
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testFileMon);
 
-void checkNextEvents(std::list<FileMonEvent> &actualEvents, std::list<FileMonEvent> &expectedEvents, CppUnit::SourceLine sourceLine)
+#define CPPUNIT_CHECK_NEXT_EVENTS( actualEvents, expectedEvents ) checkNextEvents( actualEvents, expectedEvents,  CPPUNIT_SOURCELINE() )
+
+void testFileMon::checkNextEvents(std::list<FileMonEvent> &actualEvents, std::list<FileMonEvent> &expectedEvents, CppUnit::SourceLine sourceLine)
 {
 	// The lists must be sorted for set_symmetric_difference
 	actualEvents.sort();
@@ -65,10 +69,6 @@ void checkNextEvents(std::list<FileMonEvent> &actualEvents, std::list<FileMonEve
 	actualEvents.clear();
 	expectedEvents.clear();
 }
-
-#define CPPUNIT_CHECK_NEXT_EVENTS( actualEvents, expectedEvents ) checkNextEvents( actualEvents, expectedEvents,  CPPUNIT_SOURCELINE() )
-
-#include "Path.h"
 
 // Grab all the queued events and put them into the local list
 void testFileMon::grabQueuedEvents(FileMon &m)
