@@ -24,8 +24,21 @@
 
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/ui/text/TestRunner.h>
+#include <cppunit/CompilerOutputter.h>
+#include <cppunit/TestListener.h>
+#include <cppunit/Test.h>
+#include <cppunit/TestResult.h>
 
 #include "ImageFormat.h"
+
+class MyProgressTestListener : public CppUnit::TestListener
+{
+public:
+	virtual void startTest(CppUnit::Test *test)
+	{
+		std::cout << "Starting " << test->getName() << std::endl;
+	}
+};
 
 int main(int argc, char **argv)
 {
@@ -40,7 +53,13 @@ int main(int argc, char **argv)
 	// Obtain and add a new TestSuite created by the TestFactoryRegistry that contains all
 	// the test suite registered using CPPUNIT_TEST_SUITE_REGISTRATION().
 	runner.addTest( registry.makeTest() );
-	runner.run();
+	//runner.setOutputter(CppUnit::CompilerOutputter::defaultOutputter(&runner.result(), std::cerr));
+	
+	// Add an extra test progress listener if we want a more verbose ouput
+	MyProgressTestListener progress;
+ 	runner.eventManager().addListener( &progress );
+ 	
+ 	runner.run();
 	
 	Sp::ImageFormat::deRegisterPlugins();
 	return 0;
