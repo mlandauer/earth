@@ -59,8 +59,10 @@ void index(std::string directoryName)
 int main(int argc, char **argv)
 {
 	// Parse arguments
-	if (argc != 2)
+	if (argc != 2) {
 		info(argv[0]);
+		return 1;
+	}
 	std::string directoryName(argv[1]);
 	
 	// Register the plugins
