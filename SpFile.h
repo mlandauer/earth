@@ -3,19 +3,19 @@
 #ifndef _spfile_h
 #define _spfile_h
 
-#include "SpMisc.h"
+#include "SpPathString.h"
 
 class SpFile
 {
 	public:
 		SpFile(SpString path);
 		~SpFile();
-		//SpTime getLastUpdateTime();
-		//SpSize getSize();
-		//SpString getName();
-		//SpString getFullName();
+		//SpTime lastUpdateTime();
+		SpSize size();
+		SpPathString path();
+		//SpString fullName();
 	private:
-		SpString fullName;
+		SpPathString pathString;
 };
 
 #endif

@@ -18,10 +18,10 @@ class SpSize
 		void setKBytes(unsigned long int n);
 		void setMBytes(unsigned long int n);
 		void setGBytes(unsigned long int n);
-		unsigned long int getBytes();
-		unsigned long int getKBytes();
-		unsigned long int getMBytes();
-		unsigned long int getGBytes();
+		unsigned long int bytes();
+		unsigned long int kbytes();
+		unsigned long int mbytes();
+		unsigned long int gbytes();
 	private:
 		unsigned long int KBytes;
 };

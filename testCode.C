@@ -10,24 +10,25 @@ void testSpSize()
 {
 	SpSize s;
 	s.setBytes(4097);
-	cout << s.getBytes()  << " bytes = " <<
-	        s.getKBytes() << " Kb = " <<
-	        s.getMBytes() << " Mb = " <<
-	        s.getGBytes() << " Gb" << endl;
+	cout << s.bytes()  << " bytes = " <<
+	        s.kbytes() << " Kb = " <<
+	        s.mbytes() << " Mb = " <<
+	        s.gbytes() << " Gb" << endl;
 
 	// This will overflow the bytes return
 	s.setGBytes(10);
-	cout << s.getBytes()  << " bytes = " <<
-	        s.getKBytes() << " Kb = " <<
-	        s.getMBytes() << " Mb = " <<
-	        s.getGBytes() << " Gb" << endl;
+	cout << s.bytes()  << " bytes = " <<
+	        s.kbytes() << " Kb = " <<
+	        s.mbytes() << " Mb = " <<
+	        s.gbytes() << " Gb" << endl;
 }
 
 void testSpFile()
 {
 	SpFile file("/home/matthew/images/blah1.tiff");
-	//cout << "filename = " << getName() << endl;
-	//cout << "Full Path = " << getFullName() << endl;
+	cout << "filename = " << file.path().fullName() << endl;
+	cout << "size = " << file.size().bytes() << " bytes" << endl;
+	cout << "size = " << file.size().kbytes() << " Kbytes" << endl;
 }
 
 main()

@@ -34,22 +34,22 @@ void SpSize::setGBytes(unsigned long int n)
 	KBytes = n * 1024 * 1024;
 }
 
-unsigned long int SpSize::getBytes()
+unsigned long int SpSize::bytes()
 {
 	return KBytes * 1024;
 }
 
-unsigned long int SpSize::getKBytes()
+unsigned long int SpSize::kbytes()
 {
 	return KBytes;
 }
 
-unsigned long int SpSize::getMBytes()
+unsigned long int SpSize::mbytes()
 {
 	return KBytes / 1024;
 }
 
-unsigned long int SpSize::getGBytes()
+unsigned long int SpSize::gbytes()
 {
 	return KBytes / 1024 / 1024;
 }
