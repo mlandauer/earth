@@ -299,7 +299,7 @@ main()
 	
 	cout << endl;
 	if (noErrors == 0)
-		cout << "All tests passed" << endl;
+		cout << "All tests passed!" << endl;
 	
 	SpImage::deRegisterPlugins();
 }

@@ -18,8 +18,8 @@ void SpFile::setPath(const SpPath &path)
 {
 	if (!fileOpen)
 		SpFsObject::setPath(path);
-	else 
-		cerr << "Cannot setPath for file when it is open!" << endl;
+	//else 
+	//	cerr << "Cannot setPath for file when it is open!" << endl;
 }
 
 SpFile::~SpFile()
