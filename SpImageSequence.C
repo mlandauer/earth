@@ -39,14 +39,14 @@ void SpImageSequence::addImage(SpImage *i)
 		f.insert(frameNumber(i->path()));
 }
 
-bool SpImageSequence::partOfSequence(SpImage *i)
+bool SpImageSequence::partOfSequence(SpImage *i) const
 {
 	// Check that the name of the image matches the name of the sequence
 	return (pattern(i->path()) == p) && (i->getFormat() == imageFormat)
 		&& (i->dim() == dimensions);
 }
 
-string SpImageSequence::framesString()
+string SpImageSequence::framesString() const
 {
 	string r;
 	char buf[100];
@@ -73,12 +73,12 @@ string SpImageSequence::framesString()
 	return r;
 }
 
-SpPath SpImageSequence::path()
+SpPath SpImageSequence::path() const
 {
 	return p;
 }
 
-SpPath SpImageSequence::pattern(const SpPath &a)
+SpPath SpImageSequence::pattern(const SpPath &a) const
 {
 	string s = a.fullName();
 	// Search backwards from the end for numbers
@@ -89,7 +89,7 @@ SpPath SpImageSequence::pattern(const SpPath &a)
 	return SpPath(s);
 }
 
-int SpImageSequence::frameNumber(const SpPath &a)
+int SpImageSequence::frameNumber(const SpPath &a) const
 {
 	string s = a.fullName();
 	// Search backwards from the end for numbers
@@ -104,7 +104,7 @@ int SpImageSequence::frameNumber(const SpPath &a)
 
 // Returns the correct replacement for a number based on the number of
 // characters
-string SpImageSequence::hash(int size)
+string SpImageSequence::hash(int size) const
 {
 	if (size == 4)
 		return "#";

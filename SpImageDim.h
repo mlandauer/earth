@@ -34,7 +34,7 @@ class SpImageDim
 		void setHeight(unsigned int height);
 		unsigned int width() const;
 		unsigned int height() const;
-		bool operator==(SpImageDim &d) const;
+		bool operator==(const SpImageDim &d) const;
 	private:
 		unsigned int w, h;
 };

@@ -33,17 +33,17 @@ class SpImageSequence
 	public:
 		SpImageSequence(SpImage *i);
 		void addImage(SpImage *i);
-		SpPath path();
-		string framesString();
-		SpImageDim dim() { return dimensions; };
-		SpImageFormat* format() { return imageFormat; };
+		SpPath path() const;
+		string framesString() const;
+		SpImageDim dim() const { return dimensions; };
+		SpImageFormat* format() const { return imageFormat; };
 	private:
 		set<int> f;
 		SpPath p;
-		SpPath pattern(const SpPath &a);
-		int frameNumber(const SpPath &a);
-		string hash(int size);
-		bool partOfSequence(SpImage *i);
+		SpPath pattern(const SpPath &a) const;
+		int frameNumber(const SpPath &a) const;
+		string hash(int size) const;
+		bool partOfSequence(SpImage *i) const;
 		// Image/Sequence attributes
 		SpImageFormat *imageFormat;
 		SpImageDim dimensions;

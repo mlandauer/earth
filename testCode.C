@@ -398,90 +398,64 @@ public:
 		SpImage *i6 = SpImage::construct(path3a);
 		SpImage *i7 = SpImage::construct(path4a);
 		SpImage *i8 = SpImage::construct(path5a);
-		checkNotNULL("test 1a", i1);
-		checkNotNULL("test 1b", i2);
-		checkNotNULL("test 1c", i3);
-		checkNotNULL("test 1d", i4);
-		checkNotNULL("test 1e", i5);
-		checkNotNULL("test 1f", i6);
-		checkNotNULL("test 1g", i7);
 		checkNotNULL("test 1h", i8);
 		
-		SpImageSequence seq(i1);
-		checkEqual("test 2a", seq.path().fullName(), "test/seq/test1.#.gif");
-		checkEqual("test 2b", seq.framesString(), "1");
-		checkEqual("test 2c", seq.dim().width(), 2);
-		checkEqual("test 2d", seq.dim().height(), 2);
-		checkEqual("test 2e", seq.format()->formatString(), "GIF");
+		if (checkNotNULL("test 1a", i1)) {
+			SpImageSequence seq(i1);
+			checkSequence("test 1", seq, "test/seq/test1.#.gif", "1", 2, 2, "GIF");
+			if (checkNotNULL("test 2a", i2)) {
+				seq.addImage(i2);
+				checkSequence("test 2", seq, "test/seq/test1.#.gif", "1-2", 2, 2, "GIF");
+			}
+			if (checkNotNULL("test 3a", i4)) {
+				seq.addImage(i4);
+				checkSequence("test 3", seq, "test/seq/test1.#.gif", "1-2,4", 2, 2, "GIF");
+			}
+			if (checkNotNULL("test 4a", i3)) {
+				seq.addImage(i3);
+				checkSequence("test 4", seq, "test/seq/test1.#.gif", "1-4", 2, 2, "GIF");
+			}
+		}
 		
-		seq.addImage(i2);
-		checkEqual("test 3a", seq.path().fullName(), "test/seq/test1.#.gif");
-		checkEqual("test 3b", seq.framesString(), "1-2");
-		checkEqual("test 3c", seq.dim().width(), 2);
-		checkEqual("test 3d", seq.dim().height(), 2);
-		checkEqual("test 3e", seq.format()->formatString(), "GIF");
+		if (checkNotNULL("test 5a", i5)) {
+			SpImageSequence seq2(i5);
+			checkSequence("test 5", seq2, "test/seq/test2.@.gif", "8", 2, 2, "GIF");
+		}
+		if (checkNotNULL("test 6a", i6)) {
+			SpImageSequence seq3(i6);
+			checkSequence("test 6", seq3, "test/seq/test2.@@@@@@.gif", "123", 2, 2, "GIF");
+		}
 		
-		seq.addImage(i4);
-		checkEqual("test 4a", seq.path().fullName(), "test/seq/test1.#.gif");
-		checkEqual("test 4b", seq.framesString(), "1-2,4");
-		checkEqual("test 4c", seq.dim().width(), 2);
-		checkEqual("test 4d", seq.dim().height(), 2);
-		checkEqual("test 4e", seq.format()->formatString(), "GIF");
+		if (checkNotNULL("test 7a", i7)) {
+			SpImageSequence seq4(i7);
+			checkSequence("test 7", seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
+			if (checkNotNULL("test 8a", i5)) {
+				// Adding in an image with a different name should not work
+				seq4.addImage(i5);
+				checkSequence("test 8", seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
+			}
+			if (checkNotNULL("test 9a", i8)) {
+				// Adding in an image with a correct name but wrong image size should not work
+				seq4.addImage(i8);
+				checkSequence("test 9", seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
+			}
+		}
 		
-		seq.addImage(i3);
-		checkEqual("test 5a", seq.path().fullName(), "test/seq/test1.#.gif");
-		checkEqual("test 5b", seq.framesString(), "1-4");
-		checkEqual("test 5c", seq.dim().width(), 2);
-		checkEqual("test 5d", seq.dim().height(), 2);
-		checkEqual("test 5e", seq.format()->formatString(), "GIF");
-		
-		SpImageSequence seq2(i5);
-		checkEqual("test 6a", seq2.path().fullName(), "test/seq/test2.@.gif");
-		checkEqual("test 6b", seq2.framesString(), "8");
-		checkEqual("test 6c", seq2.dim().width(), 2);
-		checkEqual("test 6d", seq2.dim().height(), 2);
-		checkEqual("test 6e", seq2.format()->formatString(), "GIF");
-		
-		SpImageSequence seq3(i6);
-		checkEqual("test 7a", seq3.path().fullName(), "test/seq/test2.@@@@@@.gif");
-		checkEqual("test 7b", seq3.framesString(), "123");
-		checkEqual("test 7c", seq3.dim().width(), 2);
-		checkEqual("test 7d", seq3.dim().height(), 2);
-		checkEqual("test 7e", seq3.format()->formatString(), "GIF");
-		
-		SpImageSequence seq4(i7);
-		checkEqual("test 8a", seq4.path().fullName(), "test/seq/@@@.gif");
-		checkEqual("test 8b", seq4.framesString(), "120");
-		checkEqual("test 8c", seq4.dim().width(), 2);
-		checkEqual("test 8d", seq4.dim().height(), 2);
-		checkEqual("test 8e", seq4.format()->formatString(), "GIF");
-		
-		// Adding in an image with a different name should not work
-		seq4.addImage(i5);
-		checkEqual("test 9a", seq4.path().fullName(), "test/seq/@@@.gif");
-		checkEqual("test 9b", seq4.framesString(), "120");
-		checkEqual("test 9c", seq4.dim().width(), 2);
-		checkEqual("test 9d", seq4.dim().height(), 2);
-		checkEqual("test 9e", seq4.format()->formatString(), "GIF");
-		
-		// Adding in an image with a correct name but wrong image size should not work
-		seq4.addImage(i8);
-		checkEqual("test 10a", seq4.path().fullName(), "test/seq/@@@.gif");
-		checkEqual("test 10b", seq4.framesString(), "120");
-		checkEqual("test 10c", seq4.dim().width(), 2);
-		checkEqual("test 10d", seq4.dim().height(), 2);
-		checkEqual("test 10e", seq4.format()->formatString(), "GIF");		
-		
-		SpImageSequence seq5(i8);
-		checkEqual("test 11a", seq5.path().fullName(), "test/seq/@@@.gif");
-		checkEqual("test 11b", seq5.framesString(), "110");
-		checkEqual("test 11c", seq5.dim().width(), 4);
-		checkEqual("test 11d", seq5.dim().height(), 4);
-		checkEqual("test 11e", seq5.format()->formatString(), "TIFF");		
-		
-		
+		if (checkNotNULL("test 10a", i8)) {
+			SpImageSequence seq5(i8);
+			checkSequence("test 10", seq5, "test/seq/@@@.gif", "110", 4, 4, "TIFF");
+		}
+			
 		system ("rm -rf test/seq");
 		delete i1, i2, i3, i4, i5, i6, i7, i8;
+	}
+	void checkSequence(string testName, const SpImageSequence &seq,
+		string name, string frames, int width, int height, string format) {
+		checkEqual(testName + "b", seq.path().fullName(), name);
+		checkEqual(testName + "c", seq.framesString(), frames);
+		checkEqual(testName + "d", seq.dim().width(), width);
+		checkEqual(testName + "e", seq.dim().height(), height);
+		checkEqual(testName + "f", seq.format()->formatString(), format);		
 	}
 	void copyFile(const SpPath &path1, const SpPath &path2) {
 		string command = "cp " + path1.fullName() + " " + path2.fullName();
