@@ -36,14 +36,18 @@ SpGid::~SpGid()
 {
 }
 
-void SpGid::setUnixGid(gid_t g)
+SpGid SpGid::unix(gid_t g)
 {
-	gid = g;
+  SpGid ret;
+  ret.gid = g;
+  return ret;
 }
 
-void SpGid::setCurrent()
+SpGid SpGid::current()
 {
-	gid = getgid();
+  SpGid ret;
+  ret.gid = getgid();
+  return ret;
 }
 
 std::string SpGid::name() const

@@ -40,8 +40,7 @@ void testSpDir::test()
 	SpUid u;
 	u.setCurrent();
 	checkEqual("test 2", dir.uid().name(), u.name());
-	SpGid g;
-	g.setCurrent();
+	SpGid g = SpGid::current();
 	checkEqual("test 3", dir.gid().name(), g.name());
 	checkEqualBool("test 4", dir.valid(), true);
 	std::vector<SpFsObjectHandle> ls = dir.ls();

@@ -33,8 +33,9 @@ class SpGid
 	public:
 		SpGid();
 		~SpGid();
-		void setUnixGid(gid_t g);
-		void setCurrent();
+    static SpGid unix(gid_t g);
+    static SpGid current();
+   
 		std::string name() const;
 	private:
 		gid_t gid;

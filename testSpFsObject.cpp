@@ -39,8 +39,7 @@ void testSpFsObject::test()
 		"test/templateImages/8x8.tiff");
 	SpUid u;
 	u.setCurrent();
-	SpGid g;
-	g.setCurrent();
+	SpGid g = SpGid::current();
 	checkEqual("test 2", file->uid().name(), u.name());
 	checkEqual("test 3", file->gid().name(), g.name());
 	checkNotNULL("test 4", dynamic_cast<SpFile *>(file.pointer()));

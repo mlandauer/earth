@@ -84,7 +84,5 @@ SpUid SpFsObject::uid() const
 
 SpGid SpFsObject::gid() const
 {
-	SpGid g;
-	g.setUnixGid(unixStat().st_gid);
-	return (g);
+	return (SpGid::unix(unixStat().st_gid));
 }
