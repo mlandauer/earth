@@ -74,6 +74,19 @@ void testSpFile()
 	cout << "Value here = " << a << endl;
 	file.close();
 	cout << "File closed" << endl;
+	
+	cout << "Testing setPath checking mechanism" << endl;
+	SpFile f;
+	cout << "setPath..." << endl;
+	f.setPath("/home/matthew/images/blah1.tiff");
+	cout << "open..." << endl;
+	f.open();
+	cout << "setPath..." << endl;
+	f.setPath("/home/matthew/images/blah1.tiff");
+	cout << "close..." << endl;
+	f.close();
+	cout << "setPath..." << endl;
+	f.setPath("/home/matthew/images/blah1.tiff");	
 }
 
 void testSpImage()
@@ -177,6 +190,12 @@ void testSpDir()
 	cout << "group owner = " << dir.gid().name() << endl;
 	cout << "is a file? = " << dir.isFile() << endl;
 	cout << "is a directory? = " << dir.isDir() << endl;
+	list<SpFsObject *> ls = dir.ls();
+	// Just print out the names
+	cout << "Contents of directory " << dir.path().fullName() << ":" << endl;
+	for (list<SpFsObject *>::iterator a = ls.begin(); a != ls.end(); ++a) {
+		cout << (*a)->path().fullName() << endl;
+	}
 }
 
 main()
