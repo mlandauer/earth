@@ -22,26 +22,35 @@
 //
 // $Id$
 
+#include <algorithm>
 #include "CachedDir.h"
 
 namespace Sp {
 	
-CachedDir::CachedDir(const Dir &d) : dir(d)
+CachedDir::CachedDir(const Dir &d) : dir(d), filesSorted(false), dirsSorted(false)
 {
 	// Really the following should be an automatic operation
 	// By default making the lists sorted
-	files = dir.listFiles(true);
-	dirs = dir.listDirs(true);
+	files = dir.listFiles(false);
+	dirs = dir.listDirs(false);
 	change = dir.lastChange();
 }
 
-std::vector<File> CachedDir::listFiles() const
+std::vector<File> CachedDir::listFiles(bool sortByPath) const
 {
+	if (sortByPath && !filesSorted) {
+		std::sort(files.begin(), files.end());
+		filesSorted = true;
+	}
 	return files;
 }
 
-std::vector<Dir> CachedDir::listDirs() const
+std::vector<Dir> CachedDir::listDirs(bool sortByPath) const
 {
+	if (sortByPath && !dirsSorted) {
+		std::sort(dirs.begin(), dirs.end());
+		dirsSorted = true;
+	}
 	return dirs;
 }
 

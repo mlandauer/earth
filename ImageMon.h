@@ -28,6 +28,7 @@
 #include <queue>
 #include "Dir.h"
 #include "File.h"
+#include "CachedDir.h"
 #include "ImageEventObserver.h"
 
 namespace Sp {

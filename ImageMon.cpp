@@ -35,12 +35,12 @@ void ImageMon::startMonitorDirectory(const Dir &d)
 {
 	CachedDir c(d);
 	dirs.push_back(c);
-	std::vector<File> files = c.listFiles();
+	std::vector<File> files = c.listFiles(true);
 	// Tell the world about the files we've found
 	for (std::vector<File>::iterator i = files.begin(); i != files.end(); ++i)
 		notifyAdded(*i);
 	// And check for subdirectories
-	std::vector<Dir> dirs = c.listDirs();
+	std::vector<Dir> dirs = c.listDirs(true);
 	for (std::vector<Dir>::iterator i = dirs.begin(); i != dirs.end(); ++i)
 		startMonitorDirectory(*i);
 }
@@ -50,12 +50,12 @@ void ImageMon::stopMonitorDirectory(const Dir &d)
 	// Find the directory
 	for (std::list<CachedDir>::iterator i = dirs.begin(); i != dirs.end(); ++i) {
 		if (i->getDir() == d) {
-			std::vector<File> deletedFiles = i->listFiles();
+			std::vector<File> deletedFiles = i->listFiles(true);
 			// Tell the world about the files that have been deleted
 			for (std::vector<File>::iterator j = deletedFiles.begin(); j != deletedFiles.end(); ++j)
 				notifyDeleted(*j);
 			// And check for subdirectories
-			std::vector<Dir> deletedDirs = i->listDirs();
+			std::vector<Dir> deletedDirs = i->listDirs(true);
 			for (std::vector<Dir>::iterator j = deletedDirs.begin(); j != deletedDirs.end(); ++j)
 				stopMonitorDirectory(*j);
 			dirs.erase(i);
@@ -80,8 +80,8 @@ void ImageMon::update()
 			
 			// Directory has changed
 			// Must have a sorted list for set_difference
-			std::vector<File> cachedFiles = i->listFiles();
-			std::vector<File> currentFiles = currentDir.listFiles();
+			std::vector<File> cachedFiles = i->listFiles(true);
+			std::vector<File> currentFiles = currentDir.listFiles(true);
 			std::vector<File> addedFiles, deletedFiles;
 			std::set_difference(currentFiles.begin(), currentFiles.end(),
 				cachedFiles.begin(), cachedFiles.end(),
@@ -97,8 +97,8 @@ void ImageMon::update()
 			}
 			
 			// Check for directories
-			std::vector<Dir> cachedDirs = i->listDirs();
-			std::vector<Dir> currentDirs = currentDir.listDirs();
+			std::vector<Dir> cachedDirs = i->listDirs(true);
+			std::vector<Dir> currentDirs = currentDir.listDirs(true);
 			std::vector<Dir> addedDirs, deletedDirs;
 			std::set_difference(currentDirs.begin(), currentDirs.end(),
 				cachedDirs.begin(), cachedDirs.end(),

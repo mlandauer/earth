@@ -36,15 +36,16 @@ public:
 	CachedDir(const Dir &d);
 	
 	//! Returns all the files in this directory
-	std::vector<File> listFiles() const;
+	std::vector<File> listFiles(bool sortByPath = false) const;
 	//! Returns all the directories immediately under this directory
-	std::vector<Dir> listDirs() const;
+	std::vector<Dir> listDirs(bool sortByPath = false) const;
 	DateTime lastChange() const;
 	Dir getDir() const;
 	
 private:
-	std::vector<File> files;
-	std::vector<Dir> dirs;
+	mutable std::vector<File> files;
+	mutable std::vector<Dir> dirs;
+	mutable bool filesSorted, dirsSorted;
 	DateTime change;
 	Dir dir;
 };
