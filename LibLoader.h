@@ -31,14 +31,18 @@
 
 namespace Sp {
 
-// Handles the loading and releasing of dynamic libraries
-
+//! Handles the loading and releasing of dynamic libraries
 class LibLoader
 {
 	public:
 		LibLoader() { };
 		~LibLoader() { };
+    //! Load a dynamic library
+    /*!
+      \param fileName the name of the file to load as a dynamic library
+    */
 		void load(std::string fileName);
+    //! Unload all previously loaded dynamic libraries
 		void releaseAll();
 	private:
 		std::list<void *> handles;	
