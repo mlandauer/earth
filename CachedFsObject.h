@@ -37,26 +37,22 @@ class CachedFsObject
 {
 public:
 	CachedFsObject(const FsObject &o) {
-		lastAccess = o.getLastAccess();
-		lastModification = o.getLastModification();
-		lastChange = o.getLastChange();
-		user = o.getUser();
-		userGroup = o.getUserGroup();
-		path = o.getPath();
+		m_lastChange = o.getLastChange();
+		m_user = o.getUser();
+		m_userGroup = o.getUserGroup();
+		m_path = o.getPath();
 	};
 
-	DateTime getLastAccess() const { return lastAccess; }
-	DateTime getLastModification() const { return lastModification; }
-	DateTime getLastChange() const { return lastChange; }
-	User getUser() const { return user; }
-	UserGroup getUserGroup() const { return userGroup; }
-	Path getPath() const { return path; }
+	DateTime getLastChange() const { return m_lastChange; }
+	User getUser() const { return m_user; }
+	UserGroup getUserGroup() const { return m_userGroup; }
+	Path getPath() const { return m_path; }
 
 private:
-	DateTime lastAccess, lastModification, lastChange;
-	User user;
-	UserGroup userGroup;
-	Path path;
+	DateTime m_lastChange;
+	User m_user;
+	UserGroup m_userGroup;
+	Path m_path;
 };
 
 }

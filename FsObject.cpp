@@ -39,16 +39,6 @@ struct stat FsObject::getUnixStat() const
 	return (s);
 }
 
-DateTime FsObject::getLastModification() const
-{
-	return DateTime::unixDateTime(getUnixStat().st_mtime);
-}
-
-DateTime FsObject::getLastAccess() const
-{
-	return DateTime::unixDateTime(getUnixStat().st_atime);
-}
-
 DateTime FsObject::getLastChange() const
 {
 	return DateTime::unixDateTime(getUnixStat().st_ctime);

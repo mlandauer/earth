@@ -49,21 +49,7 @@ class FsObject
 public:
 	FsObject(const Path &path = Path()) : p(path) { };
 
-	//! Returns the date and time of the last access to the filesystem object
-	/*!
-		In Unix, this gets set when any of the following system calls are made:
-		mknod, utimes and read.
-	*/
-	DateTime getLastAccess() const;
-
-	//! Returns the date and time that the filesystem object was last modified
-	/*!
-		In Unix, this gets set when any of the following system calls are made:
-		mknod, utimes and write.
-	*/
-	DateTime getLastModification() const;
-
-	//! Returns the date and time the filesystem object was last changes
+	//! Returns the date and time the filesystem object was last changed
 	/*!
 		In Unix, this gets set when any of the following system calls are made:
 		chmod, chown, link, mknod, rename, unlink, utimes and write.
