@@ -47,6 +47,12 @@ class FileMonEvent
 		bool operator==(const FileMonEvent &e) const {
 			return ((getCode() == e.getCode()) && (getFile() == e.getFile()));
 		}
+		bool operator<(const FileMonEvent &e) const {
+			if (getCode() == e.getCode())
+				return (getFile() < e.getFile());
+			else
+				return (getCode() < e.getCode());
+		}
 };
 
 class CachedDir
@@ -54,8 +60,9 @@ class CachedDir
 public:
 	CachedDir(const Dir &d) : dir(d) {
 		// Really the following should be an automatic operation
-		files = dir.listFiles();
-		dirs = dir.listDirs();
+		// By default making the lists sorted
+		files = dir.listFiles(true);
+		dirs = dir.listDirs(true);
 		change = dir.lastChange();
 	}
 	

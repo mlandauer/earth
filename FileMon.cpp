@@ -74,6 +74,7 @@ void FileMon::update()
 			CachedDir currentDir(i->getDir());
 			
 			// Directory has changed
+			// Must have a sorted list for set_difference
 			std::vector<File> cachedFiles = i->listFiles();
 			std::vector<File> currentFiles = currentDir.listFiles();
 			std::vector<File> addedFiles, deletedFiles;
