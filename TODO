@@ -1,6 +1,5 @@
 Todo
 ====
-Cache lstats in SpFsObject
 Have to do error checking on file access
 Start Sequence class
 Write shell script that generates fake image sequences (from image Templates)
@@ -15,6 +14,7 @@ Done
 Actually compile so's that get read in (finalise plugins)
 Figure out what to do with the multiple versions of ls in SpDir
 	Got rid of them.
+Cache lstats in SpFsObject
 
 Not going to do
 ===============

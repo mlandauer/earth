@@ -7,14 +7,6 @@
 #include "SpDir.h"
 #include "SpImage.h"
 
-SpFsObject::SpFsObject(const SpPath &path) : p(path)
-{
-}
-
-SpFsObject::~SpFsObject()
-{
-}
-
 SpFsObject *SpFsObject::construct(const SpPath &path)
 {
 	SpFsObject *o;
@@ -39,60 +31,46 @@ SpFsObject *SpFsObject::construct(const SpPath &path)
 	return (NULL);
 }
 
-void SpFsObject::setPath(const SpPath &path)
+struct stat & SpFsObject::unixStat() const
 {
-	p = path;
+	if (!statCached) {
+		lstat(path().fullName().c_str(), &s);
+		statCached = true;
+	}
+	return (s);
 }
 
 SpTime SpFsObject::lastModification() const
 {
-	struct stat fileStat;
 	SpTime t;
-	lstat(path().fullName().c_str(), &fileStat);
-	t.setUnixTime(fileStat.st_mtime);
+	t.setUnixTime(unixStat().st_mtime);
 	return (t);
 }
 
 SpTime SpFsObject::lastAccess() const
 {
-	struct stat fileStat;
 	SpTime t;
-	lstat(path().fullName().c_str(), &fileStat);
-	t.setUnixTime(fileStat.st_atime);
+	t.setUnixTime(unixStat().st_atime);
 	return (t);
 }
 
 SpTime SpFsObject::lastChange() const
 {
-	struct stat fileStat;
 	SpTime t;
-	lstat(path().fullName().c_str(), &fileStat);
-	t.setUnixTime(fileStat.st_ctime);
+	t.setUnixTime(unixStat().st_ctime);
 	return (t);
 }
 
 SpUid SpFsObject::uid() const
 {
-	struct stat fileStat;
 	SpUid u;
-	lstat(path().fullName().c_str(), &fileStat);
-	u.setUnixUid(fileStat.st_uid);
+	u.setUnixUid(unixStat().st_uid);
 	return (u);
 }
 
 SpGid SpFsObject::gid() const
 {
-	struct stat fileStat;
 	SpGid g;
-	lstat(path().fullName().c_str(), &fileStat);
-	g.setUnixGid(fileStat.st_gid);
+	g.setUnixGid(unixStat().st_gid);
 	return (g);
 }
-
-SpPath SpFsObject::path() const
-{
-	return p;
-}
-
-
-
