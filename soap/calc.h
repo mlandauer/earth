@@ -8,6 +8,4 @@ class ns__Dim
 	int height;
 };
 
-struct ns__getDimResponse { ns__Dim return_; };
-
-int ns__getDim(void *_, struct ns__getDimResponse *result);
+int ns__getDim(void *_, ns__Dim *result);

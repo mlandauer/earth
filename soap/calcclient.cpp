@@ -5,13 +5,13 @@
 int main(int argc, char **argv)
 {
 	calc c;
-	struct ns__getDimResponse result;
+	struct ns__Dim result;
 	c.getDim(NULL, &result);
 	
 	if (c.soap->error)
 		soap_print_fault(c.soap, stderr);
 	else
-		std::cout << "width, height = " << result.return_.width << ", " << result.return_.height << std::endl;
+		std::cout << "width, height = " << result.width << ", " << result.height << std::endl;
 
 	return 0;
 }
