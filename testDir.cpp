@@ -23,7 +23,7 @@
 // $Id$
 
 #include <iostream>
-#include "testSpDir.h"
+#include "testDir.h"
 #include "SpDir.h"
 
 testDir::testDir() : Tester("Dir")

@@ -8,17 +8,17 @@ SRCS = SpDir.cpp SpFsObject.cpp SpImageFormat.cpp SpSize.cpp testCode.cpp \
        SpGid.cpp SpImageSeq.cpp SpTester.cpp \
        SpImage.cpp SpLibLoader.cpp SpTime.cpp \
        SpFile.cpp SpImageDim.cpp SpPath.cpp SpUid.cpp \
-       testSpDir.cpp testSpFile.cpp testSpFsObject.cpp \
-       testSpImage.cpp testSpImageSeq.cpp testSpPath.cpp testSpSize.cpp \
-       testSpTime.cpp testSpFsObjectHandle.cpp
+       testDir.cpp testFile.cpp testFsObject.cpp \
+       testImage.cpp testImageSeq.cpp testPath.cpp testSize.cpp \
+       testTime.cpp testFsObjectHandle.cpp
 
 OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o SpLibLoader.o \
           SpUid.o SpGid.o SpImage.o SpImageFormat.o SpImageDim.o \
           SpFsObject.o SpDir.o \
 		  SpImageSeq.o \
-          testSpDir.o testSpFile.o testSpFsObject.o \
-          testSpImage.o testSpImageSeq.o testSpPath.o testSpSize.o \
-          testSpTime.o testSpFsObjectHandle.o
+          testDir.o testFile.o testFsObject.o \
+          testImage.o testImageSeq.o testPath.o testSize.o \
+          testTime.o testFsObjectHandle.o
 
 all: testCode
 	cd imageFormats; make all

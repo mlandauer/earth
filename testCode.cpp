@@ -34,15 +34,15 @@
 #include "SpTester.h"
 #include "SpImageSeq.h"
 
-#include "testSpSize.h"
-#include "testSpTime.h"
-#include "testSpDir.h"
-#include "testSpFile.h"
-#include "testSpImage.h"
-#include "testSpFsObject.h"
-#include "testSpPath.h"
-#include "testSpImageSeq.h"
-#include "testSpFsObjectHandle.h"
+#include "testSize.h"
+#include "testTime.h"
+#include "testDir.h"
+#include "testFile.h"
+#include "testImage.h"
+#include "testFsObject.h"
+#include "testPath.h"
+#include "testImageSeq.h"
+#include "testFsObjectHandle.h"
 
 int main(int argc, char **argv)
 {

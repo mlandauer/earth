@@ -22,7 +22,7 @@
 //
 // $Id$
 
-#include "testSpTime.h"
+#include "testTime.h"
 #include "SpTime.h"
 
 testTime::testTime() : Tester("Time")

@@ -22,7 +22,7 @@
 //
 // $Id$
 
-#include "testSpImageSeq.h"
+#include "testImageSeq.h"
 #include "SpPath.h"
 
 testImageSeq::testImageSeq() : Tester("ImageSeq")

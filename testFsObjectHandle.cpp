@@ -22,32 +22,27 @@
 //
 // $Id$
 
-#include "testSpSize.h"
-#include "SpSize.h"
+#include "testFsObjectHandle.h"
+#include "SpFile.h"
+#include "SpFsObjectHandle.h"
 
-testSize::testSize() : Tester("Size")
+testFsObjectHandle::testFsObjectHandle() : Tester("FsObjectHandle")
 {
 	test();
 };
 
-void testSize::test() {
-	Size s;
-	s.setBytes(4097);
-	checkEqual("test 1", s.bytes(), 4097.0);
-	checkEqual("test 2", s.kbytes(), 4.0);
-	checkEqual("test 3", s.mbytes(), 0.0);
-	checkEqual("test 4", s.gbytes(), 0.0);
+void testFsObjectHandle::test()
+{
+	// Need to think of a good way to test that objects
+	// have been deleted.
+	File *f = new File("testName");
+	FsObject *o = f;
 
-	s.setGBytes(10);
-	checkEqual("test 5", s.gbytes(), 10.0);
-	checkEqual("test 6", s.mbytes(), 10240.0);
-	checkEqual("test 7", s.kbytes(), 10485760.0);
-	checkEqual("test 8", s.bytes(), 1.073741e10, 10e5);
-	
-	s.setBytes(0);
-	checkEqual("test 9", s.bytes(), 0.0);
-	checkEqual("test 10", s.kbytes(), 0.0);
-	checkEqual("test 11", s.mbytes(), 0.0);
-	checkEqual("test 12", s.gbytes(), 0.0);
+	Handle<FsObject> h(o);
+	checkEqual("test 1", h->path().fullName(), "testName");
+	{
+	Handle<FsObject> h2(h);
+	checkEqual("test 2", h2->path().fullName(), "testName");
+	}
 }
 

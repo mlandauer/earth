@@ -22,7 +22,7 @@
 //
 // $Id$
 
-#include "testSpImage.h"
+#include "testImage.h"
 #include "SpImage.h"
 
 testImage::testImage() : Tester("Image")
