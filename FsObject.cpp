@@ -28,7 +28,6 @@
 
 #include "FsObject.h"
 #include "Dir.h"
-#include "Image.h"
 
 namespace Sp {
 
@@ -42,17 +41,11 @@ FsObjectHandle FsObject::construct(const Path &path)
 		delete o;
 		
 	o = new File(path);
-	if (o->valid()) {
-		Image *i = Image::construct(path);
-		if (i == NULL)
-			return FsObjectHandle(o);
-		else {
-			delete o;
-			return FsObjectHandle(i);
-		}
-	}
+	if (o->valid())
+    return FsObjectHandle(o);
 	else
 		delete o;
+    
 	return FsObjectHandle(NULL);
 }
 

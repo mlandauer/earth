@@ -44,19 +44,19 @@ void testDir::test()
 	std::vector<FsObjectHandle> ls = dir.ls();
 	if (checkEqual("ls test 0", ls.size(), 13)) {
 		std::vector<FsObjectHandle>::iterator a = ls.begin();
-		checkImage("ls test 1", *(a++), "test/templateImages/2x2.gif", "GIF");
-		checkNotImage("ls test 2", *(a++), "test/templateImages/2x2.jpg");
-		checkImage("ls test 3", *(a++), "test/templateImages/2x2.sgi", "SGI");
-		checkImage("ls test 4", *(a++), "test/templateImages/2x2.tiff", "TIFF");
-		checkImage("ls test 5", *(a++), "test/templateImages/4x4.gif", "GIF");		
-		checkNotImage("ls test 6", *(a++), "test/templateImages/4x4.jpg");						
-		checkImage("ls test 7", *(a++), "test/templateImages/4x4.sgi", "SGI");		
-		checkImage("ls test 8", *(a++), "test/templateImages/4x4.tiff", "TIFF");		
-		checkImage("ls test 9", *(a++), "test/templateImages/8x8.gif", "GIF");		
-		checkNotImage("ls test 10", *(a++), "test/templateImages/8x8.jpg");		
-		checkImage("ls test 11", *(a++), "test/templateImages/8x8.sgi", "SGI");		
-		checkImage("ls test 12", *(a++), "test/templateImages/8x8.tiff", "TIFF");		
-		checkDir("ls test 13", *(a++), "test/templateImages/CVS");		
+		checkFile("ls test 1", *(a++), "test/templateImages/2x2.gif");
+		checkFile("ls test 2", *(a++), "test/templateImages/2x2.jpg");
+		checkFile("ls test 3", *(a++), "test/templateImages/2x2.sgi");
+		checkFile("ls test 4", *(a++), "test/templateImages/2x2.tiff");
+		checkFile("ls test 5", *(a++), "test/templateImages/4x4.gif");		
+		checkFile("ls test 6", *(a++), "test/templateImages/4x4.jpg");						
+		checkFile("ls test 7", *(a++), "test/templateImages/4x4.sgi");		
+		checkFile("ls test 8", *(a++), "test/templateImages/4x4.tiff");		
+		checkFile("ls test 9", *(a++), "test/templateImages/8x8.gif");		
+		checkFile("ls test 10", *(a++), "test/templateImages/8x8.jpg");		
+		checkFile("ls test 11", *(a++), "test/templateImages/8x8.sgi");		
+		checkFile("ls test 12", *(a++), "test/templateImages/8x8.tiff");
+		checkDir("ls test 13", *(a++), "test/templateImages/CVS");
 	}
 	// Try doing an ls on a non-existant directory
 	Dir dirNotExist("test/whatASillyFella");
@@ -65,16 +65,9 @@ void testDir::test()
 	checkEqual("non-existant test 2", lsNotExist.size(), 0);
 }
 
-void testDir::checkImage(std::string n, FsObjectHandle o, std::string fileName, std::string formatString) {
+void testDir::checkFile(std::string n, FsObjectHandle o, std::string fileName) {
 	checkEqual(n + "a",  o->path().fullName(), fileName);
-	Image *i = dynamic_cast<Image *>(o.pointer());
-	if (Tester::checkNotNULL(n + "b", i))
-		checkEqual(n + "c",  i->formatString(), formatString);		
-}
-
-void testDir::checkNotImage(std::string n, FsObjectHandle o, std::string fileName) {
-	checkEqual(n + "a",  o->path().fullName(), fileName);
-	checkNULL(n + "b",  dynamic_cast<Image *>(o.pointer()));
+	checkNotNULL(n + "b",  dynamic_cast<File *>(o.pointer()));
 }
 
 void testDir::checkDir(std::string n, FsObjectHandle o, std::string fileName) {

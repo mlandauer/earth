@@ -35,8 +35,7 @@ class testDir : public Tester
 public:
 	testDir();
 	void test();
-	void checkImage(std::string n, FsObjectHandle o, std::string fileName, std::string formatString);
-	void checkNotImage(std::string n, FsObjectHandle o, std::string fileName);
+  void checkFile(std::string n, FsObjectHandle o, std::string fileName);
 	void checkDir(std::string n, FsObjectHandle o, std::string fileName);
 };
 
