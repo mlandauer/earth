@@ -33,7 +33,7 @@ testImage::testImage() : Tester("Image")
 void testImage::test()
 {
 	Image *image1 = Image::construct("test/templateImages/8x8.sgi");
-	if (checkNotNULL(image1)) {
+	if (check(image1 != NULL)) {
 		checkEqual(image1->path().fullName(), "test/templateImages/8x8.sgi");
 		checkEqual(image1->size().getKBytes(), 0.89);
 		checkEqual(image1->formatString(), "SGI");
@@ -43,7 +43,7 @@ void testImage::test()
 	}
 	
 	Image *image2 = Image::construct("test/templateImages/8x8.tiff");
-	if (checkNotNULL(image2)) {
+	if (check(image2 != NULL)) {
 		checkEqual(image2->path().fullName(), "test/templateImages/8x8.tiff");
 		checkEqual(image2->size().getKBytes(), 0.39);
 		checkEqual(image2->formatString(), "TIFF");
@@ -57,7 +57,7 @@ void testImage::test()
 	// *** PRTEX File format currently untested ****
 	
 	Image *image3 = Image::construct("test/templateImages/8x8.gif");
-	if (checkNotNULL(image3)) {
+	if (check(image3 != NULL)) {
 		checkEqual(image3->path().fullName(), "test/templateImages/8x8.gif");
 		checkEqual(image3->size().getKBytes(), 0.83);
 		checkEqual(image3->formatString(), "GIF");
@@ -67,7 +67,7 @@ void testImage::test()
 	}
 	
 	Image *image4 = Image::construct("test/templateImages/8x8.cin");
-	if (checkNotNULL(image4)) {
+	if (check(image4 != NULL)) {
 		checkEqual(image4->path().fullName(), "test/templateImages/8x8.cin");
 		checkEqual(image4->size().getKBytes(), 2.25);
 		checkEqual(image4->formatString(), "Cineon");
@@ -77,7 +77,7 @@ void testImage::test()
 	}
 		
 	Image *image5 = Image::construct("test/templateImages/8x8.iff");
-	if (checkNotNULL(image5)) {
+	if (check(image5 != NULL)) {
 		checkEqual(image5->path().fullName(), "test/templateImages/8x8.iff");
 		checkEqual(image5->size().getKBytes(), 0.41);
 		checkEqual(image5->formatString(), "IFF");

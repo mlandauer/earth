@@ -72,73 +72,73 @@ void testImageSeq::test()
 	Image *i11 = Image::construct(path6c);
 	Image *i12 = Image::construct(path6d);
 		
-	if (checkNotNULL(i1)) {
+	if (check(i1 != NULL)) {
 		ImageSeq seq(i1);
 		checkSequence(seq, "test/seq/test1.#.gif", "1", 2, 2, "GIF");
-		if (checkNotNULL(i2)) {
+		if (check(i2 != NULL)) {
 			check(seq.addImage(i2));
 			checkSequence(seq, "test/seq/test1.#.gif", "1-2", 2, 2, "GIF");
 		}
-		if (checkNotNULL(i4)) {
+		if (check(i4 != NULL)) {
 			check(seq.addImage(i4));
 			checkSequence(seq, "test/seq/test1.#.gif", "1-2,4", 2, 2, "GIF");
 		}
-		if (checkNotNULL(i3)) {
+		if (check(i3 != NULL)) {
 			check(seq.addImage(i3));
 			checkSequence(seq, "test/seq/test1.#.gif", "1-4", 2, 2, "GIF");
 		}
-		if (checkNotNULL(i2)) {
+		if (check(i2 != NULL)) {
 			check(seq.removeImage(i2));
 			checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
 		}
 		// If we remove something that's not part of the sequence nothing should change
-		if (checkNotNULL(i8)) {
+		if (check(i8 != NULL)) {
 			check(!seq.removeImage(i8));
 			checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
 		}
-		if (checkNotNULL(i2)) {
+		if (check(i2 != NULL)) {
 			check(!seq.removeImage(i2));
 			checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
 		}
 		// Removing by giving a path
-		if (checkNotNULL(i3)) {
+		if (check(i3 != NULL)) {
 			check(seq.removeImage(path1c));
 			checkSequence(seq, "test/seq/test1.#.gif", "1,4", 2, 2, "GIF");
 		}
 			
 	}
 		
-	if (checkNotNULL(i5)) {
+	if (check(i5 != NULL)) {
 		ImageSeq seq2(i5);
 		checkSequence(seq2, "test/seq/test2.@.gif", "8", 2, 2, "GIF");
 	}
-	if (checkNotNULL(i6)) {
+	if (check(i6 != NULL)) {
 		ImageSeq seq3(i6);
 		checkSequence(seq3, "test/seq/test2.@@@@@@.gif", "123", 2, 2, "GIF");
 	}
 		
-	if (checkNotNULL(i7)) {
+	if (check(i7 != NULL)) {
 		ImageSeq seq4(i7);
 		checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
-		if (checkNotNULL(i5)) {
+		if (check(i5 != NULL)) {
 			// Adding in an image with a different name should not work
 			check(!seq4.addImage(i5));
 			checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
 		}
-		if (checkNotNULL(i8)) {
+		if (check(i8 != NULL)) {
 			// Adding in an image with a correct name but wrong image size should not work
 			check(!seq4.addImage(i8));
 			checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
 		}
 	}
 		
-	if (checkNotNULL(i8)) {
+	if (check(i8 != NULL)) {
 		ImageSeq seq5(i8);
 		checkSequence(seq5, "test/seq/@@@.gif", "110", 4, 4, "TIFF");
 	}
 	
 	// Now test what happens when we have a mix of valid and invalid images
-	if (checkNotNULL(i9) && checkNotNULL(i10)) {
+	if (check(i9 != NULL) && check(i10 != NULL)) {
 		ImageSeq one(i9), two(i10);
 		check(i9->valid());
 		check(!i10->valid());

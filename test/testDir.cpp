@@ -45,7 +45,7 @@ void testDir::test()
 	// Check that this user owns the files
 	check(dir.user() == User::current());
 	check(dir.userGroup() == UserGroup::current());
-	checkEqualBool(dir.valid(), true);
+	check(dir.valid());
 	std::vector<File> files = dir.listFiles(true);
 	if (checkEqual(files.size(), 19)) {
 		checkEqual(files[0].path().fullName(), "test/templateImages/2x2.cin");
@@ -76,7 +76,7 @@ void testDir::test()
   
 	// Try doing an ls on a non-existant directory
 	Dir dirNotExist("test/whatASillyFella");
-	checkEqualBool(dirNotExist.valid(), false);
+	check(!dirNotExist.valid());
 	std::vector<File> lsNotExist = dirNotExist.listFiles();
 	checkEqual(lsNotExist.size(), 0);
 	

@@ -31,10 +31,7 @@ namespace Sp {
 
 #define checkEqual(a, b) checkEqualInternal(a, b, __FILE__, __LINE__)
 #define checkEqualDelta(a, b, delta) checkEqualInternal(a, b, delta, __FILE__, __LINE__)
-#define checkEqualBool(a, b) checkEqualBoolInternal(a, b, __FILE__, __LINE__)
 #define check(a) checkInternal(a, __FILE__, __LINE__)
-#define checkNULL(a) checkNULLInternal(a, __FILE__, __LINE__)
-#define checkNotNULL(a) checkNotNULLInternal(a, __FILE__, __LINE__)
 
 class Tester
 {
@@ -49,12 +46,9 @@ class Tester
 	protected:
 		bool checkEqualInternal(std::string a, std::string b, const std::string &filename, int lineNumber);
 		bool checkEqualInternal(int a, int b, const std::string &filename, int lineNumber);
-		bool checkEqualBoolInternal(bool a, bool b, const std::string &filename, int lineNumber);
 		bool checkEqualInternal(float a, float b, const std::string &filename, int lineNumber);
 		bool checkEqualInternal(float a, float b, float delta, const std::string &filename, int lineNumber);
 		bool checkInternal(bool a, const std::string &filename, int lineNumber);
-		bool checkNULLInternal(void *p, const std::string &filename, int lineNumber);
-		bool checkNotNULLInternal(void *p, const std::string &filename, int lineNumber);
 	private:
 		static bool verbose;
 		static int noFails, noSuccesses;

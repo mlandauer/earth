@@ -91,11 +91,6 @@ bool Tester::checkEqualInternal(int a, int b, const std::string &filename, int l
 	return checkInternal(a == b, toString(b), toString(a), filename, lineNumber);
 }
 
-bool Tester::checkEqualBoolInternal(bool a, bool b, const std::string &filename, int lineNumber)
-{
-	return checkInternal(a == b, toStringBool(b), toStringBool(a), filename, lineNumber);
-}
-
 bool Tester::checkEqualInternal(float a, float b, float delta, const std::string &filename, int lineNumber)
 {
 	return checkInternal(fabs(a-b) <= delta, toString(b), toString(a), filename, lineNumber);
@@ -104,16 +99,6 @@ bool Tester::checkEqualInternal(float a, float b, float delta, const std::string
 bool Tester::checkEqualInternal(float a, float b, const std::string &filename, int lineNumber)
 {
 	return checkEqualInternal(a, b, floatDelta, filename, lineNumber);
-}
-
-bool Tester::checkNotNULLInternal(void *p, const std::string &filename, int lineNumber)
-{
-	return checkInternal(p != NULL, "non-null pointer", "null pointer", filename, lineNumber);
-}
-
-bool Tester::checkNULLInternal(void *p, const std::string &filename, int lineNumber)
-{
-	return checkInternal(p == NULL, "null pointer", "non-null pointer", filename, lineNumber);
 }
 
 void Tester::finish()
