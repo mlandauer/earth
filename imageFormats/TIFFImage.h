@@ -31,6 +31,13 @@
 
 namespace Sp {
 
+//! Properties of the TIFF image format
+/*!
+  The Tag Image File Format (TIFF) is a very flexible format that can store
+  a wide variety of data types and can store the data in many different forms.
+  This flexibility comes at a price. It is often the case that applications do
+  not fully support all of the specification.
+*/
 class TIFFImageFormat: public ImageFormat
 {
 	public:
@@ -40,6 +47,10 @@ class TIFFImageFormat: public ImageFormat
 		virtual std::string formatString() { return "TIFF"; }
 };
 
+//! Support operations on a TIFF format image
+/*!
+  For a description of the TIFF format see TIFFImageFormat
+*/
 class TIFFImage : public Image
 {
 	public:

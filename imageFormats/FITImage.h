@@ -31,6 +31,13 @@
 
 namespace Sp {
 
+//! Properties of the FIT image format
+/*!
+  To quote from the Silicon Graphics website: "The FIT format was created by the IL group
+  as a programming example for adding your own format. Unfortunately it has taken on a life
+  of its own and some people want to know how to write software for other packages to read it.
+  This is not encouraged and thus we aren't very forthcoming on the details..."
+*/
 class FITImageFormat: public ImageFormat
 {
 	public:
@@ -40,6 +47,10 @@ class FITImageFormat: public ImageFormat
 		virtual std::string formatString() { return "FIT"; }
 };
 
+//! Support operations on a FIT format image
+/*!
+  For a description of the FIT format see FITImageFormat
+*/
 class FITImage : public Image
 {
 	public:

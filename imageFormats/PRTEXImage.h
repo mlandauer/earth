@@ -31,6 +31,11 @@
 
 namespace Sp {
 
+//! Properties of the PRTEX image format
+/*!
+  This is the image format used by Pixar's Photorealistic Renderman (PRMAN) for storing
+  texture maps.
+*/
 class PRTEXImageFormat: public ImageFormat
 {
 	public:
@@ -40,6 +45,10 @@ class PRTEXImageFormat: public ImageFormat
 		virtual std::string formatString() { return "PRTEX"; }
 };
 
+//! Support operations on a PRTEX format image
+/*!
+  For a description of the PRTEX format see PRTEXImageFormat
+*/
 class PRTEXImage : public Image
 {
 	public:

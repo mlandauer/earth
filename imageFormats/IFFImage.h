@@ -31,6 +31,11 @@
 
 namespace Sp {
 
+//! Properties of the IFF image format
+/*!
+  This is the image format used natively by both Maya and Shake. It is not to be
+  confused with the older IFF format (from the Amiga days, I think).
+*/
 class IFFImageFormat: public ImageFormat
 {
 	public:
@@ -40,6 +45,10 @@ class IFFImageFormat: public ImageFormat
 		virtual std::string formatString() { return "IFF"; }
 };
 
+//! Support operations on an IFF format image
+/*!
+  For a description of the IFF format see IFFImageFormat
+*/
 class IFFImage : public Image
 {
 	public:

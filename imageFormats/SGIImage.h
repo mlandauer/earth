@@ -31,6 +31,12 @@
 
 namespace Sp {
 
+//! Properties of the SGI image format
+/*!
+  The SGI format is a simple image format. As it is a relatively simple format
+  to support, it tends to be a reliable way of moving image data between different
+  applications.
+*/
 class SGIImageFormat: public ImageFormat
 {
 	public:
@@ -40,6 +46,10 @@ class SGIImageFormat: public ImageFormat
 		virtual std::string formatString() { return "SGI"; }
 };
 
+//! Support operations on an SGI format image
+/*!
+  For a description of the SGI format see SGIImageFormat
+*/
 class SGIImage : public Image
 {
 	public:

@@ -31,6 +31,11 @@
 
 namespace Sp {
 
+//! Properties of the GIF image format
+/*!
+  The Graphics Interchange Format (GIF) is a useful format for images with large
+  areas of uniform colour, such as graphic or line art, as these compress quite well.
+*/
 class GIFImageFormat: public ImageFormat
 {
 	public:
@@ -40,6 +45,10 @@ class GIFImageFormat: public ImageFormat
 		virtual std::string formatString() { return "GIF"; }
 };
 
+//! Support operations on a GIF format image
+/*!
+  For a description of the GIF format see GIFImageFormat
+*/
 class GIFImage : public Image
 {
 	public:

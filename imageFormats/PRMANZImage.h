@@ -31,6 +31,11 @@
 
 namespace Sp {
 
+//! Properties of the PRMANZ image format
+/*!
+  This is the image format used by Pixar's Photorealistic Renderman (PRMAN) for storing
+  shadow maps.
+*/
 class PRMANZImageFormat: public ImageFormat
 {
 	public:
@@ -40,6 +45,10 @@ class PRMANZImageFormat: public ImageFormat
 		virtual std::string formatString() { return "PRMANZ"; }
 };
 
+//! Support operations on a PRMANZ format image
+/*!
+  For a description of the PRMANZ format see PRMANZImageFormat
+*/
 class PRMANZImage : public Image
 {
 	public:

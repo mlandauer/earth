@@ -31,6 +31,13 @@
 
 namespace Sp {
 
+//! Properties of the Cineon image format
+/*!
+  The Cineon format is the visual effects industry standard way of saving scanned
+  film image data in a 10 bit log colourspace. The Cineon format is also closely related
+  to the SMPTE DPX format which is a more general format applicable to industries beyond
+  digital film.
+*/
 class CINEONImageFormat: public ImageFormat
 {
 	public:
@@ -40,6 +47,10 @@ class CINEONImageFormat: public ImageFormat
 		virtual std::string formatString() { return "Cineon"; }
 };
 
+//! Support operations on a Cineon format image
+/*!
+  For a description of the Cineon format see CINEONImageFormat
+*/
 class CINEONImage : public Image
 {
 	public:
