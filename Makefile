@@ -6,11 +6,13 @@ INCLUDE =
 
 SRCS = Dir.cpp FsObject.cpp ImageFormat.cpp Size.cpp UserGroup.cpp \
 			 ImageSeq.cpp Tester.cpp  Image.cpp LibLoader.cpp DateTime.cpp \
-			 File.cpp ImageDim.cpp Path.cpp User.cpp Frames.cpp
+			 File.cpp ImageDim.cpp Path.cpp User.cpp Frames.cpp \
+			 IndexDirectory.cpp
 
 OBJECTS = Dir.o FsObject.o ImageFormat.o Size.o UserGroup.o \
           ImageSeq.o Tester.o Image.o LibLoader.o DateTime.o \
-					File.o ImageDim.o Path.o User.o Frames.o		 
+					File.o ImageDim.o Path.o User.o Frames.o \
+					IndexDirectory.o
 
 all: $(OBJECTS)
 	cd imageFormats; make all

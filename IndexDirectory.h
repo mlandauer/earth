@@ -20,26 +20,23 @@
 //  with this program; if not, write the Free Software Foundation, Inc., 59
 //  Temple Place - Suite 330, Boston MA 02111-1307, USA.
 //
-// $Id$
+//  $Id$
 
-#ifndef _testindexdirectory_h_
-#define _testindexdirectory_h_
+#ifndef _indexdirectory_h_
+#define _indexdirectory_h_
 
-#include "Tester.h"
+#include <vector>
+#include "Path.h"
 #include "ImageSeq.h"
-#include <string>
 
-using namespace Sp;
+namespace Sp {
 
-class testIndexDirectory : public Tester
+class IndexDirectory
 {
 public:
-	testIndexDirectory();
-	void test();
-	
-private:
-	void checkSequence(const std::string &name, const ImageSeq &sequence,
-		const std::string &format, int width, int height, const std::string &path, const std::string &frames);
+	std::vector<ImageSeq> getImageSequences(const Path &path) const;
 };
+
+}
 
 #endif
