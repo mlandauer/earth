@@ -9,7 +9,7 @@
 
 #include "SpFsObject.h"
 
-SpDir::SpDir(const string &path) : SpFsObject(path)
+SpDir::SpDir()
 {
 }
 
@@ -17,6 +17,9 @@ SpDir::~SpDir()
 {
 }
 
+SpDir::SpDir(const SpPath &path) : SpFsObject(path)
+{
+}
 
 // Overrides default implementation in SpFsObject for efficiency
 bool SpDir::isFile() const

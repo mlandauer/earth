@@ -13,8 +13,9 @@
 class SpFile : public SpFsObject
 {
 	public:
-		SpFile(const string &path = "");
+		SpFile();
 		~SpFile();
+		SpFile(const SpPath &path);
 		inline bool isFile() const;
 		inline bool isDir() const;
 		void open();
@@ -25,7 +26,7 @@ class SpFile : public SpFsObject
 		unsigned long  readLong(const int &endian) const;
 		void seek(unsigned long int pos) const;
 		void seekForward(unsigned long int pos) const;
-		void setPath(const string &path);
+		void setPath(const SpPath &path);
 	private:
 		int fd;
 		bool fileOpen;

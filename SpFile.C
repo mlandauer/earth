@@ -5,12 +5,16 @@
 
 #include "SpFile.h"
 
-SpFile::SpFile(const string &path) : fileOpen(false)
+SpFile::SpFile() : fileOpen(false)
+{
+}
+
+SpFile::SpFile(const SpPath &path) : fileOpen(false)
 {
 	setPath(path);
 }
 
-void SpFile::setPath(const string &path)
+void SpFile::setPath(const SpPath &path)
 {
 	if (!fileOpen)
 		SpFsObject::setPath(path);

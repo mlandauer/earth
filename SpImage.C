@@ -37,7 +37,7 @@ void SpImage::deRegisterPlugins()
 		delete (*a);
 }
 
-SpImage* SpImage::construct(const string &path)
+SpImage* SpImage::construct(const SpPath &path)
 {
 	// Figure out what the greatest amount of the header that needs
 	// to be read so that all the plugins can recognise themselves.

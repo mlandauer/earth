@@ -6,7 +6,6 @@
 #ifndef _spfsobject_h_
 #define _spfsobject_h_
 
-#include <string>
 #include "SpTime.h"
 #include "SpPath.h"
 #include "SpUid.h"
@@ -18,7 +17,7 @@ class SpFsObject
 	public:
 		SpFsObject();
 		~SpFsObject();
-		SpFsObject(const string &path);
+		SpFsObject(const SpPath &path);
 		bool isDir() const;
 		bool isFile() const;
 		SpTime lastAccess() const;
@@ -28,7 +27,6 @@ class SpFsObject
 		SpUid uid() const;
 		SpGid gid() const;
 		SpSize size() const;
-		void setPath(const string &pathString);
 		void setPath(const SpPath &path);
 	private:
 		SpPath p;

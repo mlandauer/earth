@@ -9,8 +9,9 @@
 class SpDir : public SpFsObject
 {
 	public:
-		SpDir(const string &path = "");
+		SpDir();
 		~SpDir();
+		SpDir(const SpPath &path);
 		list<SpFsObject *> ls() const;
 		bool isFile() const;
 		bool isDir() const;

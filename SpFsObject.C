@@ -9,18 +9,12 @@ SpFsObject::SpFsObject()
 {
 }
 
-SpFsObject::SpFsObject(const string &path)
+SpFsObject::SpFsObject(const SpPath &path) : p(path)
 {
-	setPath(path);
 }
 
 SpFsObject::~SpFsObject()
 {
-}
-
-void SpFsObject::setPath(const string &pathString)
-{
-	p.set(pathString);
 }
 
 void SpFsObject::setPath(const SpPath &path)

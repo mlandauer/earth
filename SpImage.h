@@ -11,7 +11,7 @@
 class SpImage : public SpFile
 {
 	public:
-		static SpImage* construct(const string &path);
+		static SpImage* construct(const SpPath &path);
 		static void registerPlugins();
 		static void deRegisterPlugins();
 		virtual SpImageDim dim() = 0;
