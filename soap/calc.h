@@ -10,4 +10,4 @@ class ns__Dim
 
 struct ns__getDimResponse { ns__Dim return_; };
 
-int ns__getDim(double a, double b, struct ns__getDimResponse *result);
+int ns__getDim(void *_, struct ns__getDimResponse *result);

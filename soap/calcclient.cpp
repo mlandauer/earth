@@ -6,7 +6,7 @@ int main(int argc, char **argv)
 {
 	calc c;
 	struct ns__getDimResponse result;
-	c.getDim(2, 15, &result);
+	c.getDim(NULL, &result);
 	
 	if (c.soap->error)
 		soap_print_fault(c.soap, stderr);

@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 	return 0;
 } 
 
-int ns__getDim(struct soap *soap, double a, double b, struct ns__getDimResponse *result)
+int ns__getDim(struct soap *soap, void *_, struct ns__getDimResponse *result)
 {
 	ns__Dim d;
 	d.width = 1024;
