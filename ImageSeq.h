@@ -90,6 +90,7 @@ class ImageSeq
 		int frameNumber(const Path &a) const;
 		std::string hash(int size) const;
 		bool couldBePartOfSequence(Image *i) const;
+		bool couldBePartOfSequence(const Path &path) const;
 		bool partOfSequence(Image *i) const;
 		bool partOfSequence(const Path &p) const;
 		// Image/Sequence attributes

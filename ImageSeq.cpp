@@ -70,20 +70,29 @@ bool ImageSeq::removeImage(const Path &p)
 
 bool ImageSeq::partOfSequence(Image *i) const
 {
-	if (!couldBePartOfSequence(i))
+	if (couldBePartOfSequence(i)) {
+    int no = frameNumber(i->path());
+    return (f.find(no) != f.end());
+  }
+  else {
 		return false;
-	int no = frameNumber(i->path());
-	return (f.find(no) != f.end());
+  }
 }
 
 bool ImageSeq::partOfSequence(const Path &path) const
 {
-	if (pattern(path) == p) {
+	if (couldBePartOfSequence(path)) {
     int no = frameNumber(path);
     return (f.find(no) != f.end());
   }
   else
 		return false;
+}
+
+bool ImageSeq::couldBePartOfSequence(const Path &path) const
+{
+	// Check that the name of the image matches the name of the sequence
+  return (pattern(path) == p);
 }
 
 bool ImageSeq::couldBePartOfSequence(Image *i) const
