@@ -24,7 +24,7 @@ clean:
 	rm -fr *.o *.so testCode
 
 testCode: $(OBJECTS)
-	$(CC) $(OPTION) -rdynamic -o testCode $(OBJECTS) -ldl
+	$(CC) $(OPTION) -rdynamic -o testCode $(OBJECTS) -ldl -lcppunit
 	
 depend:
 	cd imageFormats; make depend

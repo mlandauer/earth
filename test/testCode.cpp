@@ -23,43 +23,28 @@
 // $Id$
 // Some very simple test code
 
-#include <stream.h>
-#include <algorithm>
-#include <vector>
+#include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/ui/text/TestRunner.h>
 
-#include "File.h"
-#include "Image.h"
-#include "Dir.h"
-#include "Tester.h"
-#include "ImageSeq.h"
-
-#include "testSize.h"
-#include "testDateTime.h"
-#include "testDir.h"
-#include "testFile.h"
-#include "testImage.h"
-#include "testPath.h"
-#include "testImageSeq.h"
-#include "testIndexDirectory.h"
+#include "ImageFormat.h"
 
 int main(int argc, char **argv)
 {
 	// Register the plugins
-	ImageFormat::registerPlugins();
-	// Configure the tester
-	Tester::setVerbose(false);
+	Sp::ImageFormat::registerPlugins();
+
+	CppUnit::TextUi::TestRunner runner;
+
+	// Retrieve the instance of the TestFactoryRegistry
+	CppUnit::TestFactoryRegistry &registry = CppUnit::TestFactoryRegistry::getRegistry();
+
+	// Obtain and add a new TestSuite created by the TestFactoryRegistry that contains all
+	// the test suite registered using CPPUNIT_TEST_SUITE_REGISTRATION().
+	runner.addTest( registry.makeTest() );
+	runner.run();
 	
-	testDir();
-	testSize();
-	testDateTime();
-	testFile();
-	testImage();
-	testPath();
-	testImageSeq();
-	testIndexDirectory();
-	
-	Tester::finish();
-	ImageFormat::deRegisterPlugins();
+	Sp::ImageFormat::deRegisterPlugins();
+	return 0;
 }
 
 

@@ -25,14 +25,15 @@
 #ifndef _testdir_h_
 #define _testdir_h_
 
-#include "Tester.h"
+#include <cppunit/extensions/HelperMacros.h>
 
-using namespace Sp;
-
-class testDir : public Tester
+class testDir : public CppUnit::TestFixture
 {
 public:
-	testDir();
+	CPPUNIT_TEST_SUITE(testDir);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
 	void test();
 };
 

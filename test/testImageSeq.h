@@ -25,18 +25,25 @@
 #ifndef _testimageseq_h_
 #define _testimageseq_h_
 
-#include "Tester.h"
+#include <cppunit/extensions/HelperMacros.h>
+
 #include "ImageSeq.h"
+#include "Path.h"
 
 using namespace Sp;
 
-class testImageSeq : public Tester
+class testImageSeq : public CppUnit::TestFixture
 {
 public:
-	testImageSeq();
+	CPPUNIT_TEST_SUITE(testImageSeq);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
 	void test();
-	void checkSequence(const ImageSeq &seq,
-		std::string name, std::string frames, int width, int height, std::string format);
+
+private:
+	void checkSequence(const ImageSeq &seq, std::string name, std::string frames,
+		int width, int height, std::string format);
 	void copyFile(const Path &path1, const Path &path2);
 	void makeDirectory(const Path &path);
 };

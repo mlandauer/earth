@@ -25,14 +25,15 @@
 #ifndef _testimage_h_
 #define _testimage_h_
 
-#include "Tester.h"
+#include <cppunit/extensions/HelperMacros.h>
 
-using namespace Sp;
-
-class testImage : public Tester
+class testImage : public CppUnit::TestFixture
 {
 public:
-	testImage();
+	CPPUNIT_TEST_SUITE(testImage);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
 	void test();
 };
 

@@ -25,21 +25,25 @@
 #ifndef _testindexdirectory_h_
 #define _testindexdirectory_h_
 
-#include "Tester.h"
-#include "ImageSeq.h"
+#include <cppunit/extensions/HelperMacros.h>
+
 #include <string>
+#include "ImageSeq.h"
 
 using namespace Sp;
 
-class testIndexDirectory : public Tester
+class testIndexDirectory : public CppUnit::TestFixture
 {
 public:
-	testIndexDirectory();
+	CPPUNIT_TEST_SUITE(testIndexDirectory);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
 	void test();
 	
 private:
-	void checkSequence(const ImageSeq &sequence,
-		const std::string &format, int width, int height, const std::string &path, const std::string &frames);
+	void checkSequence(const ImageSeq &sequence, const std::string &format, int width, int height,
+		const std::string &path, const std::string &frames);
 };
 
 #endif

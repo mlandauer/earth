@@ -22,45 +22,45 @@
 //
 // $Id$
 
+#include <cppunit/extensions/HelperMacros.h>
 #include "testFile.h"
+CPPUNIT_TEST_SUITE_REGISTRATION(testFile);
+
 #include "File.h"
 
-testFile::testFile() : Tester("File")
-{
-	test();
-};
+using namespace Sp;
 
 void testFile::test()
 {
 	File file1("test/templateImages/8x8.tiff");
-  check(file1.valid());
-  File file2("test/templateImages/");
-  check(!file2.valid());
+	CPPUNIT_ASSERT(file1.valid());
+	File file2("test/templateImages/");
+	CPPUNIT_ASSERT(!file2.valid());
   
-	checkEqual(file1.path().fullName(), "test/templateImages/8x8.tiff");
-	check(file1.user() == User::current());
-	check(file1.userGroup() == UserGroup::current());
+	CPPUNIT_ASSERT(file1.path().fullName() == "test/templateImages/8x8.tiff");
+	CPPUNIT_ASSERT(file1.user() == User::current());
+	CPPUNIT_ASSERT(file1.userGroup() == UserGroup::current());
 
 	// Find some way to test access, modification and change times
 	// Test opening a non-existing file or directory
 	File notExist("test/templateImages/no");
-	check(!notExist.valid());
+	CPPUNIT_ASSERT(!notExist.valid());
 
 	File file("test/templateImages/8x8.tiff");
-	check(file.valid());
-	checkEqual(file.path().fullName(), "test/templateImages/8x8.tiff");
-	checkEqualFloat(file.size().getBytes(), 396.0, 0.1);
-	checkEqualFloat(file.size().getKBytes(), 0.39, 0.1);
+	CPPUNIT_ASSERT(file.valid());
+	CPPUNIT_ASSERT(file.path().fullName() == "test/templateImages/8x8.tiff");
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(file.size().getBytes(), 396.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(file.size().getKBytes(), 0.39, 0.1);
 	file.open();
 	unsigned char buf[2];
-	checkEqual(file.read(buf, 2), 2);
-	checkEqual(buf[0], 0x49);
-	checkEqual(buf[1], 0x49);
+	CPPUNIT_ASSERT(file.read(buf, 2) == 2);
+	CPPUNIT_ASSERT(buf[0] == 0x49);
+	CPPUNIT_ASSERT(buf[1] == 0x49);
 	file.seek(10);
 	file.read(buf, 1);
-	checkEqual(buf[0], 0xff);
+	CPPUNIT_ASSERT(buf[0] == 0xff);
 	file.seekForward(2);
 	file.read(buf, 1);
-	checkEqual(buf[0], 0xff);
+	CPPUNIT_ASSERT(buf[0] == 0xff);
 	file.close();
 }

@@ -22,15 +22,14 @@
 //
 // $Id$
 
+#include <cppunit/extensions/HelperMacros.h>
 #include "testIndexDirectory.h"
+CPPUNIT_TEST_SUITE_REGISTRATION(testIndexDirectory);
 
 #include "Path.h"
 #include "IndexDirectory.h"
 
-testIndexDirectory::testIndexDirectory() : Tester("IndexDirectory")
-{
-	test();
-}
+using namespace Sp;
 
 void testIndexDirectory::test()
 {
@@ -65,20 +64,19 @@ void testIndexDirectory::test()
 	IndexDirectory i;
 	std::vector<ImageSeq> r = i.getImageSequences("test/index");
 	
-	if (checkEqual(r.size(), 5)) {
-		checkSequence(r[0], "GIF", 2, 2, "test/index/test1.#.gif", "1-4");
-		checkSequence(r[1], "GIF", 4, 4, "test/index/test1.#.gif", "5");
-		checkSequence(r[2], "SGI", 8, 8, "test/index/test2.@@", "8");
-		checkSequence(r[3], "Cineon", 4, 4, "test/index/foo/#", "2-3");
-		checkSequence(r[4], "Cineon", 8, 8, "test/index/blah/a/#.cin", "6-7");
-	}
+	CPPUNIT_ASSERT(r.size() == 5);
+	checkSequence(r[0], "GIF", 2, 2, "test/index/test1.#.gif", "1-4");
+	checkSequence(r[1], "GIF", 4, 4, "test/index/test1.#.gif", "5");
+	checkSequence(r[2], "SGI", 8, 8, "test/index/test2.@@", "8");
+	checkSequence(r[3], "Cineon", 4, 4, "test/index/foo/#", "2-3");
+	checkSequence(r[4], "Cineon", 8, 8, "test/index/blah/a/#.cin", "6-7");
 }
 
 void testIndexDirectory::checkSequence(const ImageSeq &sequence,
 	const std::string &format, int width, int height, const std::string &path, const std::string &frames)
 {
-	checkEqual(sequence.format()->formatString(), format);
-	check(sequence.dim() == ImageDim(width, height));
-	checkEqual(sequence.path().fullName(), path);
-	checkEqual(sequence.framesString(), frames);
+	CPPUNIT_ASSERT_EQUAL(sequence.format()->formatString(), format);
+	CPPUNIT_ASSERT(sequence.dim() == ImageDim(width, height));
+	CPPUNIT_ASSERT_EQUAL(sequence.path().fullName(), path);
+	CPPUNIT_ASSERT_EQUAL(sequence.framesString(), frames);
 }

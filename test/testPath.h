@@ -25,14 +25,15 @@
 #ifndef _testpath_h_
 #define _testpath_h_
 
-#include "Tester.h"
+#include <cppunit/extensions/HelperMacros.h>
 
-using namespace Sp;
-
-class testPath : public Tester
+class testPath : public CppUnit::TestFixture
 {
 public:
-	testPath();
+	CPPUNIT_TEST_SUITE(testPath);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
 	void test();
 };
 

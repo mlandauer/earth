@@ -22,89 +22,85 @@
 //
 // $Id$
 
-#include <iostream>
+#include <cppunit/extensions/HelperMacros.h>
 #include "testDir.h"
+CPPUNIT_TEST_SUITE_REGISTRATION(testDir);
+
 #include "Dir.h"
 
-testDir::testDir() : Tester("Dir")
-{
-	test();
-};
+using namespace Sp;
 
 void testDir::test()
 {
-  Dir dir1("test/templateImages/8x8.tiff");
-  check(!dir1.valid());
+	Dir dir1("test/templateImages/8x8.tiff");
+	CPPUNIT_ASSERT(!dir1.valid());
 	Dir dir2("test/templateImages/");
-  check(dir2.valid());
-	checkEqual(dir2.path().fullName(), "test/templateImages");
+	CPPUNIT_ASSERT(dir2.valid());
+	CPPUNIT_ASSERT(dir2.path().fullName() == "test/templateImages");
 
 	Dir dir("test/templateImages/");
-	checkEqual(dir.path().fullName(), "test/templateImages");
+	CPPUNIT_ASSERT(dir.path().fullName() == "test/templateImages");
 	// Think of some way to test the modification dates automatically
 	// Check that this user owns the files
-	check(dir.user() == User::current());
-	check(dir.userGroup() == UserGroup::current());
-	check(dir.valid());
+	CPPUNIT_ASSERT(dir.user() == User::current());
+	CPPUNIT_ASSERT(dir.userGroup() == UserGroup::current());
+	CPPUNIT_ASSERT(dir.valid());
 	std::vector<File> files = dir.listFiles(true);
-	if (checkEqual(files.size(), 19)) {
-		checkEqual(files[0].path().fullName(), "test/templateImages/2x2.cin");
-		checkEqual(files[1].path().fullName(), "test/templateImages/2x2.gif");
-		checkEqual(files[2].path().fullName(), "test/templateImages/2x2.iff");
-		checkEqual(files[3].path().fullName(), "test/templateImages/2x2.jpg");
-		checkEqual(files[4].path().fullName(), "test/templateImages/2x2.sgi");
-		checkEqual(files[5].path().fullName(), "test/templateImages/2x2.tiff");
-		checkEqual(files[6].path().fullName(), "test/templateImages/4x4.cin");		
-		checkEqual(files[7].path().fullName(), "test/templateImages/4x4.gif");		
-		checkEqual(files[8].path().fullName(), "test/templateImages/4x4.iff");		
-		checkEqual(files[9].path().fullName(), "test/templateImages/4x4.jpg");						
-		checkEqual(files[10].path().fullName(), "test/templateImages/4x4.sgi");		
-		checkEqual(files[11].path().fullName(), "test/templateImages/4x4.tiff");		
-		checkEqual(files[12].path().fullName(), "test/templateImages/8x8.cin");		
-		checkEqual(files[13].path().fullName(), "test/templateImages/8x8.cin-invalid");		
-		checkEqual(files[14].path().fullName(), "test/templateImages/8x8.gif");		
-		checkEqual(files[15].path().fullName(), "test/templateImages/8x8.iff");		
-		checkEqual(files[16].path().fullName(), "test/templateImages/8x8.jpg");		
-		checkEqual(files[17].path().fullName(), "test/templateImages/8x8.sgi");		
-		checkEqual(files[18].path().fullName(), "test/templateImages/8x8.tiff");
-	}
+	
+	CPPUNIT_ASSERT(files.size() == 19);
+	CPPUNIT_ASSERT(files[0].path().fullName() == "test/templateImages/2x2.cin");
+	CPPUNIT_ASSERT(files[1].path().fullName() == "test/templateImages/2x2.gif");
+	CPPUNIT_ASSERT(files[2].path().fullName() == "test/templateImages/2x2.iff");
+	CPPUNIT_ASSERT(files[3].path().fullName() == "test/templateImages/2x2.jpg");
+	CPPUNIT_ASSERT(files[4].path().fullName() == "test/templateImages/2x2.sgi");
+	CPPUNIT_ASSERT(files[5].path().fullName() == "test/templateImages/2x2.tiff");
+	CPPUNIT_ASSERT(files[6].path().fullName() == "test/templateImages/4x4.cin");		
+	CPPUNIT_ASSERT(files[7].path().fullName() == "test/templateImages/4x4.gif");		
+	CPPUNIT_ASSERT(files[8].path().fullName() == "test/templateImages/4x4.iff");		
+	CPPUNIT_ASSERT(files[9].path().fullName() == "test/templateImages/4x4.jpg");						
+	CPPUNIT_ASSERT(files[10].path().fullName() == "test/templateImages/4x4.sgi");		
+	CPPUNIT_ASSERT(files[11].path().fullName() == "test/templateImages/4x4.tiff");		
+	CPPUNIT_ASSERT(files[12].path().fullName() == "test/templateImages/8x8.cin");		
+	CPPUNIT_ASSERT(files[13].path().fullName() == "test/templateImages/8x8.cin-invalid");		
+	CPPUNIT_ASSERT(files[14].path().fullName() == "test/templateImages/8x8.gif");		
+	CPPUNIT_ASSERT(files[15].path().fullName() == "test/templateImages/8x8.iff");		
+	CPPUNIT_ASSERT(files[16].path().fullName() == "test/templateImages/8x8.jpg");		
+	CPPUNIT_ASSERT(files[17].path().fullName() == "test/templateImages/8x8.sgi");		
+	CPPUNIT_ASSERT(files[18].path().fullName() == "test/templateImages/8x8.tiff");
   
 	std::vector<Dir> dirs = dir.listDirs(true);
-	if (checkEqual(dirs.size(), 1)) {
-		checkEqual(dirs[0].path().fullName(), "test/templateImages/CVS");
-	}
+	CPPUNIT_ASSERT(dirs.size() == 1);
+	CPPUNIT_ASSERT(dirs[0].path().fullName() == "test/templateImages/CVS");
   
 	// Try doing an ls on a non-existant directory
 	Dir dirNotExist("test/whatASillyFella");
-	check(!dirNotExist.valid());
+	CPPUNIT_ASSERT(!dirNotExist.valid());
 	std::vector<File> lsNotExist = dirNotExist.listFiles();
-	checkEqual(lsNotExist.size(), 0);
+	CPPUNIT_ASSERT(lsNotExist.size() == 0);
 	
 	// Test a recursive listing
 	files = dir.listFilesRecursive(true);
-	if (checkEqual(files.size(), 22)) {
-		checkEqual(files[0].path().fullName(), "test/templateImages/2x2.cin");
-		checkEqual(files[1].path().fullName(), "test/templateImages/2x2.gif");
-		checkEqual(files[2].path().fullName(), "test/templateImages/2x2.iff");
-		checkEqual(files[3].path().fullName(), "test/templateImages/2x2.jpg");
-		checkEqual(files[4].path().fullName(), "test/templateImages/2x2.sgi");
-		checkEqual(files[5].path().fullName(), "test/templateImages/2x2.tiff");
-		checkEqual(files[6].path().fullName(), "test/templateImages/4x4.cin");		
-		checkEqual(files[7].path().fullName(), "test/templateImages/4x4.gif");		
-		checkEqual(files[8].path().fullName(), "test/templateImages/4x4.iff");		
-		checkEqual(files[9].path().fullName(), "test/templateImages/4x4.jpg");						
-		checkEqual(files[10].path().fullName(), "test/templateImages/4x4.sgi");		
-		checkEqual(files[11].path().fullName(), "test/templateImages/4x4.tiff");		
-		checkEqual(files[12].path().fullName(), "test/templateImages/8x8.cin");		
-		checkEqual(files[13].path().fullName(), "test/templateImages/8x8.cin-invalid");		
-		checkEqual(files[14].path().fullName(), "test/templateImages/8x8.gif");		
-		checkEqual(files[15].path().fullName(), "test/templateImages/8x8.iff");		
-		checkEqual(files[16].path().fullName(), "test/templateImages/8x8.jpg");		
-		checkEqual(files[17].path().fullName(), "test/templateImages/8x8.sgi");		
-		checkEqual(files[18].path().fullName(), "test/templateImages/8x8.tiff");
-		checkEqual(files[19].path().fullName(), "test/templateImages/CVS/Entries");
-		checkEqual(files[20].path().fullName(), "test/templateImages/CVS/Repository");
-		checkEqual(files[21].path().fullName(), "test/templateImages/CVS/Root");
-	}
-	
+	CPPUNIT_ASSERT(files.size() == 22);
+	CPPUNIT_ASSERT(files[0].path().fullName() == "test/templateImages/2x2.cin");
+	CPPUNIT_ASSERT(files[1].path().fullName() == "test/templateImages/2x2.gif");
+	CPPUNIT_ASSERT(files[2].path().fullName() == "test/templateImages/2x2.iff");
+	CPPUNIT_ASSERT(files[3].path().fullName() == "test/templateImages/2x2.jpg");
+	CPPUNIT_ASSERT(files[4].path().fullName() == "test/templateImages/2x2.sgi");
+	CPPUNIT_ASSERT(files[5].path().fullName() == "test/templateImages/2x2.tiff");
+	CPPUNIT_ASSERT(files[6].path().fullName() == "test/templateImages/4x4.cin");		
+	CPPUNIT_ASSERT(files[7].path().fullName() == "test/templateImages/4x4.gif");		
+	CPPUNIT_ASSERT(files[8].path().fullName() == "test/templateImages/4x4.iff");		
+	CPPUNIT_ASSERT(files[9].path().fullName() == "test/templateImages/4x4.jpg");						
+	CPPUNIT_ASSERT(files[10].path().fullName() == "test/templateImages/4x4.sgi");		
+	CPPUNIT_ASSERT(files[11].path().fullName() == "test/templateImages/4x4.tiff");		
+	CPPUNIT_ASSERT(files[12].path().fullName() == "test/templateImages/8x8.cin");		
+	CPPUNIT_ASSERT(files[13].path().fullName() == "test/templateImages/8x8.cin-invalid");		
+	CPPUNIT_ASSERT(files[14].path().fullName() == "test/templateImages/8x8.gif");		
+	CPPUNIT_ASSERT(files[15].path().fullName() == "test/templateImages/8x8.iff");		
+	CPPUNIT_ASSERT(files[16].path().fullName() == "test/templateImages/8x8.jpg");		
+	CPPUNIT_ASSERT(files[17].path().fullName() == "test/templateImages/8x8.sgi");		
+	CPPUNIT_ASSERT(files[18].path().fullName() == "test/templateImages/8x8.tiff");
+	CPPUNIT_ASSERT(files[19].path().fullName() == "test/templateImages/CVS/Entries");
+	CPPUNIT_ASSERT(files[20].path().fullName() == "test/templateImages/CVS/Repository");
+	CPPUNIT_ASSERT(files[21].path().fullName() == "test/templateImages/CVS/Root");
 }

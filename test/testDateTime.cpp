@@ -22,13 +22,13 @@
 //
 // $Id$
 
+#include <cppunit/extensions/HelperMacros.h>
 #include "testDateTime.h"
+CPPUNIT_TEST_SUITE_REGISTRATION(testDateTime);
+
 #include "DateTime.h"
 
-testDateTime::testDateTime() : Tester("DateTime")
-{
-	test();
-};
+using namespace Sp;
 
 void testDateTime::test()
 {
@@ -51,12 +51,12 @@ void testDateTime::test()
 	//checkEqual("test 13", t1.timeString(), "16:00:00");
 	DateTime t2 = DateTime::unixDateTime(100);
 	DateTime t0;
-	check(t0 == t1);
-	check(t0 <  t2);
-	check(!(t2 <  t0));
-	check(!(t0 == t2));
-	check(t1 <  t2);
-	check(!(t2 <  t1));
-	check(!(t1 == t2));
+	CPPUNIT_ASSERT(t0 == t1);
+	CPPUNIT_ASSERT(t0 <  t2);
+	CPPUNIT_ASSERT(!(t2 <  t0));
+	CPPUNIT_ASSERT(!(t0 == t2));
+	CPPUNIT_ASSERT(t1 <  t2);
+	CPPUNIT_ASSERT(!(t2 <  t1));
+	CPPUNIT_ASSERT(!(t1 == t2));
 }
 

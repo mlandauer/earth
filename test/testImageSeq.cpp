@@ -22,14 +22,13 @@
 //
 // $Id$
 
-#include <iostream>
+#include <cppunit/extensions/HelperMacros.h>
 #include "testImageSeq.h"
+CPPUNIT_TEST_SUITE_REGISTRATION(testImageSeq);
+
 #include "Path.h"
 
-testImageSeq::testImageSeq() : Tester("ImageSeq")
-{
-	test();
-};
+using namespace Sp;
 
 void testImageSeq::test()
 {
@@ -72,83 +71,76 @@ void testImageSeq::test()
 	Image *i11 = Image::construct(path6c);
 	Image *i12 = Image::construct(path6d);
 		
-	if (check(i1 != NULL)) {
-		ImageSeq seq(i1);
-		checkSequence(seq, "test/seq/test1.#.gif", "1", 2, 2, "GIF");
-		if (check(i2 != NULL)) {
-			check(seq.addImage(i2));
-			checkSequence(seq, "test/seq/test1.#.gif", "1-2", 2, 2, "GIF");
-		}
-		if (check(i4 != NULL)) {
-			check(seq.addImage(i4));
-			checkSequence(seq, "test/seq/test1.#.gif", "1-2,4", 2, 2, "GIF");
-		}
-		if (check(i3 != NULL)) {
-			check(seq.addImage(i3));
-			checkSequence(seq, "test/seq/test1.#.gif", "1-4", 2, 2, "GIF");
-		}
-		if (check(i2 != NULL)) {
-			check(seq.removeImage(i2));
-			checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
-		}
-		// If we remove something that's not part of the sequence nothing should change
-		if (check(i8 != NULL)) {
-			check(!seq.removeImage(i8));
-			checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
-		}
-		if (check(i2 != NULL)) {
-			check(!seq.removeImage(i2));
-			checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
-		}
-		// Removing by giving a path
-		if (check(i3 != NULL)) {
-			check(seq.removeImage(path1c));
-			checkSequence(seq, "test/seq/test1.#.gif", "1,4", 2, 2, "GIF");
-		}
-			
-	}
+	CPPUNIT_ASSERT(i1 != NULL);
+	ImageSeq seq(i1);
+	checkSequence(seq, "test/seq/test1.#.gif", "1", 2, 2, "GIF");
+	CPPUNIT_ASSERT(i2 != NULL);
+	CPPUNIT_ASSERT(seq.addImage(i2));
+	checkSequence(seq, "test/seq/test1.#.gif", "1-2", 2, 2, "GIF");
+
+	CPPUNIT_ASSERT(i4 != NULL);
+	CPPUNIT_ASSERT(seq.addImage(i4));
+	checkSequence(seq, "test/seq/test1.#.gif", "1-2,4", 2, 2, "GIF");
+
+	CPPUNIT_ASSERT(i3 != NULL);
+	CPPUNIT_ASSERT(seq.addImage(i3));
+	checkSequence(seq, "test/seq/test1.#.gif", "1-4", 2, 2, "GIF");
+
+	CPPUNIT_ASSERT(i2 != NULL);
+	CPPUNIT_ASSERT(seq.removeImage(i2));
+	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
+
+	// If we remove something that's not part of the sequence nothing should change
+	CPPUNIT_ASSERT(i8 != NULL);
+	CPPUNIT_ASSERT(!seq.removeImage(i8));
+	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
+
+	CPPUNIT_ASSERT(i2 != NULL);
+	CPPUNIT_ASSERT(!seq.removeImage(i2));
+	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
+
+	// Removing by giving a path
+	CPPUNIT_ASSERT(i3 != NULL);
+	CPPUNIT_ASSERT(seq.removeImage(path1c));
+	checkSequence(seq, "test/seq/test1.#.gif", "1,4", 2, 2, "GIF");		
 		
-	if (check(i5 != NULL)) {
-		ImageSeq seq2(i5);
-		checkSequence(seq2, "test/seq/test2.@.gif", "8", 2, 2, "GIF");
-	}
-	if (check(i6 != NULL)) {
-		ImageSeq seq3(i6);
-		checkSequence(seq3, "test/seq/test2.@@@@@@.gif", "123", 2, 2, "GIF");
-	}
+	CPPUNIT_ASSERT(i5 != NULL);
+	ImageSeq seq2(i5);
+	checkSequence(seq2, "test/seq/test2.@.gif", "8", 2, 2, "GIF");
+
+	CPPUNIT_ASSERT(i6 != NULL);
+	ImageSeq seq3(i6);
+	checkSequence(seq3, "test/seq/test2.@@@@@@.gif", "123", 2, 2, "GIF");
+
 		
-	if (check(i7 != NULL)) {
-		ImageSeq seq4(i7);
-		checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
-		if (check(i5 != NULL)) {
-			// Adding in an image with a different name should not work
-			check(!seq4.addImage(i5));
-			checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
-		}
-		if (check(i8 != NULL)) {
-			// Adding in an image with a correct name but wrong image size should not work
-			check(!seq4.addImage(i8));
-			checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
-		}
-	}
+	CPPUNIT_ASSERT(i7 != NULL);
+	ImageSeq seq4(i7);
+	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
+	CPPUNIT_ASSERT(i5 != NULL);
+	// Adding in an image with a different name should not work
+	CPPUNIT_ASSERT(!seq4.addImage(i5));
+	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
+
+	CPPUNIT_ASSERT(i8 != NULL);
+	// Adding in an image with a correct name but wrong image size should not work
+	CPPUNIT_ASSERT(!seq4.addImage(i8));
+	checkSequence(seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
 		
-	if (check(i8 != NULL)) {
-		ImageSeq seq5(i8);
-		checkSequence(seq5, "test/seq/@@@.gif", "110", 4, 4, "TIFF");
-	}
+	CPPUNIT_ASSERT(i8 != NULL);
+	ImageSeq seq5(i8);
+	checkSequence(seq5, "test/seq/@@@.gif", "110", 4, 4, "TIFF");
 	
 	// Now test what happens when we have a mix of valid and invalid images
-	if (check(i9 != NULL) && check(i10 != NULL)) {
-		ImageSeq one(i9), two(i10);
-		check(i9->valid());
-		check(!i10->valid());
-		check(i11->valid());
-		check(!i12->valid());
-		check(one.addImage(i11));
-		check(!one.addImage(i12));
-		check(!two.addImage(i11));
-		check(two.addImage(i12));
-	}
+	CPPUNIT_ASSERT((i9 != NULL) && (i10 != NULL));
+	ImageSeq one(i9), two(i10);
+	CPPUNIT_ASSERT(i9->valid());
+	CPPUNIT_ASSERT(!i10->valid());
+	CPPUNIT_ASSERT(i11->valid());
+	CPPUNIT_ASSERT(!i12->valid());
+	CPPUNIT_ASSERT(one.addImage(i11));
+	CPPUNIT_ASSERT(!one.addImage(i12));
+	CPPUNIT_ASSERT(!two.addImage(i11));
+	CPPUNIT_ASSERT(two.addImage(i12));
 	
 	system ("rm -rf test/seq");
 	delete i1;
@@ -168,11 +160,11 @@ void testImageSeq::test()
 void testImageSeq::checkSequence(const ImageSeq &seq, std::string name, std::string frames,
 	int width, int height, std::string format)
 {
-	checkEqual(seq.path().fullName(), name);
-	checkEqual(seq.framesString(), frames);
-	checkEqual(seq.dim().width(), width);
-	checkEqual(seq.dim().height(), height);
-	checkEqual(seq.format()->formatString(), format);		
+	CPPUNIT_ASSERT_EQUAL(seq.path().fullName(), name);
+	CPPUNIT_ASSERT_EQUAL(seq.framesString(), frames);
+	CPPUNIT_ASSERT(seq.dim().width() == width);
+	CPPUNIT_ASSERT(seq.dim().height() == height);
+	CPPUNIT_ASSERT_EQUAL(seq.format()->formatString(), format);		
 }
 
 void testImageSeq::copyFile(const Path &path1, const Path &path2)

@@ -22,69 +22,64 @@
 //
 // $Id$
 
+#include <cppunit/extensions/HelperMacros.h>
 #include "testImage.h"
+CPPUNIT_TEST_SUITE_REGISTRATION(testImage);
+
 #include "Image.h"
 
-testImage::testImage() : Tester("Image")
-{
-	test();
-};
+using namespace Sp;
 
 void testImage::test()
 {
 	Image *image1 = Image::construct("test/templateImages/8x8.sgi");
-	if (check(image1 != NULL)) {
-		checkEqual(image1->path().fullName(), "test/templateImages/8x8.sgi");
-		checkEqualFloat(image1->size().getKBytes(), 0.89, 0.1);
-		checkEqual(image1->formatString(), "SGI");
-		checkEqual(image1->dim().width(), 8);
-		checkEqual(image1->dim().height(), 8);
-		delete image1;
-	}
+	CPPUNIT_ASSERT(image1 != NULL);
+	CPPUNIT_ASSERT(image1->path().fullName() == "test/templateImages/8x8.sgi");
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(image1->size().getKBytes(), 0.89, 0.1);
+	CPPUNIT_ASSERT(image1->formatString() == "SGI");
+	CPPUNIT_ASSERT(image1->dim().width() == 8);
+	CPPUNIT_ASSERT(image1->dim().height() == 8);
+	delete image1;
 	
 	Image *image2 = Image::construct("test/templateImages/8x8.tiff");
-	if (check(image2 != NULL)) {
-		checkEqual(image2->path().fullName(), "test/templateImages/8x8.tiff");
-		checkEqualFloat(image2->size().getKBytes(), 0.39, 0.1);
-		checkEqual(image2->formatString(), "TIFF");
-		checkEqual(image2->dim().width(), 8);
-		checkEqual(image2->dim().height(), 8);
-		delete image2;
-	}
+	CPPUNIT_ASSERT(image2 != NULL);
+	CPPUNIT_ASSERT(image2->path().fullName() == "test/templateImages/8x8.tiff");
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(image2->size().getKBytes(), 0.39, 0.1);
+	CPPUNIT_ASSERT(image2->formatString() == "TIFF");
+	CPPUNIT_ASSERT(image2->dim().width() == 8);
+	CPPUNIT_ASSERT(image2->dim().height() == 8);
+	delete image2;
 		
 	// *** FIT File format currently untested ****
 	// *** PRMANZ File format currently untested ****
 	// *** PRTEX File format currently untested ****
 	
 	Image *image3 = Image::construct("test/templateImages/8x8.gif");
-	if (check(image3 != NULL)) {
-		checkEqual(image3->path().fullName(), "test/templateImages/8x8.gif");
-		checkEqualFloat(image3->size().getKBytes(), 0.83, 0.1);
-		checkEqual(image3->formatString(), "GIF");
-		checkEqual(image3->dim().width(), 8);
-		checkEqual(image3->dim().height(), 8);
-		delete image3;
-	}
+	CPPUNIT_ASSERT(image3 != NULL);
+	CPPUNIT_ASSERT(image3->path().fullName() == "test/templateImages/8x8.gif");
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(image3->size().getKBytes(), 0.83, 0.1);
+	CPPUNIT_ASSERT(image3->formatString() == "GIF");
+	CPPUNIT_ASSERT(image3->dim().width() == 8);
+	CPPUNIT_ASSERT(image3->dim().height() == 8);
+	delete image3;
 	
 	Image *image4 = Image::construct("test/templateImages/8x8.cin");
-	if (check(image4 != NULL)) {
-		checkEqual(image4->path().fullName(), "test/templateImages/8x8.cin");
-		checkEqualFloat(image4->size().getKBytes(), 2.25, 0.1);
-		checkEqual(image4->formatString(), "Cineon");
-		checkEqual(image4->dim().width(), 8);
-		checkEqual(image4->dim().height(), 8);
-		delete image4;
-	}
+	CPPUNIT_ASSERT(image4 != NULL);
+	CPPUNIT_ASSERT(image4->path().fullName() == "test/templateImages/8x8.cin");
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(image4->size().getKBytes(), 2.25, 0.1);
+	CPPUNIT_ASSERT(image4->formatString() == "Cineon");
+	CPPUNIT_ASSERT(image4->dim().width() == 8);
+	CPPUNIT_ASSERT(image4->dim().height() == 8);
+	delete image4;
 		
 	Image *image5 = Image::construct("test/templateImages/8x8.iff");
-	if (check(image5 != NULL)) {
-		checkEqual(image5->path().fullName(), "test/templateImages/8x8.iff");
-		checkEqualFloat(image5->size().getKBytes(), 0.41, 0.1);
-		checkEqual(image5->formatString(), "IFF");
-		checkEqual(image5->dim().width(), 8);
-		checkEqual(image5->dim().height(), 8);
-		delete image5;
-	}
+	CPPUNIT_ASSERT(image5 != NULL);
+	CPPUNIT_ASSERT(image5->path().fullName() == "test/templateImages/8x8.iff");
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(image5->size().getKBytes(), 0.41, 0.1);
+	CPPUNIT_ASSERT(image5->formatString() == "IFF");
+	CPPUNIT_ASSERT(image5->dim().width() == 8);
+	CPPUNIT_ASSERT(image5->dim().height() == 8);
+	delete image5;
 		
 }
 

@@ -22,31 +22,31 @@
 //
 // $Id$
 
+#include <cppunit/extensions/HelperMacros.h>
 #include "testSize.h"
+CPPUNIT_TEST_SUITE_REGISTRATION(testSize);
+
 #include "Size.h"
 
-testSize::testSize() : Tester("Size")
-{
-	test();
-};
+using namespace Sp;
 
 void testSize::test() {
 	Size s = Size::Bytes(4097);
-	checkEqualFloat(s.getBytes(), 4097.0, 0.1);
-	checkEqualFloat(s.getKBytes(), 4.0, 0.1);
-	checkEqualFloat(s.getMBytes(), 0.0, 0.1);
-	checkEqualFloat(s.getGBytes(), 0.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getBytes(), 4097.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getKBytes(), 4.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getMBytes(), 0.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getGBytes(), 0.0, 0.1);
 
 	s = Size::GBytes(10);
-	checkEqualFloat(s.getGBytes(), 10.0, 0.1);
-	checkEqualFloat(s.getMBytes(), 10240.0, 0.1);
-	checkEqualFloat(s.getKBytes(), 10485760.0, 0.1);
-	checkEqualFloat(s.getBytes(), 1.073741e10, 10e5);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getGBytes(), 10.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getMBytes(), 10240.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getKBytes(), 10485760.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getBytes(), 1.073741e10, 10e5);
 	
 	s = Size::Bytes(0);
-	checkEqualFloat(s.getBytes(), 0.0, 0.1);
-	checkEqualFloat(s.getKBytes(), 0.0, 0.1);
-	checkEqualFloat(s.getMBytes(), 0.0, 0.1);
-	checkEqualFloat(s.getGBytes(), 0.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getBytes(), 0.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getKBytes(), 0.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getMBytes(), 0.0, 0.1);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(s.getGBytes(), 0.0, 0.1);
 }
 

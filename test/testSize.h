@@ -25,14 +25,15 @@
 #ifndef _testsize_h_
 #define _testsize_h_
 
-#include "Tester.h"
+#include <cppunit/extensions/HelperMacros.h>
 
-using namespace Sp;
-
-class testSize : public Tester
+class testSize : public CppUnit::TestFixture
 {
 public:
-	testSize();
+	CPPUNIT_TEST_SUITE(testSize);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
 	void test();
 };
 

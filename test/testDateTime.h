@@ -22,18 +22,20 @@
 //
 // $Id$
 
-#ifndef _testtime_h_
-#define _testtime_h_
+#ifndef _testdatetime_h_
+#define _testdatetime_h_
 
-#include "Tester.h"
+#include <cppunit/extensions/HelperMacros.h>
 
-using namespace Sp;
-
-class testDateTime : public Tester
+class testDateTime : public CppUnit::TestFixture
 {
 public:
-	testDateTime();
+	CPPUNIT_TEST_SUITE(testDateTime);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
 	void test();
 };
+
 
 #endif
