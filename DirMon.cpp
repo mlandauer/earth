@@ -49,12 +49,18 @@ void DirMon::update()
 			// Directory has changed
 			std::vector<File> cachedFiles = i->listFiles();
 			std::vector<File> currentFiles = currentDir.listFiles();
-			std::vector<File> addedFiles;
+			std::vector<File> addedFiles, deletedFiles;
 			std::set_difference(currentFiles.begin(), currentFiles.end(),
 				cachedFiles.begin(), cachedFiles.end(),
 				std::back_inserter(addedFiles));
+			std::set_difference(cachedFiles.begin(), cachedFiles.end(),
+				currentFiles.begin(), currentFiles.end(),
+				std::back_inserter(deletedFiles));
 			for (std::vector<File>::iterator j = addedFiles.begin(); j != addedFiles.end(); ++j) {
 				notifyAdded(*j);
+			}
+			for (std::vector<File>::iterator j = deletedFiles.begin(); j != deletedFiles.end(); ++j) {
+				notifyDeleted(*j);
 			}
 			// Replace stored cached directory
 			*i = currentDir;

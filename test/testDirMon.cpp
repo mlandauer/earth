@@ -95,16 +95,22 @@ void testDirMon::test()
 	m.update();
 	CPPUNIT_ASSERT(!m.pendingEvent());
 	
+	// Test deleting files
+	DateTime::sleep(1);
+	system ("rm test/FsMonitor/test.0001.gif");
+	system ("rm test/FsMonitor/test.0006.gif");
+	m.update();
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/test.0001.gif");
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/test.0006.gif");
+	CPPUNIT_ASSERT(!m.pendingEvent());
 	
-	// Test adding files
-	//system ("rm test/FsMonitor/test.0001.gif");
+	// Test adding subdirectory
+	//DateTime::sleep(1);
 	//system ("mkdir test/FsMonitor/subdirectory");
 	//system ("cp test/templateImages/2x2.gif test/FsMonitor/subdirectory/test.0001.gif");
-	//DateTime::sleep(6);
-	//m->update();
-	//CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/test.0001.gif");
+	//m.update();
 	//CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added,   "test/FsMonitor/subdirectory/test.0001.gif");
-	//CPPUNIT_ASSERT(!m->pendingEvent());
+	//CPPUNIT_ASSERT(!m.pendingEvent());
 	
 	//system ("rm -fr test/FsMonitor/*");
 	//DateTime::sleep(6);
