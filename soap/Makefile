@@ -13,10 +13,10 @@ CFLAGS= $(CWFLAGS) $(COFLAGS) $(CIFLAGS) $(CMFLAGS)
 all:		calcclient calcserver
 calcclient:	calc.h calcclient.cpp $(SOAPH) $(SOAPC)
 		$(GSOAP) calc.h
-		$(CC) $(CFLAGS) -o calcclient calcclient.cpp soapC.cpp soapClient.cpp $(SOAPC) $(LIBS)
+		$(CPP) $(CFLAGS) -o calcclient calcclient.cpp soapC.cpp soapClient.cpp $(SOAPC) $(LIBS)
 calcserver:	calc.h calcserver.cpp $(SOAPH) $(SOAPC)
 		$(GSOAP) calc.h
-		$(CC) $(CFLAGS) -o calcserver calcserver.cpp soapC.cpp soapServer.cpp $(SOAPC) -lm $(LIBS)
+		$(CPP) $(CFLAGS) -o calcserver calcserver.cpp soapC.cpp soapServer.cpp $(SOAPC) -lm $(LIBS)
 clean:
 		rm -f *.o soapH.h soapStub.h soapC.cpp soapC.c soapClient.cpp soapClient.c soapServer.cpp soapServer.c soap*Proxy.h
 distclean:
