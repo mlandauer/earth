@@ -14,42 +14,42 @@ SpSize::~SpSize()
 {
 }
 
-void SpSize::setBytes(unsigned long int n)
+void SpSize::setBytes(float n)
 {
 	KBytes = n / 1024;
 }
 
-void SpSize::setKBytes(unsigned long int n)
+void SpSize::setKBytes(float n)
 {
 	KBytes = n;
 }
 
-void SpSize::setMBytes(unsigned long int n)
+void SpSize::setMBytes(float n)
 {
 	KBytes = n * 1024;
 }
 
-void SpSize::setGBytes(unsigned long int n)
+void SpSize::setGBytes(float n)
 {
 	KBytes = n * 1024 * 1024;
 }
 
-unsigned long int SpSize::bytes() const
+float SpSize::bytes() const
 {
 	return KBytes * 1024;
 }
 
-unsigned long int SpSize::kbytes() const
+float SpSize::kbytes() const
 {
 	return KBytes;
 }
 
-unsigned long int SpSize::mbytes() const
+float SpSize::mbytes() const
 {
 	return KBytes / 1024;
 }
 
-unsigned long int SpSize::gbytes() const
+float SpSize::gbytes() const
 {
 	return KBytes / 1024 / 1024;
 }

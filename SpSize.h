@@ -10,16 +10,16 @@ class SpSize
 	public:
 		SpSize();
 		~SpSize();
-		void setBytes(unsigned long int n);
-		void setKBytes(unsigned long int n);
-		void setMBytes(unsigned long int n);
-		void setGBytes(unsigned long int n);
-		unsigned long int bytes() const;
-		unsigned long int kbytes() const;
-		unsigned long int mbytes() const;
-		unsigned long int gbytes() const;
+		void setBytes(float n);
+		void setKBytes(float n);
+		void setMBytes(float n);
+		void setGBytes(float n);
+		float bytes() const;
+		float kbytes() const;
+		float mbytes() const;
+		float gbytes() const;
 	private:
-		unsigned long int KBytes;
+		float KBytes;
 };
 
 #endif

@@ -11,6 +11,7 @@
 #include "SpDir.h"
 
 int noErrors = 0;
+float floatDelta = 0.1;
 
 void checkEqual(string testName, string a, string b)
 {
@@ -45,21 +46,41 @@ void checkEqual(string testName, int a, int b)
 		cout << ".";
 }
 
+void checkEqual(string testName, float a, float b)
+{
+	if (fabs(a-b) > floatDelta) {
+		cout << endl << "FAILED " << testName << ": Expected " << b
+			<< " but got " << a << endl;
+		noErrors++;
+	}
+	else
+		cout << ".";
+}
+
 void testSpSize()
 {
 	SpSize s;
 	s.setBytes(4097);
-	cout << s.bytes()  << " bytes = " <<
-	        s.kbytes() << " Kb = " <<
-	        s.mbytes() << " Mb = " <<
-	        s.gbytes() << " Gb" << endl;
+	checkEqual("SpSize test 1", s.bytes(), 4097.0);
+	checkEqual("SpSize test 2", s.kbytes(), 4.0);
+	checkEqual("SpSize test 3", s.mbytes(), 0.0);
+	checkEqual("SpSize test 4", s.gbytes(), 0.0);
 
-	// This will overflow the bytes return
 	s.setGBytes(10);
-	cout << s.bytes()  << " bytes = " <<
-	        s.kbytes() << " Kb = " <<
-	        s.mbytes() << " Mb = " <<
-	        s.gbytes() << " Gb" << endl;
+	checkEqual("SpSize test 5", s.gbytes(), 10.0);
+	checkEqual("SpSize test 6", s.mbytes(), 10240.0);
+	checkEqual("SpSize test 7", s.kbytes(), 10485760.0);
+	float temp = floatDelta;
+	floatDelta = 10e5;
+	checkEqual("SpSize test 8", s.bytes(), 1.073741e10);
+	floatDelta = temp;
+	
+	s.setBytes(0);
+	checkEqual("SpSize test 9", s.bytes(), 0.0);
+	checkEqual("SpSize test 10", s.kbytes(), 0.0);
+	checkEqual("SpSize test 11", s.mbytes(), 0.0);
+	checkEqual("SpSize test 12", s.gbytes(), 0.0);
+	
 }
 
 void testSpTime()
@@ -194,7 +215,7 @@ void testSpFsObject()
 	SpFsObject file("test/templateImages/8x8.tiff");
 	checkEqual("SpFsObject test 1", file.path().fullName(),
 		"test/templateImages/8x8.tiff");
-	checkEqual("SpFsObject test 2", file.size().kbytes(), 1);
+	checkEqual("SpFsObject test 2", file.size().kbytes(), 0.39);
 	SpUid u;
 	u.setCurrent();
 	SpGid g;
@@ -205,7 +226,7 @@ void testSpFsObject()
 	checkEqual("SpFsObject test 6", file.isDir(), false);
 	SpFsObject file2("test/templateImages/");
 	checkEqual("SpFsObject test 7", file2.path().fullName(), "test/templateImages");
-	checkEqual("SpFsObject test 8", file2.size().kbytes(), 1);
+	checkEqual("SpFsObject test 8", file2.size().kbytes(), 1.0);
 	// Find some way to test access, modification and change times
 	checkEqual("SpFsObject test 9", file2.isFile(), false);
 	checkEqual("SpFsObject test 10", file2.isDir(), true);
@@ -215,7 +236,7 @@ void testSpDir()
 {
 	SpDir dir("test/templateImages/");
 	checkEqual("SpDir test 1", dir.path().fullName(), "test/templateImages");
-	checkEqual("SpDir test 2", dir.size().kbytes(), 1);
+	checkEqual("SpDir test 2", dir.size().kbytes(), 1.0);
 	// Think of some way to test the modification dates automatically
 	// Check that this user owns the files
 	SpUid u;
@@ -279,7 +300,6 @@ main()
 	SpImage::registerPlugins();
 	
 	testSpSize();
-	space();
 	testSpTime();
 	space();
 	testSpUid();
