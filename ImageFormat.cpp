@@ -24,6 +24,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <algorithm>
 
 #include "ImageFormat.h"
 #include "File.h"
@@ -90,28 +91,34 @@ ImageFormat* ImageFormat::recogniseByMagic(const Path &path)
 {
 	// Figure out what the greatest amount of the header that needs
 	// to be read so that all the plugins can recognise themselves.
-	int largestSizeToRecognise = 0;
+	long int largestSizeToRecognise = 0;
 	for (std::list<ImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
 		if ((*a)->sizeToRecognise() > largestSizeToRecognise)
 			largestSizeToRecognise = (*a)->sizeToRecognise();
 			
-	// Create a temporary file object
-	unsigned char *buf = new unsigned char[largestSizeToRecognise];
 	File f(path);
+	// Make sure we don't read beyond the end of the file
+	long int bufferSize = std::min(f.sizeBytes(), largestSizeToRecognise);
+	
+	// Create a temporary file object
+	unsigned char *buf = new unsigned char[bufferSize];
 	f.open();
-	f.read(buf, largestSizeToRecognise);
+	f.read(buf, bufferSize);
 	f.close();
 	
+	ImageFormat *format = NULL;
 	// See if any of the plugins recognise themselves.
 	for (std::list<ImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
-		if ((*a)->recognise(buf)) {
-			delete [] buf;
-			return (*a);
+		if (bufferSize >= (*a)->sizeToRecognise()) {
+			if ((*a)->recognise(buf)) {
+				format = *a;
+				break;
+			}
 		}
 	delete [] buf;
-	return (NULL);
+	return format;
 }
 
 }

@@ -89,6 +89,9 @@ class File : public FsObject
     //! Returns the file size
 		Size size() const;
     
+		//! Returns the file size in bytes
+		long int sizeBytes() const;
+		
     //! Is this a valid file?
 		bool valid() const;
 	protected:
