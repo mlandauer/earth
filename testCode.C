@@ -59,6 +59,7 @@ void checkEqual(string testName, float a, float b)
 
 void testSpSize()
 {
+	cout << endl << "Testing SpSize: ";
 	SpSize s;
 	s.setBytes(4097);
 	checkEqual("SpSize test 1", s.bytes(), 4097.0);
@@ -85,6 +86,7 @@ void testSpSize()
 
 void testSpTime()
 {
+	cout << endl << "Testing SpTime: ";
 	SpTime t;
 	t.setCurrentTime();
 	cout << "Current time and date = " << t.timeAndDateString() << endl;
@@ -103,6 +105,7 @@ void testSpTime()
 
 void testSpFile()
 {
+	cout << endl << "Testing SpFile: ";
 	SpFile file("test/templateImages/8x8.tiff");
 	cout << "filename = " << file.path().fullName() << endl;
 	cout << "size = " << file.size().bytes() << " bytes" << endl;
@@ -149,14 +152,15 @@ void testSpFile()
 
 void testSpImage()
 {
+	cout << endl << "Testing SpImage: ";
 	SpImage *image1 = SpImage::construct("test/templateImages/8x8.sgi");
 	if (image1 != NULL) {
-		cout << "Opened image " << image1->path().fullName() << endl;
-		cout << "Image Filesize = " << image1->size().kbytes() << " Kbytes" << endl;
-		cout << "Last modification = " << image1->lastModification().timeAndDateString() << endl;
-		cout << "Image format = " << image1->formatString() << endl;
-		cout << "Image width = " << image1->dim().width() << endl;
-		cout << "Image height = " << image1->dim().height() << endl;
+		checkEqual("SpImage test 1", image1->path().fullName(),
+			"test/templateImages/8x8.sgi");
+		checkEqual("SpImage test 2", image1->size().kbytes(), 0.89);
+		checkEqual("SpImage test 3", image1->formatString(), "SGI");
+		checkEqual("SpImage test 4", image1->dim().width(), 8);
+		checkEqual("SpImage test 5", image1->dim().height(), 8);
 		delete image1;
 	}
 	else
@@ -164,12 +168,12 @@ void testSpImage()
 
 	SpImage *image2 = SpImage::construct("test/templateImages/8x8.tiff");
 	if (image2 != NULL) {
-		cout << "Opened image " << image2->path().fullName() << endl;
-		cout << "Image Filesize = " << image2->size().kbytes() << " Kbytes" << endl;
-		cout << "Last modification = " << image2->lastModification().timeAndDateString() << endl;
-		cout << "Image format = " << image2->formatString() << endl;
-		cout << "Image width = " << image2->dim().width() << endl;
-		cout << "Image height = " << image2->dim().height() << endl;
+		checkEqual("SpImage test 6", image2->path().fullName(),
+			"test/templateImages/8x8.tiff");
+		checkEqual("SpImage test 7", image2->size().kbytes(), 0.39);
+		checkEqual("SpImage test 8", image2->formatString(), "TIFF");
+		checkEqual("SpImage test 9", image2->dim().width(), 8);
+		checkEqual("SpImage test 10", image2->dim().height(), 8);
 		delete image2;
 	}
 	else
@@ -183,25 +187,21 @@ void testSpImage()
 
 	SpImage *image3 = SpImage::construct("test/templateImages/8x8.gif");
 	if (image3 != NULL) {
-		cout << "Opened image " << image3->path().fullName() << endl;
-		cout << "Image Filesize = " << image3->size().kbytes() << " Kbytes" << endl;
-		cout << "Last modification = " << image3->lastModification().timeAndDateString() << endl;
-		cout << "Image format = " << image3->formatString() << endl;
-		cout << "Image width = " << image3->dim().width() << endl;
-		cout << "Image height = " << image3->dim().height() << endl;
+		checkEqual("SpImage test 11", image3->path().fullName(),
+			"test/templateImages/8x8.gif");
+		checkEqual("SpImage test 12", image3->size().kbytes(), 0.83);
+		checkEqual("SpImage test 13", image3->formatString(), "GIF");
+		checkEqual("SpImage test 14", image3->dim().width(), 8);
+		checkEqual("SpImage test 15", image3->dim().height(), 8);
 		delete image3;
 	}
 	else
 		cout << "Unrecognised image type " << endl;
 }
 
-void space()
-{
-	cout << "=========================" << endl;
-}
-
 void testSpUid()
 {
+	cout << endl << "Testing SpUid: ";
 	SpUid u;
 	SpGid g;
 	u.setCurrent();
@@ -212,6 +212,7 @@ void testSpUid()
 
 void testSpFsObject()
 {
+	cout << endl << "Testing SpFsObject: ";
 	SpFsObject file("test/templateImages/8x8.tiff");
 	checkEqual("SpFsObject test 1", file.path().fullName(),
 		"test/templateImages/8x8.tiff");
@@ -234,6 +235,7 @@ void testSpFsObject()
 
 void testSpDir()
 {
+	cout << endl << "Testing SpDir: ";
 	SpDir dir("test/templateImages/");
 	checkEqual("SpDir test 1", dir.path().fullName(), "test/templateImages");
 	checkEqual("SpDir test 2", dir.size().kbytes(), 1.0);
@@ -272,6 +274,7 @@ void testSpDir()
 
 void testSpPath()
 {
+	cout << endl << "Testing SpPath: ";
 	SpPath p("/home/blah/foo.tif");
 	checkEqual("SpPath test 1", p.fullName(), "/home/blah/foo.tif");
 	checkEqual("SpPath test 2", p.root(),     "/home/blah/");
@@ -301,13 +304,9 @@ main()
 	
 	testSpSize();
 	testSpTime();
-	space();
 	testSpUid();
-	space();
 	testSpFile();
-	space();
 	testSpImage();
-	space();
 	testSpFsObject();
 	testSpDir();
 	testSpPath();
