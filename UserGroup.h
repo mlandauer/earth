@@ -30,14 +30,21 @@
 
 namespace Sp {
 
+//! Simple abstraction of a user group
+/*!
+  Under POSIX this corresponds to a group ID (gid).
+*/
 class UserGroup
 {
 	public:
 		UserGroup();
 		~UserGroup();
+    //! Construct a group with a given POSIX group ID
     static UserGroup unixGid(gid_t g);
+    //! Returns the owner of the current process
     static UserGroup current();
    
+    //! Returns the human-readable name of the user group
 		std::string name() const;
     bool operator==(const UserGroup &g) const;
 	private:
