@@ -14,6 +14,8 @@ class SpFITImage : public SpImage
 		bool valid();
 		SpFITImage();
 		~SpFITImage();
+		int sizeToRecognise();
+		bool recognise(unsigned char *buf);
 	private:
 };
 

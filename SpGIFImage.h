@@ -14,6 +14,8 @@ class SpGIFImage : public SpImage
 		bool valid();
 		SpGIFImage();
 		~SpGIFImage();
+		int sizeToRecognise();
+		bool recognise(unsigned char *buf);
 	private:
 };
 

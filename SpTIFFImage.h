@@ -14,6 +14,8 @@ class SpTIFFImage : public SpImage
 		SpImageDim dim();
 		string formatString();
 		bool valid();
+		int sizeToRecognise();
+		bool recognise(unsigned char *buf);
 	private:
 		unsigned int h, w;
 		bool headerRead;

@@ -29,3 +29,17 @@ bool SpGIFImage::valid()
 {
 	return (true);
 }
+
+int SpGIFImage::sizeToRecognise()
+{
+	return (4);
+}
+
+bool SpGIFImage::recognise(unsigned char *buf)
+{
+	if ((buf[0] == 'G') && (buf[1] == 'I') &&
+		(buf[2] == 'F') && (buf[3] == '8'))
+		return (true);
+	else
+		return (false);
+}

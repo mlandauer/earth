@@ -119,3 +119,19 @@ void SpTIFFImage::readHeader()
 	}
 }
 
+int SpTIFFImage::sizeToRecognise()
+{
+	return (4);
+}
+
+bool SpTIFFImage::recognise(unsigned char *buf)
+{
+	if ((buf[0] == 'I') && (buf[1] == 'I') &&
+		(buf[2] == 0x2a) && (buf[3] == 0x00))
+		return (true);
+	else if ((buf[0] == 'M') && (buf[1] == 'M') &&
+		(buf[2] == 0x00) && (buf[3] == 0x2a))
+		return (true);
+	else
+		return (false);
+}

@@ -14,6 +14,8 @@ class SpSGIImage : public SpImage
 		bool valid();
 		SpSGIImage();
 		~SpSGIImage();
+		bool recognise(unsigned char *buf);
+		int sizeToRecognise();		
 	private:
 };
 

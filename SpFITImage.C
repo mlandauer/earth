@@ -30,3 +30,20 @@ bool SpFITImage::valid()
 {
 	return (true);
 }
+
+int SpFITImage::sizeToRecognise()
+{
+	return (4);
+}
+
+bool SpFITImage::recognise(unsigned char *buf)
+{
+	if ((buf[0] == 'I') && (buf[1] == 'T') &&
+		(buf[2] == '0') && (buf[3] == '1'))
+		return (true);		
+	else if ((buf[0] == 'I') && (buf[1] == 'T') &&
+		(buf[2] == '0') && (buf[3] == '2'))
+		return (true);
+	else
+		return (false);
+}

@@ -24,19 +24,22 @@ SpImage* SpImage::construct(const string &path)
 	
 	SpImage* image;
 	
+	// Construct one of every image type. This is all leading up
+	// to some kind of nice plugin architecture
+	SpTIFFImage tiffImage;
+	SpSGIImage sgiImage;
+	SpFITImage fitImage;
+	SpGIFImage gifImage;
+	SpPRMANZImage prmanzImage;
+	
 	if ((buf[0] == 0x80) && (buf[1] == 0x2a) &&
 		(buf[2] == 0x5f) && (buf[3] == 0xd7))
 		cout << "Cineon" << endl;
 		
-	else if ((buf[0] == 'I') && (buf[1] == 'I') &&
-		(buf[2] == 0x2a) && (buf[3] == 0x00))
+	else if (tiffImage.recognise(buf))
 		image = new SpTIFFImage;
 		
-	else if ((buf[0] == 'M') && (buf[1] == 'M') &&
-		(buf[2] == 0x00) && (buf[3] == 0x2a))
-		image = new SpTIFFImage;
-		
-	else if ((buf[0] == 0x01) && (buf[1] == 0xda))
+	else if (sgiImage.recognise(buf))
 		image = new SpSGIImage;
 		
 	else if ((buf[0]  == 'F') && (buf[1]  == 'O') &&
@@ -45,20 +48,13 @@ SpImage* SpImage::construct(const string &path)
 		(buf[10] == 'M') && (buf[11] == 'G'))
 		cout << "IFF" << endl;
 		
-	else if ((buf[0] == 'I') && (buf[1] == 'T') &&
-		(buf[2] == '0') && (buf[3] == '1'))
+	else if (fitImage.recognise(buf))
 		image = new SpFITImage;
 		
-	else if ((buf[0] == 'I') && (buf[1] == 'T') &&
-		(buf[2] == '0') && (buf[3] == '2'))
-		image = new SpFITImage;
-
-	else if ((buf[0] == 'G') && (buf[1] == 'I') &&
-		(buf[2] == 'F') && (buf[3] == '8'))
+	else if (gifImage.recognise(buf))
 		image = new SpGIFImage;
 
-	else if ((buf[0] == 0x2f) && (buf[1] == 0x08) &&
-		(buf[2] == 0x67) && (buf[3] == 0xab))
+	else if (prmanzImage.recognise(buf))
 		image = new SpPRMANZImage;
 
 	else if ((buf[0] == 0xce) && (buf[1] == 0xfa) &&

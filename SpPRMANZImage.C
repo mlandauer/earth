@@ -29,3 +29,17 @@ bool SpPRMANZImage::valid()
 {
 	return (true);
 }
+
+int SpPRMANZImage::sizeToRecognise()
+{
+	return (4);
+}
+
+bool SpPRMANZImage::recognise(unsigned char *buf)
+{
+	if ((buf[0] == 0x2f) && (buf[1] == 0x08) &&
+		(buf[2] == 0x67) && (buf[3] == 0xab))
+		return (true);
+	else
+		return (false);
+}

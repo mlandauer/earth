@@ -29,3 +29,16 @@ bool SpSGIImage::valid()
 {
 	return (true);
 }
+
+int SpSGIImage::sizeToRecognise()
+{
+	return (2);
+}
+	
+bool SpSGIImage::recognise(unsigned char *buf)
+{
+	if ((buf[0] == 0x01) && (buf[1] == 0xda))
+		return (true);
+	else
+		return (false);
+}
