@@ -39,7 +39,6 @@ DateTime::~DateTime()
 {
 }
 
-// Wait for an approximate amount of time
 void DateTime::sleep(int seconds)
 {
 	::sleep(seconds);

@@ -34,29 +34,81 @@
 
 namespace Sp {
 
+//! Utility class that stores a date and time
 class DateTime
 {
 	public:
 		DateTime();
 		~DateTime();
+    //! Construct date and time from a unix time
     static DateTime unixDateTime(time_t t);
+    //! Return the current date and time
     static DateTime current();
     
+    //! Wait a given number of seconds
 		static void sleep(int seconds);
+    
+    //! Returns the time and date as a string
+    /*!
+      The string has the following format: Fri Dec 13 15:57:28 2002
+    */
 		std::string timeAndDateString() const;
+    
+    //! Returns the number of days since the last sunday as an integer
+    /*!
+      In other words, Sun = 0, Mon = 1, Tue = 2, Wed = 3, Thu = 4, Fri = 5, Sat = 6
+    */
 		int dayOfWeek() const;
+    
+    //! Returns the day in the month as an integer
+    /*!
+      For the time Fri Dec 13 15:57:28 2002 this returns 13.
+    */
 		int dayOfMonth() const;
+    
+    //! Returns the year as an integer
+    /*!
+      For the time Fri Dec 13 15:57:28 2002 this returns 2002.
+    */
 		int year() const;
+    
+    //! Returns the number of months since the last december as an integer
+    /*!
+      In other words, Jan = 1, Feb = 2, Mar = 3, etc...
+    */
 		int month() const;
+    
+    //! Returns the hour as an integer
+    /*!
+      For the time Fri Dec 13 15:57:28 2002 this returns 15.
+    */
 		int hour() const;
+    
+    //! Returns the minutes as an integer
+    /*!
+      For the time Fri Dec 13 15:57:28 2002 this returns 57.
+    */
 		int minute() const;
+    
+    //! Returns the seconds as an integer
+    /*!
+      For the time Fri Dec 13 15:57:28 2002 this returns 28.
+    */
 		int second() const;
+    
+    //! Returns a short form of monthString()
 		std::string monthStringShort() const;
+    //! Returns the months as a string
 		std::string monthString() const;
+    //! Returns a short form of dayOfWeekString()
 		std::string dayOfWeekStringShort() const;
+    //! Returns the day of the week as a string
 		std::string dayOfWeekString() const;
+    //! Returns the time as a string
 		std::string timeString() const;
+    //! Returns the day of the month as a string
 		std::string dayOfMonthString() const;
+    //! Returns the year as a string
 		std::string yearString() const;
 		bool operator<(const DateTime &t) const;
 		bool operator==(const DateTime &t) const;
