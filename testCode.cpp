@@ -32,7 +32,6 @@
 #include "SpFsObject.h"
 #include "SpDir.h"
 #include "SpTester.h"
-#include "SpDirMon.h"
 #include "SpImageSeq.h"
 
 #include "testSpSize.h"
@@ -43,7 +42,6 @@
 #include "testSpFsObject.h"
 #include "testSpPath.h"
 #include "testSpImageSeq.h"
-#include "testSpDirMon.h"
 #include "testSpFsObjectHandle.h"
 
 int main(int argc, char **argv)
@@ -66,7 +64,6 @@ int main(int argc, char **argv)
 	testSpPath();
 	testSpImageSeq();
 	testSpFsObjectHandle();
-	//testSpDirMon();
 	
 	SpTester::finish();
 	SpImageFormat::deRegisterPlugins();

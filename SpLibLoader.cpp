@@ -24,7 +24,10 @@
 
 #include <iostream>
 #include "SpLibLoader.h"
+
+#ifdef __APPLE__
 #include <mach-o/dyld.h>
+#endif
 
 void SpLibLoader::load(std::string fileName)
 {

@@ -5,18 +5,18 @@ OPTION = -g
 INCLUDE = 
 
 SRCS = SpDir.cpp SpFsObject.cpp SpImageFormat.cpp SpSize.cpp testCode.cpp \
-       SpDirMon.cpp SpGid.cpp SpImageSeq.cpp SpTester.cpp \
-       SpDirMonFam.cpp SpImage.cpp SpLibLoader.cpp SpTime.cpp \
+       SpGid.cpp SpImageSeq.cpp SpTester.cpp \
+       SpImage.cpp SpLibLoader.cpp SpTime.cpp \
        SpFile.cpp SpImageDim.cpp SpPath.cpp SpUid.cpp \
-       testSpDir.cpp testSpDirMon.cpp testSpFile.cpp testSpFsObject.cpp \
+       testSpDir.cpp testSpFile.cpp testSpFsObject.cpp \
        testSpImage.cpp testSpImageSeq.cpp testSpPath.cpp testSpSize.cpp \
        testSpTime.cpp testSpFsObjectHandle.cpp
 
 OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o SpLibLoader.o \
           SpUid.o SpGid.o SpImage.o SpImageFormat.o SpImageDim.o \
-          SpFsObject.o SpDir.o SpDirMon.o SpDirMonFam.o \
+          SpFsObject.o SpDir.o \
 		  SpImageSeq.o \
-          testSpDir.o testSpDirMon.o testSpFile.o testSpFsObject.o \
+          testSpDir.o testSpFile.o testSpFsObject.o \
           testSpImage.o testSpImageSeq.o testSpPath.o testSpSize.o \
           testSpTime.o testSpFsObjectHandle.o
 
