@@ -53,7 +53,7 @@ bool SpTime::operator==(const SpTime &t) const
 	return (time == t.time);
 }
 
-SpTime SpTime::unix(time_t t)
+SpTime SpTime::unixTime(time_t t)
 {
   SpTime ret;
   ret.time = t;

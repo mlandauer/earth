@@ -62,25 +62,25 @@ struct stat SpFsObject::unixStat() const
 
 SpTime SpFsObject::lastModification() const
 {
-	return SpTime::unix(unixStat().st_mtime);
+	return SpTime::unixTime(unixStat().st_mtime);
 }
 
 SpTime SpFsObject::lastAccess() const
 {
-	return SpTime::unix(unixStat().st_atime);
+	return SpTime::unixTime(unixStat().st_atime);
 }
 
 SpTime SpFsObject::lastChange() const
 {
-	return SpTime::unix(unixStat().st_ctime);
+	return SpTime::unixTime(unixStat().st_ctime);
 }
 
 SpUid SpFsObject::uid() const
 {
-	return SpUid::unix(unixStat().st_uid);
+	return SpUid::unixUid(unixStat().st_uid);
 }
 
 SpGid SpFsObject::gid() const
 {
-	return SpGid::unix(unixStat().st_gid);
+	return SpGid::unixGid(unixStat().st_gid);
 }

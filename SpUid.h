@@ -33,7 +33,7 @@ class SpUid
 	public:
 		SpUid();
 		~SpUid();
-    static SpUid unix(uid_t u);
+    static SpUid unixUid(uid_t u);
     static SpUid current();
 
 		std::string name() const;

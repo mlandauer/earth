@@ -36,7 +36,7 @@ SpGid::~SpGid()
 {
 }
 
-SpGid SpGid::unix(gid_t g)
+SpGid SpGid::unixGid(gid_t g)
 {
   SpGid ret;
   ret.gid = g;

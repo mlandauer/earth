@@ -37,7 +37,7 @@ class SpTime
 	public:
 		SpTime();
 		~SpTime();
-    static SpTime unix(time_t t);
+    static SpTime unixTime(time_t t);
     static SpTime current();
     
 		static void sleep(int seconds);

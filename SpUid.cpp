@@ -35,7 +35,7 @@ SpUid::~SpUid()
 {
 }
 
-SpUid SpUid::unix(uid_t u)
+SpUid SpUid::unixUid(uid_t u)
 {
   SpUid ret;
   ret.uid = u;
