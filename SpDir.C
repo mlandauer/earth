@@ -4,6 +4,7 @@
 #include "SpFile.h"
 
 #include <list>
+#include <algorithm>
 #include <sys/types.h>
 #include <dirent.h>
 
@@ -33,12 +34,12 @@ bool SpDir::isDir() const
 	return (true);
 }
 
-list<SpFsObject *> SpDir::ls() const
+vector<SpFsObject *> SpDir::ls() const
 {
 	// First open a directory stream
 	DIR *d = opendir(path().fullName().c_str());
 	struct dirent *entry;
-	list<SpFsObject *> l;
+	vector<SpFsObject *> l;
 	while ((entry = readdir(d)) != NULL) {
 		SpFsObject *o = new SpFsObject;
 		string pathString = entry->d_name;
@@ -50,4 +51,18 @@ list<SpFsObject *> SpDir::ls() const
 		}
 	}
 	return (l);
+}
+
+class SpCompareFsObjectPaths
+{
+	public:
+		bool operator()(const SpFsObject *s1, const SpFsObject *s2) const
+			{ return s1->path() < s2->path(); }
+};
+
+vector<SpFsObject *> SpDir::lsSortedByPath() const
+{
+	vector<SpFsObject *> l = ls();
+	sort(l.begin(), l.end(), SpCompareFsObjectPaths());
+	return(l);
 }

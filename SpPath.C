@@ -16,6 +16,16 @@ SpPath::~SpPath()
 {
 }
 
+bool SpPath::operator<(const SpPath &p) const
+{
+	return (pathString < p.pathString);
+}
+
+bool SpPath::operator==(const SpPath &p) const
+{
+	return (pathString == p.pathString);
+}
+
 void SpPath::set(const string &a)
 {
 	pathString = a;

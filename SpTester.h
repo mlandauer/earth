@@ -7,6 +7,7 @@ class SpTester
 		static void checkEqual(string testName, bool a, bool b);
 		static void checkEqual(string testName, int a, int b);
 		static void checkEqual(string testName, float a, float b);
+		static void check(string testName, bool a);
 		static void finish();
 		static void setVerbose(bool v) { verbose = v; };
 		static void setFloatDelta(float d) { floatDelta = d; };

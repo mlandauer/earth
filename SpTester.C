@@ -8,6 +8,19 @@ bool SpTester::verbose = false;
 int SpTester::noErrors = 0;
 float SpTester::floatDelta = 0.1;
 
+void SpTester::check(string testName, bool a)
+{
+	if (!a) {
+		cout << endl << "FAILED " << testName << endl;
+		noErrors++;
+	}
+	else
+		if (verbose)
+			cout << endl << "SUCCESS " << testName;
+		else
+			cout << ".";
+}
+
 void SpTester::checkEqual(string testName, string a, string b)
 {
 	if (a != b) {

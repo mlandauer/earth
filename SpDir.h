@@ -3,7 +3,7 @@
 #ifndef _spdir_h_
 #define _spdir_h_
 
-#include <list>
+#include <vector>
 #include "SpFsObject.h"
 
 class SpDir : public SpFsObject
@@ -12,7 +12,8 @@ class SpDir : public SpFsObject
 		SpDir();
 		~SpDir();
 		SpDir(const SpPath &path);
-		list<SpFsObject *> ls() const;
+		vector<SpFsObject *> ls() const;
+		vector<SpFsObject *> lsSortedByPath() const;
 		bool isFile() const;
 		bool isDir() const;
 	private:
