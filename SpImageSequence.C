@@ -35,11 +35,25 @@ SpImageSequence::SpImageSequence(SpImage *i)
 
 void SpImageSequence::addImage(SpImage *i)
 {
-	if (partOfSequence(i))
+	if (couldBePartOfSequence(i))
 		f.insert(frameNumber(i->path()));
 }
 
+void SpImageSequence::removeImage(SpImage *i)
+{
+	if (partOfSequence(i))
+		f.erase(frameNumber(i->path()));
+}
+
 bool SpImageSequence::partOfSequence(SpImage *i) const
+{
+	if (!couldBePartOfSequence(i))
+		return false;
+	int no = frameNumber(i->path());
+	return (f.find(no) != f.end());
+}
+
+bool SpImageSequence::couldBePartOfSequence(SpImage *i) const
 {
 	// Check that the name of the image matches the name of the sequence
 	return (pattern(i->path()) == p) && (i->getFormat() == imageFormat)

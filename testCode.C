@@ -398,7 +398,6 @@ public:
 		SpImage *i6 = SpImage::construct(path3a);
 		SpImage *i7 = SpImage::construct(path4a);
 		SpImage *i8 = SpImage::construct(path5a);
-		checkNotNULL("test 1h", i8);
 		
 		if (checkNotNULL("test 1a", i1)) {
 			SpImageSequence seq(i1);
@@ -414,6 +413,19 @@ public:
 			if (checkNotNULL("test 4a", i3)) {
 				seq.addImage(i3);
 				checkSequence("test 4", seq, "test/seq/test1.#.gif", "1-4", 2, 2, "GIF");
+			}
+			if (checkNotNULL("test 11a", i2)) {
+				seq.removeImage(i2);
+				checkSequence("test 11", seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
+			}
+			// If we remove something that's not part of the sequence nothing should change
+			if (checkNotNULL("test 12a", i8)) {
+				seq.removeImage(i8);
+				checkSequence("test 12", seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
+			}
+			if (checkNotNULL("test 13a", i2)) {
+				seq.removeImage(i2);
+				checkSequence("test 13", seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
 			}
 		}
 		
