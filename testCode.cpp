@@ -46,7 +46,7 @@
 #include "testSpDirMon.h"
 #include "testSpFsObjectHandle.h"
 
-main()
+int main(int argc, char **argv)
 {
 	// Register the plugins
 	SpImageFormat::registerPlugins();

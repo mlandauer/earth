@@ -39,7 +39,6 @@ void testSpFile::test()
 	checkEqual("test 3", file.size().kbytes(), 0.39);
 	file.open();
 	unsigned char buf[2];
-	int a;
 	checkEqual("test 4", file.read(buf, 2), 2);
 	checkEqual("test 5", buf[0], 0x49);
 	checkEqual("test 6", buf[1], 0x49);

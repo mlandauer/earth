@@ -125,7 +125,14 @@ void testSpImageSeq::test()
 	}
 			
 	system ("rm -rf test/seq");
-	delete i1, i2, i3, i4, i5, i6, i7, i8;
+	delete i1;
+  delete i2;
+  delete i3;
+  delete i4;
+  delete i5;
+  delete i6;
+  delete i7;
+  delete i8;
 }
 
 void testSpImageSeq::checkSequence(std::string testName, const SpImageSeq &seq,

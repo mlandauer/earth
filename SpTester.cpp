@@ -40,6 +40,10 @@ SpTester::SpTester(std::string className) : name(className)
 	std::cout.flush();
 }
 
+SpTester::~SpTester()
+{
+}
+
 void SpTester::failMessage(std::string testName, std::string expected, std::string got)
 {
 	std::cout << std::endl << "FAILED " << name << " " << testName << ": Expected "

@@ -151,6 +151,8 @@ std::string SpTime::dayOfWeekString() const
 			return ("Friday");
 		case 6:
 			return ("Saturday");
+    default:
+      assert(false);
 	}
 }
 
@@ -188,6 +190,8 @@ std::string SpTime::monthString() const
 			return ("November");
 		case 12:
 			return ("December");
+    default:
+      assert(false);
 	}
 }
 

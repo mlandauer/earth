@@ -36,7 +36,7 @@ class SpFile : public SpFsObject
 {
 	public:
 		SpFile(const SpPath &path);
-		~SpFile() { };
+		virtual ~SpFile() { };
 		void open();
 		void close();
 		unsigned long int read(void *buf, unsigned long int count) const;

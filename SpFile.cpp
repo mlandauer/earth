@@ -30,7 +30,7 @@
 
 #include "SpFile.h"
 
-SpFile::SpFile(const SpPath &path) : fileOpen(false), SpFsObject(path)
+SpFile::SpFile(const SpPath &path) : SpFsObject(path), fileOpen(false)
 {
 }
 

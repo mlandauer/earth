@@ -40,7 +40,7 @@
 class SpFsObject
 {
 	public:
-		~SpFsObject() { };
+		virtual ~SpFsObject() { };
 		static SpFsObjectHandle construct(const SpPath &path);
 		SpTime lastAccess() const;
 		SpTime lastModification() const;

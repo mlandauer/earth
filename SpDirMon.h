@@ -45,7 +45,7 @@ class SpDirMonEvent
 class SpDirMon
 {
 	public:
-		~SpDirMon() { }
+		virtual ~SpDirMon() { }
 		static SpDirMon * construct(const SpDir &d);
 		virtual void update() = 0;
 		bool pendingEvent();

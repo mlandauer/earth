@@ -24,7 +24,7 @@
 
 #include "SpImageDim.h"
 
-SpImageDim::SpImageDim(unsigned int width = 0, unsigned int height = 0)
+SpImageDim::SpImageDim(unsigned int width, unsigned int height)
 {
 	setWidth(width);
 	h = height;

@@ -65,7 +65,7 @@ void SpPath::set(const std::string a)
 std::string SpPath::root() const
 {
 	std::string a = pathString;
-	int f = pathString.rfind('/');
+	unsigned int f = pathString.rfind('/');
 	if (f < pathString.length()) {
 		a.resize(f);
 		a += "/";
@@ -78,7 +78,7 @@ std::string SpPath::root() const
 std::string SpPath::relative() const
 {
 	std::string a = pathString;
-	int f = pathString.rfind('/');
+	unsigned int f = pathString.rfind('/');
 	if (f < pathString.length()) {
 		a = a.substr(f+1);
 	}

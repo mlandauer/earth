@@ -31,6 +31,7 @@ class SpTester
 {
 	public:
 		SpTester(std::string className);
+    virtual ~SpTester();
 		static void finish();
 		static void setVerbose(bool v) { verbose = v; };
 		static void setFloatDelta(float d) { floatDelta = d; };
