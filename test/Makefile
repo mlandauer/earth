@@ -7,18 +7,20 @@ INCLUDE = -I..
 SRCS = ../Dir.cpp ../FsObject.cpp ../ImageFormat.cpp ../Size.cpp ../UserGroup.cpp \
 			 ../ImageSeq.cpp ../Image.cpp ../LibLoader.cpp ../DateTime.cpp \
 			 ../File.cpp ../ImageDim.cpp ../Path.cpp ../User.cpp ../Frames.cpp \
-			 ../IndexDirectory.cpp ../ImageMon.cpp ../CachedDir.cpp ../ImageEventLogger.cpp \
+			 ../IndexDirectory.cpp ../ImageMon.cpp ../ImageSeqMon.cpp ../CachedDir.cpp \
+			 ../ImageEventLogger.cpp \
        testCode.cpp \
-			 testImageMon.cpp \
+			 testImageMon.cpp testImageSeqMon.cpp \
        testDir.cpp testFile.cpp testImage.cpp testImageSeq.cpp \
 			 testPath.cpp testSize.cpp testDateTime.cpp testIndexDirectory.cpp
 
 OBJECTS = ../Dir.o ../FsObject.o ../ImageFormat.o ../Size.o ../UserGroup.o \
           ../ImageSeq.o ../Image.o ../LibLoader.o ../DateTime.o \
           ../File.o ../ImageDim.o ../Path.o ../User.o ../Frames.o \
-					../IndexDirectory.o ../ImageMon.o ../CachedDir.o ../ImageEventLogger.o \
+					../IndexDirectory.o ../ImageMon.o ../ImageSeqMon.o ../CachedDir.o \
+					../ImageEventLogger.o \
 					testCode.o \
-					testImageMon.o \
+					testImageMon.o testImageSeqMon.o \
 					testDir.o testFile.o testImage.o testImageSeq.o \
 					testPath.o testSize.o testDateTime.o testIndexDirectory.o
 
