@@ -33,7 +33,7 @@ namespace Sp {
 ImageSeq::ImageSeq(Image *i)
 {
 	p = pattern(i->path());
-	frames.add(frameNumber(i->path()));
+	m_frames.add(frameNumber(i->path()));
 	m_valid = i->valid();
 	imageFormat = i->getFormat();
 	dimensions = i->dim();
@@ -42,7 +42,7 @@ ImageSeq::ImageSeq(Image *i)
 bool ImageSeq::addImage(Image *i)
 {
 	if (couldBePartOfSequence(i)) {
-		frames.add(frameNumber(i->path()));
+		m_frames.add(frameNumber(i->path()));
     return true;
   }
   else {
@@ -53,7 +53,7 @@ bool ImageSeq::addImage(Image *i)
 bool ImageSeq::removeImage(Image *i)
 {
 	if (partOfSequence(i)) {
-		return frames.remove(frameNumber(i->path()));
+		return m_frames.remove(frameNumber(i->path()));
   }
   else {
     return false;
@@ -63,7 +63,7 @@ bool ImageSeq::removeImage(Image *i)
 bool ImageSeq::removeImage(const Path &p)
 {
 	if (partOfSequence(p)) {
-		return frames.remove(frameNumber(p));
+		return m_frames.remove(frameNumber(p));
   }
   else {
     return false;
@@ -73,7 +73,7 @@ bool ImageSeq::removeImage(const Path &p)
 bool ImageSeq::partOfSequence(Image *i) const
 {
 	if (couldBePartOfSequence(i)) {
-		return (frames.partOfSequence(frameNumber(i->path())));
+		return (m_frames.partOfSequence(frameNumber(i->path())));
   }
   else {
 		return false;
@@ -83,7 +83,7 @@ bool ImageSeq::partOfSequence(Image *i) const
 bool ImageSeq::partOfSequence(const Path &path) const
 {
 	if (couldBePartOfSequence(path)) {
-		return (frames.partOfSequence(frameNumber(path)));
+		return (m_frames.partOfSequence(frameNumber(path)));
   }
   else
 		return false;
@@ -111,9 +111,9 @@ bool ImageSeq::couldBePartOfSequence(Image *i) const
 	}
 }
 
-std::string ImageSeq::framesString() const
+Frames ImageSeq::frames() const
 {
-	return frames.text();
+	return m_frames;
 }
 
 Path ImageSeq::path() const

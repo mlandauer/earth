@@ -78,5 +78,5 @@ void testIndexDirectory::checkSequence(const ImageSeq &sequence,
 	CPPUNIT_ASSERT_EQUAL(sequence.format()->formatString(), format);
 	CPPUNIT_ASSERT(sequence.dim() == ImageDim(width, height));
 	CPPUNIT_ASSERT_EQUAL(sequence.path().fullName(), path);
-	CPPUNIT_ASSERT_EQUAL(sequence.framesString(), frames);
+	CPPUNIT_ASSERT_EQUAL(sequence.frames().text(), frames);
 }

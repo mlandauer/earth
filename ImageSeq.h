@@ -77,18 +77,14 @@ public:
 	*/
 	ImageFormat* format() const { return imageFormat; };
 	
-	//! Returns a concise string containing the range of frames in this sequence
-	/*!
-		For example, a continuous frame range is written as "1-245" and a discontinuous
-		range is written as "1-145,147-240,242,245"
-	*/
-	std::string framesString() const;
+	//! Returns the frames in this sequence
+	Frames frames() const;
 	
 	//! Is this a sequence consisting of valid images?
 	bool valid() const { return m_valid; }
 	
 private:
-	Frames frames;
+	Frames m_frames;
 	Path p;
 	Path pattern(const Path &a) const;
 	int frameNumber(const Path &a) const;

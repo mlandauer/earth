@@ -55,12 +55,12 @@ void index(std::string directoryName)
 			std::cout << i->format()->formatString() << "\t"
 				<< i->dim().width() << "x" << i->dim().height() << "\t"
 				<< i->path().fullName() << "\t"
-				<< i->framesString() << std::endl;
+				<< i->frames().text() << std::endl;
 		}
 		else {
 			std::cout << "INVALID " << i->format()->formatString() << "\t\t"
 				<< i->path().fullName() << "\t"
-				<< i->framesString() << std::endl;
+				<< i->frames().text() << std::endl;
 		}
 	}
 }
