@@ -27,21 +27,31 @@
 
 namespace Sp {
 
-// A utility class for keeping of track of file or sequence sizes using
-// either a measure of bytes, Kb, Mb, etc...
+//! Utility class for file sizes
+/*!
+  A utility class for keeping of track of file or sequence sizes using either a measure of bytes, Kb, Mb, etc...
+*/
 class Size
 {
 	public:
 		Size();
 		~Size();
+    // Construct a Size object from a number in bytes
     static Size Bytes(float n);
+    // Construct a Size object from a number in KB
     static Size KBytes(float n);
+    // Construct a Size object from a number in MB
     static Size MBytes(float n);
+    // Construct a Size object from a number in GB
     static Size GBytes(float n);
     
+    // Return size in bytes
     float getBytes() const;
+    // Return size in KB
     float getKBytes() const;
+    // Return size in MB
     float getMBytes() const;
+    // Return size in GB
     float getGBytes() const;
     
 	private:
