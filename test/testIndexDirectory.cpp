@@ -24,6 +24,8 @@
 
 #include "testIndexDirectory.h"
 
+#include "Path.h"
+
 testIndexDirectory::testIndexDirectory() : Tester("IndexDirectory")
 {
 	test();
@@ -31,5 +33,15 @@ testIndexDirectory::testIndexDirectory() : Tester("IndexDirectory")
 
 void testIndexDirectory::test()
 {
+	system("rm -rf test/index");
+	system("mkdir test/index");
+	system("cp test/templateImages/2x2.gif test/index/test1.0001.gif");
+	system("cp test/templateImages/2x2.gif test/index/test1.0002.gif");
+	system("cp test/templateImages/2x2.gif test/index/test1.0003.gif");
+	system("cp test/templateImages/2x2.gif test/index/test1.0004.gif");
+	system("cp test/templateImages/2x2.gif test/index/test2.8.gif");
+	system("cp test/templateImages/2x2.gif test/index/test2.000123.gif");
+	system("cp test/templateImages/2x2.gif test/index/120.gif");
+	system("cp test/templateImages/4x4.tiff test/index/110.gif");
 }
 

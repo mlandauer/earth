@@ -48,19 +48,25 @@ void testDir::test()
 	check("test 3", dir.userGroup() == UserGroup::current());
 	checkEqualBool("test 4", dir.valid(), true);
 	std::vector<File> files = dir.listFiles(true);
-	if (checkEqual("ls test 0", files.size(), 12)) {
-		checkEqual("ls test 1", files[0].path().fullName(), "test/templateImages/2x2.gif");
-		checkEqual("ls test 2", files[1].path().fullName(), "test/templateImages/2x2.jpg");
-		checkEqual("ls test 3", files[2].path().fullName(), "test/templateImages/2x2.sgi");
-		checkEqual("ls test 4", files[3].path().fullName(), "test/templateImages/2x2.tiff");
-		checkEqual("ls test 5", files[4].path().fullName(), "test/templateImages/4x4.gif");		
-		checkEqual("ls test 6", files[5].path().fullName(), "test/templateImages/4x4.jpg");						
-		checkEqual("ls test 7", files[6].path().fullName(), "test/templateImages/4x4.sgi");		
-		checkEqual("ls test 8", files[7].path().fullName(), "test/templateImages/4x4.tiff");		
-		checkEqual("ls test 9", files[8].path().fullName(), "test/templateImages/8x8.gif");		
-		checkEqual("ls test 10", files[9].path().fullName(), "test/templateImages/8x8.jpg");		
-		checkEqual("ls test 11", files[10].path().fullName(), "test/templateImages/8x8.sgi");		
-		checkEqual("ls test 12", files[11].path().fullName(), "test/templateImages/8x8.tiff");
+	if (checkEqual("ls test 0", files.size(), 18)) {
+		checkEqual("ls test 1", files[0].path().fullName(), "test/templateImages/2x2.cin");
+		checkEqual("ls test 1", files[1].path().fullName(), "test/templateImages/2x2.gif");
+		checkEqual("ls test 1", files[2].path().fullName(), "test/templateImages/2x2.iff");
+		checkEqual("ls test 2", files[3].path().fullName(), "test/templateImages/2x2.jpg");
+		checkEqual("ls test 3", files[4].path().fullName(), "test/templateImages/2x2.sgi");
+		checkEqual("ls test 4", files[5].path().fullName(), "test/templateImages/2x2.tiff");
+		checkEqual("ls test 5", files[6].path().fullName(), "test/templateImages/4x4.cin");		
+		checkEqual("ls test 5", files[7].path().fullName(), "test/templateImages/4x4.gif");		
+		checkEqual("ls test 5", files[8].path().fullName(), "test/templateImages/4x4.iff");		
+		checkEqual("ls test 6", files[9].path().fullName(), "test/templateImages/4x4.jpg");						
+		checkEqual("ls test 7", files[10].path().fullName(), "test/templateImages/4x4.sgi");		
+		checkEqual("ls test 8", files[11].path().fullName(), "test/templateImages/4x4.tiff");		
+		checkEqual("ls test 9", files[12].path().fullName(), "test/templateImages/8x8.cin");		
+		checkEqual("ls test 9", files[13].path().fullName(), "test/templateImages/8x8.gif");		
+		checkEqual("ls test 9", files[14].path().fullName(), "test/templateImages/8x8.iff");		
+		checkEqual("ls test 10", files[15].path().fullName(), "test/templateImages/8x8.jpg");		
+		checkEqual("ls test 11", files[16].path().fullName(), "test/templateImages/8x8.sgi");		
+		checkEqual("ls test 12", files[17].path().fullName(), "test/templateImages/8x8.tiff");
 	}
   
 	std::vector<Dir> dirs = dir.listDirs(true);

@@ -57,8 +57,6 @@ void testImage::test()
 	// *** FIT File format currently untested ****
 	// *** PRMANZ File format currently untested ****
 	// *** PRTEX File format currently untested ****
-	// *** CINEON File format currently untested ****
-	// *** IFF File format currently untested ****
 	
 	Image *image3 = Image::construct("test/templateImages/8x8.gif");
 	if (checkNotNULL("test 10b", image3)) {
@@ -70,5 +68,28 @@ void testImage::test()
 		checkEqual("test 15", image3->dim().height(), 8);
 		delete image3;
 	}
+	
+	Image *image4 = Image::construct("test/templateImages/8x8.cin");
+	if (checkNotNULL("test 16a", image4)) {
+		checkEqual("test 16b", image4->path().fullName(),
+			"test/templateImages/8x8.cin");
+		checkEqual("test 16c", image4->size().getKBytes(), 2.25);
+		checkEqual("test 16d", image4->formatString(), "Cineon");
+		checkEqual("test 16e", image4->dim().width(), 8);
+		checkEqual("test 16f", image4->dim().height(), 8);
+		delete image4;
+	}
+		
+	Image *image5 = Image::construct("test/templateImages/8x8.iff");
+	if (checkNotNULL("test 17a", image5)) {
+		checkEqual("test 17b", image5->path().fullName(),
+			"test/templateImages/8x8.iff");
+		checkEqual("test 17c", image5->size().getKBytes(), 0.41);
+		checkEqual("test 17d", image5->formatString(), "IFF");
+		checkEqual("test 17e", image5->dim().width(), 8);
+		checkEqual("test 17f", image5->dim().height(), 8);
+		delete image5;
+	}
+		
 }
 
