@@ -3,9 +3,7 @@
 
 #include <stream.h>
 
-#include "SpMisc.h"
 #include "SpFile.h"
-#include "SpTime.h"
 
 void testSpSize()
 {
@@ -30,6 +28,9 @@ void testSpFile()
 	cout << "filename = " << file.path().fullName() << endl;
 	cout << "size = " << file.size().bytes() << " bytes" << endl;
 	cout << "size = " << file.size().kbytes() << " Kbytes" << endl;
+	cout << "last access = " << file.lastAccess().string() << endl;
+	cout << "last modification = " << file.lastModification().string() << endl;
+	cout << "last change = " << file.lastChange().string() << endl;
 }
 
 void testSpTime()
@@ -59,8 +60,8 @@ main()
 {
 	testSpSize();
 	space();
-	testSpFile();
-	space();
 	testSpTime();
+	space();
+	testSpFile();
 }
 

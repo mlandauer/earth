@@ -8,7 +8,7 @@
 #define _sptime_h_
 
 #include <time.h>
-#include "SpMisc.h"
+#include "SpString.h"
 
 class SpTime
 {

@@ -10,7 +10,6 @@
 
 SpFile::SpFile(SpString path)
 {
-	cout << "Creating SpFile with path = " << path << endl;
 	pathString.set(path);
 }
 
@@ -30,4 +29,31 @@ SpSize SpFile::size()
 	lstat(pathString.fullName(), &fileStat);
 	s.setBytes(fileStat.st_size);
 	return (s);
+}
+
+SpTime SpFile::lastModification()
+{
+	struct stat fileStat;
+	SpTime t;
+	lstat(pathString.fullName(), &fileStat);
+	t.setUnixTime(fileStat.st_mtime);
+	return (t);
+}
+
+SpTime SpFile::lastAccess()
+{
+	struct stat fileStat;
+	SpTime t;
+	lstat(pathString.fullName(), &fileStat);
+	t.setUnixTime(fileStat.st_atime);
+	return (t);
+}
+
+SpTime SpFile::lastChange()
+{
+	struct stat fileStat;
+	SpTime t;
+	lstat(pathString.fullName(), &fileStat);
+	t.setUnixTime(fileStat.st_ctime);
+	return (t);
 }

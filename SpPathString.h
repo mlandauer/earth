@@ -3,7 +3,7 @@
 #ifndef _sppathstring_h_
 #define _sppathstring_h_
 
-#include "SpMisc.h"
+#include "SpString.h"
 
 class SpPathString
 {

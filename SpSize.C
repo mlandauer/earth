@@ -3,7 +3,7 @@
 // A utility class for keeping of track of file or sequence sizes using
 // either a measure of bytes, Kb, Mb, etc...
 
-#include "SpMisc.h"
+#include "SpSize.h"
 
 SpSize::SpSize()
 {

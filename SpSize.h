@@ -1,11 +1,7 @@
 // $Id$
 
-#ifndef _spmisc_h
-#define _spmisc_h
-
-#include <qstring.h>
-
-typedef QString SpString;
+#ifndef _spsize_h
+#define _spsize_h
 
 // A utility class for keeping of track of file or sequence sizes using
 // either a measure of bytes, Kb, Mb, etc...
