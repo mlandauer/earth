@@ -191,27 +191,24 @@ void testSpUid()
 
 void testSpFsObject()
 {
-	cout << "Test Filesystem Object" << endl;
 	SpFsObject file("test/templateImages/8x8.tiff");
-	cout << "path = " << file.path().fullName() << endl;
-	cout << "size = " << file.size().kbytes() << " Kbytes" << endl;
-	cout << "last access = " << file.lastAccess().timeAndDateString() << endl;
-	cout << "last modification = " << file.lastModification().timeAndDateString() << endl;
-	cout << "last change = " << file.lastChange().timeAndDateString() << endl;
-	cout << "owner = " << file.uid().name() << endl;
-	cout << "group owner = " << file.gid().name() << endl;
-	cout << "is a file? = " << file.isFile() << endl;
-	cout << "is a directory? = " << file.isDir() << endl;
+	checkEqual("SpFsObject test 1", file.path().fullName(),
+		"test/templateImages/8x8.tiff");
+	checkEqual("SpFsObject test 2", file.size().kbytes(), 1);
+	SpUid u;
+	u.setCurrent();
+	SpGid g;
+	g.setCurrent();
+	checkEqual("SpFsObject test 3", file.uid().name(), u.name());
+	checkEqual("SpFsObject test 4", file.gid().name(), g.name());
+	checkEqual("SpFsObject test 5", file.isFile(), true);
+	checkEqual("SpFsObject test 6", file.isDir(), false);
 	SpFsObject file2("test/templateImages/");
-	cout << "path = " << file2.path().fullName() << endl;
-	cout << "size = " << file2.size().kbytes() << " Kbytes" << endl;
-	cout << "last access = " << file2.lastAccess().timeAndDateString() << endl;
-	cout << "last modification = " << file2.lastModification().timeAndDateString() << endl;
-	cout << "last change = " << file2.lastChange().timeAndDateString() << endl;
-	cout << "owner = " << file2.uid().name() << endl;
-	cout << "group owner = " << file2.gid().name() << endl;
-	cout << "is a file? = " << file2.isFile() << endl;
-	cout << "is a directory? = " << file2.isDir() << endl;
+	checkEqual("SpFsObject test 7", file2.path().fullName(), "test/templateImages");
+	checkEqual("SpFsObject test 8", file2.size().kbytes(), 1);
+	// Find some way to test access, modification and change times
+	checkEqual("SpFsObject test 9", file2.isFile(), false);
+	checkEqual("SpFsObject test 10", file2.isDir(), true);
 }
 
 void testSpDir()
@@ -295,8 +292,9 @@ main()
 	testSpDir();
 	testSpPath();
 	
+	cout << endl;
 	if (noErrors == 0)
-		cout << endl << "All tests passed" << endl;
+		cout << "All tests passed" << endl;
 	
 	SpImage::deRegisterPlugins();
 }
