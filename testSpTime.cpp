@@ -35,8 +35,7 @@ void testSpTime::test()
   // Commented this test out because unit time zero (the epoch) is defined as a specific
   // time in GMT. However, when you get the local time it will be different in different
   // time zones and so the test will fail or work depending on which timezone you're in.
-	SpTime t1;
-	t1.setUnixTime(0);
+	SpTime t1 = SpTime::unix(0);
 	//checkEqual("test 1", t1.timeAndDateString(), "Wed Dec 31 16:00:00 1969");
 	//checkEqual("test 2", t1.year(), 1969);
 	//checkEqual("test 3", t1.hour(), 16);
@@ -50,8 +49,7 @@ void testSpTime::test()
 	//checkEqual("test 11", t1.dayOfWeekStringShort(), "Wed");
 	//checkEqual("test 12", t1.dayOfWeekString(), "Wednesday");
 	//checkEqual("test 13", t1.timeString(), "16:00:00");
-	SpTime t2;
-	t2.setUnixTime(100);
+	SpTime t2 = SpTime::unix(100);
 	SpTime t0;
 	check("test 14",    t0 == t1);
 	check("test 15a",   t0 <  t2);

@@ -37,9 +37,11 @@ class SpTime
 	public:
 		SpTime();
 		~SpTime();
-		void setUnixTime(time_t t);
+    static SpTime unix(time_t t);
+    static SpTime current();
+    
+		static void sleep(int seconds);
 		std::string timeAndDateString() const;
-		void setCurrentTime();
 		int dayOfWeek() const;
 		int dayOfMonth() const;
 		int year() const;
@@ -56,7 +58,6 @@ class SpTime
 		std::string yearString() const;
 		bool operator<(const SpTime &t) const;
 		bool operator==(const SpTime &t) const;
-		static void sleep(int seconds);
 	private:
 		time_t time;
 };

@@ -53,9 +53,11 @@ bool SpTime::operator==(const SpTime &t) const
 	return (time == t.time);
 }
 
-void SpTime::setUnixTime(time_t t)
+SpTime SpTime::unix(time_t t)
 {
-	time = t;
+  SpTime ret;
+  ret.time = t;
+  return (ret);
 }
 
 std::string SpTime::timeAndDateString() const
@@ -213,7 +215,9 @@ int SpTime::second() const
 	return (localtime->tm_sec);
 }
 
-void SpTime::setCurrentTime()
+SpTime SpTime::current()
 {
-	time = std::time(NULL);
+  SpTime t;
+  t.time = std::time(NULL);
+  return t;
 }
