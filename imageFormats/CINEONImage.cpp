@@ -24,6 +24,8 @@
 
 #include "CINEONImage.h"
 
+namespace Sp {
+
 ImageDim CINEONImage::dim()
 {
 	open();
@@ -57,4 +59,6 @@ Image* CINEONImageFormat::constructImage()
 };
 
 static CINEONImageFormat thisCINEONImageFormat;
+
+}
 

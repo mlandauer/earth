@@ -29,6 +29,8 @@
 #include <string>
 #include <dlfcn.h>
 
+namespace Sp {
+
 // Handles the loading and releasing of dynamic libraries
 
 class LibLoader
@@ -41,5 +43,7 @@ class LibLoader
 	private:
 		std::list<void *> handles;	
 };
+
+}
 
 #endif

@@ -24,6 +24,8 @@
 
 #include "PRMANZImage.h"
 
+namespace Sp {
+
 ImageDim PRMANZImage::dim()
 {
 	open();
@@ -49,3 +51,5 @@ Image* PRMANZImageFormat::constructImage()
 }
 
 PRMANZImageFormat thisPRMANZImageFormat;
+
+}

@@ -29,6 +29,8 @@
 
 #include "Tester.h"
 
+namespace Sp {
+
 bool Tester::verbose = false;
 int Tester::noFails = 0;
 int Tester::noSuccesses = 0;
@@ -147,3 +149,6 @@ std::string Tester::toString(float a)
 	sprintf(buf, "%f", a);
 	return std::string(buf);
 }
+
+}
+

@@ -25,6 +25,8 @@
 #ifndef _size_h
 #define _size_h
 
+namespace Sp {
+
 // A utility class for keeping of track of file or sequence sizes using
 // either a measure of bytes, Kb, Mb, etc...
 class Size
@@ -43,5 +45,7 @@ class Size
 	private:
 		float KBytes;
 };
+
+}
 
 #endif

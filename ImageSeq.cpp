@@ -25,6 +25,8 @@
 #include <stdio.h>
 #include "ImageSeq.h"
 
+namespace Sp {
+
 ImageSeq::ImageSeq(Image *i)
 {
 	p = pattern(i->path());
@@ -140,4 +142,6 @@ std::string ImageSeq::hash(int size) const
 		return "#";
 	else
 		return std::string(size, '@');	
+}
+
 }

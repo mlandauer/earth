@@ -30,6 +30,8 @@
 #include "FsObject.h"
 #include "Image.h"
 
+namespace Sp {
+
 class Dir : public FsObject
 {
 	public:
@@ -43,5 +45,6 @@ class Dir : public FsObject
 		static bool sortByPath;
 };
 
+}
 #endif
 

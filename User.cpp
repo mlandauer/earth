@@ -27,6 +27,8 @@
 
 #include "User.h"
 
+namespace Sp {
+
 User::User() : uid(0)
 {
 }
@@ -60,3 +62,6 @@ std::string User::name() const
   assert(p != NULL);
 	return (std::string(p->pw_name));
 }
+
+}
+

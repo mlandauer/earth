@@ -28,6 +28,8 @@
 #include "Tester.h"
 #include "ImageSeq.h"
 
+using namespace Sp;
+
 class testImageSeq : public Tester
 {
 public:

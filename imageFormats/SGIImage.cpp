@@ -24,6 +24,8 @@
 
 #include "SGIImage.h"
 
+namespace Sp {
+
 ImageDim SGIImage::dim()
 {
 	open();
@@ -48,3 +50,5 @@ Image* SGIImageFormat::constructImage()
 }
 
 static SGIImageFormat thisSGIImageFormat;
+
+}

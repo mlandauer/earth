@@ -28,6 +28,8 @@
 #include <sys/types.h>
 #include <string>
 
+namespace Sp {
+
 class User
 {
 	public:
@@ -41,5 +43,7 @@ class User
 	private:
 		uid_t uid;
 };
+
+}
 
 #endif

@@ -27,6 +27,8 @@
 
 #include "Path.h"
 
+namespace Sp {
+
 Path::Path(const std::string &a)
 {
 	set(a);
@@ -109,5 +111,5 @@ void Path::add(const std::string &a)
 	pathString += "/" + a;
 }
 
-
+}
 

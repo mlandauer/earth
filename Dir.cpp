@@ -34,6 +34,8 @@
 #include "File.h"
 #include "FsObject.h"
 
+namespace Sp {
+
 bool Dir::sortByPath = false;
 
 bool Dir::valid() const
@@ -73,4 +75,6 @@ std::vector<FsObjectHandle> Dir::ls() const
 	if (sortByPath)
 		sort(l.begin(), l.end(), CompareFsObjectPaths());
 	return (l);
+}
+
 }

@@ -29,6 +29,8 @@
 #include <mach-o/dyld.h>
 #endif
 
+namespace Sp {
+
 void LibLoader::load(std::string fileName)
 {
   #ifndef __APPLE__
@@ -50,5 +52,7 @@ void LibLoader::releaseAll()
     for (std::list<void *>::iterator a = handles.begin(); a != handles.end(); ++a)
       dlclose((*a));
   #endif
+}
+
 }
 

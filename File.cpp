@@ -30,6 +30,8 @@
 
 #include "File.h"
 
+namespace Sp {
+
 File::File(const Path &path) : FsObject(path), fileOpen(false)
 {
 }
@@ -117,4 +119,6 @@ unsigned long File::readLong(const int &endian) const
 	else
 		value = (temp[0]<<24) + (temp[1]<<16) + (temp[2]<<8) + (temp[3]<<0);
 	return (value);
+}
+
 }

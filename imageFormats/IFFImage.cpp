@@ -24,6 +24,8 @@
 
 #include "IFFImage.h"
 
+namespace Sp {
+
 ImageDim IFFImage::dim()
 {
 	readHeader();
@@ -86,3 +88,5 @@ Image* IFFImageFormat::constructImage()
 }
 
 static IFFImageFormat thisIFFImageFormat;
+
+}

@@ -32,6 +32,8 @@
 #include "UserGroup.h"
 #include "FsObject.h"
 
+namespace Sp {
+
 class File : public FsObject
 {
 	public:
@@ -70,5 +72,7 @@ class FileDateTime : public File
 	protected:
 		DateTime cachedChange;
 };
+
+}
 
 #endif

@@ -24,6 +24,8 @@
 
 #include "GIFImage.h"
 
+namespace Sp {
+
 ImageDim GIFImage::dim()
 {
 	open();
@@ -49,4 +51,6 @@ Image* GIFImageFormat::constructImage()
 }
 
 static GIFImageFormat thisGIFImageFormat;
+
+}
 

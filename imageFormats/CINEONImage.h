@@ -29,6 +29,8 @@
 #include "ImageFormat.h"
 #include "ImageDim.h"
 
+namespace Sp {
+
 class CINEONImageFormat: public ImageFormat
 {
 	public:
@@ -48,5 +50,6 @@ class CINEONImage : public Image
 	private:
 };
 
+}
 
 #endif

@@ -25,6 +25,8 @@
 #ifndef _fsobjecthandle_h_
 #define _fsobjecthandle_h_
 
+namespace Sp {
+
 template<class C> class Handle
 {
 	private:
@@ -60,5 +62,7 @@ template<class C> class Handle
 class FsObject;
 
 typedef Handle<FsObject> FsObjectHandle;
+
+}
 
 #endif

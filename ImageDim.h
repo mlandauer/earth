@@ -25,6 +25,8 @@
 #ifndef _imagedim_h_
 #define _imagedim_h_
 
+namespace Sp {
+
 class ImageDim
 {
 	public:
@@ -38,5 +40,7 @@ class ImageDim
 	private:
 		unsigned int w, h;
 };
+
+}
 
 #endif

@@ -30,6 +30,8 @@
 #include "Dir.h"
 #include "Image.h"
 
+namespace Sp {
+
 FsObjectHandle FsObject::construct(const Path &path)
 {
 	FsObject *o;
@@ -85,4 +87,6 @@ User FsObject::user() const
 UserGroup FsObject::userGroup() const
 {
 	return UserGroup::unixGid(unixStat().st_gid);
+}
+
 }

@@ -31,6 +31,8 @@
 #include "ImageDim.h"
 #include "ImageFormat.h"
 
+namespace Sp {
+
 class Image : public File
 {
 	public:
@@ -44,5 +46,7 @@ class Image : public File
 	private:
 		ImageFormat *format;
 };
+
+}
 
 #endif

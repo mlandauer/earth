@@ -27,6 +27,8 @@
 
 #include <string>
 
+namespace Sp {
+
 class Path
 {
 	public:
@@ -44,5 +46,7 @@ class Path
 	private:
 		std::string pathString;
 };
+
+}
 
 #endif

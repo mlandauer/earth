@@ -25,6 +25,8 @@
 #include "TIFFImage.h"
 #include <stream.h>
 
+namespace Sp {
+
 ImageDim TIFFImage::dim()
 {
 	readHeader();
@@ -139,4 +141,6 @@ Image* TIFFImageFormat::constructImage()
 }
 
 static TIFFImageFormat thisTIFFImageFormat;
+
+}
 

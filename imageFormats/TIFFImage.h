@@ -29,6 +29,8 @@
 #include "ImageFormat.h"
 #include "ImageDim.h"
 
+namespace Sp {
+
 class TIFFImageFormat: public ImageFormat
 {
 	public:
@@ -51,5 +53,7 @@ class TIFFImage : public Image
 		bool validHeader;
 		void readHeader();
 };
+
+}
 
 #endif

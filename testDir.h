@@ -28,6 +28,8 @@
 #include "Tester.h"
 #include "FsObject.h"
 
+using namespace Sp;
+
 class testDir : public Tester
 {
 public:

@@ -24,6 +24,8 @@
 
 #include "ImageDim.h"
 
+namespace Sp {
+
 ImageDim::ImageDim(unsigned int width, unsigned int height)
 {
 	setWidth(width);
@@ -58,3 +60,6 @@ bool ImageDim::operator==(const ImageDim &d) const
 {
 	return ((w == d.width()) && (h == d.height()));
 }
+
+}
+

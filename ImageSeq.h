@@ -28,6 +28,8 @@
 #include <set>
 #include "Image.h"
 
+namespace Sp {
+
 class ImageSeq
 {
 	public:
@@ -52,5 +54,7 @@ class ImageSeq
 		ImageFormat *imageFormat;
 		ImageDim dimensions;
 };
+
+}
 
 #endif

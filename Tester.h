@@ -27,6 +27,8 @@
 
 #include <string>
 
+namespace Sp {
+
 class Tester
 {
 	public:
@@ -58,6 +60,8 @@ class Tester
 		void failMessage(std::string testName, std::string expected, std::string got);
 		void successMessage(std::string testName, std::string message);
 };
+
+}
 
 #endif
 

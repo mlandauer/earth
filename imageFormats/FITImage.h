@@ -29,6 +29,8 @@
 #include "ImageFormat.h"
 #include "ImageDim.h"
 
+namespace Sp {
+
 class FITImageFormat: public ImageFormat
 {
 	public:
@@ -47,5 +49,7 @@ class FITImage : public Image
 		bool valid() { return true; };
 	private:
 };
+
+}
 
 #endif

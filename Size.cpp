@@ -27,6 +27,8 @@
 
 #include "Size.h"
 
+namespace Sp {
+
 Size::Size()
 {
 	KBytes = 0;
@@ -74,5 +76,7 @@ float Size::mbytes() const
 float Size::gbytes() const
 {
 	return KBytes / 1024 / 1024;
+}
+
 }
 

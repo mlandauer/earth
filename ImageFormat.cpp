@@ -28,6 +28,8 @@
 #include "ImageFormat.h"
 #include "File.h"
 
+namespace Sp {
+
 std::list<ImageFormat *> ImageFormat::plugins;
 LibLoader ImageFormat::loader;
 
@@ -111,3 +113,6 @@ ImageFormat* ImageFormat::recogniseByMagic(const Path &path)
 	delete [] buf;
 	return (NULL);
 }
+
+}
+

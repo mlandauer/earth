@@ -28,6 +28,8 @@
 
 #include "UserGroup.h"
 
+namespace Sp {
+
 UserGroup::UserGroup()
 {
 }
@@ -59,4 +61,6 @@ std::string UserGroup::name() const
 {
 	struct group *e = getgrgid(gid);
 	return (std::string(e->gr_name));
+}
+
 }

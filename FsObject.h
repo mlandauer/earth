@@ -37,6 +37,8 @@
 #include "Size.h"
 #include "FsObjectHandle.h"
 
+namespace Sp {
+
 class FsObject
 {
 	public:
@@ -57,5 +59,7 @@ class FsObject
 		struct stat unixStat() const;
 		Path p;
 };
+
+}
 
 #endif

@@ -24,6 +24,8 @@
 
 #include "Image.h"
 
+namespace Sp {
+
 Image* Image::construct(const Path &path)
 {
 	ImageFormat *format = ImageFormat::recogniseByMagic(path);
@@ -37,5 +39,5 @@ Image* Image::construct(const Path &path)
 		return (NULL);
 }
 
-
+}
 

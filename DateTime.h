@@ -32,6 +32,8 @@
 #include <time.h>
 #include <string>
 
+namespace Sp {
+
 class DateTime
 {
 	public:
@@ -61,5 +63,7 @@ class DateTime
 	private:
 		time_t time;
 };
+
+}
 
 #endif

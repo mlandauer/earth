@@ -29,6 +29,8 @@
 
 #include "DateTime.h"
 
+namespace Sp {
+
 DateTime::DateTime() : time(0)
 {
 }
@@ -220,4 +222,6 @@ DateTime DateTime::current()
   DateTime t;
   t.time = std::time(NULL);
   return t;
+}
+
 }

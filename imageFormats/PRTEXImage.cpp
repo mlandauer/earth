@@ -26,6 +26,8 @@
 
 #include "PRTEXImage.h"
 
+namespace Sp {
+
 ImageDim PRTEXImage::dim()
 {
 	open();
@@ -55,3 +57,5 @@ Image* PRTEXImageFormat::constructImage()
 }
 
 PRTEXImageFormat thisPRTEXImageFormat;
+
+}

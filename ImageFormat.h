@@ -29,6 +29,8 @@
 #include "LibLoader.h"
 #include "Path.h"
 
+namespace Sp {
+
 class Image;
 
 class ImageFormat
@@ -50,5 +52,7 @@ class ImageFormat
 		static ImageFormat* recentPlugin();
 		static LibLoader loader;
 };
+
+}
 
 #endif

@@ -28,6 +28,8 @@
 #include <sys/types.h>
 #include <string>
 
+namespace Sp {
+
 class UserGroup
 {
 	public:
@@ -41,5 +43,7 @@ class UserGroup
 	private:
 		gid_t gid;
 };
+
+}
 
 #endif

@@ -25,6 +25,8 @@
 #include "FITImage.h"
 #include <stream.h>
 
+namespace Sp {
+
 ImageDim FITImage::dim()
 {
 	open();
@@ -53,3 +55,5 @@ Image* FITImageFormat::constructImage()
 }
 
 static FITImageFormat thisFITImageFormat;
+
+}

@@ -29,6 +29,8 @@
 #include "ImageFormat.h"
 #include "ImageDim.h"
 
+namespace Sp {
+
 class PRTEXImageFormat: public ImageFormat
 {
 	public:
@@ -47,5 +49,7 @@ class PRTEXImage : public Image
 		bool valid() { return (true); };
 	private:
 };
+
+}
 
 #endif

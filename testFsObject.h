@@ -27,6 +27,8 @@
 
 #include "Tester.h"
 
+using namespace Sp;
+
 class testFsObject : public Tester
 {
 public:
