@@ -37,7 +37,6 @@ list<SpFsObject *> SpDir::ls() const
 {
 	// First open a directory stream
 	DIR *d = opendir(path().fullName().c_str());
-	cout << "Have opened directory stream" << endl;
 	struct dirent *entry;
 	list<SpFsObject *> l;
 	while ((entry = readdir(d)) != NULL) {
