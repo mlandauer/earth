@@ -9,114 +9,7 @@
 #include "SpImage.h"
 #include "SpFsObject.h"
 #include "SpDir.h"
-
-class SpTester
-{
-	public:
-		static void checkEqual(string testName, string a, string b);
-		static void checkEqual(string testName, bool a, bool b);
-		static void checkEqual(string testName, int a, int b);
-		static void checkEqual(string testName, float a, float b);
-		static void setVerbose(bool v);
-		static void setFloatDelta(float d);
-		static float floatDelta();
-		static void finish();
-};
-
-void SpTester::setVerbose(bool v)
-{
-	extern bool verbose;
-	verbose = v;
-}
-
-void SpTester::setFloatDelta(float d)
-{
-	extern float floatDelta;
-	floatDelta = d;
-}
-
-float SpTester::floatDelta()
-{
-	extern float floatDelta;
-	return floatDelta;
-}
-
-void SpTester::checkEqual(string testName, string a, string b)
-{
-	extern int noErrors;
-	extern bool verbose;
-	if (a != b) {
-		cout << endl << "FAILED " << testName << ": Expected " << b
-			<< " but got " << a << endl;
-		noErrors++;
-	}
-	else
-		if (verbose)
-			cout << endl << "SUCCESS " << testName << ": returned " << a;
-		else
-			cout << ".";
-}
-
-void SpTester::checkEqual(string testName, bool a, bool b)
-{
-	extern int noErrors;
-	extern bool verbose;
-	if (a != b) {
-		cout << endl << "FAILED " << testName << ": Expected " << b
-			<< " but got " << a << endl;
-		noErrors++;
-	}
-	else
-		if (verbose)
-			cout << endl << "SUCCESS " << testName << ": returned " << a;
-		else
-			cout << ".";
-}
-
-void SpTester::checkEqual(string testName, int a, int b)
-{
-	extern int noErrors;
-	extern bool verbose;
-	if (a != b) {
-		cout << endl << "FAILED " << testName << ": Expected " << b
-			<< " but got " << a << endl;
-		noErrors++;
-	}
-	else
-		if (verbose)
-			cout << endl << "SUCCESS " << testName << ": returned " << a;
-		else
-			cout << ".";
-}
-
-void SpTester::checkEqual(string testName, float a, float b)
-{
-	extern int noErrors;
-	extern bool verbose;
-	extern float floatDelta;
-	if (fabs(a-b) > floatDelta) {
-		cout << endl << "FAILED " << testName << ": Expected " << b
-			<< " but got " << a << endl;
-		noErrors++;
-	}
-	else
-		if (verbose)
-			cout << endl << "SUCCESS " << testName << ": returned " << a;
-		else
-			cout << ".";
-}
-
-void SpTester::finish()
-{
-	extern int noErrors;
-	cout << endl;
-	if (noErrors == 0)
-		cout << "All tests passed!" << endl;
-}
-
-bool verbose = false;
-int noErrors = 0;
-float floatDelta = 0.1;
+#include "SpTester.h"
 
 void testSpSize()
 {
@@ -132,10 +25,10 @@ void testSpSize()
 	SpTester::checkEqual("SpSize test 5", s.gbytes(), 10.0);
 	SpTester::checkEqual("SpSize test 6", s.mbytes(), 10240.0);
 	SpTester::checkEqual("SpSize test 7", s.kbytes(), 10485760.0);
-	float temp = SpTester::floatDelta();
-	SpTester::setFloatDelta(10e5);
+	float temp = SpTester::floatDelta;
+	SpTester::floatDelta = 10e5;
 	SpTester::checkEqual("SpSize test 8", s.bytes(), 1.073741e10);
-	SpTester::setFloatDelta(temp);
+	SpTester::floatDelta = temp;
 	
 	s.setBytes(0);
 	SpTester::checkEqual("SpSize test 9", s.bytes(), 0.0);
@@ -364,8 +257,8 @@ main()
 	// Register the plugins
 	SpImage::registerPlugins();
 	
-	SpTester::setVerbose(false);
-	SpTester::setFloatDelta(0.1);
+	SpTester::verbose = false;
+	SpTester::floatDelta = 0.1;
 	testSpSize();
 	testSpTime();
 	testSpUid();

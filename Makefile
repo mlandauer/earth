@@ -4,7 +4,7 @@ CC = g++
 OPTION = -g
 INCLUDE = 
 
-OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o \
+OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o \
           SpUid.o SpGid.o SpImage.o SpImageDim.o SpFsObject.o SpDir.o \
 		  SpSGIImage.o SpTIFFImage.o SpFITImage.o SpPRMANZImage.o \
 		  SpGIFImage.o SpCINEONImage.o SpIFFImage.o SpPRTEXImage.o
@@ -20,6 +20,9 @@ testCode: testCode.o $(OBJECTS)
 
 testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h SpFsObject.h
 	$(CC) $(OPTION) -c testCode.C $(INCLUDE)
+
+SpTester.o: SpTester.C SpTester.h
+	$(CC) $(OPTION) -c SpTester.C $(INCLUDE)
 
 SpSize.o: SpSize.C SpSize.h
 	$(CC) $(OPTION) -c SpSize.C $(INCLUDE)
