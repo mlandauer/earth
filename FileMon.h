@@ -22,8 +22,8 @@
 //
 // $Id$
 
-#ifndef _dirmon_h_
-#define _dirmon_h_
+#ifndef _FileMon_h_
+#define _FileMon_h_
 
 #include <queue>
 #include "Dir.h"
@@ -31,7 +31,7 @@
 
 namespace Sp {
 	
-class DirMonEvent
+class FileMonEvent
 {
 	public:
 		enum Code {null, deleted, added};
@@ -41,10 +41,10 @@ class DirMonEvent
 		File o;
 		
 	public:
-		DirMonEvent(Code c = null, const File &h = File()) : code(c), o(h) { }
+		FileMonEvent(Code c = null, const File &h = File()) : code(c), o(h) { }
 		Code getCode() const { return code; }
 		File getFile() const { return o; }
-		bool operator==(const DirMonEvent &e) const {
+		bool operator==(const FileMonEvent &e) const {
 			return ((getCode() == e.getCode()) && (getFile() == e.getFile()));
 		}
 };
@@ -73,28 +73,28 @@ private:
 	Dir dir;
 };
 
-//! This class monitors directories and their contents
+//! This class monitors directories and their contents and sends out updates on changes to files
 /*!
 	This assumes a POSIX type filesystem which we can monitor using update
 	times of the directories.
 	\todo Refactor: extract superclass when we add more monitoring types
 	\todo add change (different from deleted or added) notification when it is appropriate
 */
-class DirMon
+class FileMon
 {
 	public:
-		DirMon();
+		FileMon();
 		void startMonitorDirectory(const Dir &d);
 		void stopMonitorDirectory(const Dir &d);
 		
 		void update();
 		bool pendingEvent() const;
-		DirMonEvent getNextEvent();
+		FileMonEvent getNextEvent();
 		
 	private:
 		void notifyDeleted(const File &o);
 		void notifyAdded(const File &o);
-		std::queue<DirMonEvent> eventQueue;
+		std::queue<FileMonEvent> eventQueue;
 		std::list<CachedDir> dirs;
 };
 

@@ -23,15 +23,15 @@
 // $Id$
 
 #include <algorithm>
-#include "DirMon.h"
+#include "FileMon.h"
 
 namespace Sp {
 	
-DirMon::DirMon()
+FileMon::FileMon()
 {
 }
 
-void DirMon::startMonitorDirectory(const Dir &d)
+void FileMon::startMonitorDirectory(const Dir &d)
 {
 	CachedDir c(d);
 	dirs.push_back(c);
@@ -45,7 +45,7 @@ void DirMon::startMonitorDirectory(const Dir &d)
 		startMonitorDirectory(*i);
 }
 
-void DirMon::stopMonitorDirectory(const Dir &d)
+void FileMon::stopMonitorDirectory(const Dir &d)
 {
 	// Find the directory
 	for (std::list<CachedDir>::iterator i = dirs.begin(); i != dirs.end(); ++i) {
@@ -64,7 +64,7 @@ void DirMon::stopMonitorDirectory(const Dir &d)
 	}
 }
 
-void DirMon::update()
+void FileMon::update()
 {
 	// Go through the cached directories and check if any of them have been updated
 	for (std::list<CachedDir>::iterator i = dirs.begin(); i != dirs.end(); ++i ) {
@@ -113,29 +113,29 @@ void DirMon::update()
 	}
 }
 
-bool DirMon::pendingEvent() const
+bool FileMon::pendingEvent() const
 {
 	return (!eventQueue.empty());
 }
 
-DirMonEvent DirMon::getNextEvent()
+FileMonEvent FileMon::getNextEvent()
 {
 	if (pendingEvent()) {
-		DirMonEvent e = eventQueue.front();
+		FileMonEvent e = eventQueue.front();
 		eventQueue.pop();
 		return e;
 	}
 	else
-		return DirMonEvent(DirMonEvent::null);
+		return FileMonEvent(FileMonEvent::null);
 }
 
-void DirMon::notifyDeleted(const File &o)
+void FileMon::notifyDeleted(const File &o)
 {
-	eventQueue.push(DirMonEvent(DirMonEvent::deleted, o));
+	eventQueue.push(FileMonEvent(FileMonEvent::deleted, o));
 }	
-void DirMon::notifyAdded(const File &o)
+void FileMon::notifyAdded(const File &o)
 {
-	eventQueue.push(DirMonEvent(DirMonEvent::added, o));
+	eventQueue.push(FileMonEvent(FileMonEvent::added, o));
 }
 
 }
