@@ -35,7 +35,7 @@ main(int argc, const char *argv[])
 		if (argc > 1)
 			endpoint = argv[1];
 		else
-			endpoint = "http://easysoap.sourceforge.net/cgi-bin/simpleserver";
+			endpoint = "http://localhost/cgi-bin/simpleserver";
 
 		SOAPProxy proxy(endpoint);
 		SOAPMethod addmethod("add", ns);
