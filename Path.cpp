@@ -39,10 +39,6 @@ Path::Path(const char *s)
 	 set(s);
 }
 
-Path::~Path()
-{
-}
-
 bool Path::operator<(const Path &p) const
 {
 	return (pathString < p.pathString);

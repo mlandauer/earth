@@ -33,10 +33,6 @@ User::User() : uid(0)
 {
 }
 
-User::~User()
-{
-}
-
 bool User::operator==(const User &u) const
 {
   return (uid == u.uid);

@@ -38,7 +38,6 @@ class Dir : public FsObject
 	public:
 		Dir(const Path &path) : FsObject(path) { };
 		Dir() { };
-		~Dir() { };
     
     //! Returns all the files in this directory
     /*!

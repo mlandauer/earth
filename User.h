@@ -38,7 +38,6 @@ class User
 {
 	public:
 		User();
-		~User();
     //! Construct a group with a given POSIX user ID
     static User unixUid(uid_t u);
     //! Returns the owner of the current process

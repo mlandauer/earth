@@ -39,7 +39,6 @@ class DateTime
 {
 public:
 	DateTime();
-	~DateTime();
 	//! Construct date and time from a unix time
 	static DateTime unixDateTime(time_t t);
 	//! Return the current date and time

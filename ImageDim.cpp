@@ -30,10 +30,6 @@ ImageDim::ImageDim(unsigned int width, unsigned int height) : w(width), h(height
 {
 }
 
-ImageDim::~ImageDim()
-{
-}
-
 unsigned int ImageDim::width() const
 {
 	return w;

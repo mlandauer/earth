@@ -35,7 +35,6 @@ class Size
 {
 	public:
 		Size();
-		~Size();
     // Construct a Size object from a number in bytes
     static Size Bytes(float n);
     // Construct a Size object from a number in KB

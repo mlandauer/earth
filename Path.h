@@ -35,7 +35,6 @@ class Path
 	public:
 		Path(const std::string &a = "");
 		Path(const char *s);
-		~Path();
     //! Set the path
 		void set(const std::string a);
     //! Return the full path as a string

@@ -33,10 +33,6 @@ Size::Size() : kb(0)
 {
 }
 
-Size::~Size()
-{
-}
-
 Size Size::Bytes(float n)
 {
   Size s;

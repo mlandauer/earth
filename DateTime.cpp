@@ -35,10 +35,6 @@ DateTime::DateTime() : time(0)
 {
 }
 
-DateTime::~DateTime()
-{
-}
-
 void DateTime::sleep(int seconds)
 {
 	::sleep(seconds);

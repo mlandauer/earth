@@ -36,7 +36,6 @@ class LibLoader
 {
 	public:
 		LibLoader() { };
-		~LibLoader() { };
     //! Load a dynamic library
     /*!
       \param fileName the name of the file to load as a dynamic library

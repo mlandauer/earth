@@ -34,10 +34,6 @@ UserGroup::UserGroup()
 {
 }
 
-UserGroup::~UserGroup()
-{
-}
-
 bool UserGroup::operator==(const UserGroup &g) const
 {
   return (gid == g.gid);

@@ -32,7 +32,6 @@ class ImageDim
 {
 	public:
 		ImageDim(unsigned int width = 0, unsigned int height = 0);
-		~ImageDim();
     //! Returns image width (in pixels)
 		unsigned int width() const;
     //! Returns image height (in pixels)
