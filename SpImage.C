@@ -10,6 +10,7 @@
 #include "SpPRMANZImage.h"
 #include "SpGIFImage.h"
 #include "SpCINEONImage.h"
+#include "SpPRTEXImage.h"
 
 SpImage* SpImage::construct(const string &path)
 {
@@ -35,6 +36,7 @@ SpImage* SpImage::construct(const string &path)
 	SpGIFImage gifImage;
 	SpPRMANZImage prmanzImage;
 	SpCINEONImage cineonImage;
+	SpPRTEXImage prtexImage;
 	
 	if (cineonImage.recognise(buf))
 		image = new SpCINEONImage;
@@ -57,13 +59,8 @@ SpImage* SpImage::construct(const string &path)
 	else if (prmanzImage.recognise(buf))
 		image = new SpPRMANZImage;
 
-	else if ((buf[0] == 0xce) && (buf[1] == 0xfa) &&
-		(buf[2] == 0x03) && (buf[3] == 0x00))
-		cout << "PRTEX" << endl;
-		
-	else if ((buf[0] == 0xfa) && (buf[1] == 0xce) &&
-		(buf[2] == 0x00) && (buf[3] == 0x03))
-		cout << "PRTEX" << endl;
+	else if (prtexImage.recognise(buf))
+		image = new SpPRTEXImage;
 	else
 		cout << "I don't know what's going on here!" << endl;
 

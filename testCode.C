@@ -98,6 +98,7 @@ void testSpImage()
 	
 	// *** FIT File format currently untested ****
 	// *** PRMANZ File format currently untested ****
+	// *** PRTEX File format currently untested ****
 	// *** CINEON File format currently untested ****
 	// *** IFF File format currently untested ****
 
