@@ -22,19 +22,19 @@
 //
 // $Id$
 
-#ifndef _spdirmonitorfam_h_
-#define _spdirmonitorfam_h_
+#ifndef _spdirmonfam_h_
+#define _spdirmonfam_h_
 
 #include <fam.h>
 #include "SpDirMon.h"
 
 // This class monitors just one directory and its contents
 // This implementation uses FAM in its entirety (VERY costly)
-class SpDirMonitorFam : public SpDirMonitor
+class SpDirMonFam : public SpDirMon
 {
 	public:
-		SpDirMonitorFam() { }
-		~SpDirMonitorFam() { stop(); }
+		SpDirMonFam() { }
+		~SpDirMonFam() { stop(); }
 		void update();
 	private:
 		bool start(const SpDir &d);

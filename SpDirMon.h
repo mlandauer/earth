@@ -22,21 +22,21 @@
 //
 // $Id$
 
-#ifndef _spdirmonitor_h_
-#define _spdirmonitor_h_
+#ifndef _spdirmon_h_
+#define _spdirmon_h_
 
 #include <queue>
 #include "SpDir.h"
 
-class SpDirMonitorEvent
+class SpDirMonEvent
 {
 	public:
 		enum SpCode {changed, deleted, added, null};
-		SpDirMonitorEvent(SpCode c = null, const SpPath &p = "") : code(c), path(p) { }
-		~SpDirMonitorEvent() { }
+		SpDirMonEvent(SpCode c = null, const SpPath &p = "") : code(c), path(p) { }
+		~SpDirMonEvent() { }
 		SpCode getCode() const { return code; }
 		SpPath getPath() const { return path; }
-		bool operator==(const SpDirMonitorEvent &e) const {
+		bool operator==(const SpDirMonEvent &e) const {
 			return ((code == e.code) && (path == e.path));
 		}
 	private:
@@ -45,13 +45,13 @@ class SpDirMonitorEvent
 };
 
 // This class monitors just one directory and its contents
-class SpDirMonitor
+class SpDirMon
 {
 	public:
-		~SpDirMonitor() { }
-		static SpDirMonitor * construct(const SpDir &d);
+		~SpDirMon() { }
+		static SpDirMon * construct(const SpDir &d);
 		bool pendingEvent();
-		SpDirMonitorEvent getNextEvent();
+		SpDirMonEvent getNextEvent();
 	protected:
 		virtual bool start(const SpDir &d) = 0;
 		virtual bool stop() = 0;
@@ -60,7 +60,7 @@ class SpDirMonitor
 		void notifyDeleted(const SpPath &path);
 		void notifyAdded(const SpPath &path);
 	private:
-		queue<SpDirMonitorEvent> eventQueue;
+		queue<SpDirMonEvent> eventQueue;
 };
 
 

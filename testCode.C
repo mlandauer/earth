@@ -319,13 +319,13 @@ class testSpDirMonitor : public SpTester
 {
 public:
 	testSpDirMonitor() : SpTester("SpDirMonitor") { test(); };
-	void checkNextEvent(string testName, SpDirMonitor *m, int code, string pathName) {
-		SpDirMonitorEvent e = m->getNextEvent();
+	void checkNextEvent(string testName, SpDirMon *m, int code, string pathName) {
+		SpDirMonEvent e = m->getNextEvent();
 		checkEqual(testName + "a", e.getCode(), code);
 		checkEqual(testName + "b", e.getPath().fullName(), pathName);
 	}
 	void test() {
-		SpDirMonitorEvent e;
+		SpDirMonEvent e;
 		cout << "Note: the following tests will take about 20 seconds" << endl;
 		// First create a directory with some test files
 		system ("rm -fr test/FsMonitor");
@@ -334,13 +334,13 @@ public:
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0002.gif");
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0003.gif");
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0004.gif");
-		SpDirMonitor *m = SpDirMonitor::construct(SpDir("test/FsMonitor"));
+		SpDirMon *m = SpDirMon::construct(SpDir("test/FsMonitor"));
 		if (checkNotNULL("test 0", m)) {
 			checkEqualBool("test 1", m->pendingEvent(), true);
-			checkNextEvent("test 2", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0001.gif");
-			checkNextEvent("test 3", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0002.gif");
-			checkNextEvent("test 4", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0003.gif");
-			checkNextEvent("test 5", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0004.gif");
+			checkNextEvent("test 2", m, SpDirMonEvent::added, "test/FsMonitor/test.0001.gif");
+			checkNextEvent("test 3", m, SpDirMonEvent::added, "test/FsMonitor/test.0002.gif");
+			checkNextEvent("test 4", m, SpDirMonEvent::added, "test/FsMonitor/test.0003.gif");
+			checkNextEvent("test 5", m, SpDirMonEvent::added, "test/FsMonitor/test.0004.gif");
 			checkEqualBool("test 1j", m->pendingEvent(), false);
 			
 			system ("rm test/FsMonitor/test.0001.gif");
@@ -348,19 +348,19 @@ public:
 			system ("mkdir test/FsMonitor/subdirectory");
 			SpTime::sleep(6);
 			checkEqualBool("test 6", m->pendingEvent(), true);
-			checkNextEvent("test 7", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0005.gif");
-			checkNextEvent("test 8", m, SpDirMonitorEvent::added, "test/FsMonitor/subdirectory");
-			checkNextEvent("test 9", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0001.gif");
+			checkNextEvent("test 7", m, SpDirMonEvent::added, "test/FsMonitor/test.0005.gif");
+			checkNextEvent("test 8", m, SpDirMonEvent::added, "test/FsMonitor/subdirectory");
+			checkNextEvent("test 9", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0001.gif");
 			checkEqualBool("test 10", m->pendingEvent(), false);
 
 			system ("rm -fr test/FsMonitor");
 			SpTime::sleep(6);
 			checkEqualBool("test 11", m->pendingEvent(), true);
-			checkNextEvent("test 12", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0005.gif");
-			checkNextEvent("test 13", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0002.gif");
-			checkNextEvent("test 14", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0003.gif");
-			checkNextEvent("test 15", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0004.gif");
-			checkNextEvent("test 16", m, SpDirMonitorEvent::deleted, "test/FsMonitor/subdirectory");
+			checkNextEvent("test 12", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0005.gif");
+			checkNextEvent("test 13", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0002.gif");
+			checkNextEvent("test 14", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0003.gif");
+			checkNextEvent("test 15", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0004.gif");
+			checkNextEvent("test 16", m, SpDirMonEvent::deleted, "test/FsMonitor/subdirectory");
 			checkEqualBool("test 17", m->pendingEvent(), false);
 			delete m;
 		}

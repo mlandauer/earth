@@ -25,7 +25,7 @@
 #include <fam.h>
 #include "SpDirMonFam.h"
 
-bool SpDirMonitorFam::start(const SpDir &d) {
+bool SpDirMonFam::start(const SpDir &d) {
 	dir = d;
 	if (FAMOpen(&fc) != 0) {
 		cerr << "Could not connect to fam daemon" << endl;
@@ -37,7 +37,7 @@ bool SpDirMonitorFam::start(const SpDir &d) {
 	return true;	
 }
 	
-bool SpDirMonitorFam::stop() {
+bool SpDirMonFam::stop() {
 	if (FAMCancelMonitor(&fc, &fr) == -1) {
 		cerr << "SpDirMonitor::~SpDirMonitor() FAMCancelMonitor failed" << endl;
 		return false;
@@ -49,7 +49,7 @@ bool SpDirMonitorFam::stop() {
 	return true;
 }
 	
-void SpDirMonitorFam::update() {
+void SpDirMonFam::update() {
 	while (FAMPending(&fc) == 1) {
 		FAMEvent fe;
 		if (FAMNextEvent(&fc, &fe) == -1) {

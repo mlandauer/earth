@@ -25,8 +25,8 @@
 #include "SpDirMon.h"
 #include "SpDirMonFam.h"
 
-SpDirMonitor * SpDirMonitor::construct(const SpDir &d) {
-	SpDirMonitor *m = new SpDirMonitorFam;
+SpDirMon * SpDirMon::construct(const SpDir &d) {
+	SpDirMon *m = new SpDirMonFam;
 	if (!m->start(d)) {
 		delete m;
 		return NULL;
@@ -35,30 +35,30 @@ SpDirMonitor * SpDirMonitor::construct(const SpDir &d) {
 		return m;
 }
 
-bool SpDirMonitor::pendingEvent() {
+bool SpDirMon::pendingEvent() {
 	update();
 	return (!eventQueue.empty());
 }
 
-SpDirMonitorEvent SpDirMonitor::getNextEvent() {
+SpDirMonEvent SpDirMon::getNextEvent() {
 	if (eventQueue.empty())
-		return SpDirMonitorEvent(SpDirMonitorEvent::null);
+		return SpDirMonEvent(SpDirMonEvent::null);
 	else {
-		SpDirMonitorEvent e = eventQueue.front();
+		SpDirMonEvent e = eventQueue.front();
 		eventQueue.pop();
 		return e;
 	}
 }
 
-void SpDirMonitor::notifyChanged(const SpPath &path) {
-	eventQueue.push(SpDirMonitorEvent(SpDirMonitorEvent::changed, path));
+void SpDirMon::notifyChanged(const SpPath &path) {
+	eventQueue.push(SpDirMonEvent(SpDirMonEvent::changed, path));
 }
 	
-void SpDirMonitor::notifyDeleted(const SpPath &path) {
-	eventQueue.push(SpDirMonitorEvent(SpDirMonitorEvent::deleted, path));
+void SpDirMon::notifyDeleted(const SpPath &path) {
+	eventQueue.push(SpDirMonEvent(SpDirMonEvent::deleted, path));
 }
 	
-void SpDirMonitor::notifyAdded(const SpPath &path) {
-	eventQueue.push(SpDirMonitorEvent(SpDirMonitorEvent::added, path));
+void SpDirMon::notifyAdded(const SpPath &path) {
+	eventQueue.push(SpDirMonEvent(SpDirMonEvent::added, path));
 }
 
