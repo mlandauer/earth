@@ -16,7 +16,7 @@ clean:
 	rm -fr ii_files *.o testCode
 
 testCode: testCode.o $(OBJECTS)
-	$(CC) $(OPTION) -o testCode testCode.o $(OBJECTS) -lqt
+	$(CC) $(OPTION) -o testCode testCode.o $(OBJECTS)
 
 testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h SpFsObject.h
 	$(CC) $(OPTION) -c testCode.C $(INCLUDE)
