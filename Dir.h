@@ -32,14 +32,26 @@
 
 namespace Sp {
 
+//! Get information and contents of a directory
 class Dir : public FsObject
 {
 	public:
 		Dir(const Path &path) : FsObject(path) { };
 		Dir() { };
 		~Dir() { };
+    
+    //! Returns all the files in this directory
+    /*!
+      \param sortByPath If true the returned files are sorted alphabetically by path
+    */
     std::vector<File> listFiles(bool sortByPath = false) const;
+    
+    //! Returns all the directories immediately under this directory
+    /*!
+      \param sortByPath If true the returned files are sorted alphabetically by path
+    */
     std::vector<Dir> listDirs(bool sortByPath = false) const;
+    //! Is this a valid directory?
 		bool valid() const;
     
 	private:
