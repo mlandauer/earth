@@ -46,17 +46,17 @@ Tester::~Tester()
 {
 }
 
-void Tester::failMessage(std::string testName, std::string expected, std::string got)
+void Tester::failMessage(std::string testName, std::string expected, std::string got, const std::string &filename, int lineNumber)
 {
-	std::cout << std::endl << "FAILED " << name << " " << testName << ": Expected "
+	std::cout << std::endl << "FAILED [" << filename << ":" << lineNumber << "] " << testName << ": Expected "
 		<< expected << " but got " << got;
 	std::cout.flush();
 }
 
-void Tester::successMessage(std::string testName, std::string returned)
+void Tester::successMessage(std::string testName, std::string returned, const std::string &filename, int lineNumber)
 {
 	if (verbose) {
-		std::cout << std::endl << "SUCCESS " << name << " " << testName << ": Returned "
+		std::cout << std::endl << "SUCCESS [" << filename << ":" << lineNumber << "] " << testName << ": Returned "
 			<< returned;
 	}
 	else
@@ -64,58 +64,58 @@ void Tester::successMessage(std::string testName, std::string returned)
 	std::cout.flush();
 }
 
-bool Tester::check(std::string testName, bool a, std::string expected, std::string got)
+bool Tester::checkInternal(std::string testName, bool a, std::string expected, std::string got, const std::string &filename, int lineNumber)
 {
 	if (a) {
-		successMessage(testName, expected);
+		successMessage(testName, expected, filename, lineNumber);
 		noSuccesses++;
 		return true;
 	}
 	else {
-		failMessage(testName, expected, got);
+		failMessage(testName, expected, got, filename, lineNumber);
 		noFails++;
 		return false;
 	}
 }
 
-bool Tester::check(std::string testName, bool a)
+bool Tester::checkInternal(std::string testName, bool a, const std::string &filename, int lineNumber)
 {
-	return check(testName, a, "true", "false");
+	return checkInternal(testName, a, "true", "false", filename, lineNumber);
 }
 
-bool Tester::checkEqual(std::string testName, std::string a, std::string b)
+bool Tester::checkEqualInternal(std::string testName, std::string a, std::string b, const std::string &filename, int lineNumber)
 {
-	return check(testName, a == b, b, a);
+	return checkInternal(testName, a == b, b, a, filename, lineNumber);
 }
 
-bool Tester::checkEqual(std::string testName, int a, int b)
+bool Tester::checkEqualInternal(std::string testName, int a, int b, const std::string &filename, int lineNumber)
 {
-	return check(testName, a == b, toString(b), toString(a));
+	return checkInternal(testName, a == b, toString(b), toString(a), filename, lineNumber);
 }
 
-bool Tester::checkEqualBool(std::string testName, bool a, bool b)
+bool Tester::checkEqualBoolInternal(std::string testName, bool a, bool b, const std::string &filename, int lineNumber)
 {
-	return check(testName, a == b, toStringBool(b), toStringBool(a));
+	return checkInternal(testName, a == b, toStringBool(b), toStringBool(a), filename, lineNumber);
 }
 
-bool Tester::checkEqual(std::string testName, float a, float b, float delta)
+bool Tester::checkEqualInternal(std::string testName, float a, float b, float delta, const std::string &filename, int lineNumber)
 {
-	return check(testName, fabs(a-b) <= delta, toString(b), toString(a));
+	return checkInternal(testName, fabs(a-b) <= delta, toString(b), toString(a), filename, lineNumber);
 }
 
-bool Tester::checkEqual(std::string testName, float a, float b)
+bool Tester::checkEqualInternal(std::string testName, float a, float b, const std::string &filename, int lineNumber)
 {
-	return checkEqual(testName, a, b, floatDelta);
+	return checkEqualInternal(testName, a, b, floatDelta, filename, lineNumber);
 }
 
-bool Tester::checkNotNULL(std::string testName, void *p)
+bool Tester::checkNotNULLInternal(std::string testName, void *p, const std::string &filename, int lineNumber)
 {
-	return check(testName, p != NULL, "non-null pointer", "null pointer");
+	return checkInternal(testName, p != NULL, "non-null pointer", "null pointer", filename, lineNumber);
 }
 
-bool Tester::checkNULL(std::string testName, void *p)
+bool Tester::checkNULLInternal(std::string testName, void *p, const std::string &filename, int lineNumber)
 {
-	return check(testName, p == NULL, "null pointer", "non-null pointer");
+	return checkInternal(testName, p == NULL, "null pointer", "non-null pointer", filename, lineNumber);
 }
 
 void Tester::finish()

@@ -41,7 +41,7 @@ void testSize::test() {
 	checkEqual("test 5", s.getGBytes(), 10.0);
 	checkEqual("test 6", s.getMBytes(), 10240.0);
 	checkEqual("test 7", s.getKBytes(), 10485760.0);
-	checkEqual("test 8", s.getBytes(), 1.073741e10, 10e5);
+	checkEqualDelta("test 8", s.getBytes(), 1.073741e10, 10e5);
 	
 	s = Size::Bytes(0);
 	checkEqual("test 9", s.getBytes(), 0.0);
