@@ -12,6 +12,7 @@ class SpDir : public SpFsObject
 {
 	public:
 		SpDir(const SpPath &path) : SpFsObject(path) { };
+		SpDir() { };
 		~SpDir() { };
 		vector<SpFsObject *> ls() const;
 		map<SpPath, SpFsObject *> lsMap() const;
