@@ -32,3 +32,7 @@ unsigned int SpImageDim::height() const
 	return h;
 }
 
+bool SpImageDim::operator==(SpImageDim &d) const
+{
+	return ((w == d.width()) && (h == d.height()));
+}

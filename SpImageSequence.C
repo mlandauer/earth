@@ -6,14 +6,22 @@
 SpImageSequence::SpImageSequence(SpImage *i)
 {
 	p = pattern(i->path());
-	//f.push_back(frameNumber(i->path()));
 	f.insert(frameNumber(i->path()));
+	imageFormat = i->getFormat();
+	dimensions = i->dim();
 }
 
 void SpImageSequence::addImage(SpImage *i)
 {
-	//f.push_back(frameNumber(i->path()));
-	f.insert(frameNumber(i->path()));
+	if (partOfSequence(i))
+		f.insert(frameNumber(i->path()));
+}
+
+bool SpImageSequence::partOfSequence(SpImage *i)
+{
+	// Check that the name of the image matches the name of the sequence
+	return (pattern(i->path()) == p) && (i->getFormat() == imageFormat)
+		&& (i->dim() == dimensions);
 }
 
 string SpImageSequence::framesString()
