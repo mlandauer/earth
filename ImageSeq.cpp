@@ -35,10 +35,8 @@ ImageSeq::ImageSeq(Image *i)
 	p = pattern(i->path());
 	frames.add(frameNumber(i->path()));
 	valid = i->valid();
-	if (valid) {
-		imageFormat = i->getFormat();
-		dimensions = i->dim();
-	}
+	imageFormat = i->getFormat();
+	dimensions = i->dim();
 }
 
 bool ImageSeq::addImage(Image *i)

@@ -131,8 +131,10 @@ void testImageSeq::test()
 	CPPUNIT_ASSERT(!one.addImage(i12));
 	CPPUNIT_ASSERT(!two.addImage(i11));
 	CPPUNIT_ASSERT(two.addImage(i12));
-	
-	system ("rm -rf test/seq");
+
+	checkSequence(one, "test/seq/test3.#", "1,3", 8, 8, "Cineon");
+	checkSequence(two, "test/seq/test3.#", "2,4", 0, 0, "Cineon");
+
 	delete i1;
 	delete i2;
 	delete i3;
@@ -154,5 +156,6 @@ void testImageSeq::checkSequence(const ImageSeq &seq, std::string name, std::str
 	CPPUNIT_ASSERT_EQUAL(seq.framesString(), frames);
 	CPPUNIT_ASSERT(seq.dim().width() == width);
 	CPPUNIT_ASSERT(seq.dim().height() == height);
+	CPPUNIT_ASSERT(seq.format() != NULL);
 	CPPUNIT_ASSERT_EQUAL(seq.format()->formatString(), format);		
 }
