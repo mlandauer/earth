@@ -12,61 +12,60 @@
 #include "SpCINEONImage.h"
 #include "SpPRTEXImage.h"
 
-SpImage* SpImage::construct(const string &path)
+list<SpImage *> SpImage::plugins;
+
+// Register all the supported image types
+void SpImage::registerPlugins()
 {
-	
-	// Figure out what the image type is by reading the first twelve bytes
-	// of the file.
-	unsigned char buf[12];
-	
-	// Create a temporary file object
-	SpFile f(path);
-	f.open();
-	f.read(buf, 12);
-	f.close();
-	
-	SpImage* image;
-	
 	// Construct one of every image type. This is all leading up
 	// to some kind of nice plugin architecture
-	SpTIFFImage tiffImage;
-	SpIFFImage iffImage;
-	SpSGIImage sgiImage;
-	SpFITImage fitImage;
-	SpGIFImage gifImage;
-	SpPRMANZImage prmanzImage;
-	SpCINEONImage cineonImage;
-	SpPRTEXImage prtexImage;
+	plugins.push_back(new SpTIFFImage);
+	plugins.push_back(new SpIFFImage);
+	plugins.push_back(new SpSGIImage);
+	plugins.push_back(new SpFITImage);
+	plugins.push_back(new SpGIFImage);
+	plugins.push_back(new SpPRMANZImage);
+	plugins.push_back(new SpCINEONImage);
+	plugins.push_back(new SpPRTEXImage);
+}
+
+void SpImage::deRegisterPlugins()
+{
+	// Iterate through all the objects and destroy
+	for (list<SpImage *>::iterator a = plugins.begin();
+		a != plugins.end(); ++a)
+		delete (*a);
+}
+
+SpImage* SpImage::construct(const string &path)
+{
+	// Figure out what the greatest amount of the header that needs
+	// to be read so that all the plugins can recognise themselves.
+	int largestSizeToRecognise = 0;
+	for (list<SpImage *>::iterator a = plugins.begin();
+		a != plugins.end(); ++a)
+		if ((*a)->sizeToRecognise() > largestSizeToRecognise)
+			largestSizeToRecognise = (*a)->sizeToRecognise();
+
+	// Create a temporary file object
+	unsigned char *buf = new unsigned char[largestSizeToRecognise];
+	SpFile f(path);
+	f.open();
+	f.read(buf, largestSizeToRecognise);
+	f.close();
 	
-	if (cineonImage.recognise(buf))
-		image = cineonImage.clone();
-		
-	else if (tiffImage.recognise(buf))
-		image = tiffImage.clone();
-		
-	else if (sgiImage.recognise(buf))
-		image = sgiImage.clone();
-		
-	else if (iffImage.recognise(buf))
-		image = iffImage.clone();
-		
-	else if (fitImage.recognise(buf))
-		image = fitImage.clone();
-		
-	else if (gifImage.recognise(buf))
-		image = gifImage.clone();
-
-	else if (prmanzImage.recognise(buf))
-		image = prmanzImage.clone();
-
-	else if (prtexImage.recognise(buf))
-		image = prtexImage.clone();
-	else
-		// This signals an error or an unrecognised image type
-		return (NULL);
-
-	image->setPath(path);
-	return (image);
+	// See if any of the plugins recognise themselves.
+	for (list<SpImage *>::iterator a = plugins.begin();
+		a != plugins.end(); ++a)
+		if ((*a)->recognise(buf)) {
+			SpImage* image = (*a)->clone();
+			image->setPath(path);
+			delete buf;
+			return (image);
+		}
+	// This signals an error or an unrecognised image type
+	delete buf;
+	return (NULL);
 }
 
 unsigned char SpImage::readChar() const

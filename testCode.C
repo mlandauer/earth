@@ -79,22 +79,30 @@ void testSpFile()
 void testSpImage()
 {
 	SpImage *image1 = SpImage::construct("/home/matthew/images/dibble1.sgi");
-	cout << "Opened image " << image1->path().fullName() << endl;
-	cout << "Image Filesize = " << image1->size().kbytes() << " Kbytes" << endl;
-	cout << "Last modification = " << image1->lastModification().timeAndDateString() << endl;
-	cout << "Image format = " << image1->formatString() << endl;
-	cout << "Image width = " << image1->dim().width() << endl;
-	cout << "Image height = " << image1->dim().height() << endl;
-	delete image1;
+	if (image1 != NULL) {
+		cout << "Opened image " << image1->path().fullName() << endl;
+		cout << "Image Filesize = " << image1->size().kbytes() << " Kbytes" << endl;
+		cout << "Last modification = " << image1->lastModification().timeAndDateString() << endl;
+		cout << "Image format = " << image1->formatString() << endl;
+		cout << "Image width = " << image1->dim().width() << endl;
+		cout << "Image height = " << image1->dim().height() << endl;
+		delete image1;
+	}
+	else
+		cout << "Unrecognised image type " << endl;
 
 	SpImage *image2 = SpImage::construct("/home/matthew/images/blah1.tiff");
-	cout << "Opened image " << image2->path().fullName() << endl;
-	cout << "Image Filesize = " << image2->size().kbytes() << " Kbytes" << endl;
-	cout << "Last modification = " << image2->lastModification().timeAndDateString() << endl;
-	cout << "Image format = " << image2->formatString() << endl;
-	cout << "Image width = " << image2->dim().width() << endl;
-	cout << "Image height = " << image2->dim().height() << endl;
-	delete image2;
+	if (image2 != NULL) {
+		cout << "Opened image " << image2->path().fullName() << endl;
+		cout << "Image Filesize = " << image2->size().kbytes() << " Kbytes" << endl;
+		cout << "Last modification = " << image2->lastModification().timeAndDateString() << endl;
+		cout << "Image format = " << image2->formatString() << endl;
+		cout << "Image width = " << image2->dim().width() << endl;
+		cout << "Image height = " << image2->dim().height() << endl;
+		delete image2;
+	}
+	else
+		cout << "Unrecognised image type " << endl;
 	
 	// *** FIT File format currently untested ****
 	// *** PRMANZ File format currently untested ****
@@ -103,13 +111,17 @@ void testSpImage()
 	// *** IFF File format currently untested ****
 
 	SpImage *image3 = SpImage::construct("/home/matthew/images/foo1.gif");
-	cout << "Opened image " << image3->path().fullName() << endl;
-	cout << "Image Filesize = " << image3->size().kbytes() << " Kbytes" << endl;
-	cout << "Last modification = " << image3->lastModification().timeAndDateString() << endl;
-	cout << "Image format = " << image3->formatString() << endl;
-	cout << "Image width = " << image3->dim().width() << endl;
-	cout << "Image height = " << image3->dim().height() << endl;
-	delete image3;
+	if (image3 != NULL) {
+		cout << "Opened image " << image3->path().fullName() << endl;
+		cout << "Image Filesize = " << image3->size().kbytes() << " Kbytes" << endl;
+		cout << "Last modification = " << image3->lastModification().timeAndDateString() << endl;
+		cout << "Image format = " << image3->formatString() << endl;
+		cout << "Image width = " << image3->dim().width() << endl;
+		cout << "Image height = " << image3->dim().height() << endl;
+		delete image3;
+	}
+	else
+		cout << "Unrecognised image type " << endl;
 }
 
 void space()
@@ -169,6 +181,9 @@ void testSpDir()
 
 main()
 {
+	// Register the plugins
+	SpImage::registerPlugins();
+	
 	testSpSize();
 	space();
 	testSpTime();
@@ -182,5 +197,7 @@ main()
 	testSpFsObject();
 	space();
 	testSpDir();
+	
+	SpImage::deRegisterPlugins();
 }
 
