@@ -36,16 +36,6 @@ ImageDim::~ImageDim()
 {
 }
 
-void ImageDim::setWidth(unsigned int width)
-{
-	w = width;
-}
-
-void ImageDim::setHeight(unsigned int height)
-{
-	h = height;
-}
-
 unsigned int ImageDim::width() const
 {
 	return w;

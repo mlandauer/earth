@@ -27,14 +27,15 @@
 
 namespace Sp {
 
+//! Holds image dimensions (width and height)
 class ImageDim
 {
 	public:
 		ImageDim(unsigned int width = 0, unsigned int height = 0);
 		~ImageDim();
-		void setWidth(unsigned int width);
-		void setHeight(unsigned int height);
+    //! Returns image width (in pixels)
 		unsigned int width() const;
+    //! Returns image height (in pixels)
 		unsigned int height() const;
 		bool operator==(const ImageDim &d) const;
 	private:
