@@ -34,6 +34,7 @@ class SpTime
 		string yearString() const;
 		bool operator<(const SpTime &t) const;
 		bool operator==(const SpTime &t) const;
+		static void sleep(int seconds);
 	private:
 		time_t time;
 };

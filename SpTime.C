@@ -3,6 +3,7 @@
 #include <string>
 #include <strstream>
 #include <iomanip>
+#include <unistd.h>
 
 #include "SpTime.h"
 
@@ -12,6 +13,12 @@ SpTime::SpTime() : time(0)
 
 SpTime::~SpTime()
 {
+}
+
+// Wait for an approximate amount of time
+void SpTime::sleep(int seconds)
+{
+	::sleep(seconds);
 }
 
 bool SpTime::operator<(const SpTime &t) const
