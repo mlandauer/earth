@@ -25,9 +25,9 @@
 #ifndef _prmanzimage_h_
 #define _prmanzimage_h_
 
-#include "SpImage.h"
-#include "SpImageFormat.h"
-#include "SpImageDim.h"
+#include "Image.h"
+#include "ImageFormat.h"
+#include "ImageDim.h"
 
 class PRMANZImageFormat: public ImageFormat
 {

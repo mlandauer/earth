@@ -25,9 +25,9 @@
 #ifndef _cineonimage_h_
 #define _cineonimage_h_
 
-#include "SpImage.h"
-#include "SpImageFormat.h"
-#include "SpImageDim.h"
+#include "Image.h"
+#include "ImageFormat.h"
+#include "ImageDim.h"
 
 class CINEONImageFormat: public ImageFormat
 {
