@@ -7,6 +7,7 @@
 
 #include "SpFile.h"
 #include "SpImageDim.h"
+#include "SpLibLoader.h"
 
 class SpImage;
 
@@ -26,9 +27,7 @@ class SpImageFormat
 		static list<SpImageFormat *> plugins;
 		static void addPlugin(SpImageFormat *plugin);
 		static void removePlugin(SpImageFormat *plugin);
-		static void loadDynamicLibrary(char *fileName);
-		static void releaseDynamicLibraries();
-		static list<void *> dynamicLibraryHandles;
+		static SpLibLoader loader;
 };
 
 class SpImage : public SpFile

@@ -2,13 +2,10 @@
 
 #include <stream.h>
 
-// HACK: not platform independent
-#include <dlfcn.h>
-
 #include "SpImage.h"
 
 list<SpImageFormat *> SpImageFormat::plugins;
-list<void *> SpImageFormat::dynamicLibraryHandles;
+SpLibLoader SpImageFormat::loader;
 
 SpImageFormat::SpImageFormat()
 {
@@ -23,33 +20,16 @@ SpImageFormat::~SpImageFormat()
 // Register all the supported image types
 void SpImageFormat::registerPlugins()
 {
-	// Construct one of every image type. This is all leading up
-	// to some kind of nice plugin architecture
-	loadDynamicLibrary("SpTIFFImage.so");
-	loadDynamicLibrary("SpTIFFImage.so");
-	loadDynamicLibrary("SpIFFImage.so");
-	loadDynamicLibrary("SpSGIImage.so");
-	loadDynamicLibrary("SpFITImage.so");
-	loadDynamicLibrary("SpGIFImage.so");
-	loadDynamicLibrary("SpPRMANZImage.so");
-	loadDynamicLibrary("SpCINEONImage.so");
-	loadDynamicLibrary("SpPRTEXImage.so");
-}
-
-void SpImageFormat::loadDynamicLibrary(char *fileName)
-{
-	void *handle = dlopen(fileName, RTLD_LAZY);
-	if (handle == NULL)
-		cerr << "dlopen failed: " << dlerror() << endl;
-	else
-		dynamicLibraryHandles.push_back(handle);
-}
-
-void SpImageFormat::releaseDynamicLibraries()
-{
-	for (list<void *>::iterator a = dynamicLibraryHandles.begin();
-		a != dynamicLibraryHandles.end(); ++a)
-		dlclose((*a));
+	// This will in future be a list read in from a file
+	loader.load("SpTIFFImage.so");
+	loader.load("SpTIFFImage.so");
+	loader.load("SpIFFImage.so");
+	loader.load("SpSGIImage.so");
+	loader.load("SpFITImage.so");
+	loader.load("SpGIFImage.so");
+	loader.load("SpPRMANZImage.so");
+	loader.load("SpCINEONImage.so");
+	loader.load("SpPRTEXImage.so");
 }
 
 void SpImageFormat::addPlugin(SpImageFormat *plugin)
@@ -64,7 +44,7 @@ void SpImageFormat::removePlugin(SpImageFormat *plugin)
 
 void SpImageFormat::deRegisterPlugins()
 {
-	releaseDynamicLibraries();
+	loader.releaseAll();
 }
 
 SpImage* SpImage::construct(const SpPath &path)

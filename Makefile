@@ -7,7 +7,7 @@ INCLUDE =
 SO_OBJECTS = SpTIFFImage.so SpFITImage.so SpPRMANZImage.so SpSGIImage.so\
 		  SpGIFImage.so SpCINEONImage.so SpIFFImage.so SpPRTEXImage.so
 		  
-OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o \
+OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o SpLibLoader.o \
           SpUid.o SpGid.o SpImage.o SpImageDim.o SpFsObject.o SpDir.o
 
 all: testCode $(SO_OBJECTS)
@@ -16,7 +16,7 @@ all: testCode $(SO_OBJECTS)
 clean:
 	rm -fr ii_files *.o *.so testCode
 
-testCode: testCode.o $(OBJECTS) SpSGIImage.so
+testCode: testCode.o $(OBJECTS)
 	$(CC) $(OPTION) -rdynamic -o testCode testCode.o $(OBJECTS) -ldl
 
 testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h SpFsObject.h
@@ -98,4 +98,7 @@ SpFsObject.o: SpFsObject.C SpFsObject.h SpTime.h SpPath.h SpUid.h SpGid.h
 
 SpDir.o: SpDir.C SpDir.h SpFsObject.h
 	$(CC) $(OPTION) -c SpDir.C $(INCLUDE)
+
+SpLibLoader.o: SpLibLoader.C SpLibLoader.h
+	$(CC) $(OPTION) -c SpLibLoader.C $(INCLUDE)
 
