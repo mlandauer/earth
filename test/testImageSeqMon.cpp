@@ -86,10 +86,10 @@ void testImageSeqMon::test()
 	CPPUNIT_ASSERT(sequences.size() == 1);
 	checkSequence(sequences[0], "Cineon", 1024, 768, "/foo/bar/image.#.cin", "1");
 
-	//m.imageAdded(CachedImage(ImageDim(1024, 768), true, cineonFormat, 100, time,
-	//	user, userGroup, Path("/foo/bar/image.0002.cin")));
-	//sequences = m.getImageSequences();
-	//CPPUNIT_ASSERT(sequences.size() == 1);
-	//checkSequence(sequences[0], "Cineon", 1024, 768, "/foo/bar/image.#.cin", "1-2");
+	m.imageAdded(CachedImage(ImageDim(1024, 768), true, cineonFormat, 100, time,
+		user, userGroup, Path("/foo/bar/image.0002.cin")));
+	sequences = m.getImageSequences();
+	CPPUNIT_ASSERT(sequences.size() == 1);
+	checkSequence(sequences[0], "Cineon", 1024, 768, "/foo/bar/image.#.cin", "1-2");
 }
 
