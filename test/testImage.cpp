@@ -24,93 +24,82 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-class testImage : public CppUnit::TestFixture
-{
-public:
-	CPPUNIT_TEST_SUITE(testImage);
-	CPPUNIT_TEST(test);
-	CPPUNIT_TEST(testNotFile);
-	CPPUNIT_TEST(testInvalidImage);
-	CPPUNIT_TEST_SUITE_END();
-	
-	void test();
-	void testNotFile();
-	void testInvalidImage();
-};
-
-CPPUNIT_TEST_SUITE_REGISTRATION(testImage);
-
 #include "Image.h"
 
 using namespace Sp;
 
-void testImage::test()
+class testImage : public CppUnit::TestFixture
 {
-	Image *image1 = Image::construct("test/templateImages/8x8.sgi");
-	CPPUNIT_ASSERT(image1 != NULL);
-	CPPUNIT_ASSERT(image1->valid());
-	CPPUNIT_ASSERT(image1->path().fullName() == "test/templateImages/8x8.sgi");
-	CPPUNIT_ASSERT_DOUBLES_EQUAL(image1->size().getKBytes(), 0.89, 0.1);
-	CPPUNIT_ASSERT(image1->formatString() == "SGI");
-	CPPUNIT_ASSERT(image1->dim().width() == 8);
-	CPPUNIT_ASSERT(image1->dim().height() == 8);
-	delete image1;
-	
-	Image *image2 = Image::construct("test/templateImages/8x8.tiff");
-	CPPUNIT_ASSERT(image2 != NULL);
-	CPPUNIT_ASSERT(image2->valid());
-	CPPUNIT_ASSERT(image2->path().fullName() == "test/templateImages/8x8.tiff");
-	CPPUNIT_ASSERT_DOUBLES_EQUAL(image2->size().getKBytes(), 0.39, 0.1);
-	CPPUNIT_ASSERT(image2->formatString() == "TIFF");
-	CPPUNIT_ASSERT(image2->dim().width() == 8);
-	CPPUNIT_ASSERT(image2->dim().height() == 8);
-	delete image2;
-		
+public:
+	CPPUNIT_TEST_SUITE(testImage);
 	// *** FIT File format currently untested ****
 	// *** PRMANZ File format currently untested ****
 	// *** PRTEX File format currently untested ****
+	CPPUNIT_TEST(testSGIImage);
+	CPPUNIT_TEST( testTIFFImage);
+	CPPUNIT_TEST(testGIFImage);
+	CPPUNIT_TEST(testCineonImage);
+	CPPUNIT_TEST(testIFFImage);
+	CPPUNIT_TEST(testNotFile);
+	CPPUNIT_TEST(testInvalidCineonImage);
+	CPPUNIT_TEST_SUITE_END();
 	
-	Image *image3 = Image::construct("test/templateImages/8x8.gif");
-	CPPUNIT_ASSERT(image3 != NULL);
-	CPPUNIT_ASSERT(image3->valid());
-	CPPUNIT_ASSERT(image3->path().fullName() == "test/templateImages/8x8.gif");
-	CPPUNIT_ASSERT_DOUBLES_EQUAL(image3->size().getKBytes(), 0.83, 0.1);
-	CPPUNIT_ASSERT(image3->formatString() == "GIF");
-	CPPUNIT_ASSERT(image3->dim().width() == 8);
-	CPPUNIT_ASSERT(image3->dim().height() == 8);
-	delete image3;
+	void testSGIImage();
+	void testTIFFImage();
+	void testGIFImage();
+	void testCineonImage();
+	void testIFFImage();
 	
-	Image *image4 = Image::construct("test/templateImages/8x8.cin");
-	CPPUNIT_ASSERT(image4 != NULL);
-	CPPUNIT_ASSERT(image4->valid());
-	CPPUNIT_ASSERT(image4->path().fullName() == "test/templateImages/8x8.cin");
-	CPPUNIT_ASSERT_DOUBLES_EQUAL(image4->size().getKBytes(), 2.25, 0.1);
-	CPPUNIT_ASSERT(image4->formatString() == "Cineon");
-	CPPUNIT_ASSERT(image4->dim().width() == 8);
-	CPPUNIT_ASSERT(image4->dim().height() == 8);
-	delete image4;
-		
-	Image *image5 = Image::construct("test/templateImages/8x8.iff");
-	CPPUNIT_ASSERT(image5 != NULL);
-	CPPUNIT_ASSERT(image5->valid());
-	CPPUNIT_ASSERT(image5->path().fullName() == "test/templateImages/8x8.iff");
-	CPPUNIT_ASSERT_DOUBLES_EQUAL(image5->size().getKBytes(), 0.41, 0.1);
-	CPPUNIT_ASSERT(image5->formatString() == "IFF");
-	CPPUNIT_ASSERT(image5->dim().width() == 8);
-	CPPUNIT_ASSERT(image5->dim().height() == 8);
-	delete image5;	
+	void testNotFile();
+	void testInvalidCineonImage();
+	
+private:
+	void checkImage(Image *image, bool valid, const std::string &name, float sizeKb,
+		const std::string &format, int width, int height);
+
+};
+
+CPPUNIT_TEST_SUITE_REGISTRATION(testImage);
+
+void testImage::testSGIImage()
+{
+	Image *image = Image::construct("test/templateImages/8x8.sgi");
+	checkImage(image, true, "test/templateImages/8x8.sgi", 0.89, "SGI", 8, 8);
+	delete image;
 }
 
-void testImage::testInvalidImage()
+void testImage::testTIFFImage()
+{
+	Image *image = Image::construct("test/templateImages/8x8.tiff");
+	checkImage(image, true, "test/templateImages/8x8.tiff", 0.39, "TIFF", 8, 8);
+	delete image;
+}
+
+void testImage::testGIFImage()
+{
+	Image *image = Image::construct("test/templateImages/8x8.gif");
+	checkImage(image, true, "test/templateImages/8x8.gif", 0.83, "GIF", 8, 8);
+	delete image;
+}
+
+void testImage::testCineonImage()
+{
+	Image *image = Image::construct("test/templateImages/8x8.cin");
+	checkImage(image, true, "test/templateImages/8x8.cin", 2.25, "Cineon", 8, 8);
+	delete image;
+}
+
+void testImage::testIFFImage()
+{
+	Image *image = Image::construct("test/templateImages/8x8.iff");
+	checkImage(image, true, "test/templateImages/8x8.iff", 0.41, "IFF", 8, 8);
+	delete image;	
+}
+
+void testImage::testInvalidCineonImage()
 {
 	Image *image = Image::construct("test/templateImages/8x8.cin-invalid");
-	CPPUNIT_ASSERT(image != NULL);
-	CPPUNIT_ASSERT(!image->valid());
-	CPPUNIT_ASSERT(image->path().fullName() == "test/templateImages/8x8.cin-invalid");
-	CPPUNIT_ASSERT_DOUBLES_EQUAL(image->size().getKBytes(), 0.13, 0.1);
-	CPPUNIT_ASSERT(image->formatString() == "Cineon");
-	CPPUNIT_ASSERT(image->dim().width() == 0);
-	CPPUNIT_ASSERT(image->dim().height() == 0);
+	checkImage(image, false, "test/templateImages/8x8.cin-invalid", 0.13, "Cineon", 0, 0);
 	delete image;		
 }
 
@@ -119,5 +108,17 @@ void testImage::testNotFile()
 	// A file that doesn't exist
 	Image *image = Image::construct("test/templateImages/foo.blah");
 	CPPUNIT_ASSERT(image == NULL);
+}
+
+void testImage::checkImage(Image *image, bool valid, const std::string &name, float sizeKb,
+	const std::string &format, int width, int height)
+{
+	CPPUNIT_ASSERT(image != NULL);
+	CPPUNIT_ASSERT(image->valid() == valid);
+	CPPUNIT_ASSERT(image->path().fullName() == name);
+	CPPUNIT_ASSERT_DOUBLES_EQUAL(image->size().getKBytes(), sizeKb, 0.1);
+	CPPUNIT_ASSERT(image->formatString() == format);
+	CPPUNIT_ASSERT(image->dim().width() == width);
+	CPPUNIT_ASSERT(image->dim().height() == height);
 }
 
