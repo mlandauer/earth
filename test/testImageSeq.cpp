@@ -34,9 +34,11 @@ class testImageSeq : public CppUnit::TestFixture
 public:
 	CPPUNIT_TEST_SUITE(testImageSeq);
 	CPPUNIT_TEST(test);
+	CPPUNIT_TEST(testInvalidSequence);
 	CPPUNIT_TEST_SUITE_END();
 	
 	void test();
+	void testInvalidSequence();
 
 private:
 	void checkSequence(const ImageSeq &seq, std::string name, std::string frames,
@@ -59,10 +61,6 @@ void testImageSeq::test()
 	Image *i6 = Image::construct("test/seq/test2.000123.gif");
 	Image *i7 = Image::construct("test/seq/120.gif");
 	Image *i8 = Image::construct("test/seq/110.gif");
-	Image *i9 = Image::construct("test/seq/test3.0001");
-	Image *i10 = Image::construct("test/seq/test3.0002");
-	Image *i11 = Image::construct("test/seq/test3.0003");
-	Image *i12 = Image::construct("test/seq/test3.0004");
 		
 	CPPUNIT_ASSERT(i1 != NULL);
 	CPPUNIT_ASSERT(i2 != NULL);
@@ -72,10 +70,6 @@ void testImageSeq::test()
 	CPPUNIT_ASSERT(i6 != NULL);
 	CPPUNIT_ASSERT(i7 != NULL);
 	CPPUNIT_ASSERT(i8 != NULL);
-	CPPUNIT_ASSERT(i9 != NULL);
-	CPPUNIT_ASSERT(i10 != NULL);
-	CPPUNIT_ASSERT(i11 != NULL);
-	CPPUNIT_ASSERT(i12 != NULL);
 	
 	ImageSeq seq(i1);
 	checkSequence(seq, "test/seq/test1.#.gif", "1", 2, 2, "GIF", true);
@@ -121,20 +115,6 @@ void testImageSeq::test()
 	ImageSeq seq5(i8);
 	checkSequence(seq5, "test/seq/@@@.gif", "110", 4, 4, "TIFF", true);
 	
-	// Now test what happens when we have a mix of valid and invalid images
-	ImageSeq one(i9), two(i10);
-	CPPUNIT_ASSERT(i9->valid());
-	CPPUNIT_ASSERT(!i10->valid());
-	CPPUNIT_ASSERT(i11->valid());
-	CPPUNIT_ASSERT(!i12->valid());
-	CPPUNIT_ASSERT(one.addImage(i11));
-	CPPUNIT_ASSERT(!one.addImage(i12));
-	CPPUNIT_ASSERT(!two.addImage(i11));
-	CPPUNIT_ASSERT(two.addImage(i12));
-
-	checkSequence(one, "test/seq/test3.#", "1,3", 8, 8, "Cineon", true);
-	checkSequence(two, "test/seq/test3.#", "2,4", 0, 0, "Cineon", false);
-
 	delete i1;
 	delete i2;
 	delete i3;
@@ -143,10 +123,38 @@ void testImageSeq::test()
 	delete i6;
 	delete i7;
 	delete i8;
-	delete i9;
-	delete i10;
-	delete i11;
-	delete i12;
+}
+
+// Test what happens when we have a mix of valid and invalid images
+void testImageSeq::testInvalidSequence()
+{
+	Image *i1 = Image::construct("test/seq/test3.0001");
+	Image *i2 = Image::construct("test/seq/test3.0002");
+	Image *i3 = Image::construct("test/seq/test3.0003");
+	Image *i4 = Image::construct("test/seq/test3.0004");
+
+	CPPUNIT_ASSERT(i1 != NULL);
+	CPPUNIT_ASSERT(i2 != NULL);
+	CPPUNIT_ASSERT(i3 != NULL);
+	CPPUNIT_ASSERT(i4 != NULL);
+	CPPUNIT_ASSERT(i1->valid());
+	CPPUNIT_ASSERT(!i2->valid());
+	CPPUNIT_ASSERT(i3->valid());
+	CPPUNIT_ASSERT(!i4->valid());
+
+	ImageSeq one(i1), two(i2);
+	CPPUNIT_ASSERT(one.addImage(i3));
+	CPPUNIT_ASSERT(!one.addImage(i4));
+	CPPUNIT_ASSERT(!two.addImage(i3));
+	CPPUNIT_ASSERT(two.addImage(i4));
+
+	checkSequence(one, "test/seq/test3.#", "1,3", 8, 8, "Cineon", true);
+	checkSequence(two, "test/seq/test3.#", "2,4", 0, 0, "Cineon", false);
+	
+	delete i1;
+	delete i2;
+	delete i3;
+	delete i4;
 }
 
 void testImageSeq::checkSequence(const ImageSeq &seq, std::string name, std::string frames,
