@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# Creates a set of test sequences from the template images that are
+# used in the unit tests. 
+
+# GIF     2     2      index/test1.#.gif      1-4
+mkdir -p index
+cp templateImages/2x2.gif index/test1.0001.gif
+cp templateImages/2x2.gif index/test1.0002.gif
+cp templateImages/2x2.gif index/test1.0003.gif
+cp templateImages/2x2.gif index/test1.0004.gif
+
+# GIF     4     4      index/test1.#.gif      5
+mkdir -p index
+cp templateImages/4x4.gif index/test1.0005.gif
+
+# SGI     8     8      index/test2.@@         8
+mkdir -p index
+cp templateImages/8x8.sgi index/test2.08
+
+# Cineon  4     4      test/index/foo/#            2-3
+mkdir -p index/foo
+cp templateImages/4x4.cin index/foo/0002
+cp templateImages/4x4.cin index/foo/0003
+
+# Cineon  8     8      index/blah/a/#.cin     6-7
+mkdir -p index/blah/a
+cp templateImages/8x8.cin index/blah/a/0006.cin
+cp templateImages/8x8.cin index/blah/a/0007.cin
+
+mkdir -p seq
+cp templateImages/2x2.gif seq/test1.0001.gif
+cp templateImages/2x2.gif seq/test1.0002.gif
+cp templateImages/2x2.gif seq/test1.0003.gif
+cp templateImages/2x2.gif seq/test1.0004.gif
+cp templateImages/2x2.gif seq/test2.8.gif
+cp templateImages/2x2.gif seq/test2.000123.gif
+cp templateImages/2x2.gif seq/120.gif
+cp templateImages/4x4.tiff seq/110.gif
+cp templateImages/8x8.cin seq/test3.0001
+cp templateImages/8x8.cin-invalid seq/test3.0002
+cp templateImages/8x8.cin seq/test3.0003
+cp templateImages/8x8.cin-invalid seq/test3.0004

@@ -41,8 +41,6 @@ public:
 private:
 	void checkSequence(const ImageSeq &seq, std::string name, std::string frames,
 		int width, int height, std::string format);
-	void copyFile(const Path &path1, const Path &path2);
-	void makeDirectory(const Path &path);
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testImageSeq);
@@ -53,44 +51,18 @@ using namespace Sp;
 
 void testImageSeq::test()
 {
-	system ("rm -rf test/seq");
-	Path path1a("test/seq/test1.0001.gif");
-	Path path1b("test/seq/test1.0002.gif");
-	Path path1c("test/seq/test1.0003.gif");
-	Path path1d("test/seq/test1.0004.gif");
-	Path path2a("test/seq/test2.8.gif");		
-	Path path3a("test/seq/test2.000123.gif");		
-	Path path4a("test/seq/120.gif");		
-	Path path5a("test/seq/110.gif");
-	Path path6a("test/seq/test3.0001");
-	Path path6b("test/seq/test3.0002");
-	Path path6c("test/seq/test3.0003");
-	Path path6d("test/seq/test3.0004");
-	makeDirectory("test/seq");
-	copyFile("test/templateImages/2x2.gif", path1a);
-	copyFile("test/templateImages/2x2.gif", path1b);
-	copyFile("test/templateImages/2x2.gif", path1c);
-	copyFile("test/templateImages/2x2.gif", path1d);
-	copyFile("test/templateImages/2x2.gif", path2a);
-	copyFile("test/templateImages/2x2.gif", path3a);
-	copyFile("test/templateImages/2x2.gif", path4a);
-	copyFile("test/templateImages/4x4.tiff", path5a);
-	copyFile("test/templateImages/8x8.cin", path6a);
-	copyFile("test/templateImages/8x8.cin-invalid", path6b);
-	copyFile("test/templateImages/8x8.cin", path6c);
-	copyFile("test/templateImages/8x8.cin-invalid", path6d);
-	Image *i1 = Image::construct(path1a);
-	Image *i2 = Image::construct(path1b);
-	Image *i3 = Image::construct(path1c);
-	Image *i4 = Image::construct(path1d);
-	Image *i5 = Image::construct(path2a);
-	Image *i6 = Image::construct(path3a);
-	Image *i7 = Image::construct(path4a);
-	Image *i8 = Image::construct(path5a);
-	Image *i9 = Image::construct(path6a);
-	Image *i10 = Image::construct(path6b);
-	Image *i11 = Image::construct(path6c);
-	Image *i12 = Image::construct(path6d);
+	Image *i1 = Image::construct("test/seq/test1.0001.gif");
+	Image *i2 = Image::construct("test/seq/test1.0002.gif");
+	Image *i3 = Image::construct("test/seq/test1.0003.gif");
+	Image *i4 = Image::construct("test/seq/test1.0004.gif");
+	Image *i5 = Image::construct("test/seq/test2.8.gif");
+	Image *i6 = Image::construct("test/seq/test2.000123.gif");
+	Image *i7 = Image::construct("test/seq/120.gif");
+	Image *i8 = Image::construct("test/seq/110.gif");
+	Image *i9 = Image::construct("test/seq/test3.0001");
+	Image *i10 = Image::construct("test/seq/test3.0002");
+	Image *i11 = Image::construct("test/seq/test3.0003");
+	Image *i12 = Image::construct("test/seq/test3.0004");
 		
 	CPPUNIT_ASSERT(i1 != NULL);
 	CPPUNIT_ASSERT(i2 != NULL);
@@ -127,7 +99,7 @@ void testImageSeq::test()
 	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF");
 
 	// Removing by giving a path
-	CPPUNIT_ASSERT(seq.removeImage(path1c));
+	CPPUNIT_ASSERT(seq.removeImage("test/seq/test1.0003.gif"));
 	checkSequence(seq, "test/seq/test1.#.gif", "1,4", 2, 2, "GIF");		
 		
 	ImageSeq seq2(i5);
@@ -183,15 +155,4 @@ void testImageSeq::checkSequence(const ImageSeq &seq, std::string name, std::str
 	CPPUNIT_ASSERT(seq.dim().width() == width);
 	CPPUNIT_ASSERT(seq.dim().height() == height);
 	CPPUNIT_ASSERT_EQUAL(seq.format()->formatString(), format);		
-}
-
-void testImageSeq::copyFile(const Path &path1, const Path &path2)
-{
-	std::string command = "cp " + path1.fullName() + " " + path2.fullName();
-	system (command.c_str());
-}
-void testImageSeq::makeDirectory(const Path &path)
-{
-	std::string command = "mkdir " + path.fullName();
-	system (command.c_str());
 }

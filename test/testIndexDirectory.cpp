@@ -52,33 +52,14 @@ using namespace Sp;
 
 void testIndexDirectory::test()
 {
-	// Making the following set of sequences:
+	// The following set of images should have been created by the
+	// script makeTestSequences
 	// Format  Width Height Name                        Frames
 	// GIF     2     2      test/index/test1.#.gif      1-4
 	// GIF     4     4      test/index/test1.#.gif      5
 	// SGI     8     8      test/index/test2.@@         8
 	// Cineon  4     4      test/index/foo/#            2-3
 	// Cineon  8     8      test/index/blah/a/#.cin     6-7
-	
-	system("rm -rf test/index");
-	system("mkdir test/index");
-	system("mkdir test/index/foo");
-	system("mkdir -p test/index/blah/a");
-	// GIF     2     2      test/index/test1.#.gif      1-4
-	system("cp test/templateImages/2x2.gif test/index/test1.0001.gif");
-	system("cp test/templateImages/2x2.gif test/index/test1.0002.gif");
-	system("cp test/templateImages/2x2.gif test/index/test1.0003.gif");
-	system("cp test/templateImages/2x2.gif test/index/test1.0004.gif");
-	// GIF     4     4      test/index/test1.#.gif      5
-	system("cp test/templateImages/4x4.gif test/index/test1.0005.gif");
-	// SGI     8     8      test/index/test2.@@         8
-	system("cp test/templateImages/8x8.sgi test/index/test2.08");
-	// Cineon  4     4      test/index/foo/#            2-3
-	system("cp test/templateImages/4x4.cin test/index/foo/0002");
-	system("cp test/templateImages/4x4.cin test/index/foo/0003");
-	// Cineon  8     8      test/index/blah/a/#.cin     6-7
-	system("cp test/templateImages/8x8.cin test/index/blah/a/0006.cin");
-	system("cp test/templateImages/8x8.cin test/index/blah/a/0007.cin");
 	
 	IndexDirectory i;
 	std::vector<ImageSeq> r = i.getImageSequences("test/index");
