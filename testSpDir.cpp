@@ -22,6 +22,7 @@
 //
 // $Id$
 
+#include <iostream>
 #include "testSpDir.h"
 #include "SpDir.h"
 

@@ -57,7 +57,8 @@ FsObjectHandle FsObject::construct(const Path &path)
 struct stat FsObject::unixStat() const
 {
 	struct stat s;
-	lstat(path().fullName().c_str(), &s);
+	int ret = lstat(path().fullName().c_str(), &s);
+  assert(ret == 0);
 	return (s);
 }
 
