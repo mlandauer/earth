@@ -6,7 +6,8 @@ INCLUDE =
 
 OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o SpLibLoader.o \
           SpUid.o SpGid.o SpImage.o SpImageFormat.o SpImageDim.o \
-          SpFsObject.o SpDir.o SpDirMonitor.o SpDirMonitorFam.o
+          SpFsObject.o SpDir.o SpDirMonitor.o SpDirMonitorFam.o \
+		  SpImageSequence.o
 
 all: testCode
 	cd imageFormats; make all
@@ -48,6 +49,9 @@ SpImage.o: SpImage.C SpImage.h SpFile.h
 
 SpImageFormat.o: SpImageFormat.C SpImageFormat.h SpFile.h
 	$(CC) $(OPTION) -c SpImageFormat.C $(INCLUDE)
+
+SpImageSequence.o: SpImageSequence.C SpImageSequence.h
+	$(CC) $(OPTION) -c SpImageSequence.C $(INCLUDE)
 
 SpImageDim.o: SpImageDim.C SpImageDim.h
 	$(CC) $(OPTION) -c SpImageDim.C $(INCLUDE)

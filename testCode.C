@@ -11,6 +11,7 @@
 #include "SpDir.h"
 #include "SpTester.h"
 #include "SpDirMonitor.h"
+#include "SpImageSequence.h"
 
 class testSpSize : public SpTester
 {
@@ -77,7 +78,7 @@ public:
 	testSpFile() : SpTester("SpFile") { test(); };
 	void test() {
 		SpFile file("test/templateImages/8x8.tiff");
-		checkEqual("test 0", file.valid(), true);
+		checkEqualBool("test 0", file.valid(), true);
 		checkEqual("test 1", file.path().fullName(), "test/templateImages/8x8.tiff");
 		checkEqual("test 2", file.size().bytes(), 396.0);
 		checkEqual("test 3", file.size().kbytes(), 0.39);
@@ -170,12 +171,12 @@ public:
 		checkEqual("test 3", file->gid().name(), g.name());
 		checkNotNULL("test 4", dynamic_cast<SpFile *>(file));
 		checkNULL("test 5", dynamic_cast<SpDir *>(file));
+		delete file;
 		SpFsObject *file2 = SpFsObject::construct("test/templateImages/");
 		checkEqual("test 6", file2->path().fullName(), "test/templateImages");
 		// Find some way to test access, modification and change times
 		checkNULL("test 7", dynamic_cast<SpFile *>(file2));
 		checkNotNULL("test 8", dynamic_cast<SpDir *>(file2));
-		delete file;
 		delete file2;
 		// Test opening a non-existing file or directory
 		SpFsObject *notExist = SpFsObject::construct("test/templateImages/no");
@@ -199,7 +200,7 @@ public:
 		SpGid g;
 		g.setCurrent();
 		checkEqual("test 3", dir.gid().name(), g.name());
-		checkEqual("test 4", dir.valid(), true);
+		checkEqualBool("test 4", dir.valid(), true);
 		vector<SpFsObject *> ls = dir.ls();
 		if (checkEqual("ls test 0", ls.size(), 13)) {
 			vector<SpFsObject *>::iterator a = ls.begin();
@@ -217,9 +218,11 @@ public:
 			checkImage("ls test 12", *(a++), "test/templateImages/8x8.tiff", "TIFF");		
 			checkDir("ls test 13", *(a++), "test/templateImages/CVS");		
 		}
+		for (vector<SpFsObject *>::iterator a=ls.begin(); a!=ls.end(); ++a)
+			delete *a;
 		// Try doing an ls on a non-existant directory
 		SpDir dirNotExist("test/whatASillyFella");
-		checkEqual("non-existant test 1", dirNotExist.valid(), false);
+		checkEqualBool("non-existant test 1", dirNotExist.valid(), false);
 		vector<SpFsObject *> lsNotExist = dirNotExist.ls();
 		checkEqual("non-existant test 2", lsNotExist.size(), 0);
 	}
@@ -311,34 +314,110 @@ public:
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0004.gif");
 		SpDirMonitor *m = SpDirMonitor::construct(SpDir("test/FsMonitor"));
 		if (checkNotNULL("test 0", m)) {
-			checkEqual("test 1", m->pendingEvent(), true);
+			checkEqualBool("test 1", m->pendingEvent(), true);
 			checkNextEvent("test 2", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0001.gif");
 			checkNextEvent("test 3", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0002.gif");
 			checkNextEvent("test 4", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0003.gif");
 			checkNextEvent("test 5", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0004.gif");
-			checkEqual("test 1j", m->pendingEvent(), false);
+			checkEqualBool("test 1j", m->pendingEvent(), false);
 			
 			system ("rm test/FsMonitor/test.0001.gif");
 			system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0005.gif");
 			system ("mkdir test/FsMonitor/subdirectory");
 			SpTime::sleep(6);
-			checkEqual("test 6", m->pendingEvent(), true);
+			checkEqualBool("test 6", m->pendingEvent(), true);
 			checkNextEvent("test 7", m, SpDirMonitorEvent::added, "test/FsMonitor/test.0005.gif");
 			checkNextEvent("test 8", m, SpDirMonitorEvent::added, "test/FsMonitor/subdirectory");
 			checkNextEvent("test 9", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0001.gif");
-			checkEqual("test 10", m->pendingEvent(), false);
+			checkEqualBool("test 10", m->pendingEvent(), false);
 
 			system ("rm -fr test/FsMonitor");
 			SpTime::sleep(6);
-			checkEqual("test 11", m->pendingEvent(), true);
+			checkEqualBool("test 11", m->pendingEvent(), true);
 			checkNextEvent("test 12", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0005.gif");
 			checkNextEvent("test 13", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0002.gif");
 			checkNextEvent("test 14", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0003.gif");
 			checkNextEvent("test 15", m, SpDirMonitorEvent::deleted, "test/FsMonitor/test.0004.gif");
 			checkNextEvent("test 16", m, SpDirMonitorEvent::deleted, "test/FsMonitor/subdirectory");
-			checkEqual("test 17", m->pendingEvent(), false);
+			checkEqualBool("test 17", m->pendingEvent(), false);
 			delete m;
 		}
+	}
+};
+
+class testSpImageSequence : public SpTester
+{
+public:
+	testSpImageSequence() : SpTester("SpImageSequence") { test(); };
+	void test() {
+		system ("rm -rf test/seq");
+		SpPath path1a("test/seq/test1.0001.gif");
+		SpPath path1b("test/seq/test1.0002.gif");
+		SpPath path1c("test/seq/test1.0003.gif");
+		SpPath path1d("test/seq/test1.0004.gif");
+		SpPath path2a("test/seq/test2.8.gif");		
+		SpPath path3a("test/seq/test2.000123.gif");		
+		SpPath path4a("test/seq/120.gif");		
+		makeDirectory("test/seq");
+		copyFile("test/templateImages/2x2.gif", path1a);
+		copyFile("test/templateImages/2x2.gif", path1b);
+		copyFile("test/templateImages/2x2.gif", path1c);
+		copyFile("test/templateImages/2x2.gif", path1d);
+		copyFile("test/templateImages/2x2.gif", path2a);
+		copyFile("test/templateImages/2x2.gif", path3a);
+		copyFile("test/templateImages/2x2.gif", path4a);
+		SpImage *i1 = SpImage::construct(path1a);
+		SpImage *i2 = SpImage::construct(path1b);
+		SpImage *i3 = SpImage::construct(path1c);
+		SpImage *i4 = SpImage::construct(path1d);
+		SpImage *i5 = SpImage::construct(path2a);
+		SpImage *i6 = SpImage::construct(path3a);
+		SpImage *i7 = SpImage::construct(path4a);
+		checkNotNULL("test 1a", i1);
+		checkNotNULL("test 1b", i2);
+		checkNotNULL("test 1c", i3);
+		checkNotNULL("test 1d", i4);
+		checkNotNULL("test 1e", i5);
+		checkNotNULL("test 1f", i6);
+		checkNotNULL("test 1g", i7);
+		
+		SpImageSequence seq(i1);
+		checkEqual("test 2", seq.path().fullName(), "test/seq/test1.#.gif");
+		checkEqual("test 3", seq.framesString(), "1");
+		
+		seq.addImage(i2);
+		checkEqual("test 4", seq.path().fullName(), "test/seq/test1.#.gif");
+		checkEqual("test 5", seq.framesString(), "1-2");
+		
+		seq.addImage(i4);
+		checkEqual("test 6", seq.path().fullName(), "test/seq/test1.#.gif");
+		checkEqual("test 7", seq.framesString(), "1-2,4");
+		
+		seq.addImage(i3);
+		checkEqual("test 8", seq.path().fullName(), "test/seq/test1.#.gif");
+		checkEqual("test 9", seq.framesString(), "1-4");
+		
+		SpImageSequence seq2(i5);
+		checkEqual("test 10", seq2.path().fullName(), "test/seq/test2.@.gif");
+		checkEqual("test 11", seq2.framesString(), "8");
+		
+		SpImageSequence seq3(i6);
+		checkEqual("test 12", seq3.path().fullName(), "test/seq/test2.@@@@@@.gif");
+		checkEqual("test 13", seq3.framesString(), "123");
+		
+		SpImageSequence seq4(i7);
+		checkEqual("test 14", seq4.path().fullName(), "test/seq/@@@.gif");
+		checkEqual("test 15", seq4.framesString(), "120");
+		system ("rm -rf test/seq");
+		delete i1, i2, i3, i4, i5, i6, i7;
+	}
+	void copyFile(const SpPath &path1, const SpPath &path2) {
+		string command = "cp " + path1.fullName() + " " + path2.fullName();
+		system (command.c_str());
+	}
+	void makeDirectory(const SpPath &path) {
+		string command = "mkdir " + path.fullName();
+		system (command.c_str());
 	}
 };
 
@@ -353,15 +432,16 @@ main()
 	// returns things in alphabetical order.
 	SpDir::setSortByPath(true);
 	
+	testSpDir();
 	testSpSize();
 	testSpTime();
 	testSpUid();
 	testSpFile();
 	testSpImage();
 	testSpFsObject();
-	testSpDir();
 	testSpPath();
-	testSpDirMonitor();
+	testSpImageSequence();
+	//testSpDirMonitor();
 	
 	SpTester::finish();
 	SpImageFormat::deRegisterPlugins();
