@@ -36,8 +36,10 @@ bool SpTester::check(string testName, bool a)
 			successMessage(testName);
 			cout << endl;
 		}
-		else
+		else {
 			cout << ".";
+			cout.flush();
+		}
 		return true;
 	}
 }
@@ -55,8 +57,10 @@ bool SpTester::checkEqual(string testName, string a, string b)
 			successMessage(testName);
 			cout << ": returned " << a << endl;
 		}
-		else
+		else {
 			cout << ".";
+			cout.flush();
+		}
 		return true;
 	}
 }
@@ -74,8 +78,10 @@ bool SpTester::checkEqual(string testName, int a, int b)
 			successMessage(testName);
 			cout << ": returned " << a << endl;
 		}
-		else
+		else {
 			cout << ".";
+			cout.flush();
+		}
 		return true;
 	}
 }
@@ -93,8 +99,10 @@ bool SpTester::checkEqual(string testName, float a, float b, float delta)
 			successMessage(testName);
 			cout << ": returned " << a << endl;
 		}
-		else
+		else {
 			cout << ".";
+			cout.flush();
+		}
 		return true;
 	}
 }
@@ -112,8 +120,10 @@ bool SpTester::checkNotNULL(string testName, void *p)
 			successMessage(testName);
 			cout << ": returned non-null pointer" << endl;
 		}
-		else
+		else {
 			cout << ".";
+			cout.flush();
+		}
 		return true;
 	}
 }
@@ -131,8 +141,10 @@ bool SpTester::checkNULL(string testName, void *p)
 			successMessage(testName);
 			cout << ": returned null pointer" << endl;
 		}
-		else
+		else {
 			cout << ".";
+			cout.flush();
+		}
 		return true;
 	}
 }
