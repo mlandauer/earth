@@ -1,4 +1,4 @@
-//  Copyright (C) 2001, 2002 Matthew Landauer. All Rights Reserved.
+//  Copyright (C) 2001-2003 Matthew Landauer. All Rights Reserved.
 //  
 //  This program is free software; you can redistribute it and/or modify it
 //  under the terms of version 2 of the GNU General Public License as
