@@ -104,22 +104,55 @@ void testDirMon::test()
 	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/test.0006.gif");
 	CPPUNIT_ASSERT(!m.pendingEvent());
 	
+	// Test changing nothing
+	m.update();
+	CPPUNIT_ASSERT(!m.pendingEvent());
+
 	// Test adding subdirectory
-	//DateTime::sleep(1);
-	//system ("mkdir test/FsMonitor/subdirectory");
-	//system ("cp test/templateImages/2x2.gif test/FsMonitor/subdirectory/test.0001.gif");
-	//m.update();
-	//CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added,   "test/FsMonitor/subdirectory/test.0001.gif");
-	//CPPUNIT_ASSERT(!m.pendingEvent());
+	DateTime::sleep(1);
+	system ("mkdir test/FsMonitor/subdirectory");
+	system ("cp test/templateImages/2x2.gif test/FsMonitor/subdirectory/test.0001.gif");
+	m.update();
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added,   "test/FsMonitor/subdirectory/test.0001.gif");
+	CPPUNIT_ASSERT(!m.pendingEvent());
 	
-	//system ("rm -fr test/FsMonitor/*");
-	//DateTime::sleep(6);
-	//m->update();
-	//checkNextEvent(m, DirMonEvent::deleted, "test/FsMonitor/test.0002.gif");
-	//checkNextEvent(m, DirMonEvent::deleted, "test/FsMonitor/test.0003.gif");
-	//checkNextEvent(m, DirMonEvent::deleted, "test/FsMonitor/test.0004.gif");
-	//checkNextEvent(m, DirMonEvent::deleted, "test/FsMonitor/test.0005.gif");
-	//checkNextEvent(m, DirMonEvent::deleted, "test/FsMonitor/subdirectory/test.0001.gif");
-	//CPPUNIT_ASSERT(!m->pendingEvent());
+	// Test changing nothing
+	m.update();
+	CPPUNIT_ASSERT(!m.pendingEvent());
+
+	// Test adding in both directories
+	DateTime::sleep(1);
+	system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0006.gif");
+	system ("cp test/templateImages/2x2.gif test/FsMonitor/subdirectory/test.0002.gif");
+	m.update();
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added, "test/FsMonitor/test.0006.gif");
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::added, "test/FsMonitor/subdirectory/test.0002.gif");
+	CPPUNIT_ASSERT(!m.pendingEvent());
+
+	// Test changing nothing
+	m.update();
+	CPPUNIT_ASSERT(!m.pendingEvent());
+	
+	// Test removing a directory
+	DateTime::sleep(1);
+	system ("rm -fr test/FsMonitor/subdirectory");
+	m.update();
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/subdirectory/test.0001.gif");
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/subdirectory/test.0002.gif");
+	CPPUNIT_ASSERT(!m.pendingEvent());
+
+	// Test removing the rest
+	DateTime::sleep(1);
+	system ("rm -fr test/FsMonitor/*");
+	m.update();
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/test.0002.gif");
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/test.0003.gif");
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/test.0004.gif");
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/test.0005.gif");
+	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent::deleted, "test/FsMonitor/test.0006.gif");
+	CPPUNIT_ASSERT(!m.pendingEvent());
+	
+	// We're stoping watching. So we can delete the top level directory
+	system ("rmdir test/FsMonitor");
 }
 

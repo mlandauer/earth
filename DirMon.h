@@ -85,11 +85,11 @@ class DirMon
 		bool pendingEvent() const;
 		DirMonEvent getNextEvent();
 		
-	protected:
+	private:
 		void notifyDeleted(const File &o);
 		void notifyAdded(const File &o);
-		
-	private:
+		void addedDirectory(const Dir &d);
+		void deletedDirectory(const Dir &d);
 		std::queue<DirMonEvent> eventQueue;
 		std::list<CachedDir> dirs;
 };

@@ -29,12 +29,40 @@ namespace Sp {
 	
 DirMon::DirMon(const Dir &d)
 {
+	addedDirectory(d);
+}
+
+void DirMon::addedDirectory(const Dir &d)
+{
 	CachedDir c(d);
 	dirs.push_back(c);
 	std::vector<File> files = c.listFiles();
 	// Tell the world about the files we've found
 	for (std::vector<File>::iterator i = files.begin(); i != files.end(); ++i)
 		notifyAdded(*i);
+	// And check for subdirectories
+	std::vector<Dir> dirs = c.listDirs();
+	for (std::vector<Dir>::iterator i = dirs.begin(); i != dirs.end(); ++i)
+		addedDirectory(*i);
+}
+
+void DirMon::deletedDirectory(const Dir &d)
+{
+	// Find the directory
+	for (std::list<CachedDir>::iterator i = dirs.begin(); i != dirs.end(); ++i) {
+		if (i->getDir() == d) {
+			std::vector<File> deletedFiles = i->listFiles();
+			// Tell the world about the files that have been deleted
+			for (std::vector<File>::iterator j = deletedFiles.begin(); j != deletedFiles.end(); ++j)
+				notifyDeleted(*j);
+			// And check for subdirectories
+			std::vector<Dir> deletedDirs = i->listDirs();
+			for (std::vector<Dir>::iterator j = deletedDirs.begin(); j != deletedDirs.end(); ++j)
+				deletedDirectory(*j);
+			dirs.erase(i);
+			return;
+		}
+	}
 }
 
 void DirMon::update()
@@ -62,6 +90,24 @@ void DirMon::update()
 			for (std::vector<File>::iterator j = deletedFiles.begin(); j != deletedFiles.end(); ++j) {
 				notifyDeleted(*j);
 			}
+			
+			// Check for directories
+			std::vector<Dir> cachedDirs = i->listDirs();
+			std::vector<Dir> currentDirs = currentDir.listDirs();
+			std::vector<Dir> addedDirs, deletedDirs;
+			std::set_difference(currentDirs.begin(), currentDirs.end(),
+				cachedDirs.begin(), cachedDirs.end(),
+				std::back_inserter(addedDirs));
+			std::set_difference(cachedDirs.begin(), cachedDirs.end(),
+				currentDirs.begin(), currentDirs.end(),
+				std::back_inserter(deletedDirs));
+			for (std::vector<Dir>::iterator j = addedDirs.begin(); j != addedDirs.end(); ++j) {
+				addedDirectory(*j);
+			}
+			for (std::vector<Dir>::iterator j = deletedDirs.begin(); j != deletedDirs.end(); ++j) {
+				deletedDirectory(*j);
+			}
+			
 			// Replace stored cached directory
 			*i = currentDir;
 		}
