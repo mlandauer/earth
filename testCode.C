@@ -128,6 +128,7 @@ void testSpFsObject()
 	cout << "Test Filesystem Object" << endl;
 	SpFsObject file("/home/matthew/images/blah1.tiff");
 	cout << "path = " << file.path().fullName() << endl;
+	cout << "size = " << file.size().kbytes() << " Kbytes" << endl;
 	cout << "last access = " << file.lastAccess().timeAndDateString() << endl;
 	cout << "last modification = " << file.lastModification().timeAndDateString() << endl;
 	cout << "last change = " << file.lastChange().timeAndDateString() << endl;
@@ -137,6 +138,7 @@ void testSpFsObject()
 	cout << "is a directory? = " << file.isDir() << endl;
 	SpFsObject file2("/home/matthew/images/");
 	cout << "path = " << file2.path().fullName() << endl;
+	cout << "size = " << file2.size().kbytes() << " Kbytes" << endl;
 	cout << "last access = " << file2.lastAccess().timeAndDateString() << endl;
 	cout << "last modification = " << file2.lastModification().timeAndDateString() << endl;
 	cout << "last change = " << file2.lastChange().timeAndDateString() << endl;

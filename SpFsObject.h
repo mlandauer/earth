@@ -11,6 +11,7 @@
 #include "SpPathString.h"
 #include "SpUid.h"
 #include "SpGid.h"
+#include "SpSize.h"
 
 class SpFsObject
 {
@@ -26,6 +27,7 @@ class SpFsObject
 		SpPathString path() const;
 		SpUid uid() const;
 		SpGid gid() const;
+		SpSize size() const;
 	protected:
 		void setPath(const string &path);
 	private:

@@ -1,13 +1,9 @@
 // $Id$
 
-#include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
 
-#include <stream.h>
-
 #include "SpFile.h"
-#include "SpPathString.h"
 
 SpFile::SpFile()
 {
@@ -22,13 +18,16 @@ SpFile::~SpFile()
 {
 }
 
-SpSize SpFile::size() const
+// Override default implementation in parent class for efficiency sake
+bool SpFile::isFile() const
 {
-	struct stat fileStat;
-	SpSize s;
-	lstat(path().fullName().c_str(), &fileStat);
-	s.setBytes(fileStat.st_size);
-	return (s);
+	return (true);
+}
+
+// Override default implementation in parent class for efficiency sake
+bool SpFile::isDir() const
+{
+	return (false);
 }
 
 // Opens for read only at the moment
