@@ -51,10 +51,17 @@ void index(std::string directoryName)
 	std::cout << "<image format>\t<image size>\t<path>\t<frames>" << std::endl;
 	std::cout << std::endl;
 	for (std::vector<ImageSeq>::iterator i = s.begin(); i != s.end(); ++i) {
-		std::cout << i->format()->formatString() << "\t"
-			<< i->dim().width() << "x" << i->dim().height() << "\t"
-			<< i->path().fullName() << "\t"
-			<< i->framesString() << std::endl;
+		if (i->valid()) {
+			std::cout << i->format()->formatString() << "\t"
+				<< i->dim().width() << "x" << i->dim().height() << "\t"
+				<< i->path().fullName() << "\t"
+				<< i->framesString() << std::endl;
+		}
+		else {
+			std::cout << "INVALID " << i->format()->formatString() << "\t\t"
+				<< i->path().fullName() << "\t"
+				<< i->framesString() << std::endl;
+		}
 	}
 }
 
