@@ -68,7 +68,7 @@ long int File::sizeBytes() const
 {
 	struct stat fileStat;
 	int ret = lstat(path().fullName().c_str(), &fileStat);
-  assert(ret == 0);
+	assert(ret == 0);
 	return fileStat.st_size;
 }
 
