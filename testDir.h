@@ -26,7 +26,6 @@
 #define _testdir_h_
 
 #include "Tester.h"
-#include "FsObject.h"
 
 using namespace Sp;
 
@@ -35,8 +34,6 @@ class testDir : public Tester
 public:
 	testDir();
 	void test();
-  void checkFile(std::string n, FsObjectHandle o, std::string fileName);
-	void checkDir(std::string n, FsObjectHandle o, std::string fileName);
 };
 
 #endif

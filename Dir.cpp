@@ -48,16 +48,35 @@ bool Dir::valid() const
 		return false;
 }
 
-class CompareFsObjectPaths
+std::vector<File> Dir::listFiles() const
 {
-	public:
-		bool operator()(FsObjectHandle s1, FsObjectHandle s2) const
-			{ return s1->path() < s2->path(); }
-};
+	std::vector<File> l;
+  std::vector<Path> paths = listPaths();
 
-std::vector<FsObjectHandle> Dir::ls() const
+  for (std::vector<Path>::iterator i = paths.begin(); i != paths.end(); ++i) {
+    File f(*i);
+    if (f.valid())
+      l.push_back(f);
+  }
+  return l;
+}
+
+std::vector<Dir> Dir::listDirs() const
 {
-	std::vector<FsObjectHandle> l;
+	std::vector<Dir> l;
+  std::vector<Path> paths = listPaths();
+
+  for (std::vector<Path>::iterator i = paths.begin(); i != paths.end(); ++i) {
+    Dir f(*i);
+    if (f.valid())
+      l.push_back(f);
+  }
+  return l;
+}
+
+std::vector<Path> Dir::listPaths() const
+{
+	std::vector<Path> l;
 	if (!valid())
 		return l;
 	// First open a directory stream
@@ -68,12 +87,12 @@ std::vector<FsObjectHandle> Dir::ls() const
 		if ((pathString != ".") && (pathString != "..")) {
 			Path p = path();
 			p.add(pathString);
-			l.push_back(FsObject::construct(p));
+      l.push_back(p);
 		}
 	}
 	closedir(d);
 	if (sortByPath)
-		sort(l.begin(), l.end(), CompareFsObjectPaths());
+		sort(l.begin(), l.end());
 	return (l);
 }
 

@@ -41,36 +41,30 @@ void testDir::test()
 	check("test 2", dir.user() == User::current());
 	check("test 3", dir.userGroup() == UserGroup::current());
 	checkEqualBool("test 4", dir.valid(), true);
-	std::vector<FsObjectHandle> ls = dir.ls();
-	if (checkEqual("ls test 0", ls.size(), 13)) {
-		std::vector<FsObjectHandle>::iterator a = ls.begin();
-		checkFile("ls test 1", *(a++), "test/templateImages/2x2.gif");
-		checkFile("ls test 2", *(a++), "test/templateImages/2x2.jpg");
-		checkFile("ls test 3", *(a++), "test/templateImages/2x2.sgi");
-		checkFile("ls test 4", *(a++), "test/templateImages/2x2.tiff");
-		checkFile("ls test 5", *(a++), "test/templateImages/4x4.gif");		
-		checkFile("ls test 6", *(a++), "test/templateImages/4x4.jpg");						
-		checkFile("ls test 7", *(a++), "test/templateImages/4x4.sgi");		
-		checkFile("ls test 8", *(a++), "test/templateImages/4x4.tiff");		
-		checkFile("ls test 9", *(a++), "test/templateImages/8x8.gif");		
-		checkFile("ls test 10", *(a++), "test/templateImages/8x8.jpg");		
-		checkFile("ls test 11", *(a++), "test/templateImages/8x8.sgi");		
-		checkFile("ls test 12", *(a++), "test/templateImages/8x8.tiff");
-		checkDir("ls test 13", *(a++), "test/templateImages/CVS");
+	std::vector<File> files = dir.listFiles();
+	if (checkEqual("ls test 0", files.size(), 12)) {
+		checkEqual("ls test 1", files[0].path().fullName(), "test/templateImages/2x2.gif");
+		checkEqual("ls test 2", files[1].path().fullName(), "test/templateImages/2x2.jpg");
+		checkEqual("ls test 3", files[2].path().fullName(), "test/templateImages/2x2.sgi");
+		checkEqual("ls test 4", files[3].path().fullName(), "test/templateImages/2x2.tiff");
+		checkEqual("ls test 5", files[4].path().fullName(), "test/templateImages/4x4.gif");		
+		checkEqual("ls test 6", files[5].path().fullName(), "test/templateImages/4x4.jpg");						
+		checkEqual("ls test 7", files[6].path().fullName(), "test/templateImages/4x4.sgi");		
+		checkEqual("ls test 8", files[7].path().fullName(), "test/templateImages/4x4.tiff");		
+		checkEqual("ls test 9", files[8].path().fullName(), "test/templateImages/8x8.gif");		
+		checkEqual("ls test 10", files[9].path().fullName(), "test/templateImages/8x8.jpg");		
+		checkEqual("ls test 11", files[10].path().fullName(), "test/templateImages/8x8.sgi");		
+		checkEqual("ls test 12", files[11].path().fullName(), "test/templateImages/8x8.tiff");
 	}
+  
+	std::vector<Dir> dirs = dir.listDirs();
+	if (checkEqual("ls test 13", dirs.size(), 1)) {
+		checkEqual("ls test 14", dirs[0].path().fullName(), "test/templateImages/CVS");
+	}
+  
 	// Try doing an ls on a non-existant directory
 	Dir dirNotExist("test/whatASillyFella");
 	checkEqualBool("non-existant test 1", dirNotExist.valid(), false);
-	std::vector<FsObjectHandle> lsNotExist = dirNotExist.ls();
+	std::vector<File> lsNotExist = dirNotExist.listFiles();
 	checkEqual("non-existant test 2", lsNotExist.size(), 0);
-}
-
-void testDir::checkFile(std::string n, FsObjectHandle o, std::string fileName) {
-	checkEqual(n + "a",  o->path().fullName(), fileName);
-	checkNotNULL(n + "b",  dynamic_cast<File *>(o.pointer()));
-}
-
-void testDir::checkDir(std::string n, FsObjectHandle o, std::string fileName) {
-	checkEqual(n + "a",  o->path().fullName(), fileName);
-	checkNotNULL(n + "b",  dynamic_cast<Dir *>(o.pointer()));
 }
