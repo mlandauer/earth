@@ -34,14 +34,14 @@ namespace Sp {
 class FileMonEvent
 {
 	public:
-		enum Code {null, deleted, added};
+		enum Code {deleted, added};
 
 	private:
 		Code code;
 		File o;
 		
 	public:
-		FileMonEvent(Code c = null, const File &h = File()) : code(c), o(h) { }
+		FileMonEvent(Code c, const File &h) : code(c), o(h) { }
 		Code getCode() const { return code; }
 		File getFile() const { return o; }
 		bool operator==(const FileMonEvent &e) const {

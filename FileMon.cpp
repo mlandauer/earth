@@ -120,13 +120,12 @@ bool FileMon::pendingEvent() const
 
 FileMonEvent FileMon::getNextEvent()
 {
-	if (pendingEvent()) {
-		FileMonEvent e = eventQueue.front();
-		eventQueue.pop();
-		return e;
-	}
-	else
-		return FileMonEvent(FileMonEvent::null);
+	// Double check that there is indeed a pending event
+	assert(pendingEvent());
+
+	FileMonEvent e = eventQueue.front();
+	eventQueue.pop();
+	return e;
 }
 
 void FileMon::notifyDeleted(const File &o)
