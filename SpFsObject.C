@@ -17,16 +17,24 @@ SpFsObject::~SpFsObject()
 
 SpFsObject *SpFsObject::construct(const SpPath &path)
 {
-	SpFsObject o(path);
-	if (o.isDir())
-		return (new SpDir(path));
-	else if (o.isFile()) {
+	SpDir *d = new SpDir(path);
+	if (d->valid())
+		return (d);
+	else
+		delete d;
+		
+	SpFile *f = new SpFile(path);
+	if (f->valid()) {
 		SpImage *i = SpImage::construct(path);
 		if (i == NULL)
-			return (new SpFile(path));
-		else
+			return (f);
+		else {
+			delete f;
 			return (i);
+		}
 	}
+	else
+		delete f;
 	return (NULL);
 }
 
@@ -60,20 +68,6 @@ SpTime SpFsObject::lastChange() const
 	lstat(path().fullName().c_str(), &fileStat);
 	t.setUnixTime(fileStat.st_ctime);
 	return (t);
-}
-
-bool SpFsObject::isFile() const
-{
-	struct stat fileStat;
-	lstat(path().fullName().c_str(), &fileStat);
-	return(S_ISREG(fileStat.st_mode));
-}
-
-bool SpFsObject::isDir() const
-{
-	struct stat fileStat;
-	lstat(path().fullName().c_str(), &fileStat);
-	return(S_ISDIR(fileStat.st_mode));
 }
 
 SpUid SpFsObject::uid() const

@@ -16,6 +16,13 @@ SpFile::SpFile(const SpPath &path) : fileOpen(false)
 	setPath(path);
 }
 
+bool SpFile::valid() const
+{
+	struct stat fileStat;
+	lstat(path().fullName().c_str(), &fileStat);
+	return(S_ISREG(fileStat.st_mode));
+}
+
 void SpFile::setPath(const SpPath &path)
 {
 	if (!fileOpen)
