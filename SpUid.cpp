@@ -35,14 +35,18 @@ SpUid::~SpUid()
 {
 }
 
-void SpUid::setUnixUid(uid_t u)
+SpUid SpUid::unix(uid_t u)
 {
-	uid = u;
+  SpUid ret;
+  ret.uid = u;
+  return ret;
 }
 
-void SpUid::setCurrent()
+SpUid SpUid::current()
 {
-	uid = getuid();
+  SpUid ret;
+  ret.uid = getuid();
+  return ret;
 }
 
 std::string SpUid::name() const

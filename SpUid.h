@@ -33,9 +33,10 @@ class SpUid
 	public:
 		SpUid();
 		~SpUid();
-		void setUnixUid(uid_t u);
+    static SpUid unix(uid_t u);
+    static SpUid current();
+
 		std::string name() const;
-		void setCurrent();
 	private:
 		uid_t uid;
 };

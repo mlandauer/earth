@@ -37,8 +37,7 @@ void testSpDir::test()
 		"test/templateImages");
 	// Think of some way to test the modification dates automatically
 	// Check that this user owns the files
-	SpUid u;
-	u.setCurrent();
+	SpUid u = SpUid::current();
 	checkEqual("test 2", dir.uid().name(), u.name());
 	SpGid g = SpGid::current();
 	checkEqual("test 3", dir.gid().name(), g.name());

@@ -37,8 +37,7 @@ void testSpFsObject::test()
 	SpFsObjectHandle file = SpFsObject::construct("test/templateImages/8x8.tiff");
 	checkEqual("test 1", file->path().fullName(),
 		"test/templateImages/8x8.tiff");
-	SpUid u;
-	u.setCurrent();
+	SpUid u = SpUid::current();
 	SpGid g = SpGid::current();
 	checkEqual("test 2", file->uid().name(), u.name());
 	checkEqual("test 3", file->gid().name(), g.name());

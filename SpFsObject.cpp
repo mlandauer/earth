@@ -77,12 +77,10 @@ SpTime SpFsObject::lastChange() const
 
 SpUid SpFsObject::uid() const
 {
-	SpUid u;
-	u.setUnixUid(unixStat().st_uid);
-	return (u);
+	return SpUid::unix(unixStat().st_uid);
 }
 
 SpGid SpFsObject::gid() const
 {
-	return (SpGid::unix(unixStat().st_gid));
+	return SpGid::unix(unixStat().st_gid);
 }
