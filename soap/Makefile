@@ -1,6 +1,6 @@
-GSOAP=../../soapcpp2
-SOAPH=../../stdsoap2.h
-SOAPC=../../stdsoap2.c
+GSOAP=soapcpp2
+SOAPH=stdsoap2.h
+SOAPC=stdsoap2.c
 SOAPCPP=../../stdsoap2.cpp
 CC=gcc
 CPP=g++
