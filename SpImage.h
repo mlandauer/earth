@@ -24,4 +24,13 @@ class SpImage : public SpFile
 		static list<SpImage *> plugins;
 };
 
+class SpImageFormat
+{
+	public:
+		virtual string formatString() = 0;
+		virtual SpImage* constructImage() = 0;
+		virtual bool recognise(unsigned char *buf) = 0;
+		virtual int sizeToRecognise() = 0;
+};
+
 #endif

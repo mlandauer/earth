@@ -2,14 +2,6 @@
 
 #include "SpCINEONImage.h"
 
-SpCINEONImage::SpCINEONImage()
-{
-}
-
-SpCINEONImage::~SpCINEONImage()
-{
-}
-
 SpImageDim SpCINEONImage::dim()
 {
 	open();
@@ -28,22 +20,7 @@ SpImageDim SpCINEONImage::dim()
 	return (SpImageDim(width, height));
 }
 
-string SpCINEONImage::formatString()
-{
-	return (string("Cineon"));
-}
-
-bool SpCINEONImage::valid()
-{
-	return (true);
-}
-
-int SpCINEONImage::sizeToRecognise()
-{
-	return (4);
-}
-
-bool SpCINEONImage::recognise(unsigned char *buf)
+bool SpCINEONImageFormat::recognise(unsigned char *buf)
 {
 	if ((buf[0] == 0x80) && (buf[1] == 0x2a) &&
 		(buf[2] == 0x5f) && (buf[3] == 0xd7))
@@ -52,7 +29,7 @@ bool SpCINEONImage::recognise(unsigned char *buf)
 		return (false);
 }
 
-SpImage* SpCINEONImage::clone()
+SpImage* SpCINEONImageFormat::constructImage()
 {
 	return (new SpCINEONImage);
-}
+};
