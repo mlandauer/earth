@@ -40,12 +40,18 @@ CPPUNIT_TEST_SUITE_REGISTRATION(testDatabase);
 #include <iomanip>
 #include <sqlplus.hh>
 
+// These need to have the hostname of the machine with the database and
+// the user with permissions to access the database, with the corresponding password.
+const char *host = "localhost";
+const char *user = "matthewl";
+const char *password = "foo";
+
 // Do some simple tests of MySQL database access using MySQL++ API
 // Also assuming that the database has been created and populated with the
 // script populateTestDatabase.sql
 void testDatabase::test()
 {
-  Connection con("earth", "localhost", "matthewl", "foo"); 
+  Connection con("earth", host, user, password); 
   Query query = con.query();
  
   query << "select * from sequences where frames='2-3'";
