@@ -84,14 +84,14 @@ void testImageSeq::test()
 	CPPUNIT_ASSERT(seq.addImage(i3));
 	checkSequence(seq, "test/seq/test1.#.gif", "1-4", 2, 2, "GIF", true);
 
-	CPPUNIT_ASSERT(seq.removeImage(i2));
+	CPPUNIT_ASSERT(seq.removeImage("test/seq/test1.0002.gif"));
 	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF", true);
 
 	// If we remove something that's not part of the sequence nothing should change
-	CPPUNIT_ASSERT(!seq.removeImage(i8));
+	CPPUNIT_ASSERT(!seq.removeImage("test/seq/110.gif"));
 	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF", true);
 
-	CPPUNIT_ASSERT(!seq.removeImage(i2));
+	CPPUNIT_ASSERT(!seq.removeImage("test/seq/test1.0002.gif"));
 	checkSequence(seq, "test/seq/test1.#.gif", "1,3-4", 2, 2, "GIF", true);
 
 	// Removing by giving a path

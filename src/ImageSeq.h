@@ -51,13 +51,6 @@ public:
 		If the image is not part of the sequence nothing happens
 		\return true if the image was successfully removed
 	*/
-	bool removeImage(const CachedImage &image);
-
-	//! Remove an image from the current sequence
-	/*!
-		If the image is not part of the sequence nothing happens
-		\return true if the image was successfully removed
-	*/
 	bool removeImage(const Path &p);
 
 	//! Returns the path of the image sequence

@@ -54,16 +54,6 @@ bool ImageSeq::addImage(const CachedImage &image)
   }
 }
 
-bool ImageSeq::removeImage(const CachedImage &image)
-{
-	if (partOfSequence(image)) {
-		return m_frames.remove(frameNumber(image.getPath()));
-  }
-  else {
-    return false;
-  }
-}
-
 bool ImageSeq::removeImage(const Path &p)
 {
 	if (partOfSequence(p)) {
