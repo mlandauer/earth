@@ -22,18 +22,18 @@
 //
 // $Id$
 
-#ifndef _testspimagesequence_h_
-#define _testspimagesequence_h_
+#ifndef _testspimageseq_h_
+#define _testspimageseq_h_
 
 #include "SpTester.h"
-#include "SpImageSequence.h"
+#include "SpImageSeq.h"
 
-class testSpImageSequence : public SpTester
+class testSpImageSeq : public SpTester
 {
 public:
-	testSpImageSequence();
+	testSpImageSeq();
 	void test();
-	void checkSequence(string testName, const SpImageSequence &seq,
+	void checkSequence(string testName, const SpImageSeq &seq,
 		string name, string frames, int width, int height, string format);
 	void copyFile(const SpPath &path1, const SpPath &path2);
 	void makeDirectory(const SpPath &path);

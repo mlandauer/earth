@@ -5,19 +5,19 @@ OPTION = -g
 INCLUDE = 
 
 SRCS = SpDir.C SpFsObject.C SpImageFormat.C SpSize.C testCode.C \
-       SpDirMon.C SpGid.C SpImageSequence.C SpTester.C \
+       SpDirMon.C SpGid.C SpImageSeq.C SpTester.C \
        SpDirMonFam.C SpImage.C SpLibLoader.C SpTime.C \
        SpFile.C SpImageDim.C SpPath.C SpUid.C \
        testSpDir.C testSpDirMon.C testSpFile.C testSpFsObject.C \
-       testSpImage.C testSpImageSequence.C testSpPath.C testSpSize.C \
+       testSpImage.C testSpImageSeq.C testSpPath.C testSpSize.C \
        testSpTime.C testSpFsObjectHandle.C
 
 OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o SpLibLoader.o \
           SpUid.o SpGid.o SpImage.o SpImageFormat.o SpImageDim.o \
           SpFsObject.o SpDir.o SpDirMon.o SpDirMonFam.o \
-		  SpImageSequence.o \
+		  SpImageSeq.o \
           testSpDir.o testSpDirMon.o testSpFile.o testSpFsObject.o \
-          testSpImage.o testSpImageSequence.o testSpPath.o testSpSize.o \
+          testSpImage.o testSpImageSeq.o testSpPath.o testSpSize.o \
           testSpTime.o testSpFsObjectHandle.o
 
 all: testCode
@@ -212,16 +212,16 @@ testCode.o: SpLibLoader.h /usr/include/dlfcn.h /usr/include/bits/dlfcn.h
 testCode.o: SpDir.h /usr/include/g++/map /usr/include/g++/stl_tree.h
 testCode.o: /usr/include/g++/stl_function.h /usr/include/g++/stl_map.h
 testCode.o: /usr/include/g++/stl_multimap.h SpTester.h SpDirMon.h
-testCode.o: SpImageSequence.h /usr/include/g++/set /usr/include/g++/stl_set.h
-testCode.o: /usr/include/g++/stl_multiset.h testSpSize.h testSpTime.h
-testCode.o: testSpDir.h testSpFile.h testSpImage.h testSpFsObject.h
-testCode.o: testSpPath.h testSpImageSequence.h testSpDirMon.h
+testCode.o: /usr/include/g++/queue /usr/include/g++/stl_deque.h
+testCode.o: /usr/include/g++/stl_queue.h SpImageSeq.h /usr/include/g++/set
+testCode.o: /usr/include/g++/stl_set.h /usr/include/g++/stl_multiset.h
+testCode.o: testSpSize.h testSpTime.h testSpDir.h testSpFile.h testSpImage.h
+testCode.o: testSpFsObject.h testSpPath.h testSpImageSeq.h testSpDirMon.h
 testCode.o: testSpFsObjectHandle.h
-SpDirMon.o: SpDirMon.h SpDir.h /usr/include/g++/vector
-SpDirMon.o: /usr/include/g++/stl_algobase.h /usr/include/g++/stl_config.h
-SpDirMon.o: /usr/include/_G_config.h /usr/include/bits/types.h
-SpDirMon.o: /usr/include/features.h /usr/include/sys/cdefs.h
-SpDirMon.o: /usr/include/gnu/stubs.h
+SpDirMon.o: SpDirMon.h /usr/include/g++/queue /usr/include/g++/stl_algobase.h
+SpDirMon.o: /usr/include/g++/stl_config.h /usr/include/_G_config.h
+SpDirMon.o: /usr/include/bits/types.h /usr/include/features.h
+SpDirMon.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
 SpDirMon.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stddef.h
 SpDirMon.o: /usr/include/g++/stl_relops.h /usr/include/g++/stl_pair.h
 SpDirMon.o: /usr/include/g++/type_traits.h /usr/include/string.h
@@ -246,8 +246,10 @@ SpDirMon.o: /usr/include/bits/pthreadtypes.h /usr/include/bits/sigthread.h
 SpDirMon.o: /usr/include/g++/stl_construct.h
 SpDirMon.o: /usr/include/g++/stl_uninitialized.h
 SpDirMon.o: /usr/include/g++/stl_vector.h /usr/include/g++/stl_bvector.h
-SpDirMon.o: /usr/include/g++/map /usr/include/g++/stl_tree.h
-SpDirMon.o: /usr/include/g++/stl_function.h /usr/include/g++/stl_map.h
+SpDirMon.o: /usr/include/g++/stl_heap.h /usr/include/g++/stl_deque.h
+SpDirMon.o: /usr/include/g++/stl_function.h /usr/include/g++/stl_queue.h
+SpDirMon.o: SpDir.h /usr/include/g++/vector /usr/include/g++/map
+SpDirMon.o: /usr/include/g++/stl_tree.h /usr/include/g++/stl_map.h
 SpDirMon.o: /usr/include/g++/stl_multimap.h SpFsObject.h
 SpDirMon.o: /usr/include/sys/stat.h /usr/include/bits/stat.h SpTime.h
 SpDirMon.o: /usr/include/g++/string /usr/include/g++/std/bastring.h
@@ -280,49 +282,46 @@ SpGid.o: /usr/include/g++/streambuf.h /usr/include/libio.h
 SpGid.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stdarg.h
 SpGid.o: /usr/include/g++/stl_iterator.h /usr/include/g++/cassert
 SpGid.o: /usr/include/assert.h /usr/include/g++/std/bastring.cc
-SpImageSequence.o: /usr/include/stdio.h SpImageSequence.h
-SpImageSequence.o: /usr/include/g++/set /usr/include/g++/stl_set.h
-SpImageSequence.o: /usr/include/g++/stl_multiset.h SpImage.h
-SpImageSequence.o: /usr/include/g++/list /usr/include/g++/stl_algobase.h
-SpImageSequence.o: /usr/include/g++/stl_config.h /usr/include/_G_config.h
-SpImageSequence.o: /usr/include/bits/types.h /usr/include/features.h
-SpImageSequence.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
-SpImageSequence.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stddef.h
-SpImageSequence.o: /usr/include/g++/stl_relops.h /usr/include/g++/stl_pair.h
-SpImageSequence.o: /usr/include/g++/type_traits.h /usr/include/string.h
-SpImageSequence.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
-SpImageSequence.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
-SpImageSequence.o: /usr/include/bits/posix2_lim.h /usr/include/stdlib.h
-SpImageSequence.o: /usr/include/sys/types.h /usr/include/time.h
-SpImageSequence.o: /usr/include/endian.h /usr/include/bits/endian.h
-SpImageSequence.o: /usr/include/sys/select.h /usr/include/bits/select.h
-SpImageSequence.o: /usr/include/bits/sigset.h /usr/include/sys/sysmacros.h
-SpImageSequence.o: /usr/include/alloca.h
-SpImageSequence.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/new.h
-SpImageSequence.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/new
-SpImageSequence.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/exception
-SpImageSequence.o: /usr/include/g++/iostream.h /usr/include/g++/streambuf.h
-SpImageSequence.o: /usr/include/libio.h
-SpImageSequence.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stdarg.h
-SpImageSequence.o: /usr/include/g++/stl_iterator.h
-SpImageSequence.o: /usr/include/g++/stl_alloc.h /usr/include/assert.h
-SpImageSequence.o: /usr/include/pthread.h /usr/include/sched.h
-SpImageSequence.o: /usr/include/bits/sched.h /usr/include/signal.h
-SpImageSequence.o: /usr/include/bits/pthreadtypes.h
-SpImageSequence.o: /usr/include/bits/sigthread.h
-SpImageSequence.o: /usr/include/g++/stl_construct.h
-SpImageSequence.o: /usr/include/g++/stl_uninitialized.h
-SpImageSequence.o: /usr/include/g++/stl_list.h SpFile.h SpPath.h
-SpImageSequence.o: /usr/include/g++/string /usr/include/g++/std/bastring.h
-SpImageSequence.o: /usr/include/g++/cstddef /usr/include/g++/std/straits.h
-SpImageSequence.o: /usr/include/g++/cctype /usr/include/ctype.h
-SpImageSequence.o: /usr/include/g++/cstring /usr/include/g++/alloc.h
-SpImageSequence.o: /usr/include/g++/iterator /usr/include/g++/cassert
-SpImageSequence.o: /usr/include/g++/std/bastring.cc SpTime.h SpSize.h SpUid.h
-SpImageSequence.o: SpGid.h SpFsObject.h /usr/include/sys/stat.h
-SpImageSequence.o: /usr/include/bits/stat.h SpFsObjectHandle.h SpImageDim.h
-SpImageSequence.o: SpImageFormat.h SpLibLoader.h /usr/include/dlfcn.h
-SpImageSequence.o: /usr/include/bits/dlfcn.h
+SpImageSeq.o: /usr/include/stdio.h SpImageSeq.h /usr/include/g++/set
+SpImageSeq.o: /usr/include/g++/stl_set.h /usr/include/g++/stl_multiset.h
+SpImageSeq.o: SpImage.h /usr/include/g++/list /usr/include/g++/stl_algobase.h
+SpImageSeq.o: /usr/include/g++/stl_config.h /usr/include/_G_config.h
+SpImageSeq.o: /usr/include/bits/types.h /usr/include/features.h
+SpImageSeq.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+SpImageSeq.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stddef.h
+SpImageSeq.o: /usr/include/g++/stl_relops.h /usr/include/g++/stl_pair.h
+SpImageSeq.o: /usr/include/g++/type_traits.h /usr/include/string.h
+SpImageSeq.o: /usr/include/limits.h /usr/include/bits/posix1_lim.h
+SpImageSeq.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
+SpImageSeq.o: /usr/include/bits/posix2_lim.h /usr/include/stdlib.h
+SpImageSeq.o: /usr/include/sys/types.h /usr/include/time.h
+SpImageSeq.o: /usr/include/endian.h /usr/include/bits/endian.h
+SpImageSeq.o: /usr/include/sys/select.h /usr/include/bits/select.h
+SpImageSeq.o: /usr/include/bits/sigset.h /usr/include/sys/sysmacros.h
+SpImageSeq.o: /usr/include/alloca.h
+SpImageSeq.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/new.h
+SpImageSeq.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/new
+SpImageSeq.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/exception
+SpImageSeq.o: /usr/include/g++/iostream.h /usr/include/g++/streambuf.h
+SpImageSeq.o: /usr/include/libio.h
+SpImageSeq.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stdarg.h
+SpImageSeq.o: /usr/include/g++/stl_iterator.h /usr/include/g++/stl_alloc.h
+SpImageSeq.o: /usr/include/assert.h /usr/include/pthread.h
+SpImageSeq.o: /usr/include/sched.h /usr/include/bits/sched.h
+SpImageSeq.o: /usr/include/signal.h /usr/include/bits/pthreadtypes.h
+SpImageSeq.o: /usr/include/bits/sigthread.h /usr/include/g++/stl_construct.h
+SpImageSeq.o: /usr/include/g++/stl_uninitialized.h
+SpImageSeq.o: /usr/include/g++/stl_list.h SpFile.h SpPath.h
+SpImageSeq.o: /usr/include/g++/string /usr/include/g++/std/bastring.h
+SpImageSeq.o: /usr/include/g++/cstddef /usr/include/g++/std/straits.h
+SpImageSeq.o: /usr/include/g++/cctype /usr/include/ctype.h
+SpImageSeq.o: /usr/include/g++/cstring /usr/include/g++/alloc.h
+SpImageSeq.o: /usr/include/g++/iterator /usr/include/g++/cassert
+SpImageSeq.o: /usr/include/g++/std/bastring.cc SpTime.h SpSize.h SpUid.h
+SpImageSeq.o: SpGid.h SpFsObject.h /usr/include/sys/stat.h
+SpImageSeq.o: /usr/include/bits/stat.h SpFsObjectHandle.h SpImageDim.h
+SpImageSeq.o: SpImageFormat.h SpLibLoader.h /usr/include/dlfcn.h
+SpImageSeq.o: /usr/include/bits/dlfcn.h
 SpTester.o: /usr/include/g++/string /usr/include/g++/std/bastring.h
 SpTester.o: /usr/include/g++/cstddef
 SpTester.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stddef.h
@@ -345,9 +344,9 @@ SpDirMonFam.o: /usr/include/features.h /usr/include/sys/cdefs.h
 SpDirMonFam.o: /usr/include/gnu/stubs.h /usr/include/bits/posix1_lim.h
 SpDirMonFam.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
 SpDirMonFam.o: /usr/include/bits/posix2_lim.h SpDirMonFam.h SpDirMon.h
-SpDirMonFam.o: SpDir.h /usr/include/g++/vector
-SpDirMonFam.o: /usr/include/g++/stl_algobase.h /usr/include/g++/stl_config.h
-SpDirMonFam.o: /usr/include/_G_config.h /usr/include/bits/types.h
+SpDirMonFam.o: /usr/include/g++/queue /usr/include/g++/stl_algobase.h
+SpDirMonFam.o: /usr/include/g++/stl_config.h /usr/include/_G_config.h
+SpDirMonFam.o: /usr/include/bits/types.h
 SpDirMonFam.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stddef.h
 SpDirMonFam.o: /usr/include/g++/stl_relops.h /usr/include/g++/stl_pair.h
 SpDirMonFam.o: /usr/include/g++/type_traits.h /usr/include/string.h
@@ -369,8 +368,10 @@ SpDirMonFam.o: /usr/include/signal.h /usr/include/bits/pthreadtypes.h
 SpDirMonFam.o: /usr/include/bits/sigthread.h /usr/include/g++/stl_construct.h
 SpDirMonFam.o: /usr/include/g++/stl_uninitialized.h
 SpDirMonFam.o: /usr/include/g++/stl_vector.h /usr/include/g++/stl_bvector.h
-SpDirMonFam.o: /usr/include/g++/map /usr/include/g++/stl_tree.h
-SpDirMonFam.o: /usr/include/g++/stl_function.h /usr/include/g++/stl_map.h
+SpDirMonFam.o: /usr/include/g++/stl_heap.h /usr/include/g++/stl_deque.h
+SpDirMonFam.o: /usr/include/g++/stl_function.h /usr/include/g++/stl_queue.h
+SpDirMonFam.o: SpDir.h /usr/include/g++/vector /usr/include/g++/map
+SpDirMonFam.o: /usr/include/g++/stl_tree.h /usr/include/g++/stl_map.h
 SpDirMonFam.o: /usr/include/g++/stl_multimap.h SpFsObject.h
 SpDirMonFam.o: /usr/include/sys/stat.h /usr/include/bits/stat.h SpTime.h
 SpDirMonFam.o: /usr/include/g++/string /usr/include/g++/std/bastring.h
@@ -593,7 +594,7 @@ testSpDirMon.o: /usr/include/libio.h
 testSpDirMon.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stdarg.h
 testSpDirMon.o: /usr/include/g++/stl_iterator.h /usr/include/g++/cassert
 testSpDirMon.o: /usr/include/assert.h /usr/include/g++/std/bastring.cc
-testSpDirMon.o: SpPath.h SpDirMon.h SpDir.h /usr/include/g++/vector
+testSpDirMon.o: SpPath.h SpDirMon.h /usr/include/g++/queue
 testSpDirMon.o: /usr/include/g++/stl_algobase.h /usr/include/g++/stl_pair.h
 testSpDirMon.o: /usr/include/g++/type_traits.h /usr/include/limits.h
 testSpDirMon.o: /usr/include/bits/posix1_lim.h /usr/include/bits/local_lim.h
@@ -612,8 +613,10 @@ testSpDirMon.o: /usr/include/bits/sigthread.h
 testSpDirMon.o: /usr/include/g++/stl_construct.h
 testSpDirMon.o: /usr/include/g++/stl_uninitialized.h
 testSpDirMon.o: /usr/include/g++/stl_vector.h /usr/include/g++/stl_bvector.h
-testSpDirMon.o: /usr/include/g++/map /usr/include/g++/stl_tree.h
-testSpDirMon.o: /usr/include/g++/stl_function.h /usr/include/g++/stl_map.h
+testSpDirMon.o: /usr/include/g++/stl_heap.h /usr/include/g++/stl_deque.h
+testSpDirMon.o: /usr/include/g++/stl_function.h /usr/include/g++/stl_queue.h
+testSpDirMon.o: SpDir.h /usr/include/g++/vector /usr/include/g++/map
+testSpDirMon.o: /usr/include/g++/stl_tree.h /usr/include/g++/stl_map.h
 testSpDirMon.o: /usr/include/g++/stl_multimap.h SpFsObject.h
 testSpDirMon.o: /usr/include/sys/stat.h /usr/include/bits/stat.h SpTime.h
 testSpDirMon.o: SpUid.h SpGid.h SpSize.h SpFsObjectHandle.h SpImage.h
@@ -724,54 +727,49 @@ testSpImage.o: SpSize.h SpUid.h SpGid.h SpFsObject.h /usr/include/sys/stat.h
 testSpImage.o: /usr/include/bits/stat.h SpFsObjectHandle.h SpImageDim.h
 testSpImage.o: SpImageFormat.h SpLibLoader.h /usr/include/dlfcn.h
 testSpImage.o: /usr/include/bits/dlfcn.h
-testSpImageSequence.o: testSpImageSequence.h SpTester.h
-testSpImageSequence.o: /usr/include/g++/string
-testSpImageSequence.o: /usr/include/g++/std/bastring.h
-testSpImageSequence.o: /usr/include/g++/cstddef
-testSpImageSequence.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stddef.h
-testSpImageSequence.o: /usr/include/g++/std/straits.h /usr/include/g++/cctype
-testSpImageSequence.o: /usr/include/ctype.h /usr/include/features.h
-testSpImageSequence.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
-testSpImageSequence.o: /usr/include/bits/types.h /usr/include/endian.h
-testSpImageSequence.o: /usr/include/bits/endian.h /usr/include/g++/cstring
-testSpImageSequence.o: /usr/include/string.h /usr/include/g++/alloc.h
-testSpImageSequence.o: /usr/include/g++/iterator
-testSpImageSequence.o: /usr/include/g++/stl_config.h /usr/include/_G_config.h
-testSpImageSequence.o: /usr/include/g++/stl_relops.h
-testSpImageSequence.o: /usr/include/g++/iostream.h
-testSpImageSequence.o: /usr/include/g++/streambuf.h /usr/include/libio.h
-testSpImageSequence.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stdarg.h
-testSpImageSequence.o: /usr/include/g++/stl_iterator.h
-testSpImageSequence.o: /usr/include/g++/cassert /usr/include/assert.h
-testSpImageSequence.o: /usr/include/g++/std/bastring.cc SpImageSequence.h
-testSpImageSequence.o: /usr/include/g++/set /usr/include/g++/stl_set.h
-testSpImageSequence.o: /usr/include/g++/stl_multiset.h SpImage.h
-testSpImageSequence.o: /usr/include/g++/list /usr/include/g++/stl_algobase.h
-testSpImageSequence.o: /usr/include/g++/stl_pair.h
-testSpImageSequence.o: /usr/include/g++/type_traits.h /usr/include/limits.h
-testSpImageSequence.o: /usr/include/bits/posix1_lim.h
-testSpImageSequence.o: /usr/include/bits/local_lim.h
-testSpImageSequence.o: /usr/include/linux/limits.h
-testSpImageSequence.o: /usr/include/bits/posix2_lim.h /usr/include/stdlib.h
-testSpImageSequence.o: /usr/include/sys/types.h /usr/include/time.h
-testSpImageSequence.o: /usr/include/sys/select.h /usr/include/bits/select.h
-testSpImageSequence.o: /usr/include/bits/sigset.h
-testSpImageSequence.o: /usr/include/sys/sysmacros.h /usr/include/alloca.h
-testSpImageSequence.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/new.h
-testSpImageSequence.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/new
-testSpImageSequence.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/exception
-testSpImageSequence.o: /usr/include/g++/stl_alloc.h /usr/include/pthread.h
-testSpImageSequence.o: /usr/include/sched.h /usr/include/bits/sched.h
-testSpImageSequence.o: /usr/include/signal.h /usr/include/bits/pthreadtypes.h
-testSpImageSequence.o: /usr/include/bits/sigthread.h
-testSpImageSequence.o: /usr/include/g++/stl_construct.h
-testSpImageSequence.o: /usr/include/g++/stl_uninitialized.h
-testSpImageSequence.o: /usr/include/g++/stl_list.h SpFile.h SpPath.h SpTime.h
-testSpImageSequence.o: SpSize.h SpUid.h SpGid.h SpFsObject.h
-testSpImageSequence.o: /usr/include/sys/stat.h /usr/include/bits/stat.h
-testSpImageSequence.o: SpFsObjectHandle.h SpImageDim.h SpImageFormat.h
-testSpImageSequence.o: SpLibLoader.h /usr/include/dlfcn.h
-testSpImageSequence.o: /usr/include/bits/dlfcn.h
+testSpImageSeq.o: testSpImageSeq.h SpTester.h /usr/include/g++/string
+testSpImageSeq.o: /usr/include/g++/std/bastring.h /usr/include/g++/cstddef
+testSpImageSeq.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stddef.h
+testSpImageSeq.o: /usr/include/g++/std/straits.h /usr/include/g++/cctype
+testSpImageSeq.o: /usr/include/ctype.h /usr/include/features.h
+testSpImageSeq.o: /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h
+testSpImageSeq.o: /usr/include/bits/types.h /usr/include/endian.h
+testSpImageSeq.o: /usr/include/bits/endian.h /usr/include/g++/cstring
+testSpImageSeq.o: /usr/include/string.h /usr/include/g++/alloc.h
+testSpImageSeq.o: /usr/include/g++/iterator /usr/include/g++/stl_config.h
+testSpImageSeq.o: /usr/include/_G_config.h /usr/include/g++/stl_relops.h
+testSpImageSeq.o: /usr/include/g++/iostream.h /usr/include/g++/streambuf.h
+testSpImageSeq.o: /usr/include/libio.h
+testSpImageSeq.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stdarg.h
+testSpImageSeq.o: /usr/include/g++/stl_iterator.h /usr/include/g++/cassert
+testSpImageSeq.o: /usr/include/assert.h /usr/include/g++/std/bastring.cc
+testSpImageSeq.o: SpImageSeq.h /usr/include/g++/set
+testSpImageSeq.o: /usr/include/g++/stl_set.h /usr/include/g++/stl_multiset.h
+testSpImageSeq.o: SpImage.h /usr/include/g++/list
+testSpImageSeq.o: /usr/include/g++/stl_algobase.h /usr/include/g++/stl_pair.h
+testSpImageSeq.o: /usr/include/g++/type_traits.h /usr/include/limits.h
+testSpImageSeq.o: /usr/include/bits/posix1_lim.h
+testSpImageSeq.o: /usr/include/bits/local_lim.h /usr/include/linux/limits.h
+testSpImageSeq.o: /usr/include/bits/posix2_lim.h /usr/include/stdlib.h
+testSpImageSeq.o: /usr/include/sys/types.h /usr/include/time.h
+testSpImageSeq.o: /usr/include/sys/select.h /usr/include/bits/select.h
+testSpImageSeq.o: /usr/include/bits/sigset.h /usr/include/sys/sysmacros.h
+testSpImageSeq.o: /usr/include/alloca.h
+testSpImageSeq.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/new.h
+testSpImageSeq.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/new
+testSpImageSeq.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/exception
+testSpImageSeq.o: /usr/include/g++/stl_alloc.h /usr/include/pthread.h
+testSpImageSeq.o: /usr/include/sched.h /usr/include/bits/sched.h
+testSpImageSeq.o: /usr/include/signal.h /usr/include/bits/pthreadtypes.h
+testSpImageSeq.o: /usr/include/bits/sigthread.h
+testSpImageSeq.o: /usr/include/g++/stl_construct.h
+testSpImageSeq.o: /usr/include/g++/stl_uninitialized.h
+testSpImageSeq.o: /usr/include/g++/stl_list.h SpFile.h SpPath.h SpTime.h
+testSpImageSeq.o: SpSize.h SpUid.h SpGid.h SpFsObject.h
+testSpImageSeq.o: /usr/include/sys/stat.h /usr/include/bits/stat.h
+testSpImageSeq.o: SpFsObjectHandle.h SpImageDim.h SpImageFormat.h
+testSpImageSeq.o: SpLibLoader.h /usr/include/dlfcn.h
+testSpImageSeq.o: /usr/include/bits/dlfcn.h
 testSpPath.o: testSpPath.h SpTester.h /usr/include/g++/string
 testSpPath.o: /usr/include/g++/std/bastring.h /usr/include/g++/cstddef
 testSpPath.o: /usr/lib/gcc-lib/i386-linux/egcs-2.91.66/include/stddef.h

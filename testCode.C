@@ -33,7 +33,7 @@
 #include "SpDir.h"
 #include "SpTester.h"
 #include "SpDirMon.h"
-#include "SpImageSequence.h"
+#include "SpImageSeq.h"
 
 #include "testSpSize.h"
 #include "testSpTime.h"
@@ -42,7 +42,7 @@
 #include "testSpImage.h"
 #include "testSpFsObject.h"
 #include "testSpPath.h"
-#include "testSpImageSequence.h"
+#include "testSpImageSeq.h"
 #include "testSpDirMon.h"
 #include "testSpFsObjectHandle.h"
 
@@ -64,9 +64,9 @@ main()
 	testSpImage();
 	testSpFsObject();
 	testSpPath();
-	testSpImageSequence();
+	testSpImageSeq();
 	testSpFsObjectHandle();
-	testSpDirMonitor();
+	testSpDirMon();
 	
 	SpTester::finish();
 	SpImageFormat::deRegisterPlugins();

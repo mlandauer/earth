@@ -29,10 +29,10 @@
 #include "SpPath.h"
 #include "SpDirMon.h"
 
-class testSpDirMonitor : public SpTester
+class testSpDirMon : public SpTester
 {
 public:
-	testSpDirMonitor();
+	testSpDirMon();
 	void checkNextEvent(string testName, SpDirMon *m, int code, const SpPath &p);	
 	void test();
 };

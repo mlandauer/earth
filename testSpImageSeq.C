@@ -22,15 +22,15 @@
 //
 // $Id$
 
-#include "testSpImageSequence.h"
+#include "testSpImageSeq.h"
 #include "SpPath.h"
 
-testSpImageSequence::testSpImageSequence() : SpTester("SpImageSequence")
+testSpImageSeq::testSpImageSeq() : SpTester("SpImageSeq")
 {
 	test();
 };
 
-void testSpImageSequence::test()
+void testSpImageSeq::test()
 {
 	system ("rm -rf test/seq");
 	SpPath path1a("test/seq/test1.0001.gif");
@@ -60,7 +60,7 @@ void testSpImageSequence::test()
 	SpImage *i8 = SpImage::construct(path5a);
 		
 	if (checkNotNULL("test 1a", i1)) {
-		SpImageSequence seq(i1);
+		SpImageSeq seq(i1);
 		checkSequence("test 1", seq, "test/seq/test1.#.gif", "1", 2, 2, "GIF");
 		if (checkNotNULL("test 2a", i2)) {
 			seq.addImage(i2);
@@ -96,16 +96,16 @@ void testSpImageSequence::test()
 	}
 		
 	if (checkNotNULL("test 5a", i5)) {
-		SpImageSequence seq2(i5);
+		SpImageSeq seq2(i5);
 		checkSequence("test 5", seq2, "test/seq/test2.@.gif", "8", 2, 2, "GIF");
 	}
 	if (checkNotNULL("test 6a", i6)) {
-		SpImageSequence seq3(i6);
+		SpImageSeq seq3(i6);
 		checkSequence("test 6", seq3, "test/seq/test2.@@@@@@.gif", "123", 2, 2, "GIF");
 	}
 		
 	if (checkNotNULL("test 7a", i7)) {
-		SpImageSequence seq4(i7);
+		SpImageSeq seq4(i7);
 		checkSequence("test 7", seq4, "test/seq/@@@.gif", "120", 2, 2, "GIF");
 		if (checkNotNULL("test 8a", i5)) {
 			// Adding in an image with a different name should not work
@@ -120,7 +120,7 @@ void testSpImageSequence::test()
 	}
 		
 	if (checkNotNULL("test 10a", i8)) {
-		SpImageSequence seq5(i8);
+		SpImageSeq seq5(i8);
 		checkSequence("test 10", seq5, "test/seq/@@@.gif", "110", 4, 4, "TIFF");
 	}
 			
@@ -128,7 +128,7 @@ void testSpImageSequence::test()
 	delete i1, i2, i3, i4, i5, i6, i7, i8;
 }
 
-void testSpImageSequence::checkSequence(string testName, const SpImageSequence &seq,
+void testSpImageSeq::checkSequence(string testName, const SpImageSeq &seq,
 	string name, string frames, int width, int height, string format)
 {
 	checkEqual(testName + "b", seq.path().fullName(), name);
@@ -138,12 +138,12 @@ void testSpImageSequence::checkSequence(string testName, const SpImageSequence &
 	checkEqual(testName + "f", seq.format()->formatString(), format);		
 }
 
-void testSpImageSequence::copyFile(const SpPath &path1, const SpPath &path2)
+void testSpImageSeq::copyFile(const SpPath &path1, const SpPath &path2)
 {
 	string command = "cp " + path1.fullName() + " " + path2.fullName();
 	system (command.c_str());
 }
-void testSpImageSequence::makeDirectory(const SpPath &path)
+void testSpImageSeq::makeDirectory(const SpPath &path)
 {
 	string command = "mkdir " + path.fullName();
 	system (command.c_str());

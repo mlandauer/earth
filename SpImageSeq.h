@@ -22,16 +22,16 @@
 //
 // $Id$
 
-#ifndef _spimagesequence_h_
-#define _spimagesequence_h_
+#ifndef _spimageseq_h_
+#define _spimageseq_h_
 
 #include <set>
 #include "SpImage.h"
 
-class SpImageSequence
+class SpImageSeq
 {
 	public:
-		SpImageSequence(SpImage *i);
+		SpImageSeq(SpImage *i);
 		void addImage(SpImage *i);
 		void removeImage(SpImage *i);
 		void removeImage(const SpPath &p);
