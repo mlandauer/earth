@@ -22,14 +22,14 @@
 //
 // $Id$
 
-#ifndef _FILEOBSERVER_H_
-#define _FILEOBSERVER_H_
+#ifndef _FileEventObserver_H_
+#define _FileEventObserver_H_
 
 #include "File.h"
 
 namespace Sp {
 	
-class FileObserver
+class FileEventObserver
 {
 public:
 	virtual void fileAdded(const File &file) = 0;

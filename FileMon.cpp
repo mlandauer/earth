@@ -64,7 +64,7 @@ void FileMon::stopMonitorDirectory(const Dir &d)
 	}
 }
 
-void FileMon::registerObserver(FileObserver *o)
+void FileMon::registerObserver(FileEventObserver *o)
 {
 	observer = o;
 }

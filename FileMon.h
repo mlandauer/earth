@@ -28,7 +28,7 @@
 #include <queue>
 #include "Dir.h"
 #include "File.h"
-#include "FileObserver.h"
+#include "FileEventObserver.h"
 
 namespace Sp {
 	
@@ -71,7 +71,7 @@ class FileMon
 		void startMonitorDirectory(const Dir &d);
 		void stopMonitorDirectory(const Dir &d);
 		
-		void registerObserver(FileObserver *o);
+		void registerObserver(FileEventObserver *o);
 		
 		void update();
 		
@@ -79,7 +79,7 @@ class FileMon
 		void notifyDeleted(const File &o);
 		void notifyAdded(const File &o);
 		std::list<CachedDir> dirs;
-		FileObserver *observer;
+		FileEventObserver *observer;
 };
 
 }

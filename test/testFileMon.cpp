@@ -28,11 +28,11 @@
 #include <algorithm>
 #include "FileMon.h"
 #include "Path.h"
-#include "FileObserver.h"
+#include "FileEventObserver.h"
 
 using namespace Sp;
 
-class testFileMon : public CppUnit::TestFixture, public FileObserver
+class testFileMon : public CppUnit::TestFixture, public FileEventObserver
 {
 public:
 	CPPUNIT_TEST_SUITE(testFileMon);
