@@ -20,10 +20,6 @@ class SpImage : public SpFile
 		virtual bool recognise(unsigned char *buf) = 0;
 		virtual int sizeToRecognise() = 0;
 		virtual SpImage* clone() = 0;
-	protected:
-		unsigned char  readChar() const;
-		unsigned short readShort(const int &endian) const;
-		unsigned long  readLong(const int &endian) const;
 	private:
 		static list<SpImage *> plugins;
 };

@@ -21,6 +21,9 @@ class SpFile : public SpFsObject
 		void open();
 		void close();
 		unsigned long int read(void *buf, unsigned long int count) const;
+		unsigned char  readChar() const;
+		unsigned short readShort(const int &endian) const;
+		unsigned long  readLong(const int &endian) const;
 		void seek(unsigned long int pos) const;
 		void seekForward(unsigned long int pos) const;
 	private:
