@@ -23,7 +23,17 @@
 // $Id$
 
 #include <cppunit/extensions/HelperMacros.h>
-#include "testDateTime.h"
+
+class testDateTime : public CppUnit::TestFixture
+{
+public:
+	CPPUNIT_TEST_SUITE(testDateTime);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
+	void test();
+};
+
 CPPUNIT_TEST_SUITE_REGISTRATION(testDateTime);
 
 #include "DateTime.h"

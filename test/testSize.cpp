@@ -23,7 +23,17 @@
 // $Id$
 
 #include <cppunit/extensions/HelperMacros.h>
-#include "testSize.h"
+
+class testSize : public CppUnit::TestFixture
+{
+public:
+	CPPUNIT_TEST_SUITE(testSize);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
+	void test();
+};
+
 CPPUNIT_TEST_SUITE_REGISTRATION(testSize);
 
 #include "Size.h"

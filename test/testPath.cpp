@@ -23,7 +23,17 @@
 // $Id$
 
 #include <cppunit/extensions/HelperMacros.h>
-#include "testPath.h"
+
+class testPath : public CppUnit::TestFixture
+{
+public:
+	CPPUNIT_TEST_SUITE(testPath);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
+	void test();
+};
+
 CPPUNIT_TEST_SUITE_REGISTRATION(testPath);
 
 #include "Path.h"

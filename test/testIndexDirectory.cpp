@@ -23,7 +23,26 @@
 // $Id$
 
 #include <cppunit/extensions/HelperMacros.h>
-#include "testIndexDirectory.h"
+
+#include <string>
+#include "ImageSeq.h"
+
+using namespace Sp;
+
+class testIndexDirectory : public CppUnit::TestFixture
+{
+public:
+	CPPUNIT_TEST_SUITE(testIndexDirectory);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
+	void test();
+	
+private:
+	void checkSequence(const ImageSeq &sequence, const std::string &format, int width, int height,
+		const std::string &path, const std::string &frames);
+};
+
 CPPUNIT_TEST_SUITE_REGISTRATION(testIndexDirectory);
 
 #include "Path.h"

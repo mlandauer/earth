@@ -23,7 +23,17 @@
 // $Id$
 
 #include <cppunit/extensions/HelperMacros.h>
-#include "testImage.h"
+
+class testImage : public CppUnit::TestFixture
+{
+public:
+	CPPUNIT_TEST_SUITE(testImage);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
+	void test();
+};
+
 CPPUNIT_TEST_SUITE_REGISTRATION(testImage);
 
 #include "Image.h"

@@ -23,7 +23,17 @@
 // $Id$
 
 #include <cppunit/extensions/HelperMacros.h>
-#include "testDir.h"
+
+class testDir : public CppUnit::TestFixture
+{
+public:
+	CPPUNIT_TEST_SUITE(testDir);
+	CPPUNIT_TEST(test);
+	CPPUNIT_TEST_SUITE_END();
+	
+	void test();
+};
+
 CPPUNIT_TEST_SUITE_REGISTRATION(testDir);
 
 #include "Dir.h"
