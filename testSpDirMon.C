@@ -29,33 +29,26 @@ testSpDirMonitor::testSpDirMonitor() : SpTester("SpDirMonitor")
 	test();
 };
 
-void testSpDirMonitor::checkNextEvent(string testName, SpDirMon *m, const SpDirMonEvent &event)
+void testSpDirMonitor::checkNextEvent(string testName, SpDirMon *m, int code, const SpPath &p)
 {
 	m->update();
-	check(testName + "a", event == nextEvent);
-}
-
-SpDirMonEvent::SpType testSpDirMonitor::type(SpFsObjectHandle o)
-{
-	if (dynamic_cast<SpDir *>(o.pointer()))
-		return SpDirMonEvent::dir;
-	else
-		return SpDirMonEvent::file;
+	checkEqual(testName + "a", nextEvent.getCode(), code);
+	checkEqual(testName + "b", nextEvent.getFsObjectHandle()->path().fullName(), p.fullName());
 }
 
 void testSpDirMonitor::notifyChanged(SpFsObjectHandle o)
 {
-	nextEvent = SpDirMonEvent(SpDirMonEvent::changed, type(o), o->path());
+	nextEvent = SpDirMonEvent(SpDirMonEvent::changed, o);
 }
 
 void testSpDirMonitor::notifyDeleted(SpFsObjectHandle o)
 {
-	nextEvent = SpDirMonEvent(SpDirMonEvent::deleted, type(o), o->path());
+	nextEvent = SpDirMonEvent(SpDirMonEvent::deleted, o);
 }
 
 void testSpDirMonitor::notifyAdded(SpFsObjectHandle o)
 {
-	nextEvent = SpDirMonEvent(SpDirMonEvent::added, type(o), o->path());
+	nextEvent = SpDirMonEvent(SpDirMonEvent::added, o);
 }
 	
 void testSpDirMonitor::test()
@@ -71,25 +64,25 @@ void testSpDirMonitor::test()
 	SpDirMon *m = SpDirMon::construct(SpDir("test/FsMonitor"), this);
 	m->setMaxEvents(1);
 	if (checkNotNULL("test 0", m)) {
-		checkNextEvent("test 1", m, SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::file, "test/FsMonitor/test.0001.gif"));
-		checkNextEvent("test 2", m, SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::file, "test/FsMonitor/test.0002.gif"));
-		checkNextEvent("test 3", m, SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::file, "test/FsMonitor/test.0003.gif"));
-		checkNextEvent("test 4", m, SpDirMonEvent(SpDirMonEvent::added, SpDirMonEvent::file, "test/FsMonitor/test.0004.gif"));
+		checkNextEvent("test 1", m, SpDirMonEvent::added, "test/FsMonitor/test.0001.gif");
+		checkNextEvent("test 2", m, SpDirMonEvent::added, "test/FsMonitor/test.0002.gif");
+		checkNextEvent("test 3", m, SpDirMonEvent::added, "test/FsMonitor/test.0003.gif");
+		checkNextEvent("test 4", m, SpDirMonEvent::added, "test/FsMonitor/test.0004.gif");
 		
 		system ("rm test/FsMonitor/test.0001.gif");
 		system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0005.gif");
 		system ("mkdir test/FsMonitor/subdirectory");
 		SpTime::sleep(6);
-		checkNextEvent("test 6", m, SpDirMonEvent(SpDirMonEvent::added,   SpDirMonEvent::file, "test/FsMonitor/test.0005.gif"));
-		checkNextEvent("test 7", m, SpDirMonEvent(SpDirMonEvent::added,   SpDirMonEvent::dir,  "test/FsMonitor/subdirectory"));
-		checkNextEvent("test 8", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, "test/FsMonitor/test.0001.gif"));
+		checkNextEvent("test 6", m, SpDirMonEvent::added,   "test/FsMonitor/test.0005.gif");
+		checkNextEvent("test 7", m, SpDirMonEvent::added,   "test/FsMonitor/subdirectory");
+		checkNextEvent("test 8", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0001.gif");
 		system ("rm -fr test/FsMonitor");
 		SpTime::sleep(6);
-		checkNextEvent("test 10", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, "test/FsMonitor/test.0005.gif"));
-		checkNextEvent("test 11", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, "test/FsMonitor/test.0002.gif"));
-		checkNextEvent("test 12", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, "test/FsMonitor/test.0003.gif"));
-		checkNextEvent("test 13", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::file, "test/FsMonitor/test.0004.gif"));
-		checkNextEvent("test 14", m, SpDirMonEvent(SpDirMonEvent::deleted, SpDirMonEvent::dir,  "test/FsMonitor/subdirectory"));
+		checkNextEvent("test 10", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0005.gif");
+		checkNextEvent("test 11", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0002.gif");
+		checkNextEvent("test 12", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0003.gif");
+		checkNextEvent("test 13", m, SpDirMonEvent::deleted, "test/FsMonitor/test.0004.gif");
+		checkNextEvent("test 14", m, SpDirMonEvent::deleted, "test/FsMonitor/subdirectory");
 		delete m;
 	}
 }

@@ -33,19 +33,13 @@ class SpDirMonEvent
 {
 	public:
 		enum SpCode {null, changed, deleted, added};
-		enum SpType {file, dir};
-		SpDirMonEvent(SpCode c = null, SpType t = file, const SpPath &p = "") : code(c), type(t), path(p) { }
+		SpDirMonEvent(SpCode c = null, SpFsObjectHandle h = SpFsObjectHandle(NULL)) : code(c), o(h) { }
 		~SpDirMonEvent() { }
-		SpCode getCode() const { return code; }
-		SpType getType() const { return type; }
-		SpPath getPath() const { return path; }
-		bool operator==(const SpDirMonEvent &e) const {
-			return ((code == e.code) && (type == e.type) && (path == e.path));
-		}
+		SpCode getCode() { return code; }
+		SpFsObjectHandle getFsObjectHandle() { return o; }
 	private:
 		SpCode code;
-		SpType type;
-		SpPath path;
+		SpFsObjectHandle o;
 };
 
 class testSpDirMonitor : public SpTester, public SpDirMonObserver
@@ -54,9 +48,7 @@ private:
 	SpDirMonEvent nextEvent;
 public:
 	testSpDirMonitor();
-	void checkNextEvent(string testName, SpDirMon *m, const SpDirMonEvent &event);
-	SpDirMonEvent::SpType type(SpFsObjectHandle o);
-
+	void checkNextEvent(string testName, SpDirMon *m, int code, const SpPath &p);
 	void notifyChanged(SpFsObjectHandle o);
 	void notifyDeleted(SpFsObjectHandle o);
 	void notifyAdded(SpFsObjectHandle o);
