@@ -21,30 +21,42 @@
 //  Temple Place - Suite 330, Boston MA 02111-1307, USA.
 //
 // $Id$
+//
 
-#ifndef _CACHEDDIR_H_
-#define _CACHEDDIR_H_
+#ifndef _SP_CACHED_FS_OBJECT_H_
+#define _SP_CACHED_FS_OBJECT_H_
 
-#include "Dir.h"
-#include "File.h"
-#include "CachedFsObject.h"
+#include "DateTime.h"
+#include "User.h"
+#include "UserGroup.h"
+#include "Path.h"
 
 namespace Sp {
-	
-class CachedDir : public CachedFsObject
+
+class CachedFsObject
 {
 public:
-	CachedDir(const Path &p);
-	
-	//! Returns all the files in this directory
-	std::vector<File> listFiles(bool sortByPath = false) const;
-	//! Returns all the directories immediately under this directory
-	std::vector<Dir> listDirs(bool sortByPath = false) const;
-	
+	CachedFsObject(const Path &p) : path(p) {
+		FsObject o(path);
+		lastAccess = o.getLastAccess();
+		lastModification = o.getLastModification();
+		lastChange = o.getLastChange();
+		user = o.getUser();
+		userGroup = o.getUserGroup();
+	};
+
+	DateTime getLastAccess() const { return lastAccess; }
+	DateTime getLastModification() const { return lastModification; }
+	DateTime getLastChange() const { return lastChange; }
+	User getUser() const { return user; }
+	UserGroup getUserGroup() const { return userGroup; }
+	Path getPath() const { return path; }
+
 private:
-	mutable std::vector<File> files;
-	mutable std::vector<Dir> dirs;
-	mutable bool filesSorted, dirsSorted;
+	DateTime lastAccess, lastModification, lastChange;
+	User user;
+	UserGroup userGroup;
+	Path path;
 };
 
 }

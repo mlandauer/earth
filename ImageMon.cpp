@@ -33,7 +33,7 @@ ImageMon::ImageMon() : observer(NULL)
 
 void ImageMon::startMonitorDirectory(const Dir &d)
 {
-	CachedDir c(d);
+	CachedDir c(d.getPath());
 	dirs.push_back(c);
 	std::vector<File> files = c.listFiles(true);
 	// Tell the world about the files we've found
@@ -49,7 +49,7 @@ void ImageMon::stopMonitorDirectory(const Dir &d)
 {
 	// Find the directory
 	for (std::list<CachedDir>::iterator i = dirs.begin(); i != dirs.end(); ++i) {
-		if (i->getDir() == d) {
+		if (i->getPath() == d.getPath()) {
 			std::vector<File> deletedFiles = i->listFiles(true);
 			// Tell the world about the files that have been deleted
 			for (std::vector<File>::iterator j = deletedFiles.begin(); j != deletedFiles.end(); ++j)
@@ -74,9 +74,9 @@ void ImageMon::update()
 	// Go through the cached directories and check if any of them have been updated
 	for (std::list<CachedDir>::iterator i = dirs.begin(); i != dirs.end(); ++i ) {
 		DateTime cachedTime = i->getLastChange();
-		DateTime currentTime = i->getDir().getLastChange();
+		DateTime currentTime = Dir(i->getPath()).getLastChange();
 		if (currentTime > cachedTime) {
-			CachedDir currentDir(i->getDir());
+			CachedDir currentDir(i->getPath());
 			
 			// Directory has changed
 			// Must have a sorted list for set_difference

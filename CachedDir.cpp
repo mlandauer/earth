@@ -27,13 +27,13 @@
 
 namespace Sp {
 	
-CachedDir::CachedDir(const Dir &d) : dir(d), filesSorted(false), dirsSorted(false)
+CachedDir::CachedDir(const Path &path) : CachedFsObject(path),
+	filesSorted(false), dirsSorted(false)
 {
-	// Really the following should be an automatic operation
-	// By default making the lists sorted
+	Dir dir(path);
+	// Really the following should be an atomic operation
 	files = dir.listFiles(false);
 	dirs = dir.listDirs(false);
-	change = dir.getLastChange();
 }
 
 std::vector<File> CachedDir::listFiles(bool sortByPath) const
@@ -52,16 +52,6 @@ std::vector<Dir> CachedDir::listDirs(bool sortByPath) const
 		dirsSorted = true;
 	}
 	return dirs;
-}
-
-DateTime CachedDir::getLastChange() const
-{
-	return change;
-}
-
-Dir CachedDir::getDir() const
-{
-	return dir;
 }
 
 }
