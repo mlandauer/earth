@@ -43,6 +43,12 @@ void ImageSeqMon::imageAdded(const CachedImage &image)
 
 void ImageSeqMon::fileDeleted(const File &file)
 {
+	// Try deleting this file from all the currently known sequences
+	for (std::vector<ImageSeq>::iterator i = sequences.begin(); i != sequences.end(); ++i) {
+		if (i->removeImage(file.getPath())) {
+			break;
+		}
+	}
 }
 
 std::vector<ImageSeq> ImageSeqMon::getImageSequences() const

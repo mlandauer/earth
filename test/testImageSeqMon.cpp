@@ -98,5 +98,17 @@ void testImageSeqMon::test()
 	CPPUNIT_ASSERT(sequences.size() == 2);
 	checkSequence(sequences[0], "Cineon", 1024, 768, "/foo/bar/image.#.cin", "1-2");
 	checkSequence(sequences[1], "Cineon", 512, 512, "/foo/bar/image.#.cin", "3");
+	
+	m.fileDeleted(File("/foo/bar/image.0001.cin"));
+	sequences = m.getImageSequences();
+	CPPUNIT_ASSERT(sequences.size() == 2);
+	checkSequence(sequences[0], "Cineon", 1024, 768, "/foo/bar/image.#.cin", "2");
+	checkSequence(sequences[1], "Cineon", 512, 512, "/foo/bar/image.#.cin", "3");
+	
+	m.fileDeleted(File("/foo/bar/nonexistantfile.cin"));
+	sequences = m.getImageSequences();
+	CPPUNIT_ASSERT(sequences.size() == 2);
+	checkSequence(sequences[0], "Cineon", 1024, 768, "/foo/bar/image.#.cin", "2");
+	checkSequence(sequences[1], "Cineon", 512, 512, "/foo/bar/image.#.cin", "3");
 }
 
