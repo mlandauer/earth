@@ -25,8 +25,8 @@
 #ifndef _imageseq_h_
 #define _imageseq_h_
 
-#include <set>
 #include "Image.h"
+#include "Frames.h"
 
 namespace Sp {
 
@@ -65,13 +65,6 @@ class ImageSeq
     */
 		Path path() const;
     
-    //! Returns a concise string containing the range of frames in this sequence
-    /*!
-      For example, a continuous frame range is written as "1-245" and a discontinuous
-      range is written as "1-145,147-240,242,245"
-    */
-		std::string framesString() const;
-    
     //! Returns the size of the images in the sequence
     /*!
       For images to be part of the same sequence they all have to have the same dimensions.
@@ -83,8 +76,16 @@ class ImageSeq
       For images to be part of the same sequence they all have to have the same image format.
     */
 		ImageFormat* format() const { return imageFormat; };
+		
+		//! Returns a concise string containing the range of frames in this sequence
+		/*!
+			For example, a continuous frame range is written as "1-245" and a discontinuous
+			range is written as "1-145,147-240,242,245"
+		*/
+		std::string framesString() const;
+		
 	private:
-		std::set<int> f;
+		Frames frames;
 		Path p;
 		Path pattern(const Path &a) const;
 		int frameNumber(const Path &a) const;

@@ -30,7 +30,7 @@ namespace Sp {
 ImageSeq::ImageSeq(Image *i)
 {
 	p = pattern(i->path());
-	f.insert(frameNumber(i->path()));
+	frames.add(frameNumber(i->path()));
 	imageFormat = i->getFormat();
 	dimensions = i->dim();
 }
@@ -38,7 +38,7 @@ ImageSeq::ImageSeq(Image *i)
 bool ImageSeq::addImage(Image *i)
 {
 	if (couldBePartOfSequence(i)) {
-		f.insert(frameNumber(i->path()));
+		frames.add(frameNumber(i->path()));
     return true;
   }
   else {
@@ -49,8 +49,7 @@ bool ImageSeq::addImage(Image *i)
 bool ImageSeq::removeImage(Image *i)
 {
 	if (partOfSequence(i)) {
-		f.erase(frameNumber(i->path()));
-    return true;
+		return frames.remove(frameNumber(i->path()));
   }
   else {
     return false;
@@ -60,8 +59,7 @@ bool ImageSeq::removeImage(Image *i)
 bool ImageSeq::removeImage(const Path &p)
 {
 	if (partOfSequence(p)) {
-		f.erase(frameNumber(p));
-    return true;
+		return frames.remove(frameNumber(p));
   }
   else {
     return false;
@@ -71,8 +69,7 @@ bool ImageSeq::removeImage(const Path &p)
 bool ImageSeq::partOfSequence(Image *i) const
 {
 	if (couldBePartOfSequence(i)) {
-    int no = frameNumber(i->path());
-    return (f.find(no) != f.end());
+		return (frames.partOfSequence(frameNumber(i->path())));
   }
   else {
 		return false;
@@ -82,8 +79,7 @@ bool ImageSeq::partOfSequence(Image *i) const
 bool ImageSeq::partOfSequence(const Path &path) const
 {
 	if (couldBePartOfSequence(path)) {
-    int no = frameNumber(path);
-    return (f.find(no) != f.end());
+		return (frames.partOfSequence(frameNumber(path)));
   }
   else
 		return false;
@@ -104,29 +100,7 @@ bool ImageSeq::couldBePartOfSequence(Image *i) const
 
 std::string ImageSeq::framesString() const
 {
-	std::string r;
-	char buf[100];
-	int count = 0;
-	std::set<int>::iterator a = f.begin();
-	while (a != f.end()) {
-		int start = *a;
-		int current = *a;
-		a++;
-		while ((a != f.end()) && (*a == current + 1)) {
-			current = *a;
-			a++;
-		}
-		int end = current;
-		if (start == end)
-			sprintf(buf, "%i", start);
-		else
-			sprintf(buf, "%i-%i", start, end);
-		if (count > 0)
-			r += ",";
-		r += std::string(buf);
-		count++;
-	}
-	return r;
+	return frames.text();
 }
 
 Path ImageSeq::path() const

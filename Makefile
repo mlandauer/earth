@@ -4,21 +4,19 @@ CC = g++
 OPTION = -g
 INCLUDE = 
 
-SRCS = Dir.cpp FsObject.cpp ImageFormat.cpp Size.cpp testCode.cpp \
-       UserGroup.cpp ImageSeq.cpp Tester.cpp \
-       Image.cpp LibLoader.cpp DateTime.cpp \
-       File.cpp ImageDim.cpp Path.cpp User.cpp
+SRCS = testCode.cpp \
+       Dir.cpp FsObject.cpp ImageFormat.cpp Size.cpp UserGroup.cpp \
+			 ImageSeq.cpp Tester.cpp  Image.cpp LibLoader.cpp DateTime.cpp \
+			 File.cpp ImageDim.cpp Path.cpp User.cpp Frames.cpp
 
-OBJECTS = Size.o File.o Path.o DateTime.o Tester.o LibLoader.o \
-          User.o UserGroup.o Image.o ImageFormat.o ImageDim.o \
-          FsObject.o Dir.o \
-		  ImageSeq.o \
+OBJECTS = Dir.o FsObject.o ImageFormat.o Size.o UserGroup.o \
+          ImageSeq.o Tester.o Image.o LibLoader.o DateTime.o \
+					File.o ImageDim.o Path.o User.o Frames.o		 
 
 all: $(OBJECTS)
 	cd imageFormats; make all
 	cd test; make all
 	LD_LIBRARY_PATH=/usr/local/lib:imageFormats ./test/testCode
-	
 	
 clean:
 	cd imageFormats; make clean
