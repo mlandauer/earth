@@ -156,22 +156,20 @@ void testSpFsObject()
 	SpFsObject file("test/templateImages/8x8.tiff");
 	SpTester::checkEqual("SpFsObject test 1", file.path().fullName(),
 		"test/templateImages/8x8.tiff");
-	SpTester::checkEqual("SpFsObject test 2", file.size().kbytes(), 0.39);
 	SpUid u;
 	u.setCurrent();
 	SpGid g;
 	g.setCurrent();
-	SpTester::checkEqual("SpFsObject test 3", file.uid().name(), u.name());
-	SpTester::checkEqual("SpFsObject test 4", file.gid().name(), g.name());
-	SpTester::checkEqual("SpFsObject test 5", file.isFile(), true);
-	SpTester::checkEqual("SpFsObject test 6", file.isDir(), false);
+	SpTester::checkEqual("SpFsObject test 2", file.uid().name(), u.name());
+	SpTester::checkEqual("SpFsObject test 3", file.gid().name(), g.name());
+	SpTester::checkEqual("SpFsObject test 4", file.isFile(), true);
+	SpTester::checkEqual("SpFsObject test 5", file.isDir(), false);
 	SpFsObject file2("test/templateImages/");
-	SpTester::checkEqual("SpFsObject test 7", file2.path().fullName(),
+	SpTester::checkEqual("SpFsObject test 6", file2.path().fullName(),
 		"test/templateImages");
-	SpTester::checkEqual("SpFsObject test 8", file2.size().kbytes(), 1.0);
 	// Find some way to test access, modification and change times
-	SpTester::checkEqual("SpFsObject test 9", file2.isFile(), false);
-	SpTester::checkEqual("SpFsObject test 10", file2.isDir(), true);
+	SpTester::checkEqual("SpFsObject test 7", file2.isFile(), false);
+	SpTester::checkEqual("SpFsObject test 8", file2.isDir(), true);
 }
 
 void testSpDir()
@@ -180,17 +178,16 @@ void testSpDir()
 	SpDir dir("test/templateImages/");
 	SpTester::checkEqual("SpDir test 1", dir.path().fullName(),
 		"test/templateImages");
-	SpTester::checkEqual("SpDir test 2", dir.size().kbytes(), 1.0);
 	// Think of some way to test the modification dates automatically
 	// Check that this user owns the files
 	SpUid u;
 	u.setCurrent();
-	SpTester::checkEqual("SpDir test 6", dir.uid().name(), u.name());
+	SpTester::checkEqual("SpDir test 2", dir.uid().name(), u.name());
 	SpGid g;
 	g.setCurrent();
-	SpTester::checkEqual("SpDir test 7", dir.gid().name(), g.name());
-	SpTester::checkEqual("SpDir test 8", dir.isFile(), false);
-	SpTester::checkEqual("SpDir test 9", dir.isDir(), true);
+	SpTester::checkEqual("SpDir test 3", dir.gid().name(), g.name());
+	SpTester::checkEqual("SpDir test 4", dir.isFile(), false);
+	SpTester::checkEqual("SpDir test 5", dir.isDir(), true);
 	list<SpFsObject *> ls = dir.ls();
 	// Create a vector of just the filenames
 	vector<string> names;

@@ -26,7 +26,6 @@ class SpFsObject
 		SpPath path() const;
 		SpUid uid() const;
 		SpGid gid() const;
-		SpSize size() const;
 		void setPath(const SpPath &path);
 	private:
 		SpPath p;

@@ -2,6 +2,8 @@
 
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include "SpFile.h"
 
@@ -47,6 +49,15 @@ void SpFile::open()
 		cerr << "Error opening file " << path().fullName().c_str() << endl;
 	else
 		fileOpen = true;
+}
+
+SpSize SpFile::size() const
+{
+	struct stat fileStat;
+	SpSize s;
+	lstat(path().fullName().c_str(), &fileStat);
+	s.setBytes(fileStat.st_size);
+	return (s);
 }
 
 void SpFile::close()

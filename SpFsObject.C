@@ -81,15 +81,6 @@ SpGid SpFsObject::gid() const
 	return (g);
 }
 
-SpSize SpFsObject::size() const
-{
-	struct stat fileStat;
-	SpSize s;
-	lstat(path().fullName().c_str(), &fileStat);
-	s.setBytes(fileStat.st_size);
-	return (s);
-}
-
 SpPath SpFsObject::path() const
 {
 	return p;

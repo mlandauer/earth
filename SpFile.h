@@ -27,6 +27,7 @@ class SpFile : public SpFsObject
 		void seek(unsigned long int pos) const;
 		void seekForward(unsigned long int pos) const;
 		void setPath(const SpPath &path);
+		SpSize size() const;
 	private:
 		int fd;
 		bool fileOpen;
