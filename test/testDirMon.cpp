@@ -62,7 +62,7 @@ void checkNextEvents(DirMon &m, std::list<DirMonEvent> &e, CppUnit::SourceLine s
 
 void testDirMon::test()
 {
-	//std::cout << "Note: the following tests will take about 20 seconds" << std::endl;
+	std::cout << "Note: the following tests will take about 10 seconds" << std::endl;
 	// First create a directory with some test files
 	system ("rm -fr test/FsMonitor");
 	system ("mkdir test/FsMonitor");
@@ -75,8 +75,6 @@ void testDirMon::test()
 	DirMon m;
 	m.startMonitorDirectory(Dir("test/FsMonitor"));
 	
-	//DateTime::sleep(6);
-	m.update();
 	// I'm putting these tests out of order as these events are not guaranteed to come in any
 	// particular order.
 	std::list<DirMonEvent> expectedEvents;
