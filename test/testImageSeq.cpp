@@ -165,13 +165,13 @@ void testImageSeq::test()
 	
 	system ("rm -rf test/seq");
 	delete i1;
-  delete i2;
-  delete i3;
-  delete i4;
-  delete i5;
-  delete i6;
-  delete i7;
-  delete i8;
+	delete i2;
+	delete i3;
+	delete i4;
+	delete i5;
+	delete i6;
+	delete i7;
+	delete i8;
 	delete i9;
 	delete i10;
 	delete i11;

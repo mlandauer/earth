@@ -36,32 +36,33 @@ namespace Sp {
 //! Support simple operations on an image
 class Image : public File
 {
-	public:
-    //! Construct an image object from a path to a file
-    /*!
-      This recognises the image format of the file and returns a pointer to a new instance
-      of the relevant subclassed image class. This should always be used to construct an
-      image object rather than calling the constructor directly on the subclassed image class.
-    */
-		static Image* construct(const Path &path);
-    //! Load all the image format plugins
-		static void registerPlugins();
-    //! Unload all the image format plugins
-		static void deRegisterPlugins();
-    //! Return the dimensions (width and height) of the image
-		virtual ImageDim dim() = 0;
-    //! Is this a valid file in this format?
-    /*!
-      As the image constructing in construct() is done by recognising the image format from a
-      magic number, there is a possibility that the magic number corresponds to a particular image
-      format but that the image is incorrectly written. This method checks whether the whole image
-      header is valid.
-    */
-		virtual bool valid() = 0;
-		std::string formatString() { return getFormat()->formatString(); };
-		ImageFormat* getFormat() { return format; };
-	private:
-		ImageFormat *format;
+public:
+	//! Construct an image object from a path to a file
+	/*!
+		This recognises the image format of the file and returns a pointer to a new instance
+		of the relevant subclassed image class. This should always be used to construct an
+		image object rather than calling the constructor directly on the subclassed image class.
+	*/
+	static Image* construct(const Path &path);
+	//! Load all the image format plugins
+	static void registerPlugins();
+	//! Unload all the image format plugins
+	static void deRegisterPlugins();
+	//! Return the dimensions (width and height) of the image
+	virtual ImageDim dim() = 0;
+	//! Is this a valid file in this format?
+	/*!
+		As the image constructing in construct() is done by recognising the image format from a
+		magic number, there is a possibility that the magic number corresponds to a particular image
+		format but that the image is incorrectly written. This method checks whether the whole image
+		header is valid.
+	*/
+	virtual bool valid() = 0;
+	std::string formatString() { return getFormat()->formatString(); };
+	ImageFormat* getFormat() { return format; };
+	
+private:
+	ImageFormat *format;
 };
 
 }

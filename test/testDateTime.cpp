@@ -42,9 +42,9 @@ using namespace Sp;
 
 void testDateTime::test()
 {
-  // Commented this test out because unit time zero (the epoch) is defined as a specific
-  // time in GMT. However, when you get the local time it will be different in different
-  // time zones and so the test will fail or work depending on which timezone you're in.
+	// Commented this test out because unit time zero (the epoch) is defined as a specific
+	// time in GMT. However, when you get the local time it will be different in different
+	// time zones and so the test will fail or work depending on which timezone you're in.
 	DateTime t1 = DateTime::unixDateTime(0);
 	//checkEqual("test 1", t1.timeAndDateString(), "Wed Dec 31 16:00:00 1969");
 	//checkEqual("test 2", t1.year(), 1969);

@@ -46,45 +46,45 @@ namespace Sp {
 */
 class FsObject
 {
-	public:
-		FsObject(const Path &path) : p(path) { };
-		FsObject() { };
-		virtual ~FsObject() { };
-    
-    //! Returns the date and time of the last access to the filesystem object
-    /*!
-      In Unix, this gets set when any of the following system calls are made:
-      mknod, utimes and read.
-    */
-		DateTime lastAccess() const;
-    
-    //! Returns the date and time that the filesystem object was last modified
-    /*!
-      In Unix, this gets set when any of the following system calls are made:
-      mknod, utimes and write.
-    */
-		DateTime lastModification() const;
-    
-    //! Returns the date and time the filesystem object was last changes
-    /*!
-      In Unix, this gets set when any of the following system calls are made:
-      chmod, chown, link, mknod, rename, unlink, utimes and write.
-    */
-		DateTime lastChange() const;
-    
-    //! Returns the owning user of the filesystem object
-		User user() const;
-    //! Returns the owning group of the filesystem object
-		UserGroup userGroup() const;
-    //! Returns the path to the filesystem object
-		Path path() const { return p; };
-    
-	protected:
-		void setPath(const Path &path) { p = path; };
-    
-	private:
-		struct stat unixStat() const;
-		Path p;
+public:
+	FsObject(const Path &path) : p(path) { };
+	FsObject() { };
+	virtual ~FsObject() { };
+
+	//! Returns the date and time of the last access to the filesystem object
+	/*!
+		In Unix, this gets set when any of the following system calls are made:
+		mknod, utimes and read.
+	*/
+	DateTime lastAccess() const;
+
+	//! Returns the date and time that the filesystem object was last modified
+	/*!
+		In Unix, this gets set when any of the following system calls are made:
+		mknod, utimes and write.
+	*/
+	DateTime lastModification() const;
+
+	//! Returns the date and time the filesystem object was last changes
+	/*!
+		In Unix, this gets set when any of the following system calls are made:
+		chmod, chown, link, mknod, rename, unlink, utimes and write.
+	*/
+	DateTime lastChange() const;
+
+	//! Returns the owning user of the filesystem object
+	User user() const;
+	//! Returns the owning group of the filesystem object
+	UserGroup userGroup() const;
+	//! Returns the path to the filesystem object
+	Path path() const { return p; };
+
+protected:
+	void setPath(const Path &path) { p = path; };
+
+private:
+	struct stat unixStat() const;
+	Path p;
 };
 
 }

@@ -89,7 +89,6 @@ void testImage::test()
 	CPPUNIT_ASSERT(image5->formatString() == "IFF");
 	CPPUNIT_ASSERT(image5->dim().width() == 8);
 	CPPUNIT_ASSERT(image5->dim().height() == 8);
-	delete image5;
-		
+	delete image5;	
 }
 
