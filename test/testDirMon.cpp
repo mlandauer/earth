@@ -25,7 +25,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/SourceLine.h>
 #include <cppunit/TestAssert.h>
-
+#include <algorithm>
 #include "DirMon.h"
 
 using namespace Sp;
@@ -42,13 +42,21 @@ public:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(testDirMon);
 
-void checkNextEvent(DirMon &m, const DirMonEvent &e, CppUnit::SourceLine sourceLine)
+void checkNextEvents(DirMon &m, std::list<DirMonEvent> &e, CppUnit::SourceLine sourceLine)
 {
-	CppUnit::Asserter::failIf(!m.pendingEvent(), "expected pending event", sourceLine);
-	CppUnit::Asserter::failIf(m.getNextEvent() != e, "next event has unexpected value", sourceLine);
+	while (!e.empty()) {
+		CppUnit::Asserter::failIf(!m.pendingEvent(), "fewer events than expected", sourceLine);
+		DirMonEvent nextEvent = m.getNextEvent();
+		// Check that this event is expected
+		std::list<DirMonEvent>::iterator i = std::find(e.begin(), e.end(), nextEvent);
+		CppUnit::Asserter::failIf(i == e.end(), "next event has unexpected value", sourceLine);
+		// Remove the found event
+		e.erase(i);
+	}
+	CppUnit::Asserter::failIf(m.pendingEvent(), "more events than expected", sourceLine);
 }
 
-#define CPPUNIT_CHECK_NEXT_EVENT( m, e ) checkNextEvent( m, e,  CPPUNIT_SOURCELINE() )
+#define CPPUNIT_CHECK_NEXT_EVENTS( m, e ) checkNextEvents( m, e,  CPPUNIT_SOURCELINE() )
 
 #include "Path.h"
 
@@ -71,16 +79,12 @@ void testDirMon::test()
 	m.update();
 	// I'm putting these tests out of order as these events are not guaranteed to come in any
 	// particular order.
-	//std::list<DirMonEvent> expectedEvents;
-	//expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0001.gif")));
-	//expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0002.gif")));
-	//expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0003.gif")));
-	//expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0004.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0001.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0002.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0003.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0004.gif")));
-	CPPUNIT_ASSERT(!m.pendingEvent());
+	std::list<DirMonEvent> expectedEvents;
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0001.gif")));
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0004.gif")));
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0002.gif")));
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0003.gif")));
+	CPPUNIT_CHECK_NEXT_EVENTS(m, expectedEvents);
 	
 	// Test adding files
 	DateTime before = Dir("test/FsMonitor").lastChange();
@@ -92,70 +96,70 @@ void testDirMon::test()
 	DateTime after = Dir("test/FsMonitor").lastChange();
 	CPPUNIT_ASSERT(after > before);
 	m.update();
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0005.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0006.gif")));
-	CPPUNIT_ASSERT(!m.pendingEvent());
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0005.gif")));
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0006.gif")));
+	CPPUNIT_CHECK_NEXT_EVENTS(m, expectedEvents);
 	
 	// Test changing nothing
 	m.update();
-	CPPUNIT_ASSERT(!m.pendingEvent());
+	CPPUNIT_CHECK_NEXT_EVENTS(m, expectedEvents);
 	
 	// Test deleting files
 	DateTime::sleep(1);
 	system ("rm test/FsMonitor/test.0001.gif");
 	system ("rm test/FsMonitor/test.0006.gif");
 	m.update();
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0001.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0006.gif")));
-	CPPUNIT_ASSERT(!m.pendingEvent());
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0001.gif")));
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0006.gif")));
+	CPPUNIT_CHECK_NEXT_EVENTS(m, expectedEvents);
 	
 	// Test changing nothing
 	m.update();
-	CPPUNIT_ASSERT(!m.pendingEvent());
+	CPPUNIT_CHECK_NEXT_EVENTS(m, expectedEvents);
 
 	// Test adding subdirectory
 	DateTime::sleep(1);
 	system ("mkdir test/FsMonitor/subdirectory");
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/subdirectory/test.0001.gif");
 	m.update();
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::added, File("test/FsMonitor/subdirectory/test.0001.gif")));
-	CPPUNIT_ASSERT(!m.pendingEvent());
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/subdirectory/test.0001.gif")));
+	CPPUNIT_CHECK_NEXT_EVENTS(m, expectedEvents);
 	
 	// Test changing nothing
 	m.update();
-	CPPUNIT_ASSERT(!m.pendingEvent());
+	CPPUNIT_CHECK_NEXT_EVENTS(m, expectedEvents);
 
 	// Test adding in both directories
 	DateTime::sleep(1);
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/test.0006.gif");
 	system ("cp test/templateImages/2x2.gif test/FsMonitor/subdirectory/test.0002.gif");
 	m.update();
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0006.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::added, File("test/FsMonitor/subdirectory/test.0002.gif")));
-	CPPUNIT_ASSERT(!m.pendingEvent());
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/test.0006.gif")));
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::added, File("test/FsMonitor/subdirectory/test.0002.gif")));
+	CPPUNIT_CHECK_NEXT_EVENTS(m, expectedEvents);
 
 	// Test changing nothing
 	m.update();
-	CPPUNIT_ASSERT(!m.pendingEvent());
+	CPPUNIT_CHECK_NEXT_EVENTS(m, expectedEvents);
 	
 	// Test removing a directory
 	DateTime::sleep(1);
 	system ("rm -fr test/FsMonitor/subdirectory");
 	m.update();
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/subdirectory/test.0001.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/subdirectory/test.0002.gif")));
-	CPPUNIT_ASSERT(!m.pendingEvent());
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/subdirectory/test.0001.gif")));
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/subdirectory/test.0002.gif")));
+	CPPUNIT_CHECK_NEXT_EVENTS(m, expectedEvents);
 
 	// Test removing the rest
 	DateTime::sleep(1);
 	system ("rm -fr test/FsMonitor/*");
 	m.update();
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0002.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0003.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0004.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0005.gif")));
-	CPPUNIT_CHECK_NEXT_EVENT(m, DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0006.gif")));
-	CPPUNIT_ASSERT(!m.pendingEvent());
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0002.gif")));
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0003.gif")));
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0004.gif")));
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0005.gif")));
+	expectedEvents.push_back(DirMonEvent(DirMonEvent::deleted, File("test/FsMonitor/test.0006.gif")));
+	CPPUNIT_CHECK_NEXT_EVENTS(m, expectedEvents);
 	
 	// We're stopping watching. So we can delete the top level directory
 	system ("rmdir test/FsMonitor");
