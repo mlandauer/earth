@@ -4,12 +4,12 @@
 #define _spgifimage_h_
 
 #include "SpImage.h"
+#include "SpImageFormat.h"
 #include "SpImageDim.h"
 
 class SpGIFImageFormat: public SpImageFormat
 {
 	public:
-		virtual string formatString() { return "GIF"; };
 		virtual SpImage* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };

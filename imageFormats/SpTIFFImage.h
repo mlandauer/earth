@@ -4,12 +4,12 @@
 #define _sptiffimage_h_
 
 #include "SpImage.h"
+#include "SpImageFormat.h"
 #include "SpImageDim.h"
 
 class SpTIFFImageFormat: public SpImageFormat
 {
 	public:
-		virtual string formatString() { return "TIFF"; };
 		virtual SpImage* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };

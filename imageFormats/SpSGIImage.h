@@ -4,12 +4,12 @@
 #define _spsgiimage_h_
 
 #include "SpImage.h"
+#include "SpImageFormat.h"
 #include "SpImageDim.h"
 
 class SpSGIImageFormat: public SpImageFormat
 {
 	public:
-		virtual string formatString() { return "SGI"; };
 		virtual SpImage* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 2; };

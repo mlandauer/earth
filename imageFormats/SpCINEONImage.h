@@ -4,12 +4,12 @@
 #define _spcineonimage_h_
 
 #include "SpImage.h"
+#include "SpImageFormat.h"
 #include "SpImageDim.h"
 
 class SpCINEONImageFormat: public SpImageFormat
 {
 	public:
-		virtual string formatString() { return "Cineon"; };
 		virtual SpImage* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };

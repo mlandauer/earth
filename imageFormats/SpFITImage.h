@@ -4,12 +4,12 @@
 #define _spfitimage_h_
 
 #include "SpImage.h"
+#include "SpImageFormat.h"
 #include "SpImageDim.h"
 
 class SpFITImageFormat: public SpImageFormat
 {
 	public:
-		virtual string formatString() { return "FIT"; };
 		virtual SpImage* constructImage();
 		virtual bool recognise(unsigned char *buf);
 		virtual int sizeToRecognise() { return 4; };

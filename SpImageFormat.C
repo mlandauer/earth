@@ -18,16 +18,24 @@ void SpImageFormat::registerPlugins()
 			<< formatsFilename << endl;
 		return;
 	}
-	string line;
 	while (formats) {
-		formats >> line;
-		loader.load(line);
+		string libraryFilename, formatString;
+		formats >> libraryFilename;
+		formats >> formatString;
+		loader.load(libraryFilename);
+		// Set the format name on the plugin we just loaded
+		recentPlugin()->setFormatString(formatString);
 	}
 }
 
 void SpImageFormat::addPlugin(SpImageFormat *plugin)
 {
 	plugins.push_back(plugin);
+}
+
+SpImageFormat* SpImageFormat::recentPlugin()
+{
+	return *(--plugins.end());
 }
 
 void SpImageFormat::removePlugin(SpImageFormat *plugin)
@@ -38,6 +46,11 @@ void SpImageFormat::removePlugin(SpImageFormat *plugin)
 void SpImageFormat::deRegisterPlugins()
 {
 	loader.releaseAll();
+}
+
+void SpImageFormat::setFormatString(string n)
+{
+	shortFormat = n;
 }
 
 SpImageFormat* SpImageFormat::recogniseByMagic(const SpPath &path)
