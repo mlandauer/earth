@@ -28,7 +28,6 @@
 #include <vector>
 #include <map>
 #include "FsObject.h"
-#include "Image.h"
 
 namespace Sp {
 
