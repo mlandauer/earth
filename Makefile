@@ -2,7 +2,8 @@
 
 CC = g++
 OPTION = -g
-INCLUDE = 
+INCLUDE = `xml++-config --cflags` `xml-config --cflags` 
+LIBS = -ldl `xml++-config --libs`
 
 SRCS = Dir.cpp FsObject.cpp ImageFormat.cpp Size.cpp UserGroup.cpp \
 			 ImageSeq.cpp Image.cpp LibLoader.cpp DateTime.cpp \
@@ -19,7 +20,7 @@ OBJECTS = Dir.o FsObject.o ImageFormat.o Size.o UserGroup.o \
 all: $(OBJECTS)
 	cd imageFormats; make all
 	cd test; make all
-	$(CC) $(OPTION) -rdynamic -o earth $(OBJECTS) -ldl
+	$(CC) $(OPTION) -rdynamic -o earth $(OBJECTS) $(LIBS)
 	
 clean:
 	cd imageFormats; make clean
