@@ -256,9 +256,10 @@ main()
 {
 	// Register the plugins
 	SpImage::registerPlugins();
-	
+	// Configure the tester
 	SpTester::setVerbose(false);
 	SpTester::setFloatDelta(0.1);
+	
 	testSpSize();
 	testSpTime();
 	testSpUid();
@@ -269,7 +270,6 @@ main()
 	testSpPath();
 	
 	SpTester::finish();
-	
 	SpImage::deRegisterPlugins();
 }
 
