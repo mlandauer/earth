@@ -33,12 +33,14 @@ SpFsObjectHandle SpFsObject::construct(const SpPath &path)
 {
 	SpFsObject *o;
 	o = new SpDir(path);
+	assert(o != NULL);
 	if (o->valid())
 		return SpFsObjectHandle(o);
 	else
 		delete o;
 		
 	o = new SpFile(path);
+	assert(o != NULL);
 	if (o->valid()) {
 		SpImage *i = SpImage::construct(path);
 		if (i == NULL)

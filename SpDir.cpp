@@ -31,6 +31,7 @@
 #include <dirent.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <iostream>
 
 #include "SpFsObject.h"
 
@@ -39,8 +40,11 @@ bool SpDir::sortByPath = false;
 bool SpDir::valid() const
 {
 	struct stat fileStat;
-	lstat(path().fullName().c_str(), &fileStat);
-	return(S_ISDIR(fileStat.st_mode));
+	int ret = lstat(path().fullName().c_str(), &fileStat);
+	if (ret == 0)
+		return(S_ISDIR(fileStat.st_mode));
+	else
+		return false;
 }
 
 class SpCompareFsObjectPaths

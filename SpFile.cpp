@@ -37,8 +37,11 @@ SpFile::SpFile(const SpPath &path) : SpFsObject(path), fileOpen(false)
 bool SpFile::valid() const
 {
 	struct stat fileStat;
-	lstat(path().fullName().c_str(), &fileStat);
-	return(S_ISREG(fileStat.st_mode));
+	int ret = lstat(path().fullName().c_str(), &fileStat);
+	if (ret == 0)
+		return(S_ISREG(fileStat.st_mode));
+	else
+		return false;
 }
 
 // Opens for read only at the moment

@@ -93,9 +93,9 @@ SpImageFormat* SpImageFormat::recogniseByMagic(const SpPath &path)
 	for (std::list<SpImageFormat *>::iterator a = plugins.begin();
 		a != plugins.end(); ++a)
 		if ((*a)->recognise(buf)) {
-			delete buf;
+			delete [] buf;
 			return (*a);
 		}
-	delete buf;
+	delete [] buf;
 	return (NULL);
 }
