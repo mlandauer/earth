@@ -45,7 +45,7 @@ void testSpTime()
 
 void testSpFile()
 {
-	SpFile file("/home/matthew/images/blah1.tiff");
+	SpFile file("/home/matthew/progs/seqspy/test/templateImages/8x8.tiff");
 	cout << "filename = " << file.path().fullName() << endl;
 	cout << "size = " << file.size().bytes() << " bytes" << endl;
 	cout << "size = " << file.size().kbytes() << " Kbytes" << endl;
@@ -78,20 +78,20 @@ void testSpFile()
 	cout << "Testing setPath checking mechanism" << endl;
 	SpFile f;
 	cout << "setPath..." << endl;
-	f.setPath("/home/matthew/images/blah1.tiff");
+	f.setPath("/home/matthew/progs/seqspy/test/templateImages/8x8.tiff");
 	cout << "open..." << endl;
 	f.open();
 	cout << "setPath..." << endl;
-	f.setPath("/home/matthew/images/blah1.tiff");
+	f.setPath("/home/matthew/progs/seqspy/test/templateImages/8x8.tiff");
 	cout << "close..." << endl;
 	f.close();
 	cout << "setPath..." << endl;
-	f.setPath("/home/matthew/images/blah1.tiff");	
+	f.setPath("/home/matthew/progs/seqspy/test/templateImages/8x8.tiff");	
 }
 
 void testSpImage()
 {
-	SpImage *image1 = SpImage::construct("/home/matthew/images/dibble1.sgi");
+	SpImage *image1 = SpImage::construct("/home/matthew/progs/seqspy/test/templateImages/8x8.sgi");
 	if (image1 != NULL) {
 		cout << "Opened image " << image1->path().fullName() << endl;
 		cout << "Image Filesize = " << image1->size().kbytes() << " Kbytes" << endl;
@@ -104,7 +104,7 @@ void testSpImage()
 	else
 		cout << "Unrecognised image type " << endl;
 
-	SpImage *image2 = SpImage::construct("/home/matthew/images/blah1.tiff");
+	SpImage *image2 = SpImage::construct("/home/matthew/progs/seqspy/test/templateImages/8x8.tiff");
 	if (image2 != NULL) {
 		cout << "Opened image " << image2->path().fullName() << endl;
 		cout << "Image Filesize = " << image2->size().kbytes() << " Kbytes" << endl;
@@ -123,7 +123,7 @@ void testSpImage()
 	// *** CINEON File format currently untested ****
 	// *** IFF File format currently untested ****
 
-	SpImage *image3 = SpImage::construct("/home/matthew/images/foo1.gif");
+	SpImage *image3 = SpImage::construct("/home/matthew/progs/seqspy/test/templateImages/8x8.gif");
 	if (image3 != NULL) {
 		cout << "Opened image " << image3->path().fullName() << endl;
 		cout << "Image Filesize = " << image3->size().kbytes() << " Kbytes" << endl;
@@ -155,7 +155,7 @@ void testSpUid()
 void testSpFsObject()
 {
 	cout << "Test Filesystem Object" << endl;
-	SpFsObject file("/home/matthew/images/blah1.tiff");
+	SpFsObject file("/home/matthew/progs/seqspy/test/templateImages/8x8.tiff");
 	cout << "path = " << file.path().fullName() << endl;
 	cout << "size = " << file.size().kbytes() << " Kbytes" << endl;
 	cout << "last access = " << file.lastAccess().timeAndDateString() << endl;
@@ -165,7 +165,7 @@ void testSpFsObject()
 	cout << "group owner = " << file.gid().name() << endl;
 	cout << "is a file? = " << file.isFile() << endl;
 	cout << "is a directory? = " << file.isDir() << endl;
-	SpFsObject file2("/home/matthew/images/");
+	SpFsObject file2("/home/matthew/progs/seqspy/test/templateImages/");
 	cout << "path = " << file2.path().fullName() << endl;
 	cout << "size = " << file2.size().kbytes() << " Kbytes" << endl;
 	cout << "last access = " << file2.lastAccess().timeAndDateString() << endl;
@@ -180,7 +180,7 @@ void testSpFsObject()
 void testSpDir()
 {
 	cout << "Test Directory Class" << endl;
-	SpDir dir("/home/matthew/images/");
+	SpDir dir("/home/matthew/progs/seqspy/test/templateImages/");
 	cout << "path = " << dir.path().fullName() << endl;
 	cout << "size = " << dir.size().kbytes() << " Kbytes" << endl;
 	cout << "last access = " << dir.lastAccess().timeAndDateString() << endl;
