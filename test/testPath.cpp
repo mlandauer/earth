@@ -62,7 +62,7 @@ void testPath::test()
 	CPPUNIT_ASSERT(p5.fullName() == "/blah");
 	CPPUNIT_ASSERT(p5.root() == "/");
 	CPPUNIT_ASSERT(p5.relative() == "blah");
-	// CPPUNIT_ASSERT that paths can be ordered alphabetically
+	// check that paths can be ordered alphabetically
 	Path p6("alpha");
 	Path p7("beta");
 	Path p8("gamma");
