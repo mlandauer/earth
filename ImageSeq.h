@@ -1,4 +1,4 @@
-///  Copyright (C) 2001, 2002 Matthew Landauer. All Rights Reserved.
+//  Copyright (C) 2001, 2002 Matthew Landauer. All Rights Reserved.
 //  
 //  This program is free software; you can redistribute it and/or modify it
 //  under the terms of version 2 of the GNU General Public License as
@@ -22,36 +22,35 @@
 //
 // $Id$
 
-#include <pwd.h>
-#include <unistd.h>
-#include <grp.h>
+#ifndef _imageseq_h_
+#define _imageseq_h_
 
-#include "SpGid.h"
+#include <set>
+#include "Image.h"
 
-Gid::Gid()
+class ImageSeq
 {
-}
+	public:
+		ImageSeq(Image *i);
+		void addImage(Image *i);
+		void removeImage(Image *i);
+		void removeImage(const Path &p);
+		Path path() const;
+		std::string framesString() const;
+		ImageDim dim() const { return dimensions; };
+		ImageFormat* format() const { return imageFormat; };
+	private:
+		std::set<int> f;
+		Path p;
+		Path pattern(const Path &a) const;
+		int frameNumber(const Path &a) const;
+		std::string hash(int size) const;
+		bool couldBePartOfSequence(Image *i) const;
+		bool partOfSequence(Image *i) const;
+		bool partOfSequence(const Path &p) const;
+		// Image/Sequence attributes
+		ImageFormat *imageFormat;
+		ImageDim dimensions;
+};
 
-Gid::~Gid()
-{
-}
-
-Gid Gid::unixGid(gid_t g)
-{
-  Gid ret;
-  ret.gid = g;
-  return ret;
-}
-
-Gid Gid::current()
-{
-  Gid ret;
-  ret.gid = getgid();
-  return ret;
-}
-
-std::string Gid::name() const
-{
-	struct group *e = getgrgid(gid);
-	return (std::string(e->gr_name));
-}
+#endif

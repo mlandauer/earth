@@ -23,8 +23,8 @@
 // $Id$
 
 #include "testFsObjectHandle.h"
-#include "SpFile.h"
-#include "SpFsObjectHandle.h"
+#include "File.h"
+#include "FsObjectHandle.h"
 
 testFsObjectHandle::testFsObjectHandle() : Tester("FsObjectHandle")
 {

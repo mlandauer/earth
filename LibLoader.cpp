@@ -22,53 +22,33 @@
 //
 // $Id$
 
-#ifndef _file_h
-#define _file_h
+#include <iostream>
+#include "LibLoader.h"
 
-#include "SpPath.h"
-#include "SpTime.h"
-#include "SpSize.h"
-#include "SpUid.h"
-#include "SpGid.h"
-#include "SpFsObject.h"
-
-class File : public FsObject
-{
-	public:
-		File(const Path &path);
-		virtual ~File() { };
-		void open();
-		void close();
-		unsigned long int read(void *buf, unsigned long int count) const;
-		unsigned char  readChar() const;
-		unsigned short readShort(const int &endian) const;
-		unsigned long  readLong(const int &endian) const;
-		void seek(unsigned long int pos) const;
-		void seekForward(unsigned long int pos) const;
-		Size size() const;
-		bool valid() const;
-	protected:
-		File() { };
-	private:
-		int fd;
-		bool fileOpen;
-};
-
-// Stores a file with its time stamps
-class FileTime : public File
-{
-	public:
-		FileTime(const File &file) : File(file) { }
-		bool changed() {
-			if (cachedChange < lastChange()) {
-				cachedChange = lastChange();
-				return true;
-			}
-			else
-				return false;
-		}
-	protected:
-		Time cachedChange;
-};
-
+#ifdef __APPLE__
+#include <mach-o/dyld.h>
 #endif
+
+void LibLoader::load(std::string fileName)
+{
+  #ifndef __APPLE__
+    void *handle = dlopen(fileName.c_str(), RTLD_LAZY);
+    if (handle == NULL)
+      std::cerr << "LibLoader: dlopen failed: " << dlerror() << std::endl;
+    else
+    	handles.push_back(handle);
+  #else
+    const struct mach_header *handle = NSAddImage(fileName.c_str(), NSADDIMAGE_OPTION_RETURN_ON_ERROR);
+    if (handle == NULL)
+      std::cerr << "LibLoader: NSAddImage failed " << std::endl;
+  #endif
+}
+
+void LibLoader::releaseAll()
+{
+  #ifndef __APPLE__
+    for (std::list<void *>::iterator a = handles.begin(); a != handles.end(); ++a)
+      dlclose((*a));
+  #endif
+}
+

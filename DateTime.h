@@ -22,36 +22,44 @@
 //
 // $Id$
 
-#include <pwd.h>
-#include <unistd.h>
+// Basic class for keeping track of date and time stuff, comparing dates,
+// making it all human readable but doing this in a way that the unix
+// specific code (relating to time and date) is wrapped up in this class.
 
-#include "SpUid.h"
+#ifndef _datetime_h_
+#define _datetime_h_
 
-Uid::Uid() : uid(0)
+#include <time.h>
+#include <string>
+
+class DateTime
 {
-}
+	public:
+		DateTime();
+		~DateTime();
+    static DateTime unixDateTime(time_t t);
+    static DateTime current();
+    
+		static void sleep(int seconds);
+		std::string timeAndDateString() const;
+		int dayOfWeek() const;
+		int dayOfMonth() const;
+		int year() const;
+		int month() const;
+		int hour() const;
+		int minute() const;
+		int second() const;
+		std::string monthStringShort() const;
+		std::string monthString() const;
+		std::string dayOfWeekStringShort() const;
+		std::string dayOfWeekString() const;
+		std::string timeString() const;
+		std::string dayOfMonthString() const;
+		std::string yearString() const;
+		bool operator<(const DateTime &t) const;
+		bool operator==(const DateTime &t) const;
+	private:
+		time_t time;
+};
 
-Uid::~Uid()
-{
-}
-
-Uid Uid::unixUid(uid_t u)
-{
-  Uid ret;
-  ret.uid = u;
-  return ret;
-}
-
-Uid Uid::current()
-{
-  Uid ret;
-  ret.uid = getuid();
-  return ret;
-}
-
-std::string Uid::name() const
-{
-	struct passwd *p = getpwuid(uid);
-  assert(p != NULL);
-	return (std::string(p->pw_name));
-}
+#endif

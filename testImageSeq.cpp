@@ -23,7 +23,7 @@
 // $Id$
 
 #include "testImageSeq.h"
-#include "SpPath.h"
+#include "Path.h"
 
 testImageSeq::testImageSeq() : Tester("ImageSeq")
 {

@@ -27,7 +27,7 @@
 #include <math.h>
 #include <iostream>
 
-#include "SpTester.h"
+#include "Tester.h"
 
 bool Tester::verbose = false;
 int Tester::noFails = 0;

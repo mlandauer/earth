@@ -27,15 +27,15 @@
 #include <algorithm>
 #include <vector>
 
-#include "SpFile.h"
-#include "SpImage.h"
-#include "SpFsObject.h"
-#include "SpDir.h"
-#include "SpTester.h"
-#include "SpImageSeq.h"
+#include "File.h"
+#include "Image.h"
+#include "FsObject.h"
+#include "Dir.h"
+#include "Tester.h"
+#include "ImageSeq.h"
 
 #include "testSize.h"
-#include "testTime.h"
+#include "testDateTime.h"
 #include "testDir.h"
 #include "testFile.h"
 #include "testImage.h"
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	
 	testDir();
 	testSize();
-	testTime();
+	testDateTime();
 	testFile();
 	testImage();
 	testFsObject();

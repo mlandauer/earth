@@ -22,33 +22,55 @@
 //
 // $Id$
 
-#include <iostream>
-#include "SpLibLoader.h"
+#include <sys/types.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
-#ifdef __APPLE__
-#include <mach-o/dyld.h>
-#endif
+#include <list>
+#include <algorithm>
 
-void LibLoader::load(std::string fileName)
+#include "Dir.h"
+#include "File.h"
+#include "FsObject.h"
+
+bool Dir::sortByPath = false;
+
+bool Dir::valid() const
 {
-  #ifndef __APPLE__
-    void *handle = dlopen(fileName.c_str(), RTLD_LAZY);
-    if (handle == NULL)
-      std::cerr << "LibLoader: dlopen failed: " << dlerror() << std::endl;
-    else
-    	handles.push_back(handle);
-  #else
-    const struct mach_header *handle = NSAddImage(fileName.c_str(), NSADDIMAGE_OPTION_RETURN_ON_ERROR);
-    if (handle == NULL)
-      std::cerr << "LibLoader: NSAddImage failed " << std::endl;
-  #endif
+	struct stat fileStat;
+	int ret = lstat(path().fullName().c_str(), &fileStat);
+	if (ret == 0)
+		return(S_ISDIR(fileStat.st_mode));
+	else
+		return false;
 }
 
-void LibLoader::releaseAll()
+class CompareFsObjectPaths
 {
-  #ifndef __APPLE__
-    for (std::list<void *>::iterator a = handles.begin(); a != handles.end(); ++a)
-      dlclose((*a));
-  #endif
-}
+	public:
+		bool operator()(FsObjectHandle s1, FsObjectHandle s2) const
+			{ return s1->path() < s2->path(); }
+};
 
+std::vector<FsObjectHandle> Dir::ls() const
+{
+	std::vector<FsObjectHandle> l;
+	if (!valid())
+		return l;
+	// First open a directory stream
+	DIR *d = opendir(path().fullName().c_str());
+	struct dirent *entry;
+	while ((entry = readdir(d)) != NULL) {
+		std::string pathString = entry->d_name;
+		if ((pathString != ".") && (pathString != "..")) {
+			Path p = path();
+			p.add(pathString);
+			l.push_back(FsObject::construct(p));
+		}
+	}
+	closedir(d);
+	if (sortByPath)
+		sort(l.begin(), l.end(), CompareFsObjectPaths());
+	return (l);
+}

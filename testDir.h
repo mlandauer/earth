@@ -25,8 +25,8 @@
 #ifndef _testdir_h_
 #define _testdir_h_
 
-#include "SpTester.h"
-#include "SpFsObject.h"
+#include "Tester.h"
+#include "FsObject.h"
 
 class testDir : public Tester
 {

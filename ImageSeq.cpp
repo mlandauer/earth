@@ -23,7 +23,7 @@
 // $Id$
 
 #include <stdio.h>
-#include "SpImageSeq.h"
+#include "ImageSeq.h"
 
 ImageSeq::ImageSeq(Image *i)
 {

@@ -25,7 +25,7 @@
 #ifndef _testpath_h_
 #define _testpath_h_
 
-#include "SpTester.h"
+#include "Tester.h"
 
 class testPath : public Tester
 {

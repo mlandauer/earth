@@ -23,7 +23,7 @@
 // $Id$
 
 #include "testSize.h"
-#include "SpSize.h"
+#include "Size.h"
 
 testSize::testSize() : Tester("Size")
 {

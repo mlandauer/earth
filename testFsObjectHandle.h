@@ -25,7 +25,7 @@
 #ifndef _testfsobjecthandle_h_
 #define _testfsobjecthandle_h_
 
-#include "SpTester.h"
+#include "Tester.h"
 
 class testFsObjectHandle : public Tester
 {

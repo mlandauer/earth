@@ -25,8 +25,8 @@
 #ifndef _testimageseq_h_
 #define _testimageseq_h_
 
-#include "SpTester.h"
-#include "SpImageSeq.h"
+#include "Tester.h"
+#include "ImageSeq.h"
 
 class testImageSeq : public Tester
 {

@@ -22,27 +22,26 @@
 //
 // $Id$
 
-#ifndef _image_h_
-#define _image_h_
+#ifndef _dir_h_
+#define _dir_h_
 
-#include <list>
+#include <vector>
+#include <map>
+#include "FsObject.h"
+#include "Image.h"
 
-#include "SpFile.h"
-#include "SpImageDim.h"
-#include "SpImageFormat.h"
-
-class Image : public File
+class Dir : public FsObject
 {
 	public:
-		static Image* construct(const Path &path);
-		static void registerPlugins();
-		static void deRegisterPlugins();
-		virtual ImageDim dim() = 0;
-		virtual bool valid() = 0;
-		std::string formatString() { return getFormat()->formatString(); };
-		ImageFormat* getFormat() { return format; };
+		Dir(const Path &path) : FsObject(path) { };
+		Dir() { };
+		~Dir() { };
+		std::vector<FsObjectHandle> ls() const;
+		bool valid() const;
+		static void setSortByPath(bool b) { sortByPath = b; };
 	private:
-		ImageFormat *format;
+		static bool sortByPath;
 };
 
 #endif
+

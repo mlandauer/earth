@@ -21,24 +21,41 @@
 //  Temple Place - Suite 330, Boston MA 02111-1307, USA.
 //
 // $Id$
+//
+// A file system object that File and Dir inherit from
+//
 
-#ifndef _gid_h_
-#define _gid_h_
+#ifndef _fsobject_h_
+#define _fsobject_h_
 
-#include <sys/types.h>
-#include <string>
+#include <sys/stat.h>
 
-class Gid
+#include "DateTime.h"
+#include "Path.h"
+#include "User.h"
+#include "UserGroup.h"
+#include "Size.h"
+#include "FsObjectHandle.h"
+
+class FsObject
 {
 	public:
-		Gid();
-		~Gid();
-    static Gid unixGid(gid_t g);
-    static Gid current();
-   
-		std::string name() const;
+		virtual ~FsObject() { };
+		static FsObjectHandle construct(const Path &path);
+		DateTime lastAccess() const;
+		DateTime lastModification() const;
+		DateTime lastChange() const;
+		User user() const;
+		UserGroup userGroup() const;
+		Path path() const { return p; };
+		virtual bool valid() const = 0;
+	protected:
+		FsObject(const Path &path) : p(path) { };
+		FsObject() { };
+		void setPath(const Path &path) { p = path; };
 	private:
-		gid_t gid;
+		struct stat unixStat() const;
+		Path p;
 };
 
 #endif

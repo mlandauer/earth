@@ -23,9 +23,9 @@
 // $Id$
 
 #include "testFsObject.h"
-#include "SpFsObject.h"
-#include "SpFile.h"
-#include "SpDir.h"
+#include "FsObject.h"
+#include "File.h"
+#include "Dir.h"
 
 testFsObject::testFsObject() : Tester("FsObject")
 {
@@ -37,10 +37,10 @@ void testFsObject::test()
 	FsObjectHandle file = FsObject::construct("test/templateImages/8x8.tiff");
 	checkEqual("test 1", file->path().fullName(),
 		"test/templateImages/8x8.tiff");
-	Uid u = Uid::current();
-	Gid g = Gid::current();
-	checkEqual("test 2", file->uid().name(), u.name());
-	checkEqual("test 3", file->gid().name(), g.name());
+	User u = User::current();
+	UserGroup g = UserGroup::current();
+	checkEqual("test 2", file->user().name(), u.name());
+	checkEqual("test 3", file->userGroup().name(), g.name());
 	checkNotNULL("test 4", dynamic_cast<File *>(file.pointer()));
 	checkNULL("test 5", dynamic_cast<Dir *>(file.pointer()));
 	FsObjectHandle file2 = FsObject::construct("test/templateImages/");

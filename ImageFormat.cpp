@@ -25,8 +25,8 @@
 #include <fstream>
 #include <iostream>
 
-#include "SpImageFormat.h"
-#include "SpFile.h"
+#include "ImageFormat.h"
+#include "File.h"
 
 std::list<ImageFormat *> ImageFormat::plugins;
 LibLoader ImageFormat::loader;

@@ -25,7 +25,7 @@
 #ifndef _testfile_h_
 #define _testfile_h_
 
-#include "SpTester.h"
+#include "Tester.h"
 
 class testFile : public Tester
 {

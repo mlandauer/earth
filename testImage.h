@@ -25,7 +25,7 @@
 #ifndef _testimage_h_
 #define _testimage_h_
 
-#include "SpTester.h"
+#include "Tester.h"
 
 class testImage : public Tester
 {

@@ -22,55 +22,20 @@
 //
 // $Id$
 
-#include "SpDir.h"
-#include "SpFile.h"
+#include "Image.h"
 
-#include <list>
-#include <algorithm>
-#include <sys/types.h>
-#include <dirent.h>
-#include <sys/stat.h>
-#include <unistd.h>
-
-#include "SpFsObject.h"
-
-bool Dir::sortByPath = false;
-
-bool Dir::valid() const
+Image* Image::construct(const Path &path)
 {
-	struct stat fileStat;
-	int ret = lstat(path().fullName().c_str(), &fileStat);
-	if (ret == 0)
-		return(S_ISDIR(fileStat.st_mode));
-	else
-		return false;
-}
-
-class CompareFsObjectPaths
-{
-	public:
-		bool operator()(FsObjectHandle s1, FsObjectHandle s2) const
-			{ return s1->path() < s2->path(); }
-};
-
-std::vector<FsObjectHandle> Dir::ls() const
-{
-	std::vector<FsObjectHandle> l;
-	if (!valid())
-		return l;
-	// First open a directory stream
-	DIR *d = opendir(path().fullName().c_str());
-	struct dirent *entry;
-	while ((entry = readdir(d)) != NULL) {
-		std::string pathString = entry->d_name;
-		if ((pathString != ".") && (pathString != "..")) {
-			Path p = path();
-			p.add(pathString);
-			l.push_back(FsObject::construct(p));
-		}
+	ImageFormat *format = ImageFormat::recogniseByMagic(path);
+	if (format) {
+		Image* image = format->constructImage();
+		image->format = format;
+		image->setPath(path);
+		return (image);
 	}
-	closedir(d);
-	if (sortByPath)
-		sort(l.begin(), l.end(), CompareFsObjectPaths());
-	return (l);
+	else
+		return (NULL);
 }
+
+
+

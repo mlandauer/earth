@@ -24,7 +24,7 @@
 
 #include <iostream>
 #include "testDir.h"
-#include "SpDir.h"
+#include "Dir.h"
 
 testDir::testDir() : Tester("Dir")
 {
@@ -38,10 +38,8 @@ void testDir::test()
 		"test/templateImages");
 	// Think of some way to test the modification dates automatically
 	// Check that this user owns the files
-	Uid u = Uid::current();
-	checkEqual("test 2", dir.uid().name(), u.name());
-	Gid g = Gid::current();
-	checkEqual("test 3", dir.gid().name(), g.name());
+	check("test 2", dir.user() == User::current());
+	check("test 3", dir.userGroup() == UserGroup::current());
 	checkEqualBool("test 4", dir.valid(), true);
 	std::vector<FsObjectHandle> ls = dir.ls();
 	if (checkEqual("ls test 0", ls.size(), 13)) {

@@ -22,39 +22,33 @@
 //
 // $Id$
 
-#include "SpImageDim.h"
+#ifndef _imageformat_h_
+#define _imageformat_h_
 
-ImageDim::ImageDim(unsigned int width, unsigned int height)
-{
-	setWidth(width);
-	h = height;
-}
+#include <string>
+#include "LibLoader.h"
+#include "Path.h"
 
-ImageDim::~ImageDim()
-{
-}
+class Image;
 
-void ImageDim::setWidth(unsigned int width)
+class ImageFormat
 {
-	w = width;
-}
+	public:
+		ImageFormat();
+		virtual ~ImageFormat();
+		virtual std::string formatString() = 0;
+		virtual Image* constructImage() = 0;
+		static void registerPlugins();
+		static void deRegisterPlugins();
+		static ImageFormat* recogniseByMagic(const Path &path);
+	private:
+		virtual bool recognise(unsigned char *buf) = 0;
+		virtual int sizeToRecognise() = 0;
+		static std::list<ImageFormat *> plugins;
+		static void addPlugin(ImageFormat *plugin);
+		static void removePlugin(ImageFormat *plugin);
+		static ImageFormat* recentPlugin();
+		static LibLoader loader;
+};
 
-void ImageDim::setHeight(unsigned int height)
-{
-	h = height;
-}
-
-unsigned int ImageDim::width() const
-{
-	return w;
-}
-
-unsigned int ImageDim::height() const
-{
-	return h;
-}
-
-bool ImageDim::operator==(const ImageDim &d) const
-{
-	return ((w == d.width()) && (h == d.height()));
-}
+#endif

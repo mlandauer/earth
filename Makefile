@@ -4,21 +4,21 @@ CC = g++
 OPTION = -g
 INCLUDE = 
 
-SRCS = SpDir.cpp SpFsObject.cpp SpImageFormat.cpp SpSize.cpp testCode.cpp \
-       SpGid.cpp SpImageSeq.cpp SpTester.cpp \
-       SpImage.cpp SpLibLoader.cpp SpTime.cpp \
-       SpFile.cpp SpImageDim.cpp SpPath.cpp SpUid.cpp \
+SRCS = Dir.cpp FsObject.cpp ImageFormat.cpp Size.cpp testCode.cpp \
+       UserGroup.cpp ImageSeq.cpp Tester.cpp \
+       Image.cpp LibLoader.cpp DateTime.cpp \
+       File.cpp ImageDim.cpp Path.cpp User.cpp \
        testDir.cpp testFile.cpp testFsObject.cpp \
        testImage.cpp testImageSeq.cpp testPath.cpp testSize.cpp \
-       testTime.cpp testFsObjectHandle.cpp
+       testDateTime.cpp testFsObjectHandle.cpp
 
-OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o SpTester.o SpLibLoader.o \
-          SpUid.o SpGid.o SpImage.o SpImageFormat.o SpImageDim.o \
-          SpFsObject.o SpDir.o \
-		  SpImageSeq.o \
+OBJECTS = Size.o File.o Path.o DateTime.o Tester.o LibLoader.o \
+          User.o UserGroup.o Image.o ImageFormat.o ImageDim.o \
+          FsObject.o Dir.o \
+		  ImageSeq.o \
           testDir.o testFile.o testFsObject.o \
           testImage.o testImageSeq.o testPath.o testSize.o \
-          testTime.o testFsObjectHandle.o
+          testDateTime.o testFsObjectHandle.o
 
 all: testCode
 	cd imageFormats; make all

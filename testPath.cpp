@@ -23,7 +23,7 @@
 // $Id$
 
 #include "testPath.h"
-#include "SpPath.h"
+#include "Path.h"
 
 testPath::testPath() : Tester("Path")
 {

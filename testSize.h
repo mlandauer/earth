@@ -25,7 +25,7 @@
 #ifndef _testsize_h_
 #define _testsize_h_
 
-#include "SpTester.h"
+#include "Tester.h"
 
 class testSize : public Tester
 {

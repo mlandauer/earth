@@ -25,12 +25,12 @@
 #ifndef _testtime_h_
 #define _testtime_h_
 
-#include "SpTester.h"
+#include "Tester.h"
 
-class testTime : public Tester
+class testDateTime : public Tester
 {
 public:
-	testTime();
+	testDateTime();
 	void test();
 };
 

@@ -28,7 +28,7 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "SpFile.h"
+#include "File.h"
 
 File::File(const Path &path) : FsObject(path), fileOpen(false)
 {

@@ -22,20 +22,67 @@
 //
 // $Id$
 
-#include "SpImage.h"
+#include <sys/stat.h>
+#include <unistd.h>
+#include <iostream>
 
-Image* Image::construct(const Path &path)
+#include "FsObject.h"
+#include "Dir.h"
+#include "Image.h"
+
+FsObjectHandle FsObject::construct(const Path &path)
 {
-	ImageFormat *format = ImageFormat::recogniseByMagic(path);
-	if (format) {
-		Image* image = format->constructImage();
-		image->format = format;
-		image->setPath(path);
-		return (image);
+	FsObject *o;
+	o = new Dir(path);
+	if (o->valid())
+		return FsObjectHandle(o);
+	else
+		delete o;
+		
+	o = new File(path);
+	if (o->valid()) {
+		Image *i = Image::construct(path);
+		if (i == NULL)
+			return FsObjectHandle(o);
+		else {
+			delete o;
+			return FsObjectHandle(i);
+		}
 	}
 	else
-		return (NULL);
+		delete o;
+	return FsObjectHandle(NULL);
 }
 
+struct stat FsObject::unixStat() const
+{
+	struct stat s;
+	int ret = lstat(path().fullName().c_str(), &s);
+  assert(ret == 0);
+	return (s);
+}
 
+DateTime FsObject::lastModification() const
+{
+	return DateTime::unixDateTime(unixStat().st_mtime);
+}
 
+DateTime FsObject::lastAccess() const
+{
+	return DateTime::unixDateTime(unixStat().st_atime);
+}
+
+DateTime FsObject::lastChange() const
+{
+	return DateTime::unixDateTime(unixStat().st_ctime);
+}
+
+User FsObject::user() const
+{
+	return User::unixUid(unixStat().st_uid);
+}
+
+UserGroup FsObject::userGroup() const
+{
+	return UserGroup::unixGid(unixStat().st_gid);
+}

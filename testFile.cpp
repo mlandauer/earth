@@ -23,7 +23,7 @@
 // $Id$
 
 #include "testFile.h"
-#include "SpFile.h"
+#include "File.h"
 
 testFile::testFile() : Tester("File")
 {

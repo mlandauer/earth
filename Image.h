@@ -22,57 +22,27 @@
 //
 // $Id$
 
-// A utility class for keeping of track of file or sequence sizes using
-// either a measure of bytes, Kb, Mb, etc...
+#ifndef _image_h_
+#define _image_h_
 
-#include "SpSize.h"
+#include <list>
 
-Size::Size()
+#include "File.h"
+#include "ImageDim.h"
+#include "ImageFormat.h"
+
+class Image : public File
 {
-	KBytes = 0;
-}
+	public:
+		static Image* construct(const Path &path);
+		static void registerPlugins();
+		static void deRegisterPlugins();
+		virtual ImageDim dim() = 0;
+		virtual bool valid() = 0;
+		std::string formatString() { return getFormat()->formatString(); };
+		ImageFormat* getFormat() { return format; };
+	private:
+		ImageFormat *format;
+};
 
-Size::~Size()
-{
-}
-
-void Size::setBytes(float n)
-{
-	KBytes = n / 1024;
-}
-
-void Size::setKBytes(float n)
-{
-	KBytes = n;
-}
-
-void Size::setMBytes(float n)
-{
-	KBytes = n * 1024;
-}
-
-void Size::setGBytes(float n)
-{
-	KBytes = n * 1024 * 1024;
-}
-
-float Size::bytes() const
-{
-	return KBytes * 1024;
-}
-
-float Size::kbytes() const
-{
-	return KBytes;
-}
-
-float Size::mbytes() const
-{
-	return KBytes / 1024;
-}
-
-float Size::gbytes() const
-{
-	return KBytes / 1024 / 1024;
-}
-
+#endif

@@ -22,33 +22,53 @@
 //
 // $Id$
 
-#ifndef _imageformat_h_
-#define _imageformat_h_
+#ifndef _file_h
+#define _file_h
 
-#include <string>
-#include "SpLibLoader.h"
-#include "SpPath.h"
+#include "Path.h"
+#include "DateTime.h"
+#include "Size.h"
+#include "User.h"
+#include "UserGroup.h"
+#include "FsObject.h"
 
-class Image;
-
-class ImageFormat
+class File : public FsObject
 {
 	public:
-		ImageFormat();
-		virtual ~ImageFormat();
-		virtual std::string formatString() = 0;
-		virtual Image* constructImage() = 0;
-		static void registerPlugins();
-		static void deRegisterPlugins();
-		static ImageFormat* recogniseByMagic(const Path &path);
+		File(const Path &path);
+		virtual ~File() { };
+		void open();
+		void close();
+		unsigned long int read(void *buf, unsigned long int count) const;
+		unsigned char  readChar() const;
+		unsigned short readShort(const int &endian) const;
+		unsigned long  readLong(const int &endian) const;
+		void seek(unsigned long int pos) const;
+		void seekForward(unsigned long int pos) const;
+		Size size() const;
+		bool valid() const;
+	protected:
+		File() { };
 	private:
-		virtual bool recognise(unsigned char *buf) = 0;
-		virtual int sizeToRecognise() = 0;
-		static std::list<ImageFormat *> plugins;
-		static void addPlugin(ImageFormat *plugin);
-		static void removePlugin(ImageFormat *plugin);
-		static ImageFormat* recentPlugin();
-		static LibLoader loader;
+		int fd;
+		bool fileOpen;
+};
+
+// Stores a file with its time stamps
+class FileDateTime : public File
+{
+	public:
+		FileDateTime(const File &file) : File(file) { }
+		bool changed() {
+			if (cachedChange < lastChange()) {
+				cachedChange = lastChange();
+				return true;
+			}
+			else
+				return false;
+		}
+	protected:
+		DateTime cachedChange;
 };
 
 #endif

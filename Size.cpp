@@ -22,35 +22,57 @@
 //
 // $Id$
 
-#ifndef _imageseq_h_
-#define _imageseq_h_
+// A utility class for keeping of track of file or sequence sizes using
+// either a measure of bytes, Kb, Mb, etc...
 
-#include <set>
-#include "SpImage.h"
+#include "Size.h"
 
-class ImageSeq
+Size::Size()
 {
-	public:
-		ImageSeq(Image *i);
-		void addImage(Image *i);
-		void removeImage(Image *i);
-		void removeImage(const Path &p);
-		Path path() const;
-		std::string framesString() const;
-		ImageDim dim() const { return dimensions; };
-		ImageFormat* format() const { return imageFormat; };
-	private:
-		std::set<int> f;
-		Path p;
-		Path pattern(const Path &a) const;
-		int frameNumber(const Path &a) const;
-		std::string hash(int size) const;
-		bool couldBePartOfSequence(Image *i) const;
-		bool partOfSequence(Image *i) const;
-		bool partOfSequence(const Path &p) const;
-		// Image/Sequence attributes
-		ImageFormat *imageFormat;
-		ImageDim dimensions;
-};
+	KBytes = 0;
+}
 
-#endif
+Size::~Size()
+{
+}
+
+void Size::setBytes(float n)
+{
+	KBytes = n / 1024;
+}
+
+void Size::setKBytes(float n)
+{
+	KBytes = n;
+}
+
+void Size::setMBytes(float n)
+{
+	KBytes = n * 1024;
+}
+
+void Size::setGBytes(float n)
+{
+	KBytes = n * 1024 * 1024;
+}
+
+float Size::bytes() const
+{
+	return KBytes * 1024;
+}
+
+float Size::kbytes() const
+{
+	return KBytes;
+}
+
+float Size::mbytes() const
+{
+	return KBytes / 1024;
+}
+
+float Size::gbytes() const
+{
+	return KBytes / 1024 / 1024;
+}
+

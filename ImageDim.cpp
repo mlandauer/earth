@@ -21,41 +21,40 @@
 //  Temple Place - Suite 330, Boston MA 02111-1307, USA.
 //
 // $Id$
-//
-// A file system object that File and Dir inherit from
-//
 
-#ifndef _fsobject_h_
-#define _fsobject_h_
+#include "ImageDim.h"
 
-#include <sys/stat.h>
-
-#include "SpTime.h"
-#include "SpPath.h"
-#include "SpUid.h"
-#include "SpGid.h"
-#include "SpSize.h"
-#include "SpFsObjectHandle.h"
-
-class FsObject
+ImageDim::ImageDim(unsigned int width, unsigned int height)
 {
-	public:
-		virtual ~FsObject() { };
-		static FsObjectHandle construct(const Path &path);
-		Time lastAccess() const;
-		Time lastModification() const;
-		Time lastChange() const;
-		Uid uid() const;
-		Gid gid() const;
-		Path path() const { return p; };
-		virtual bool valid() const = 0;
-	protected:
-		FsObject(const Path &path) : p(path) { };
-		FsObject() { };
-		void setPath(const Path &path) { p = path; };
-	private:
-		struct stat unixStat() const;
-		Path p;
-};
+	setWidth(width);
+	h = height;
+}
 
-#endif
+ImageDim::~ImageDim()
+{
+}
+
+void ImageDim::setWidth(unsigned int width)
+{
+	w = width;
+}
+
+void ImageDim::setHeight(unsigned int height)
+{
+	h = height;
+}
+
+unsigned int ImageDim::width() const
+{
+	return w;
+}
+
+unsigned int ImageDim::height() const
+{
+	return h;
+}
+
+bool ImageDim::operator==(const ImageDim &d) const
+{
+	return ((w == d.width()) && (h == d.height()));
+}

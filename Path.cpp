@@ -25,7 +25,7 @@
 #include <unistd.h>
 #include <iostream>
 
-#include "SpPath.h"
+#include "Path.h"
 
 Path::Path(const std::string &a)
 {
