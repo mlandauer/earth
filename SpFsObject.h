@@ -8,7 +8,7 @@
 
 #include <string>
 #include "SpTime.h"
-#include "SpPathString.h"
+#include "SpPath.h"
 #include "SpUid.h"
 #include "SpGid.h"
 #include "SpSize.h"
@@ -24,14 +24,13 @@ class SpFsObject
 		SpTime lastAccess() const;
 		SpTime lastModification() const;
 		SpTime lastChange() const;
-		SpPathString path() const;
+		SpPath path() const;
 		SpUid uid() const;
 		SpGid gid() const;
 		SpSize size() const;
-	protected:
-		void setPath(const string &path);
+		void setPath(const string &pathString);
 	private:
-		SpPathString pathString;
+		SpPath p;
 };
 
 #endif

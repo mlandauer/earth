@@ -46,7 +46,7 @@ SpImage* SpImage::construct(const string &path)
 		a != plugins.end(); ++a)
 		if ((*a)->sizeToRecognise() > largestSizeToRecognise)
 			largestSizeToRecognise = (*a)->sizeToRecognise();
-
+			
 	// Create a temporary file object
 	unsigned char *buf = new unsigned char[largestSizeToRecognise];
 	SpFile f(path);

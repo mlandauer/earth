@@ -1,15 +1,15 @@
 // $Id$
 
-#ifndef _sppathstring_h_
-#define _sppathstring_h_
+#ifndef _sppath_h_
+#define _sppath_h_
 
 #include <string>
 
-class SpPathString
+class SpPath
 {
 	public:
-		SpPathString();
-		~SpPathString();
+		SpPath();
+		~SpPath();
 		void set(const string &a);
 		string fullName() const;
 	private:

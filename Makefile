@@ -4,7 +4,7 @@ CC = g++
 OPTION = -g
 INCLUDE = 
 
-OBJECTS = SpSize.o SpFile.o SpPathString.o SpTime.o \
+OBJECTS = SpSize.o SpFile.o SpPath.o SpTime.o \
           SpUid.o SpGid.o SpImage.o SpImageDim.o SpFsObject.o SpDir.o \
 		  SpSGIImage.o SpTIFFImage.o SpFITImage.o SpPRMANZImage.o \
 		  SpGIFImage.o SpCINEONImage.o SpIFFImage.o SpPRTEXImage.o
@@ -24,11 +24,11 @@ testCode.o: testCode.C SpFile.h SpUid.h SpGid.h SpTime.h SpSize.h SpFsObject.h
 SpSize.o: SpSize.C SpSize.h
 	$(CC) $(OPTION) -c SpSize.C $(INCLUDE)
 
-SpFile.o: SpFile.C SpFile.h SpPathString.h SpTime.h SpSize.h SpUid.h SpGid.h
+SpFile.o: SpFile.C SpFile.h SpPath.h SpTime.h SpSize.h SpUid.h SpGid.h
 	$(CC) $(OPTION) -c SpFile.C $(INCLUDE)
 
-SpPathString.o: SpPathString.C SpPathString.h
-	$(CC) $(OPTION) -c SpPathString.C $(INCLUDE)
+SpPath.o: SpPath.C SpPath.h
+	$(CC) $(OPTION) -c SpPath.C $(INCLUDE)
 
 SpTime.o: SpTime.C SpTime.h
 	$(CC) $(OPTION) -c SpTime.C $(INCLUDE)
@@ -69,7 +69,7 @@ SpCINEONImage.o: SpCINEONImage.C SpCINEONImage.h SpImage.h
 SpImageDim.o: SpImageDim.C SpImageDim.h
 	$(CC) $(OPTION) -c SpImageDim.C $(INCLUDE)
 
-SpFsObject.o: SpFsObject.C SpFsObject.h SpTime.h SpPathString.h SpUid.h SpGid.h
+SpFsObject.o: SpFsObject.C SpFsObject.h SpTime.h SpPath.h SpUid.h SpGid.h
 	$(CC) $(OPTION) -c SpFsObject.C $(INCLUDE)
 
 SpDir.o: SpDir.C SpDir.h SpFsObject.h
