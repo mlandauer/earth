@@ -40,7 +40,7 @@ std::vector<ImageSeq> IndexDirectory::getImageSequences(const Path &path) const
 		Image *image = Image::construct(i->getPath());
 		// Doesn't correctly take account of whether the image is valid or not
 		if (image != NULL) {
-			sequences.addImage(image);
+			sequences.addImage(CachedImage(image));
 		}
 	}
 	return sequences.getSequences();

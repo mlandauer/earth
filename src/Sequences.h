@@ -26,7 +26,7 @@
 #define _EARTH_SEQUENCES_H_
 
 #include <vector>
-#include "Image.h"
+#include "CachedImage.h"
 #include "ImageSeq.h"
 
 namespace Sp {
@@ -38,7 +38,8 @@ private:
 	
 public:
 	std::vector<ImageSeq> getSequences() const;
-	void addImage(const Image *image);
+	void addImage(const CachedImage &image);
+	void removeImage(const Path &path);
 };
 
 }

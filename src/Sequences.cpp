@@ -26,7 +26,7 @@
 
 namespace Sp {
 
-void Sequences::addImage(const Image *image)
+void Sequences::addImage(const CachedImage &image)
 {
 	// Go through each sequence and try adding it until one accepts
 	bool added = false;
@@ -40,6 +40,16 @@ void Sequences::addImage(const Image *image)
 	if (!added) {
 		// Add a new sequence which is this image
 		sequences.push_back(ImageSeq(image));
+	}
+}
+
+void Sequences::removeImage(const Path &path)
+{
+	// Try deleting this file from all the currently known sequences
+	for (std::vector<ImageSeq>::iterator i = sequences.begin(); i != sequences.end(); ++i) {
+		if (i->removeImage(path)) {
+			break;
+		}
 	}
 }
 

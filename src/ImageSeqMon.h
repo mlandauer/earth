@@ -28,6 +28,7 @@
 #include "ImageEventObserver.h"
 #include "ImageSeq.h"
 #include <vector>
+#include "Sequences.h"
 
 namespace Sp {
 	
@@ -39,7 +40,7 @@ public:
 	std::vector<ImageSeq> getImageSequences() const;
 	
 private:
-	std::vector<ImageSeq> sequences;
+	Sequences sequences;
 };
 
 }

@@ -28,32 +28,17 @@ namespace Sp {
 	
 void ImageSeqMon::imageAdded(const CachedImage &image)
 {
-	// Try adding this image to all of the currently known sequences
-	bool added = false;
-	for (std::vector<ImageSeq>::iterator i = sequences.begin(); i != sequences.end(); ++i) {
-		if (i->addImage(image)) {
-			added = true;
-			break;
-		}
-	}
-	// If the image was not part of a sequence make a new sequence
-	if (!added)
-		sequences.push_back(ImageSeq(image));
+	sequences.addImage(image);
 }
 
 void ImageSeqMon::fileDeleted(const File &file)
 {
-	// Try deleting this file from all the currently known sequences
-	for (std::vector<ImageSeq>::iterator i = sequences.begin(); i != sequences.end(); ++i) {
-		if (i->removeImage(file.getPath())) {
-			break;
-		}
-	}
+	sequences.removeImage(file.getPath());
 }
 
 std::vector<ImageSeq> ImageSeqMon::getImageSequences() const
 {
-	return sequences;
+	return sequences.getSequences();
 }
 
 }
