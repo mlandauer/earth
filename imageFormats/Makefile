@@ -2,7 +2,7 @@
 
 CC = g++
 OPTION = -g
-INCLUDE = -I..
+INCLUDE = -I../src
 
 SRCS = CINEONImage.cpp GIFImage.cpp PRMANZImage.cpp SGIImage.cpp \
        FITImage.cpp IFFImage.cpp PRTEXImage.cpp TIFFImage.cpp 

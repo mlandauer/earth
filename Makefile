@@ -9,20 +9,20 @@ SRCS = src/Dir.cpp src/FsObject.cpp src/ImageFormat.cpp src/Size.cpp src/UserGro
 			 src/ImageSeq.cpp src/Image.cpp src/LibLoader.cpp src/DateTime.cpp \
 			 src/File.cpp src/ImageDim.cpp src/Path.cpp src/User.cpp src/Frames.cpp \
 			 src/IndexDirectory.cpp src/ImageMon.cpp src/CachedDir.cpp src/ImageEventLogger.cpp \
-			 src/ImageSeqMon.cpp \
+			 src/ImageSeqMon.cpp src/Sequences.cpp \
 			 src/earth.cpp
 
 OBJECTS = src/Dir.o src/FsObject.o src/ImageFormat.o src/Size.o src/UserGroup.o \
 					src/ImageSeq.o src/Image.o src/LibLoader.o src/DateTime.o \
 					src/File.o src/ImageDim.o src/Path.o src/User.o src/Frames.o \
 					src/IndexDirectory.o src/ImageMon.o src/CachedDir.o src/ImageEventLogger.o \
-					src/ImageSeqMon.o \
+					src/ImageSeqMon.o src/Sequences.o \
 					src/earth.o
 					
 EARTH_OBJECTS = src/Dir.o src/FsObject.o src/ImageFormat.o src/Size.o src/UserGroup.o \
 					src/ImageSeq.o src/Image.o src/LibLoader.o src/DateTime.o \
 					src/File.o src/ImageDim.o src/Path.o src/User.o src/Frames.o \
-					src/IndexDirectory.o \
+					src/IndexDirectory.o src/Sequences.o \
 					src/earth.o
 
 all: $(OBJECTS)

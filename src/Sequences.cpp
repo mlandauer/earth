@@ -20,30 +20,32 @@
 //  with this program; if not, write the Free Software Foundation, Inc., 59
 //  Temple Place - Suite 330, Boston MA 02111-1307, USA.
 //
-//  $Id: IndexDirectory.cpp,v 1.4 2003/01/28 23:23:32 mlandauer Exp $
+//  $Id$
 
-#include "IndexDirectory.h"
-#include "Dir.h"
 #include "Sequences.h"
 
 namespace Sp {
 
-std::vector<ImageSeq> IndexDirectory::getImageSequences(const Path &path) const
+void Sequences::addImage(const Image *image)
 {
-	Dir d(path);
-	assert(d.valid());
-	
-	std::vector<File> files = d.listFilesRecursive();
-	// Make a list of image sequences from this
-	Sequences sequences;
-	for (std::vector<File>::iterator i = files.begin(); i != files.end(); ++i) {
-		Image *image = Image::construct(i->getPath());
-		// Doesn't correctly take account of whether the image is valid or not
-		if (image != NULL) {
-			sequences.addImage(image);
+	// Go through each sequence and try adding it until one accepts
+	bool added = false;
+	for (std::vector<ImageSeq>::iterator j = sequences.begin(); j != sequences.end(); ++j) {
+		if (j->addImage(image)) {
+			added = true;
+			break;
 		}
 	}
-	return sequences.getSequences();
+	// If no sequences accepts the image, make a new sequence
+	if (!added) {
+		// Add a new sequence which is this image
+		sequences.push_back(ImageSeq(image));
+	}
+}
+
+std::vector<ImageSeq> Sequences::getSequences() const
+{
+	return sequences;
 }
 
 }
