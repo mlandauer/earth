@@ -1,0 +1,14 @@
+dnl Process this file with autoconf to produce a configure script
+
+AC_INIT(earth.cpp)
+AM_INIT_AUTOMAKE(earth, 0.1)
+AC_PROG_CXX
+AC_PROG_CC
+AC_PROG_CPP
+AC_LANG(C++)
+
+AM_PATH_XML2
+AM_LIBXMLPP
+AC_CHECK_LIB(dl, dlopen)
+
+AC_OUTPUT(Makefile)
