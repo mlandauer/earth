@@ -17,7 +17,6 @@ OBJECTS = Dir.o FsObject.o ImageFormat.o Size.o UserGroup.o \
 all: $(OBJECTS)
 	cd imageFormats; make all
 	cd test; make all
-	LD_LIBRARY_PATH=/usr/local/lib:imageFormats ./test/testCode
 	
 clean:
 	cd imageFormats; make clean
