@@ -1,2 +1,6 @@
 Cache lstats in SpFsObject
 Have to do error checking on file access
+Make SpFsObject use plugins for returning objects
+Actually compile so's that get read in (finalise plugins)
+Start Sequence class
+Write shell script that generates fake image sequences (from image Templates)
