@@ -15,6 +15,7 @@ class SpPath
 		string fullName() const;
 		string root() const;
 		string relative() const;
+		string absolute() const;
 		void add(const string &a);
 		bool operator<(const SpPath &p) const;
 		bool operator==(const SpPath &p) const;

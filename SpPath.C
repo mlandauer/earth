@@ -1,5 +1,6 @@
 // $Id$
 
+#include <unistd.h>
 #include "SpPath.h"
 
 SpPath::SpPath(const string &a)
@@ -61,6 +62,20 @@ string SpPath::relative() const
 	return (a);
 }
 
+// Returns an absolute version of the path
+// i.e. foo/blah.tif -> /home/fiddle/foo/blah.tif
+string SpPath::absolute() const
+{
+	if (pathString[0] == '/')
+		return pathString;
+	char workingDirectory[512];
+	if (getcwd(workingDirectory, 512) == NULL) {
+		cerr << "SpPath::absolute() getcwd buffer overflow!" << endl;
+		exit(1);
+	}
+	return (string(workingDirectory) + "/" + pathString);
+}
+
 string SpPath::fullName() const
 {
 	return (pathString);
@@ -70,3 +85,6 @@ void SpPath::add(const string &a)
 {
 	pathString += "/" + a;
 }
+
+
+
