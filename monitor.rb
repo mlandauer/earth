@@ -6,11 +6,15 @@ DirectoryRemoved = Struct.new(:path)
 class Snapshot
   attr_reader :directory, :filenames, :subdirectories, :snapshots
 
+  def deep_copy
+    a = Snapshot.new(directory, filenames, snapshots.clone)
+  end
+  
   def Snapshot.difference(snap1, snap2)
     added_files = snap2.filenames - snap1.filenames
     removed_files = snap1.filenames - snap2.filenames
-    added_directories = snap2.subdirectories - snap1.subdirectories
-    removed_directories = snap1.subdirectories - snap2.subdirectories
+    added_directories = snap2.snapshots.keys - snap1.snapshots.keys
+    removed_directories = snap1.snapshots.keys - snap2.snapshots.keys
 
     changes = added_files.map{|x| FileAdded.new(x)}
     changes += removed_files.map{|x| FileRemoved.new(x)}
@@ -27,18 +31,17 @@ class Snapshot
     changes
   end
 
-  def initialize(directory)
+  def initialize(directory, filenames = [], snapshots = Hash.new)
     @directory = directory
-    @filenames = []
-    @subdirectories = []
-    @snapshots = Hash.new
+    @filenames = filenames
+    @snapshots = snapshots
   end
   
   def exist?(path)
     if @filenames.include?(path)
       true
     else
-      @snapshots.each do |dir, snapshot|
+      @snapshots.each_value do |snapshot|
         if snapshot.exist?(path)
           return true
         end
@@ -55,8 +58,9 @@ class Snapshot
     # Make absolute paths
     entries.map!{|x| File.join(@directory, x)}
     
-    @filenames, @subdirectories = entries.partition{|f| File.file?(f)}
-    @subdirectories.each do |d|
+    @filenames, subdirectories = entries.partition{|f| File.file?(f)}
+    @snapshots.clear
+    subdirectories.each do |d|
       snapshot = Snapshot.new(d)
       snapshot.update
       @snapshots[d] = snapshot
@@ -74,7 +78,7 @@ class Monitor
   end
   
   def update
-    old_snapshot = @snapshot.clone
+    old_snapshot = @snapshot.deep_copy
     @snapshot.update
     # Return the changes
     Snapshot.difference(old_snapshot, @snapshot)
