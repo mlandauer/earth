@@ -19,11 +19,15 @@ class Monitor
   end
   
   def update
-    @filenames, dirs = Dir.entries(@directory).partition{|f| File.file?(File.join(@directory, f))}
-    @filenames.map!{|f| File.join(@directory, f)}
-    dirs.delete(".")
-    dirs.delete("..")
-    @monitors = dirs.map{|d| Monitor.new(File.join(@directory, d))}
+    entries = Dir.entries(@directory)
+    entries.delete(".")
+    entries.delete("..")
+
+    # Make absolute paths
+    entries.map!{|x| File.join(@directory, x)}
+    
+    @filenames, dirs = entries.partition{|f| File.file?(f)}
+    @monitors = dirs.map {|d| Monitor.new(d)}
     @monitors.each{|m| m.update}
   end
 end

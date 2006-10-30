@@ -29,6 +29,13 @@ class TestMonitor < Test::Unit::TestCase
     assert(!@monitor.exist?('test_data/file2'))    
   end
   
+  # Those pesky '.' and '..' directories shouldn't be there
+  def test_hidden_files
+    @monitor.update
+    assert(!@monitor.exist?('test_data/.')) 
+    assert(!@monitor.exist?('test_data/..')) 
+  end
+  
   def test_recursive
     @monitor.update
     assert(@monitor.exist?('test_data/dir1/file1'))
