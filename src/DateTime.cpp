@@ -45,6 +45,11 @@ bool DateTime::operator<(const DateTime &t) const
 	return (time < t.time);
 }
 
+bool DateTime::operator>(const DateTime &t) const
+{
+	return (time > t.time);
+}
+
 bool DateTime::operator==(const DateTime &t) const
 {
 	return (time == t.time);

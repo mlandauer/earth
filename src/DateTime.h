@@ -110,6 +110,7 @@ public:
 	//! Returns the year as a string
 	std::string getYearString() const;
 	bool operator<(const DateTime &t) const;
+	bool operator>(const DateTime &t) const;
 	bool operator==(const DateTime &t) const;
 	
 private:
