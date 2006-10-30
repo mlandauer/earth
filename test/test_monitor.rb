@@ -43,7 +43,7 @@ class TestMonitor < Test::Unit::TestCase
   end
   
   def test_added
-    assert_equal([FileAdded.new('test_data/file1'), DirectoryAdded.new('test_data/dir1'), FileAdded.new('test_data/dir1/file1')],
+    assert_equal([FileAdded.new('test_data/file1'), FileAdded.new('test_data/dir1/file1')],
       @monitor.update)
   end
   
@@ -51,7 +51,7 @@ class TestMonitor < Test::Unit::TestCase
     @monitor.update
     FileUtils.rm_rf 'test_data/dir1'
     FileUtils.rm 'test_data/file1'
-    assert_equal([FileRemoved.new('test_data/file1'), DirectoryRemoved.new('test_data/dir1'), FileRemoved.new('test_data/dir1/file1')],
+    assert_equal([FileRemoved.new('test_data/file1'), FileRemoved.new('test_data/dir1/file1')],
       @monitor.update)
   end
   
@@ -61,8 +61,7 @@ class TestMonitor < Test::Unit::TestCase
     @monitor.update
     FileUtils.rm_rf 'test_data/dir1'
 
-    assert_equal([DirectoryRemoved.new('test_data/dir1'), FileRemoved.new('test_data/dir1/file1'),
-      DirectoryRemoved.new('test_data/dir1/dir2'), FileRemoved.new('test_data/dir1/dir2/file')],
+    assert_equal([FileRemoved.new('test_data/dir1/file1'), FileRemoved.new('test_data/dir1/dir2/file')],
       @monitor.update)
   end
 

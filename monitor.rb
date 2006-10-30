@@ -1,10 +1,8 @@
 FileAdded = Struct.new(:filename)
 FileRemoved = Struct.new(:filename)
-DirectoryAdded = Struct.new(:path)
-DirectoryRemoved = Struct.new(:path)
 
 class Snapshot
-  attr_reader :directory, :filenames, :subdirectories, :snapshots
+  attr_reader :directory, :filenames, :snapshots
 
   def deep_copy
     a = Snapshot.new(directory, filenames, snapshots.clone)
@@ -20,8 +18,6 @@ class Snapshot
     
     changes = added_files.map{|x| FileAdded.new(x)}
     changes += removed_files.map{|x| FileRemoved.new(x)}
-    changes += added_directories.map{|x| DirectoryAdded.new(x)}
-    changes += removed_directories.map{|x| DirectoryRemoved.new(x)}
     directories.each do |d|
       changes += Snapshot.difference(snap1.snapshots[d], snap2.snapshots[d])
     end
