@@ -55,9 +55,21 @@ class TestMonitor < Test::Unit::TestCase
       @monitor.update)
   end
   
+  def test_removed2
+    FileUtils.mkdir 'test_data/dir1/dir2'
+    FileUtils.touch 'test_data/dir1/dir2/file'
+    @monitor.update
+    FileUtils.rm_rf 'test_data/dir1'
+
+    assert_equal([DirectoryRemoved.new('test_data/dir1'), FileRemoved.new('test_data/dir1/file1'),
+      DirectoryRemoved.new('test_data/dir1/dir2'), FileRemoved.new('test_data/dir1/dir2/file')],
+      @monitor.update)
+  end
+
   def test_change_in_subdirectory
     @monitor.update
     FileUtils.touch 'test_data/dir1/file2'
     assert_equal([FileAdded.new('test_data/dir1/file2')], @monitor.update)
   end
+  
 end
