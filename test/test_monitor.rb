@@ -41,4 +41,10 @@ class TestMonitor < Test::Unit::TestCase
     assert(@monitor.exist?('test_data/dir1/file1'))
     assert(!@monitor.exist?('test_data/dir1/file2'))
   end
+  
+  def test_added
+    changes = @monitor.update
+    assert_equal([FileAdded.new('test_data/file1'), DirectoryAdded.new('test_data/dir1'), FileAdded.new('test_data/dir1/file1')],
+      changes)
+  end
 end
