@@ -13,13 +13,19 @@ class Snapshot
   def Snapshot.difference(snap1, snap2)
     added_files = snap2.filenames - snap1.filenames
     removed_files = snap1.filenames - snap2.filenames
-    added_directories = snap2.snapshots.keys - snap1.snapshots.keys
-    removed_directories = snap1.snapshots.keys - snap2.snapshots.keys
-
+    added_directories = snap2.subdirectories - snap1.subdirectories
+    removed_directories = snap1.subdirectories - snap2.subdirectories
+    # Directories that have not been either added or removed
+    directories = snap1.subdirectories - removed_directories
+    
     changes = added_files.map{|x| FileAdded.new(x)}
     changes += removed_files.map{|x| FileRemoved.new(x)}
     changes += added_directories.map{|x| DirectoryAdded.new(x)}
     changes += removed_directories.map{|x| DirectoryRemoved.new(x)}
+    directories.each do |d|
+      changes += Snapshot.difference(snap1.snapshots[d], snap2.snapshots[d])
+    end
+    
     # In each of the added directories all the files are new files
     added_directories.each do |directory|
       changes += Snapshot.difference(Snapshot.new(directory), snap2.snapshots[directory])
@@ -37,6 +43,10 @@ class Snapshot
     @snapshots = snapshots
   end
   
+  def subdirectories
+    @snapshots.keys
+  end
+
   def exist?(path)
     if @filenames.include?(path)
       true
