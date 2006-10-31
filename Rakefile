@@ -5,7 +5,8 @@ ActiveRecord::Base.establish_connection(
   :adapter  => "mysql",
   :host     => "localhost",
   :database => "earth_test",
-  :username => "")
+  :username => "earth",
+  :password => "earth")
 
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 
