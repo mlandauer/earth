@@ -15,7 +15,7 @@ class TestDatabase < Test::Unit::TestCase
     )
     
     file = Files.new
-    file.name = 'A/stupid/name'
+    file.path = 'an/arbitrary/path/to_a_file'
     file.save
   end
 end
