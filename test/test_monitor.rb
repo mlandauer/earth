@@ -9,7 +9,7 @@ class TestMonitor < Test::Unit::TestCase
     FileUtils.touch 'test_data/file1'
     FileUtils.touch 'test_data/dir1/file1'
 
-    @monitor = Monitor.new("test_data")
+    @monitor = MonitorWithQueue.new("test_data")
   end
   
   def teardown
