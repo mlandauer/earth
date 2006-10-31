@@ -10,9 +10,6 @@
 require 'thread'
 require 'snapshot'
 
-FileAdded = Struct.new(:filename)
-FileRemoved = Struct.new(:filename)
-
 class Monitor
   attr_reader :queue
   
@@ -40,6 +37,9 @@ class Monitor
   end
 end
 
+FileAdded = Struct.new(:filename)
+FileRemoved = Struct.new(:filename)
+
 class MonitorWithQueue < Monitor
   def initialize(directory)
     super(directory)
@@ -53,6 +53,5 @@ class MonitorWithQueue < Monitor
   def file_removed(name)
     @queue.push(FileRemoved.new(name))
   end
-  
 end
 
