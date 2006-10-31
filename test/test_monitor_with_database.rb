@@ -1,6 +1,6 @@
 require "fileutils"
 require "monitor_with_database"
-require "files"
+require "file_info"
 
 class TestMonitorWithDatabase < Test::Unit::TestCase
   def setup
@@ -20,12 +20,12 @@ class TestMonitorWithDatabase < Test::Unit::TestCase
 
   # Database should be empty on startup
   def test_empty
-    assert(Files.find_all.empty?)
+    assert(FileInfo.find_all.empty?)
   end
   
   def test_simple
     @monitor.update
-    files = Files.find_all
+    files = FileInfo.find_all
     assert_equal(2, files.size)
     assert_equal(File.expand_path('test_data/file1'), files[0].path)
     assert_equal(File.expand_path('test_data/dir1/file1'), files[1].path)
@@ -35,7 +35,7 @@ class TestMonitorWithDatabase < Test::Unit::TestCase
     @monitor.update
     FileUtils.rm 'test_data/file1'
     @monitor.update
-    files = Files.find_all
+    files = FileInfo.find_all
     assert_equal(1, files.size)
     assert_equal(File.expand_path('test_data/dir1/file1'), files[0].path)    
   end

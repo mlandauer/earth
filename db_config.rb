@@ -11,3 +11,7 @@ ActiveRecord::Base.establish_connection(
 
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 ActiveRecord::Base.logger.level = Logger::WARN
+
+Inflector.inflections do |inflect|
+  inflect.irregular 'info', 'info'
+end
