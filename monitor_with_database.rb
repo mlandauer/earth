@@ -13,6 +13,6 @@ class MonitorWithDatabase < FileMonitor
   end
   
   def file_removed(name)
-    Files.delete_all('path = #{name}')
+    Files.delete_all(['path = ?', name])
   end
 end
