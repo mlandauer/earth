@@ -85,11 +85,19 @@ class Monitor
     @snapshot.exist?(path)
   end
   
+  def file_added(name)
+    @queue.push(FileAdded.new(name))
+  end
+  
+  def file_removed(name)
+    @queue.push(FileRemoved.new(name))
+  end
+  
   def update
     old_snapshot = @snapshot.deep_copy
     @snapshot.update
     # Pop the changes onto the queue
-    Snapshot.added_files(old_snapshot, @snapshot).each {|x| @queue.push(FileAdded.new(x))}
-    Snapshot.removed_files(old_snapshot, @snapshot).each {|x| @queue.push(FileRemoved.new(x))}
+    Snapshot.added_files(old_snapshot, @snapshot).each {|x| file_added(x)}
+    Snapshot.removed_files(old_snapshot, @snapshot).each {|x| file_removed(x)}
   end
 end
