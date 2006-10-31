@@ -10,29 +10,30 @@ class Snapshot
     a = Snapshot.new(directory, filenames, snapshots.clone)
   end
   
-  def Snapshot.difference(snap1, snap2)
+  def Snapshot.added_files(snap1, snap2)
     added_files = snap2.filenames - snap1.filenames
-    removed_files = snap1.filenames - snap2.filenames
     added_directories = snap2.subdirectories - snap1.subdirectories
-    removed_directories = snap1.subdirectories - snap2.subdirectories
     # Directories that have not been either added or removed
-    directories = snap1.subdirectories - removed_directories
+    directories = snap2.subdirectories - added_directories
     
-    changes = added_files.map{|x| FileAdded.new(x)}
-    changes += removed_files.map{|x| FileRemoved.new(x)}
-    directories.each do |d|
-      changes += Snapshot.difference(snap1.snapshots[d], snap2.snapshots[d])
-    end
-    
-    # In each of the added directories all the files are new files
+    changes = added_files
     added_directories.each do |directory|
-      changes += Snapshot.difference(Snapshot.new(directory), snap2.snapshots[directory])
-    end
-    removed_directories.each do |directory|
-      changes += Snapshot.difference(snap1.snapshots[directory], Snapshot.new(directory))
+      changes += Snapshot.added_files(Snapshot.new(directory), snap2.snapshots[directory])
     end
     
+    directories.each do |d|
+      changes += Snapshot.added_files(snap1.snapshots[d], snap2.snapshots[d])
+    end
+
     changes
+  end
+  
+  def Snapshot.removed_files(snap1, snap2)
+    Snapshot.added_files(snap2, snap1)
+  end
+  
+  def Snapshot.difference(snap1, snap2)
+    Snapshot.added_files(snap1, snap2).map{|x| FileAdded.new(x)} + Snapshot.removed_files(snap1, snap2).map{|x| FileRemoved.new(x)}
   end
 
   def initialize(directory, filenames = [], snapshots = Hash.new)
