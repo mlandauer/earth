@@ -32,10 +32,6 @@ class Snapshot
     Snapshot.added_files(snap2, snap1)
   end
   
-  def Snapshot.difference(snap1, snap2)
-    Snapshot.added_files(snap1, snap2).map{|x| FileAdded.new(x)} + Snapshot.removed_files(snap1, snap2).map{|x| FileRemoved.new(x)}
-  end
-
   def initialize(directory, filenames = [], snapshots = Hash.new)
     @directory = directory
     @filenames = filenames
@@ -93,6 +89,7 @@ class Monitor
     old_snapshot = @snapshot.deep_copy
     @snapshot.update
     # Pop the changes onto the queue
-    Snapshot.difference(old_snapshot, @snapshot).each {|x| @queue.push(x)}
+    Snapshot.added_files(old_snapshot, @snapshot).each {|x| @queue.push(FileAdded.new(x))}
+    Snapshot.removed_files(old_snapshot, @snapshot).each {|x| @queue.push(FileRemoved.new(x))}
   end
 end
