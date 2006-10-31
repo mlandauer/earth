@@ -27,8 +27,8 @@ class TestMonitorWithDatabase < Test::Unit::TestCase
     @monitor.update
     files = Files.find_all
     assert_equal(2, files.size)
-    assert_equal('test_data/file1', files[0].path)
-    assert_equal('test_data/dir1/file1', files[1].path)
+    assert_equal(File.expand_path('test_data/file1'), files[0].path)
+    assert_equal(File.expand_path('test_data/dir1/file1'), files[1].path)
   end
   
   def test_delete
@@ -37,6 +37,6 @@ class TestMonitorWithDatabase < Test::Unit::TestCase
     @monitor.update
     files = Files.find_all
     assert_equal(1, files.size)
-    assert_equal('test_data/dir1/file1', files[0].path)    
+    assert_equal(File.expand_path('test_data/dir1/file1'), files[0].path)    
   end
 end

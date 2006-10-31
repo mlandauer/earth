@@ -37,7 +37,8 @@ class Snapshot
   end
   
   def initialize(directory, filenames = [], snapshots = Hash.new)
-    @directory = directory
+    # Internally store everything as absolute path
+    @directory = File.expand_path(directory)
     @filenames = filenames
     @snapshots = snapshots
   end
