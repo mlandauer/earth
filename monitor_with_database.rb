@@ -1,6 +1,7 @@
-require "monitor"
+require 'file_monitor.rb'
+require 'files'
 
-class MonitorWithDatabase < Monitor
+class MonitorWithDatabase < FileMonitor
   def initialize(directory)
     super(directory)
     # Clear out database
