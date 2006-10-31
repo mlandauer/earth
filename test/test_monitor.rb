@@ -43,16 +43,22 @@ class TestMonitor < Test::Unit::TestCase
   end
   
   def test_added
-    assert_equal([FileAdded.new('test_data/file1'), FileAdded.new('test_data/dir1/file1')],
-      @monitor.update)
+    @monitor.queue.clear
+    @monitor.update
+    assert_equal(FileAdded.new('test_data/file1'), @monitor.queue.pop)
+    assert_equal(FileAdded.new('test_data/dir1/file1'), @monitor.queue.pop)
+    assert(@monitor.queue.empty?)
   end
   
   def test_removed
     @monitor.update
     FileUtils.rm_rf 'test_data/dir1'
     FileUtils.rm 'test_data/file1'
-    assert_equal([FileRemoved.new('test_data/file1'), FileRemoved.new('test_data/dir1/file1')],
-      @monitor.update)
+    @monitor.queue.clear
+    @monitor.update
+    assert_equal(FileRemoved.new('test_data/file1'), @monitor.queue.pop)
+    assert_equal(FileRemoved.new('test_data/dir1/file1'), @monitor.queue.pop)
+    assert(@monitor.queue.empty?)
   end
   
   def test_removed2
@@ -60,15 +66,20 @@ class TestMonitor < Test::Unit::TestCase
     FileUtils.touch 'test_data/dir1/dir2/file'
     @monitor.update
     FileUtils.rm_rf 'test_data/dir1'
-
-    assert_equal([FileRemoved.new('test_data/dir1/file1'), FileRemoved.new('test_data/dir1/dir2/file')],
-      @monitor.update)
+    @monitor.queue.clear
+    @monitor.update
+    assert_equal(FileRemoved.new('test_data/dir1/file1'), @monitor.queue.pop)
+    assert_equal(FileRemoved.new('test_data/dir1/dir2/file'), @monitor.queue.pop)
+    assert(@monitor.queue.empty?)
   end
 
   def test_change_in_subdirectory
     @monitor.update
     FileUtils.touch 'test_data/dir1/file2'
-    assert_equal([FileAdded.new('test_data/dir1/file2')], @monitor.update)
+    @monitor.queue.clear
+    @monitor.update
+    assert_equal(FileAdded.new('test_data/dir1/file2'), @monitor.queue.pop)
+    assert(@monitor.queue.empty?)
   end
   
 end

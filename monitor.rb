@@ -1,3 +1,5 @@
+require 'thread'
+
 FileAdded = Struct.new(:filename)
 FileRemoved = Struct.new(:filename)
 
@@ -75,8 +77,11 @@ class Snapshot
 end
 
 class Monitor
+  attr_reader :queue
+  
   def initialize(directory)
     @snapshot = Snapshot.new(directory)
+    @queue = Queue.new
   end
   
   def exist?(path)
@@ -86,7 +91,7 @@ class Monitor
   def update
     old_snapshot = @snapshot.deep_copy
     @snapshot.update
-    # Return the changes
-    Snapshot.difference(old_snapshot, @snapshot)
+    # Pop the changes onto the queue
+    Snapshot.difference(old_snapshot, @snapshot).each {|x| @queue.push(x)}
   end
 end
