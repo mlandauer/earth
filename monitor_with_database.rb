@@ -16,10 +16,10 @@ class MonitorWithDatabase < FileMonitor
     FileInfo.delete_all(['path = ? AND name = ?', path, name])
   end
   
-  def file_changed(path, name, old_stat, new_stat)
+  def file_changed(path, name, stat)
     file = FileInfo.find(:first, :conditions => ['path = ? AND name = ?', path, name])
-    file.modified = new_stat.mtime
-    file.size = new_stat.size
+    file.modified = stat.mtime
+    file.size = stat.size
     file.save
   end
 end

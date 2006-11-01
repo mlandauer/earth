@@ -30,7 +30,7 @@ class FileMonitor
     puts "File #{name} at #{path} removed"
   end
   
-  def file_changed(path, name, old_stat, new_stat)
+  def file_changed(path, name, stat)
     puts "File #{name} at #{path} has changed"
   end
   
@@ -38,14 +38,14 @@ class FileMonitor
     new_snapshot = Snapshot.new(@directory)
     Snapshot.added_files(@snapshot, new_snapshot).each {|x| file_added(File.dirname(x), File.basename(x), new_snapshot.stat(x))}
     Snapshot.removed_files(@snapshot, new_snapshot).each {|x| file_removed(File.dirname(x), File.basename(x))}
-    Snapshot.changed_files(@snapshot, new_snapshot).each {|x| file_changed(File.dirname(x), File.basename(x), @snapshot.stat(x), new_snapshot.stat(x))}
+    Snapshot.changed_files(@snapshot, new_snapshot).each {|x| file_changed(File.dirname(x), File.basename(x), new_snapshot.stat(x))}
     @snapshot = new_snapshot
   end
 end
 
 FileAdded = Struct.new(:path, :name, :stat)
 FileRemoved = Struct.new(:path, :name)
-FileChanged = Struct.new(:path, :name, :old_stat, :new_stat)
+FileChanged = Struct.new(:path, :name, :stat)
 
 class MonitorWithQueue < FileMonitor
   def initialize(directory)
@@ -61,8 +61,8 @@ class MonitorWithQueue < FileMonitor
     @queue.push(FileRemoved.new(path, name))
   end
   
-  def file_changed(path, name, old_stat, new_stat)
-    @queue.push(FileChanged.new(path, name, old_stat, new_stat))
+  def file_changed(path, name, stat)
+    @queue.push(FileChanged.new(path, name, stat))
   end
 end
 

@@ -79,12 +79,10 @@ class TestMonitor < Test::Unit::TestCase
     # Changes the access and modification time on the file to be one minute in the past
     File.utime(Time.now - 60, Time.now - 60, @file2)
     @monitor.update
-    old_stat = File.lstat(@file2)
     FileUtils.touch @file2
-    new_stat = File.lstat(@file2)
     @monitor.queue.clear
     @monitor.update
-    assert_equal(FileChanged.new(@dir1, 'file1', old_stat, new_stat), @monitor.queue.pop)
+    assert_equal(FileChanged.new(@dir1, 'file1', File.lstat(@file2)), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
   end
 

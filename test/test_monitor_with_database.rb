@@ -46,7 +46,7 @@ class TestMonitorWithDatabase < Test::Unit::TestCase
   
   def test_change
     @monitor.file_added(@dir, 'file1', @stat1)
-    @monitor.file_changed(@dir, 'file1', @stat1, @stat2)
+    @monitor.file_changed(@dir, 'file1', @stat2)
     files = FileInfo.find_all
     assert_equal(1, files.size)
     assert_equal(@dir, files[0].path)    
