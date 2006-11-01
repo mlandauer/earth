@@ -59,8 +59,8 @@ class TestMonitor < Test::Unit::TestCase
   def test_added
     @monitor.queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(@dir, 'file1', File.mtime(@file1)), @monitor.queue.pop)
-    assert_equal(FileAdded.new(@dir1, 'file1', File.mtime(@file2)), @monitor.queue.pop)
+    assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @monitor.queue.pop)
+    assert_equal(FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
   end
   
@@ -94,7 +94,7 @@ class TestMonitor < Test::Unit::TestCase
     FileUtils.touch file3
     @monitor.queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(@dir1, 'file2', File.mtime(file3)), @monitor.queue.pop)
+    assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
   end
   

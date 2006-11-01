@@ -69,8 +69,8 @@ class Snapshot
     !snapshot_with_file(path).nil?
   end
   
-  def modified(path)
-    snapshot_with_file(path).stats[path].mtime
+  def stat(path)
+    snapshot_with_file(path).stats[path]
   end
   
   def update
