@@ -70,11 +70,24 @@ class TestMonitor < Test::Unit::TestCase
     FileUtils.rm 'test_data/file1'
     @monitor.queue.clear
     @monitor.update
-    assert_equal(FileRemoved.new(File.expand_path('test_data'), 'file1'), @monitor.queue.pop)
-    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1'), 'file1'), @monitor.queue.pop)
+    assert_equal(FileRemoved.new(@dir, 'file1'), @monitor.queue.pop)
+    assert_equal(FileRemoved.new(@dir1, 'file1'), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
   end
   
+  def test_changed
+    # Changes the access and modification time on the file to be one minute in the past
+    File.utime(Time.now - 60, Time.now - 60, @file2)
+    @monitor.update
+    old_stat = File.lstat(@file2)
+    FileUtils.touch @file2
+    new_stat = File.lstat(@file2)
+    @monitor.queue.clear
+    @monitor.update
+    assert_equal(FileChanged.new(@dir1, 'file1', old_stat, new_stat), @monitor.queue.pop)
+    assert(@monitor.queue.empty?)
+  end
+
   def test_removed2
     FileUtils.mkdir 'test_data/dir1/dir2'
     FileUtils.touch 'test_data/dir1/dir2/file'
