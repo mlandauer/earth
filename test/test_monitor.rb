@@ -54,8 +54,8 @@ class TestMonitor < Test::Unit::TestCase
   def test_added
     @monitor.queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(File.expand_path('test_data/file1')), @monitor.queue.pop)
-    assert_equal(FileAdded.new(File.expand_path('test_data/dir1/file1')), @monitor.queue.pop)
+    assert_equal(FileAdded.new(File.expand_path('test_data'), 'file1'), @monitor.queue.pop)
+    assert_equal(FileAdded.new(File.expand_path('test_data/dir1'), 'file1'), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
   end
   
@@ -65,8 +65,8 @@ class TestMonitor < Test::Unit::TestCase
     FileUtils.rm 'test_data/file1'
     @monitor.queue.clear
     @monitor.update
-    assert_equal(FileRemoved.new(File.expand_path('test_data/file1')), @monitor.queue.pop)
-    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1/file1')), @monitor.queue.pop)
+    assert_equal(FileRemoved.new(File.expand_path('test_data'), 'file1'), @monitor.queue.pop)
+    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1'), 'file1'), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
   end
   
@@ -77,8 +77,8 @@ class TestMonitor < Test::Unit::TestCase
     FileUtils.rm_rf 'test_data/dir1'
     @monitor.queue.clear
     @monitor.update
-    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1/file1')), @monitor.queue.pop)
-    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1/dir2/file')), @monitor.queue.pop)
+    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1'), 'file1'), @monitor.queue.pop)
+    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1/dir2'), 'file'), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
   end
 
@@ -87,7 +87,7 @@ class TestMonitor < Test::Unit::TestCase
     FileUtils.touch 'test_data/dir1/file2'
     @monitor.queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(File.expand_path('test_data/dir1/file2')), @monitor.queue.pop)
+    assert_equal(FileAdded.new(File.expand_path('test_data/dir1'), 'file2'), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
   end
   

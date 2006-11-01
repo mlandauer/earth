@@ -37,8 +37,8 @@ class FileMonitor
   end
 end
 
-FileAdded = Struct.new(:filename)
-FileRemoved = Struct.new(:filename)
+FileAdded = Struct.new(:path, :name)
+FileRemoved = Struct.new(:path, :name)
 
 class MonitorWithQueue < FileMonitor
   def initialize(directory)
@@ -47,11 +47,11 @@ class MonitorWithQueue < FileMonitor
   end
   
   def file_added(path, name)
-    @queue.push(FileAdded.new(File.join(path, name)))
+    @queue.push(FileAdded.new(path, name))
   end
   
   def file_removed(path, name)
-    @queue.push(FileRemoved.new(File.join(path, name)))
+    @queue.push(FileRemoved.new(path, name))
   end
 end
 
