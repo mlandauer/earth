@@ -14,10 +14,14 @@ class TestMonitor < Test::Unit::TestCase
   def setup
     # Put some test files in the directory test_data
     @dir = File.expand_path('test_data')
+    @file1 = File.join(@dir, 'file1')
+    @dir1 = File.join(@dir, 'dir1')
+    @file2 = File.join(@dir1, 'file1')
+
     FileUtils.rm_rf @dir
-    FileUtils.mkdir_p File.join(@dir, 'dir1')
-    FileUtils.touch File.join(@dir, 'file1')
-    FileUtils.touch File.join(@dir, 'dir1/file1')
+    FileUtils.mkdir_p @dir1
+    FileUtils.touch @file1
+    FileUtils.touch @file2
     
     @monitor = MonitorWithQueue.new(@dir)
   end
@@ -55,8 +59,8 @@ class TestMonitor < Test::Unit::TestCase
   def test_added
     @monitor.queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(@dir, 'file1'), @monitor.queue.pop)
-    assert_equal(FileAdded.new(File.join(@dir, 'dir1'), 'file1'), @monitor.queue.pop)
+    assert_equal(FileAdded.new(@dir, 'file1', File.mtime(@file1)), @monitor.queue.pop)
+    assert_equal(FileAdded.new(@dir1, 'file1', File.mtime(@file2)), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
   end
   
@@ -78,6 +82,7 @@ class TestMonitor < Test::Unit::TestCase
     FileUtils.rm_rf 'test_data/dir1'
     @monitor.queue.clear
     @monitor.update
+    
     assert_equal(FileRemoved.new(File.expand_path('test_data/dir1'), 'file1'), @monitor.queue.pop)
     assert_equal(FileRemoved.new(File.expand_path('test_data/dir1/dir2'), 'file'), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
@@ -85,10 +90,11 @@ class TestMonitor < Test::Unit::TestCase
 
   def test_change_in_subdirectory
     @monitor.update
-    FileUtils.touch 'test_data/dir1/file2'
+    file3 = File.join(@dir1, 'file2')
+    FileUtils.touch file3
     @monitor.queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(File.expand_path('test_data/dir1'), 'file2'), @monitor.queue.pop)
+    assert_equal(FileAdded.new(@dir1, 'file2', File.mtime(file3)), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
   end
   

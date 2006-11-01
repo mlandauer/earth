@@ -8,7 +8,7 @@
 # $Id$
 
 class Snapshot
-  attr_reader :directory, :filenames, :snapshots
+  attr_reader :directory, :filenames, :snapshots, :stats
 
   def deep_copy
     a = Snapshot.new(directory, filenames, snapshots.clone)
@@ -40,6 +40,7 @@ class Snapshot
     # Internally store everything as absolute path
     @directory = File.expand_path(directory)
     @filenames = filenames
+    @stats = Hash.new
     @snapshots = snapshots
   end
   
@@ -47,17 +48,29 @@ class Snapshot
     @snapshots.keys
   end
 
-  def exist?(path)
+  # Returns the snapshot object which has a particular file
+  # Searches recursively down from here
+  # If can't be found returns nil
+  def snapshot_with_file(path)
     if @filenames.include?(path)
-      true
+      return self
     else
       @snapshots.each_value do |snapshot|
-        if snapshot.exist?(path)
-          return true
+        s = snapshot.snapshot_with_file(path)
+        if !s.nil?
+          return s
         end
       end
-      false
+      nil
     end
+  end
+  
+  def exist?(path)
+    !snapshot_with_file(path).nil?
+  end
+  
+  def modified(path)
+    snapshot_with_file(path).stats[path].mtime
   end
   
   def update
@@ -69,6 +82,10 @@ class Snapshot
     entries.map!{|x| File.join(@directory, x)}
     
     @filenames, subdirectories = entries.partition{|f| File.file?(f)}
+    @stats.clear
+    @filenames.each do |f|
+      @stats[f] = File.lstat(f)
+    end
     @snapshots.clear
     subdirectories.each do |d|
       snapshot = Snapshot.new(d)

@@ -32,13 +32,13 @@ class FileMonitor
   def update
     old_snapshot = @snapshot.deep_copy
     @snapshot.update
-    Snapshot.added_files(old_snapshot, @snapshot).each {|x| file_added(File.dirname(x), File.basename(x))}
+    Snapshot.added_files(old_snapshot, @snapshot).each {|x| file_added(File.dirname(x), File.basename(x), @snapshot.modified(x))}
     Snapshot.removed_files(old_snapshot, @snapshot).each {|x| file_removed(File.dirname(x), File.basename(x))}
   end
 end
 
-FileAdded = Struct.new(:path, :name)
-FileRemoved = Struct.new(:path, :name)
+FileAdded = Struct.new(:path, :name, :modified)
+FileRemoved = Struct.new(:path, :name, :modified)
 
 class MonitorWithQueue < FileMonitor
   def initialize(directory)
@@ -46,8 +46,8 @@ class MonitorWithQueue < FileMonitor
     @queue = Queue.new    
   end
   
-  def file_added(path, name)
-    @queue.push(FileAdded.new(path, name))
+  def file_added(path, name, modified)
+    @queue.push(FileAdded.new(path, name, modified))
   end
   
   def file_removed(path, name)
