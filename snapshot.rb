@@ -32,6 +32,27 @@ class Snapshot
     changes
   end
   
+  def Snapshot.changed_files(snap1, snap2)
+    added_file_names = snap2.file_names - snap1.file_names
+    added_directory_names = snap2.subdirectory_names - snap1.subdirectory_names
+    # Files and directories that haven't been added or removed
+    file_names = snap2.file_names - added_file_names
+    directory_names = snap2.subdirectory_names - added_directory_names
+    
+    changes = []
+    file_names.each do |f|
+      if snap1.stats[f] != snap2.stats[f]
+        changes << f
+      end
+    end
+    
+    directory_names.each do |d|
+      changes += Snapshot.changed_files(snap1.snapshots[d], snap2.snapshots[d])
+    end
+    
+    changes
+  end
+
   def Snapshot.removed_files(snap1, snap2)
     Snapshot.added_files(snap2, snap1)
   end
