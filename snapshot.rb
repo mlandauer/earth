@@ -53,12 +53,15 @@ class Snapshot
     Snapshot.added_files(snap2, snap1)
   end
   
-  def initialize(directory, stats = Hash.new, snapshots = Hash.new)
-    # Internally store everything as absolute path
-    @directory = File.expand_path(directory)
+  def initialize(directory = nil)
     # These are hashes that map from the name to the properties
-    @stats = stats
-    @snapshots = snapshots
+    @stats = Hash.new
+    @snapshots = Hash.new
+
+    unless directory.nil?
+      # Internally store everything as absolute path
+      @directory = File.expand_path(directory)
+    end
   end
   
   def subdirectory_names

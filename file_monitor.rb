@@ -15,7 +15,7 @@ class FileMonitor
   
   def initialize(directory)
     @directory = directory
-    @snapshot = Snapshot.new(directory)
+    @snapshot = Snapshot.new
   end
   
   def exist?(path)
@@ -31,11 +31,11 @@ class FileMonitor
   end
   
   def update
-    old_snapshot = @snapshot
-    @snapshot = Snapshot.new(@directory)
-    @snapshot.update
-    Snapshot.added_files(old_snapshot, @snapshot).each {|x| file_added(File.dirname(x), File.basename(x), @snapshot.stat(x))}
-    Snapshot.removed_files(old_snapshot, @snapshot).each {|x| file_removed(File.dirname(x), File.basename(x))}
+    new_snapshot = Snapshot.new(@directory)
+    new_snapshot.update
+    Snapshot.added_files(@snapshot, new_snapshot).each {|x| file_added(File.dirname(x), File.basename(x), new_snapshot.stat(x))}
+    Snapshot.removed_files(@snapshot, new_snapshot).each {|x| file_removed(File.dirname(x), File.basename(x))}
+    @snapshot = new_snapshot
   end
 end
 
