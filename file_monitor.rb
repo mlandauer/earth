@@ -32,7 +32,6 @@ class FileMonitor
   
   def update
     new_snapshot = Snapshot.new(@directory)
-    new_snapshot.update
     Snapshot.added_files(@snapshot, new_snapshot).each {|x| file_added(File.dirname(x), File.basename(x), new_snapshot.stat(x))}
     Snapshot.removed_files(@snapshot, new_snapshot).each {|x| file_removed(File.dirname(x), File.basename(x))}
     @snapshot = new_snapshot

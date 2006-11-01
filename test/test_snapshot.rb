@@ -25,10 +25,8 @@ class TestSnapshot < Test::Unit::TestCase
     # Changes the access and modification time on the file to be one minute in the past
     File.utime(Time.now - 60, Time.now - 60, @file2)
     s1 = Snapshot.new(@dir)
-    s1.update
     FileUtils.touch @file2
     s2 = Snapshot.new(@dir)
-    s2.update
     assert_equal([@file2], Snapshot.changed_files(s1, s2))
   end
 end

@@ -8,7 +8,7 @@
 # $Id$
 
 class Snapshot
-  attr_reader :directory, :snapshots, :stats
+  attr_reader :snapshots, :stats
 
   def Snapshot.added_files(snap1, snap2)
     added_file_names = snap2.file_names - snap1.file_names
@@ -18,7 +18,7 @@ class Snapshot
     
     changes = added_file_names
     added_directory_names.each do |directory|
-      changes += Snapshot.added_files(Snapshot.new(directory), snap2.snapshots[directory])
+      changes += Snapshot.added_files(Snapshot.new, snap2.snapshots[directory])
     end
     
     directories.each do |d|
@@ -60,7 +60,24 @@ class Snapshot
 
     unless directory.nil?
       # Internally store everything as absolute path
-      @directory = File.expand_path(directory)
+      directory = File.expand_path(directory)
+      entries = Dir.entries(directory)
+      entries.delete(".")
+      entries.delete("..")
+  
+      # Make absolute paths
+      entries.map!{|x| File.join(directory, x)}
+      
+      filenames, subdirectories = entries.partition{|f| File.file?(f)}
+      @stats.clear
+      filenames.each do |f|
+        @stats[f] = File.lstat(f)
+      end
+      @snapshots.clear
+      subdirectories.each do |d|
+        snapshot = Snapshot.new(d)
+        @snapshots[d] = snapshot
+      end
     end
   end
   
@@ -95,26 +112,5 @@ class Snapshot
   
   def stat(path)
     snapshot_with_file(path).stats[path]
-  end
-  
-  def update
-    entries = Dir.entries(@directory)
-    entries.delete(".")
-    entries.delete("..")
-
-    # Make absolute paths
-    entries.map!{|x| File.join(@directory, x)}
-    
-    filenames, subdirectories = entries.partition{|f| File.file?(f)}
-    @stats.clear
-    filenames.each do |f|
-      @stats[f] = File.lstat(f)
-    end
-    @snapshots.clear
-    subdirectories.each do |d|
-      snapshot = Snapshot.new(d)
-      snapshot.update
-      @snapshots[d] = snapshot
-    end
   end
 end
