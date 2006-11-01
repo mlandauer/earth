@@ -10,10 +10,6 @@
 class Snapshot
   attr_reader :directory, :snapshots, :stats
 
-  def deep_copy
-    a = Snapshot.new(directory, stats.clone, snapshots.clone)
-  end
-  
   def Snapshot.added_files(snap1, snap2)
     added_file_names = snap2.file_names - snap1.file_names
     added_directory_names = snap2.subdirectory_names - snap1.subdirectory_names

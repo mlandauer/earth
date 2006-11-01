@@ -14,6 +14,7 @@ class FileMonitor
   attr_reader :queue
   
   def initialize(directory)
+    @directory = directory
     @snapshot = Snapshot.new(directory)
   end
   
@@ -30,7 +31,8 @@ class FileMonitor
   end
   
   def update
-    old_snapshot = @snapshot.deep_copy
+    old_snapshot = @snapshot
+    @snapshot = Snapshot.new(@directory)
     @snapshot.update
     Snapshot.added_files(old_snapshot, @snapshot).each {|x| file_added(File.dirname(x), File.basename(x), @snapshot.stat(x))}
     Snapshot.removed_files(old_snapshot, @snapshot).each {|x| file_removed(File.dirname(x), File.basename(x))}
