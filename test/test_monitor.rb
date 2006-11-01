@@ -13,12 +13,13 @@ require "fileutils"
 class TestMonitor < Test::Unit::TestCase
   def setup
     # Put some test files in the directory test_data
-    FileUtils.rm_rf 'test_data'
-    FileUtils.mkdir_p 'test_data/dir1'
-    FileUtils.touch 'test_data/file1'
-    FileUtils.touch 'test_data/dir1/file1'
-
-    @monitor = MonitorWithQueue.new("test_data")
+    @dir = File.expand_path('test_data')
+    FileUtils.rm_rf @dir
+    FileUtils.mkdir_p File.join(@dir, 'dir1')
+    FileUtils.touch File.join(@dir, 'file1')
+    FileUtils.touch File.join(@dir, 'dir1/file1')
+    
+    @monitor = MonitorWithQueue.new(@dir)
   end
   
   def teardown
@@ -27,35 +28,35 @@ class TestMonitor < Test::Unit::TestCase
   end
 
   def test_empty    
-    assert(!@monitor.exist?(File.expand_path('test_data/file1')))
-    assert(!@monitor.exist?(File.expand_path('test_data/file2')))
+    assert(!@monitor.exist?(File.join(@dir, 'file1')))
+    assert(!@monitor.exist?(File.join(@dir, 'file2')))
   end
   
   def test_update
      # It should only update its knowledge of the files on calling update
     @monitor.update
-    assert(@monitor.exist?(File.expand_path('test_data/file1')))
-    assert(!@monitor.exist?(File.expand_path('test_data/file2')))    
+    assert(@monitor.exist?(File.join(@dir, 'file1')))
+    assert(!@monitor.exist?(File.join(@dir, 'file2')))    
   end
   
   # Those pesky '.' and '..' directories shouldn't be there
   def test_hidden_files
     @monitor.update
-    assert(!@monitor.exist?(File.expand_path('test_data/.')))
-    assert(!@monitor.exist?(File.expand_path('test_data/..'))) 
+    assert(!@monitor.exist?(File.join(@dir, '.')))
+    assert(!@monitor.exist?(File.join(@dir, '..'))) 
   end
   
   def test_recursive
     @monitor.update
-    assert(@monitor.exist?(File.expand_path('test_data/dir1/file1')))
-    assert(!@monitor.exist?(File.expand_path('test_data/dir1/file2')))
+    assert(@monitor.exist?(File.join(@dir, 'dir1/file1')))
+    assert(!@monitor.exist?(File.join(@dir, 'dir1/file2')))
   end
   
   def test_added
     @monitor.queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(File.expand_path('test_data'), 'file1'), @monitor.queue.pop)
-    assert_equal(FileAdded.new(File.expand_path('test_data/dir1'), 'file1'), @monitor.queue.pop)
+    assert_equal(FileAdded.new(@dir, 'file1'), @monitor.queue.pop)
+    assert_equal(FileAdded.new(File.join(@dir, 'dir1'), 'file1'), @monitor.queue.pop)
     assert(@monitor.queue.empty?)
   end
   
