@@ -11,17 +11,17 @@ class Snapshot
   attr_reader :directory, :snapshots, :stats
 
   def deep_copy
-    a = Snapshot.new(directory, filenames, stats.clone, snapshots.clone)
+    a = Snapshot.new(directory, stats.clone, snapshots.clone)
   end
   
   def Snapshot.added_files(snap1, snap2)
-    added_files = snap2.filenames - snap1.filenames
-    added_directories = snap2.subdirectories - snap1.subdirectories
+    added_file_names = snap2.file_names - snap1.file_names
+    added_directory_names = snap2.subdirectory_names - snap1.subdirectory_names
     # Directories that have not been either added or removed
-    directories = snap2.subdirectories - added_directories
+    directories = snap2.subdirectory_names - added_directory_names
     
-    changes = added_files
-    added_directories.each do |directory|
+    changes = added_file_names
+    added_directory_names.each do |directory|
       changes += Snapshot.added_files(Snapshot.new(directory), snap2.snapshots[directory])
     end
     
@@ -36,7 +36,7 @@ class Snapshot
     Snapshot.added_files(snap2, snap1)
   end
   
-  def initialize(directory, filenames = [], stats = Hash.new, snapshots = Hash.new)
+  def initialize(directory, stats = Hash.new, snapshots = Hash.new)
     # Internally store everything as absolute path
     @directory = File.expand_path(directory)
     # These are hashes that map from the name to the properties
@@ -44,11 +44,11 @@ class Snapshot
     @snapshots = snapshots
   end
   
-  def subdirectories
+  def subdirectory_names
     @snapshots.keys
   end
   
-  def filenames
+  def file_names
     @stats.keys
   end
 
@@ -56,7 +56,7 @@ class Snapshot
   # Searches recursively down from here
   # If can't be found returns nil
   def snapshot_with_file(path)
-    if filenames.include?(path)
+    if file_names.include?(path)
       return self
     else
       @snapshots.each_value do |snapshot|
