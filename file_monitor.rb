@@ -21,19 +21,19 @@ class FileMonitor
     @snapshot.exist?(path)
   end
   
-  def file_added(name)
-    puts "File #{name} added"
+  def file_added(path, name)
+    puts "File #{name} at #{path} added"
   end
   
-  def file_removed(name)
-    puts "File #{name} removed"
+  def file_removed(path, name)
+    puts "File #{name} at #{path} removed"
   end
   
   def update
     old_snapshot = @snapshot.deep_copy
     @snapshot.update
-    Snapshot.added_files(old_snapshot, @snapshot).each {|x| file_added(x)}
-    Snapshot.removed_files(old_snapshot, @snapshot).each {|x| file_removed(x)}
+    Snapshot.added_files(old_snapshot, @snapshot).each {|x| file_added(File.dirname(x), File.basename(x))}
+    Snapshot.removed_files(old_snapshot, @snapshot).each {|x| file_removed(File.dirname(x), File.basename(x))}
   end
 end
 
@@ -46,12 +46,12 @@ class MonitorWithQueue < FileMonitor
     @queue = Queue.new    
   end
   
-  def file_added(name)
-    @queue.push(FileAdded.new(name))
+  def file_added(path, name)
+    @queue.push(FileAdded.new(File.join(path, name)))
   end
   
-  def file_removed(name)
-    @queue.push(FileRemoved.new(name))
+  def file_removed(path, name)
+    @queue.push(FileRemoved.new(File.join(path, name)))
   end
 end
 
