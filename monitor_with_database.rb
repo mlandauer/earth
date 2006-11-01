@@ -9,7 +9,7 @@ class MonitorWithDatabase < FileMonitor
   end
   
   def file_added(path, name, stat)
-    FileInfo.create(:path => path, :name => name, :modified => stat.mtime)
+    FileInfo.create(:path => path, :name => name, :modified => stat.mtime, :size => stat.size)
   end
   
   def file_removed(path, name)
