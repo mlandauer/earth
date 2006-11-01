@@ -8,8 +8,8 @@ class MonitorWithDatabase < FileMonitor
     FileInfo.delete_all
   end
   
-  def file_added(path, name, modified)
-    FileInfo.create(:path => path, :name => name, :modified => modified)
+  def file_added(path, name, stat)
+    FileInfo.create(:path => path, :name => name, :modified => stat.mtime)
   end
   
   def file_removed(path, name)
