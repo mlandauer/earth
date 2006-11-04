@@ -10,7 +10,7 @@
 require "file_monitor"
 require "fileutils"
 
-class TestMonitor < Test::Unit::TestCase
+class TestFileMonitor < Test::Unit::TestCase
   def setup
     # Put some test files in the directory test_data
     @dir = File.expand_path('test_data')
