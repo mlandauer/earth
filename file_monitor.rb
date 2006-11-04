@@ -18,10 +18,6 @@ class FileMonitor
     @snapshot = Snapshot.new
   end
   
-  def exist?(path)
-    @snapshot.exist?(path)
-  end
-  
   def file_added(path, name, stat)
     puts "File #{name} at #{path} added"
   end

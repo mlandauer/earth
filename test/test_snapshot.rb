@@ -14,13 +14,34 @@ class TestSnapshot < Test::Unit::TestCase
     
     FileUtils.touch @file1
     FileUtils.touch @file2
+    
+    @snapshot = Snapshot.new(@dir)
   end
   
   def teardown
     # Tidy up
     FileUtils.rm_rf @dir
   end
-
+  
+  def test_empty
+    assert(!Snapshot.new.exist?(File.join(@dir, 'file1')))
+    assert(!Snapshot.new.exist?(File.join(@dir, 'file2')))
+  end
+  
+  def test_simple
+    assert(@snapshot.exist?(File.join(@dir, 'file1')))
+    assert(@snapshot.exist?(File.join(@dir, 'dir1/file1')))
+    # Check files that don't exist
+    assert(!@snapshot.exist?(File.join(@dir, 'file2')))    
+    assert(!@snapshot.exist?(File.join(@dir, 'dir1/file2')))
+  end
+  
+  # Those pesky '.' and '..' directories shouldn't be there
+  def test_hidden_files
+    assert(!@snapshot.exist?(File.join(@dir, '.')))
+    assert(!@snapshot.exist?(File.join(@dir, '..'))) 
+  end
+  
   def test_changed_files
     # Changes the access and modification time on the file to be one minute in the past
     File.utime(Time.now - 60, Time.now - 60, @file2)

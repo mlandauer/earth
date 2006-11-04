@@ -31,31 +31,6 @@ class TestFileMonitor < Test::Unit::TestCase
     FileUtils.rm_rf 'test_data'
   end
 
-  def test_empty    
-    assert(!@monitor.exist?(File.join(@dir, 'file1')))
-    assert(!@monitor.exist?(File.join(@dir, 'file2')))
-  end
-  
-  def test_update
-     # It should only update its knowledge of the files on calling update
-    @monitor.update
-    assert(@monitor.exist?(File.join(@dir, 'file1')))
-    assert(!@monitor.exist?(File.join(@dir, 'file2')))    
-  end
-  
-  # Those pesky '.' and '..' directories shouldn't be there
-  def test_hidden_files
-    @monitor.update
-    assert(!@monitor.exist?(File.join(@dir, '.')))
-    assert(!@monitor.exist?(File.join(@dir, '..'))) 
-  end
-  
-  def test_recursive
-    @monitor.update
-    assert(@monitor.exist?(File.join(@dir, 'dir1/file1')))
-    assert(!@monitor.exist?(File.join(@dir, 'dir1/file2')))
-  end
-  
   def test_added
     @monitor.queue.clear
     @monitor.update
