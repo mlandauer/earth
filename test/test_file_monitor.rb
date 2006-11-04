@@ -23,7 +23,9 @@ class TestFileMonitor < Test::Unit::TestCase
     FileUtils.touch @file1
     FileUtils.touch @file2
     
-    @monitor = MonitorWithQueue.new(@dir)
+    @queue = FileMonitorQueue.new
+    @monitor = FileMonitor.new(@dir)
+    @monitor.observer = @queue
   end
   
   def teardown
@@ -32,22 +34,22 @@ class TestFileMonitor < Test::Unit::TestCase
   end
 
   def test_added
-    @monitor.queue.clear
+    @queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @monitor.queue.pop)
-    assert_equal(FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @monitor.queue.pop)
-    assert(@monitor.queue.empty?)
+    assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
+    assert_equal(FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
+    assert(@queue.empty?)
   end
   
   def test_removed
     @monitor.update
     FileUtils.rm_rf 'test_data/dir1'
     FileUtils.rm 'test_data/file1'
-    @monitor.queue.clear
+    @queue.clear
     @monitor.update
-    assert_equal(FileRemoved.new(@dir, 'file1'), @monitor.queue.pop)
-    assert_equal(FileRemoved.new(@dir1, 'file1'), @monitor.queue.pop)
-    assert(@monitor.queue.empty?)
+    assert_equal(FileRemoved.new(@dir, 'file1'), @queue.pop)
+    assert_equal(FileRemoved.new(@dir1, 'file1'), @queue.pop)
+    assert(@queue.empty?)
   end
   
   def test_changed
@@ -55,10 +57,10 @@ class TestFileMonitor < Test::Unit::TestCase
     File.utime(Time.now - 60, Time.now - 60, @file2)
     @monitor.update
     FileUtils.touch @file2
-    @monitor.queue.clear
+    @queue.clear
     @monitor.update
-    assert_equal(FileChanged.new(@dir1, 'file1', File.lstat(@file2)), @monitor.queue.pop)
-    assert(@monitor.queue.empty?)
+    assert_equal(FileChanged.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
+    assert(@queue.empty?)
   end
 
   def test_removed2
@@ -66,22 +68,22 @@ class TestFileMonitor < Test::Unit::TestCase
     FileUtils.touch 'test_data/dir1/dir2/file'
     @monitor.update
     FileUtils.rm_rf 'test_data/dir1'
-    @monitor.queue.clear
+    @queue.clear
     @monitor.update
     
-    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1'), 'file1'), @monitor.queue.pop)
-    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1/dir2'), 'file'), @monitor.queue.pop)
-    assert(@monitor.queue.empty?)
+    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1'), 'file1'), @queue.pop)
+    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1/dir2'), 'file'), @queue.pop)
+    assert(@queue.empty?)
   end
 
   def test_change_in_subdirectory
     @monitor.update
     file3 = File.join(@dir1, 'file2')
     FileUtils.touch file3
-    @monitor.queue.clear
+    @queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @monitor.queue.pop)
-    assert(@monitor.queue.empty?)
+    assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
+    assert(@queue.empty?)
   end
   
 end
