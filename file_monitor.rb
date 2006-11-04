@@ -11,8 +11,6 @@ require 'thread'
 require 'snapshot'
 
 class FileMonitor
-  attr_reader :queue
-  
   def initialize(directory)
     @directory = directory
     @snapshot = Snapshot.new
@@ -44,6 +42,8 @@ FileRemoved = Struct.new(:path, :name)
 FileChanged = Struct.new(:path, :name, :stat)
 
 class MonitorWithQueue < FileMonitor
+  attr_reader :queue
+  
   def initialize(directory)
     super(directory)
     @queue = Queue.new    
