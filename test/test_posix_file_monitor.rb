@@ -59,16 +59,22 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     assert(@queue.empty?)
   end
   
-#  def test_changed
-#    # Changes the access and modification time on the file to be one minute in the past
-#    File.utime(Time.now - 60, Time.now - 60, @file2)
-#    @monitor.update
-#    FileUtils.touch @file2
-#    @queue.clear
-#    @monitor.update
-#    assert_equal(FileChanged.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
-#    assert(@queue.empty?)
-#  end
+  def test_changed
+    # Changes the access and modification time on the file to be one minute in the past
+    File.utime(Time.now - 60, Time.now - 60, @file2)
+    @monitor.update
+    @monitor.update
+    sleep 2
+    FileUtils.touch @file2
+    # For the previous change to be noticed we need to create a new file as well
+    file3 = File.join(@dir1, 'file2')
+    FileUtils.touch file3
+    @queue.clear
+    @monitor.update
+    assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
+    assert_equal(FileChanged.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
+    assert(@queue.empty?)
+  end
 
   def test_removed2
     FileUtils.mkdir 'test_data/dir1/dir2'
