@@ -17,18 +17,20 @@ class SnapshotNonRecursive
       new_stat = File.lstat(@directory)
       if new_stat != @directory_stat
         @directory_stat = new_stat
-        # Update contents of directory
-        entries = Dir.entries(@directory)
-        entries.delete(".")
-        entries.delete("..")
-    
-        # Make absolute paths
-        entries.map!{|x| File.join(directory, x)}
-        
-        filenames, @subdirectory_names = entries.partition{|f| File.file?(f)}
-        @stats.clear
-        filenames.each do |f|
-          @stats[f] = File.lstat(f)
+        # Update contents of directory if readable
+        if @directory_stat.readable?
+          entries = Dir.entries(@directory)
+          entries.delete(".")
+          entries.delete("..")
+      
+          # Make absolute paths
+          entries.map!{|x| File.join(directory, x)}
+          
+          filenames, @subdirectory_names = entries.partition{|f| File.file?(f)}
+          @stats.clear
+          filenames.each do |f|
+            @stats[f] = File.lstat(f)
+          end
         end
       end
     else
