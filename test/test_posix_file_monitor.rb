@@ -23,9 +23,12 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     FileUtils.touch @file1
     FileUtils.touch @file2
     
-    # Changes the access and modification time on the directories to be one minute in the past
-    File.utime(Time.now - 60, Time.now - 60, @dir)
-    File.utime(Time.now - 60, Time.now - 60, @dir1)
+    # Changes the access and modification time to be one minute in the past
+    past = Time.now - 60
+    File.utime(past, past, @dir)
+    File.utime(past, past, @dir1)
+    File.utime(past, past, @file1)
+    File.utime(past, past, @file2)
     
     @queue = FileMonitorQueue.new
     @monitor = PosixFileMonitor.new(@dir)
@@ -38,6 +41,15 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     FileUtils.rm_rf 'test_data'
   end
 
+  def test_ignore_dot_files
+    @monitor.update
+    FileUtils.touch 'test_data/.an_invisible_file'
+    FileUtils.touch 'test_data/.another'
+    @queue.clear
+    @monitor.update
+    assert(@queue.empty?)
+  end
+  
   # If the daemon doesn't have permission to list the directory
   # it should ignore it
   def test_permissions_directory
@@ -72,8 +84,6 @@ class TestPosixFileMonitor < Test::Unit::TestCase
   end
   
   def test_changed
-    # Changes the access and modification time on the file to be one minute in the past
-    File.utime(Time.now - 60, Time.now - 60, @file2)
     @monitor.update
     FileUtils.touch @file2
     # For the previous change to be noticed we need to create a new file as well
