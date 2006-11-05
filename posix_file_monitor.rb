@@ -100,10 +100,9 @@ class PosixFileMonitor < FileMonitorBase
     @snapshots[directory] = snapshot
     old_snapshot = snapshot.deep_copy
     snapshot.update
-    added_files = SnapshotNonRecursive.added_files(old_snapshot, snapshot)
-    added_directories = SnapshotNonRecursive.added_directories(old_snapshot, snapshot)
-    added_files.each {|x| file_added(x, snapshot.stat(x))}
-    added_directories.each {|x| add_directory(x)}
+
+    SnapshotNonRecursive.added_files(old_snapshot, snapshot).each {|x| file_added(x, snapshot.stat(x))}
+    SnapshotNonRecursive.added_directories(old_snapshot, snapshot).each {|x| add_directory(x)}
   end
   
   def update
