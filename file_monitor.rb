@@ -13,19 +13,19 @@ require 'snapshot'
 class FileMonitorBase
   attr_writer :observer
 
-  def file_added(path, name, stat)
+  def file_added(full_path, stat)
     raise("No observer set") if @observer.nil?
-    @observer.file_added(path, name, stat)
+    @observer.file_added(File.dirname(full_path), File.basename(full_path), stat)
   end
   
-  def file_removed(path, name)
+  def file_removed(full_path)
     raise("No observer set") if @observer.nil?
-    @observer.file_removed(path, name)
+    @observer.file_removed(File.dirname(full_path), File.basename(full_path))
   end
   
-  def file_changed(path, name, stat)
+  def file_changed(full_path, stat)
     raise("No observer set") if @observer.nil?
-    @observer.file_changed(path, name, stat)
+    @observer.file_changed(File.dirname(full_path), File.basename(full_path), stat)
   end
   
 end
@@ -38,9 +38,9 @@ class FileMonitor < FileMonitorBase
   
   def update   
     new_snapshot = Snapshot.new(@directory)
-    Snapshot.added_files(@snapshot, new_snapshot).each {|x| file_added(File.dirname(x), File.basename(x), new_snapshot.stat(x))}
-    Snapshot.removed_files(@snapshot, new_snapshot).each {|x| file_removed(File.dirname(x), File.basename(x))}
-    Snapshot.changed_files(@snapshot, new_snapshot).each {|x| file_changed(File.dirname(x), File.basename(x), new_snapshot.stat(x))}
+    Snapshot.added_files(@snapshot, new_snapshot).each {|x| file_added(x, new_snapshot.stat(x))}
+    Snapshot.removed_files(@snapshot, new_snapshot).each {|x| file_removed(x)}
+    Snapshot.changed_files(@snapshot, new_snapshot).each {|x| file_changed(x, new_snapshot.stat(x))}
     @snapshot = new_snapshot
   end
 end
