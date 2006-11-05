@@ -8,7 +8,7 @@ class TestMonitorWithDatabase < Test::Unit::TestCase
 
   def setup
     @dir = File.expand_path('test_data')
-    @monitor = MonitorWithDatabase.new(@dir)
+    @monitor = MonitorWithDatabase.new
     # 1st of January 2000
     @stat1 = Stat.new(Time.local(2000, 1, 1), 24)
     @stat2 = Stat.new(Time.local(2001, 1, 1), 53)

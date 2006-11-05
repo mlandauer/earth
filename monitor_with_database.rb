@@ -1,9 +1,8 @@
 require 'file_monitor.rb'
 require 'file_info'
 
-class MonitorWithDatabase < FileMonitor
-  def initialize(directory)
-    super(directory)
+class MonitorWithDatabase
+  def initialize
     # Clear out database
     FileInfo.delete_all
   end

@@ -24,7 +24,10 @@ end
 
 directory = ARGV[0]
 
-monitor = MonitorWithDatabase.new(directory)
+db_updater = MonitorWithDatabase.new
+monitor = PosixFileMonitor.new(directory)
+monitor.observer = db_updater
+
 while true do
   monitor.update
   sleep(10)

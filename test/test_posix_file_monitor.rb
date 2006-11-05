@@ -38,16 +38,11 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     @queue.clear
     @monitor.update
     assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
-    assert(@queue.empty?)
-    # Requires a second update to see the lower directories
-    @monitor.update
     assert_equal(FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
     assert(@queue.empty?)
   end
   
   def test_removed
-    # Requires two updates to see all the changes
-    @monitor.update
     @monitor.update
     sleep 2
     FileUtils.rm_rf 'test_data/dir1'
@@ -62,7 +57,6 @@ class TestPosixFileMonitor < Test::Unit::TestCase
   def test_changed
     # Changes the access and modification time on the file to be one minute in the past
     File.utime(Time.now - 60, Time.now - 60, @file2)
-    @monitor.update
     @monitor.update
     sleep 2
     FileUtils.touch @file2
@@ -79,9 +73,6 @@ class TestPosixFileMonitor < Test::Unit::TestCase
   def test_removed2
     FileUtils.mkdir 'test_data/dir1/dir2'
     FileUtils.touch 'test_data/dir1/dir2/file'
-    # Need three updates to go down into the directory structure
-    @monitor.update
-    @monitor.update
     @monitor.update
     sleep 2
     FileUtils.rm_rf 'test_data/dir1'

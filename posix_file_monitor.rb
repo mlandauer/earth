@@ -94,6 +94,17 @@ class PosixFileMonitor < FileMonitorBase
     @snapshots.delete(directory)
   end
   
+  def add_directory(directory)
+    snapshot = SnapshotNonRecursive.new(directory)
+    @snapshots[directory] = snapshot
+    old_snapshot = snapshot.deep_copy
+    snapshot.update
+    added_files = SnapshotNonRecursive.added_files(old_snapshot, snapshot)
+    added_directories = SnapshotNonRecursive.added_directories(old_snapshot, snapshot)
+    added_files.each {|x| file_added(x, snapshot.stat(x))}
+    added_directories.each {|x| add_directory(x)}
+  end
+  
   def update
     @snapshots.each do |directory, snapshot|
       old_snapshot = snapshot.deep_copy
@@ -103,14 +114,11 @@ class PosixFileMonitor < FileMonitorBase
       removed_files = SnapshotNonRecursive.removed_files(old_snapshot, snapshot)
       removed_directories = SnapshotNonRecursive.removed_directories(old_snapshot, snapshot)
       changed_files = SnapshotNonRecursive.changed_files(old_snapshot, snapshot)
+      
       added_files.each {|x| file_added(x, snapshot.stat(x))}
-      for added_directory in added_directories
-        @snapshots[added_directory] = SnapshotNonRecursive.new(added_directory)
-      end
+      added_directories.each {|x| add_directory(x)}
       removed_files.each {|x| file_removed(x)}
-      for removed_directory in removed_directories
-        remove_directory(removed_directory)
-      end
+      removed_directories.each {|x| remove_directory(x)}
       changed_files.each {|x| file_changed(x, snapshot.stat(x))}
     end
   end
