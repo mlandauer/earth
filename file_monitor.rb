@@ -10,20 +10,6 @@
 require 'thread'
 require 'snapshot'
 
-module FileMonitorObserver
-  def file_added(path, name, stat)
-    puts "File #{name} at #{path} added"
-  end
-  
-  def file_removed(path, name)
-    puts "File #{name} at #{path} removed"
-  end
-  
-  def file_changed(path, name, stat)
-    puts "File #{name} at #{path} has changed"
-  end  
-end
-
 class FileMonitor
   attr_writer :observer
   

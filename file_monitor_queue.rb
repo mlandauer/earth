@@ -3,8 +3,6 @@ FileRemoved = Struct.new(:path, :name)
 FileChanged = Struct.new(:path, :name, :stat)
 
 class FileMonitorQueue < Queue
-  include FileMonitorObserver
-  
   def file_added(path, name, stat)
     push(FileAdded.new(path, name, stat))
   end
