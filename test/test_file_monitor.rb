@@ -25,7 +25,13 @@ class TestFileMonitor < Test::Unit::TestCase
     
     @queue = FileMonitorQueue.new
     @monitor = FileMonitor.new(@dir)
-    @monitor.observer = @queue
+    # Like the previous file monitor but more efficient as it only needs
+    # to check directory modification times. However, it doesn't find
+    # file changes unless the directory the file is in has changed too.
+    @posix_file_monitor = PosixFileMonitor.new(@dir)
+
+    @monitors = [@monitor, @posix_file_monitor]
+    @monitors.each {|m| m.observer = @queue}
   end
   
   def teardown
@@ -34,11 +40,13 @@ class TestFileMonitor < Test::Unit::TestCase
   end
 
   def test_added
-    @queue.clear
-    @monitor.update
-    assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
-    assert_equal(FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
-    assert(@queue.empty?)
+    for monitor in @monitors
+      @queue.clear
+      monitor.update
+      assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
+      assert_equal(FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
+      assert(@queue.empty?)
+    end
   end
   
   def test_removed
