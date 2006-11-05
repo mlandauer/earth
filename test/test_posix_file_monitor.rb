@@ -23,9 +23,12 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     FileUtils.touch @file1
     FileUtils.touch @file2
     
+    # Changes the access and modification time on the directories to be one minute in the past
+    File.utime(Time.now - 60, Time.now - 60, @dir)
+    File.utime(Time.now - 60, Time.now - 60, @dir1)
+    
     @queue = FileMonitorQueue.new
     @monitor = PosixFileMonitor.new(@dir)
-    #@monitor = FileMonitor.new(@dir)
     @monitor.observer = @queue
   end
   
@@ -59,7 +62,6 @@ class TestPosixFileMonitor < Test::Unit::TestCase
   
   def test_removed
     @monitor.update
-    sleep 2
     FileUtils.rm_rf 'test_data/dir1'
     FileUtils.rm 'test_data/file1'
     @queue.clear
@@ -73,7 +75,6 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     # Changes the access and modification time on the file to be one minute in the past
     File.utime(Time.now - 60, Time.now - 60, @file2)
     @monitor.update
-    sleep 2
     FileUtils.touch @file2
     # For the previous change to be noticed we need to create a new file as well
     file3 = File.join(@dir1, 'file2')
@@ -89,7 +90,6 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     FileUtils.mkdir 'test_data/dir1/dir2'
     FileUtils.touch 'test_data/dir1/dir2/file'
     @monitor.update
-    sleep 2
     FileUtils.rm_rf 'test_data/dir1'
     @queue.clear
     @monitor.update
@@ -101,7 +101,6 @@ class TestPosixFileMonitor < Test::Unit::TestCase
 
   def test_added_in_subdirectory
     @monitor.update
-    sleep 2
     file3 = File.join(@dir1, 'file2')
     FileUtils.touch file3
     @queue.clear
