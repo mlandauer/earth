@@ -20,9 +20,8 @@ class SnapshotNonRecursive
         # Update contents of directory if readable
         if @directory_stat.readable?
           entries = Dir.entries(@directory)
-          entries.delete(".")
-          entries.delete("..")
-      
+          # Ignore all files and directories starting with '.'
+          entries.delete_if {|x| x[0,1] == "."}
           # Make absolute paths
           entries.map!{|x| File.join(directory, x)}
           
