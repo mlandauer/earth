@@ -84,14 +84,15 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     assert(@queue.empty?)
   end
 
-#  def test_change_in_subdirectory
-#    @monitor.update
-#    file3 = File.join(@dir1, 'file2')
-#    FileUtils.touch file3
-#    @queue.clear
-#    @monitor.update
-#    assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
-#    assert(@queue.empty?)
-#  end
+  def test_added_in_subdirectory
+    @monitor.update
+    sleep 2
+    file3 = File.join(@dir1, 'file2')
+    FileUtils.touch file3
+    @queue.clear
+    @monitor.update
+    assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
+    assert(@queue.empty?)
+  end
   
 end
