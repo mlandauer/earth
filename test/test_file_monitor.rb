@@ -76,7 +76,7 @@ class TestFileMonitor < Test::Unit::TestCase
     assert(@queue.empty?)
   end
 
-  def test_change_in_subdirectory
+  def test_added_in_subdirectory
     @monitor.update
     file3 = File.join(@dir1, 'file2')
     FileUtils.touch file3
