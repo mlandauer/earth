@@ -57,85 +57,11 @@ class SnapshotNonRecursive
   def file_names
     @stats.keys
   end
-
-  def SnapshotNonRecursive.added_files(snap1, snap2)
-    snap2.file_names - snap1.file_names
-  end
-  
-  def SnapshotNonRecursive.removed_files(snap1, snap2)
-    snap1.file_names - snap2.file_names
-  end
-  
-  def SnapshotNonRecursive.changed_files(snap1, snap2)
-    added_file_names = snap2.file_names - snap1.file_names
-    # Files that haven't been added or removed
-    file_names = snap2.file_names - added_file_names
-    
-    changes = []
-    file_names.each do |f|
-      if snap1.stat(f) != snap2.stat(f)
-        changes << f
-      end
-    end
-    
-    changes
-  end
-
-  def SnapshotNonRecursive.added_directories(snap1, snap2)
-    snap2.subdirectory_names - snap1.subdirectory_names
-  end
-
-  def SnapshotNonRecursive.removed_directories(snap1, snap2)
-    snap1.subdirectory_names - snap2.subdirectory_names
-  end
 end
 
 class Snapshot
   attr_reader :snapshots, :stats
 
-  def Snapshot.added_files(snap1, snap2)
-    added_file_names = snap2.file_names - snap1.file_names
-    added_directory_names = snap2.subdirectory_names - snap1.subdirectory_names
-    # Directories that have not been either added or removed
-    directories = snap2.subdirectory_names - added_directory_names
-    
-    changes = added_file_names
-    added_directory_names.each do |directory|
-      changes += Snapshot.added_files(Snapshot.new, snap2.snapshots[directory])
-    end
-    
-    directories.each do |d|
-      changes += Snapshot.added_files(snap1.snapshots[d], snap2.snapshots[d])
-    end
-
-    changes
-  end
-  
-  def Snapshot.changed_files(snap1, snap2)
-    added_file_names = snap2.file_names - snap1.file_names
-    added_directory_names = snap2.subdirectory_names - snap1.subdirectory_names
-    # Files and directories that haven't been added or removed
-    file_names = snap2.file_names - added_file_names
-    directory_names = snap2.subdirectory_names - added_directory_names
-    
-    changes = []
-    file_names.each do |f|
-      if snap1.stats[f] != snap2.stats[f]
-        changes << f
-      end
-    end
-    
-    directory_names.each do |d|
-      changes += Snapshot.changed_files(snap1.snapshots[d], snap2.snapshots[d])
-    end
-    
-    changes
-  end
-
-  def Snapshot.removed_files(snap1, snap2)
-    Snapshot.added_files(snap2, snap1)
-  end
-  
   def initialize(directory = nil)
     # These are hashes that map from the name to the properties
     @stats = Hash.new
@@ -145,8 +71,8 @@ class Snapshot
       # Internally store everything as absolute path
       directory = File.expand_path(directory)
       entries = Dir.entries(directory)
-      entries.delete(".")
-      entries.delete("..")
+      # Ignore all files and directories starting with '.'
+      entries.delete_if {|x| x[0,1] == "."}
   
       # Make absolute paths
       entries.map!{|x| File.join(directory, x)}
@@ -195,5 +121,60 @@ class Snapshot
   
   def stat(path)
     snapshot_with_file(path).stats[path]
+  end
+end
+
+module Difference
+  def Difference.added_files(snap1, snap2)
+    snap2.file_names - snap1.file_names
+  end
+    
+  def Difference.removed_files(snap1, snap2)
+    snap1.file_names - snap2.file_names
+  end
+  
+  # Files that have not been either added or removed
+  def Difference.common_files(snap1, snap2)
+    snap2.file_names - added_files(snap1, snap2)
+  end
+  
+  def Difference.changed_files(snap1, snap2)
+    common_files(snap1, snap2).select {|f| snap1.stat(f) != snap2.stat(f)}
+  end
+  
+  def Difference.changed_files_recursive(snap1, snap2)
+    changes = changed_files(snap1, snap2)
+    common_directories(snap1, snap2).each do |d|
+      changes += changed_files_recursive(snap1.snapshots[d], snap2.snapshots[d])
+    end
+    changes
+  end
+  
+  def Difference.added_directories(snap1, snap2)
+    snap2.subdirectory_names - snap1.subdirectory_names
+  end
+  
+  def Difference.removed_directories(snap1, snap2)
+    snap1.subdirectory_names - snap2.subdirectory_names
+  end
+  
+  # Directories that have not been either added or removed
+  def Difference.common_directories(snap1, snap2)
+    snap2.subdirectory_names - added_directories(snap1, snap2)
+  end
+  
+  def Difference.added_files_recursive(snap1, snap2)
+    changes = added_files(snap1, snap2)
+    added_directories(snap1, snap2).each do |directory|
+      changes += added_files_recursive(Snapshot.new, snap2.snapshots[directory])
+    end
+    common_directories(snap1, snap2).each do |d|
+      changes += added_files_recursive(snap1.snapshots[d], snap2.snapshots[d])
+    end
+    changes
+  end
+    
+  def Difference.removed_files_recursive(snap1, snap2)
+    added_files_recursive(snap2, snap1)
   end
 end

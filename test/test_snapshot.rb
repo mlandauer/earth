@@ -48,6 +48,6 @@ class TestSnapshot < Test::Unit::TestCase
     s1 = Snapshot.new(@dir)
     FileUtils.touch @file2
     s2 = Snapshot.new(@dir)
-    assert_equal([@file2], Snapshot.changed_files(s1, s2))
+    assert_equal([@file2], Difference.changed_files_recursive(s1, s2))
   end
 end

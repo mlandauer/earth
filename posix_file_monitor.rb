@@ -19,8 +19,8 @@ class PosixFileMonitor < FileMonitorBase
     old_snapshot = snapshot.deep_copy
     snapshot.update(directory)
 
-    SnapshotNonRecursive.added_files(old_snapshot, snapshot).each {|x| file_added(x, snapshot.stat(x))}
-    SnapshotNonRecursive.added_directories(old_snapshot, snapshot).each {|x| add_directory(x)}
+    Difference.added_files(old_snapshot, snapshot).each {|x| file_added(x, snapshot.stat(x))}
+    Difference.added_directories(old_snapshot, snapshot).each {|x| add_directory(x)}
   end
   
   def update
@@ -31,12 +31,12 @@ class PosixFileMonitor < FileMonitorBase
       old_snapshot = snapshot.deep_copy
       snapshot.update(directory)
 
-      added_directories += SnapshotNonRecursive.added_directories(old_snapshot, snapshot)
-      removed_directories += SnapshotNonRecursive.removed_directories(old_snapshot, snapshot)
+      added_directories += Difference.added_directories(old_snapshot, snapshot)
+      removed_directories += Difference.removed_directories(old_snapshot, snapshot)
       
-      SnapshotNonRecursive.added_files(old_snapshot, snapshot).each {|x| file_added(x, snapshot.stat(x))}
-      SnapshotNonRecursive.removed_files(old_snapshot, snapshot).each {|x| file_removed(x)}
-      SnapshotNonRecursive.changed_files(old_snapshot, snapshot).each {|x| file_changed(x, snapshot.stat(x))}
+      Difference.added_files(old_snapshot, snapshot).each {|x| file_added(x, snapshot.stat(x))}
+      Difference.removed_files(old_snapshot, snapshot).each {|x| file_removed(x)}
+      Difference.changed_files(old_snapshot, snapshot).each {|x| file_changed(x, snapshot.stat(x))}
     end
     
     # Doing this outside the loop above so that we are not adding and removing from @snapshots
