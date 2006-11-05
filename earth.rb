@@ -29,7 +29,9 @@ monitor = PosixFileMonitor.new(directory)
 monitor.observer = db_updater
 
 while true do
+  puts "Updating..."
   monitor.update
+  puts "Sleeping..."
   sleep(10)
 end
 
