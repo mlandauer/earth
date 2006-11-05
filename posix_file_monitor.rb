@@ -106,20 +106,24 @@ class PosixFileMonitor < FileMonitorBase
   end
   
   def update
+    added_directories = []
+    removed_directories = []
+    
     @snapshots.each do |directory, snapshot|
       old_snapshot = snapshot.deep_copy
       snapshot.update
-      added_files = SnapshotNonRecursive.added_files(old_snapshot, snapshot)
-      added_directories = SnapshotNonRecursive.added_directories(old_snapshot, snapshot)
-      removed_files = SnapshotNonRecursive.removed_files(old_snapshot, snapshot)
-      removed_directories = SnapshotNonRecursive.removed_directories(old_snapshot, snapshot)
-      changed_files = SnapshotNonRecursive.changed_files(old_snapshot, snapshot)
+
+      added_directories += SnapshotNonRecursive.added_directories(old_snapshot, snapshot)
+      removed_directories += SnapshotNonRecursive.removed_directories(old_snapshot, snapshot)
       
-      added_files.each {|x| file_added(x, snapshot.stat(x))}
-      added_directories.each {|x| add_directory(x)}
-      removed_files.each {|x| file_removed(x)}
-      removed_directories.each {|x| remove_directory(x)}
-      changed_files.each {|x| file_changed(x, snapshot.stat(x))}
+      SnapshotNonRecursive.added_files(old_snapshot, snapshot).each {|x| file_added(x, snapshot.stat(x))}
+      SnapshotNonRecursive.removed_files(old_snapshot, snapshot).each {|x| file_removed(x)}
+      SnapshotNonRecursive.changed_files(old_snapshot, snapshot).each {|x| file_changed(x, snapshot.stat(x))}
     end
+    
+    # Doing this outside the loop above so that we are not adding and removing from @snapshots
+    # while we're in the middle of the loop
+    added_directories.each {|x| add_directory(x)}
+    removed_directories.each {|x| remove_directory(x)}
   end
 end
