@@ -4,9 +4,7 @@ class SnapshotNonRecursive
   end
 end
 
-class PosixFileMonitor
-  attr_writer :observer
-  
+class PosixFileMonitor < FileMonitorBase
   def initialize(directory)
     @snapshot = SnapshotNonRecursive.new(directory)
   end
@@ -15,8 +13,7 @@ class PosixFileMonitor
     # Get the stat information of all the directories from the current snapshot
     # and find the directories which have different stat info now
 
-    @observer.file_added(File.expand_path('test_data'), 'file1', File.lstat(File.expand_path('test_data/file1')))
-    @observer.file_added(File.expand_path('test_data/dir1'), 'file1', File.lstat(File.expand_path('test_data/dir1/file1')))
-    
+    file_added(File.expand_path('test_data'), 'file1', File.lstat(File.expand_path('test_data/file1')))
+    file_added(File.expand_path('test_data/dir1'), 'file1', File.lstat(File.expand_path('test_data/dir1/file1')))
   end
 end
