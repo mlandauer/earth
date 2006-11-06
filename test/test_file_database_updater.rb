@@ -1,8 +1,8 @@
 require "fileutils"
-require "monitor_with_database"
+require "file_database_updater"
 require "file_info"
 
-class TestFileDatabaseConnector < Test::Unit::TestCase
+class TestFileDatabaseUpdater < Test::Unit::TestCase
   # Duck typing comes in handy here. Making fake File::Stat object
   Stat = Struct.new(:mtime, :size)
 

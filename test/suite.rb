@@ -3,7 +3,7 @@
 require 'test/unit'
 
 require 'test_database'
-require 'test_monitor_with_database'
+require 'test_file_database_updater'
 require 'test_simple_file_monitor'
 require 'test_posix_file_monitor'
 require 'test_snapshot_recursive'

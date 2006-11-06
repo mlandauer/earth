@@ -9,7 +9,7 @@
 #
 # $Id$
 
-require 'monitor_with_database'
+require 'file_database_updater'
 
 def usage
   puts "#{$0} <directory>"
@@ -24,9 +24,9 @@ end
 
 directory = ARGV[0]
 
-db_updater = FileDatabaseUpdater.new
+updater = FileDatabaseUpdater.new
 monitor = PosixFileMonitor.new(directory)
-monitor.observer = db_updater
+monitor.observer = updater
 
 while true do
   puts "Updating..."
