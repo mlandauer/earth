@@ -33,13 +33,12 @@ class Snapshot
           # Ignore all files and directories starting with '.'
           entries.delete_if {|x| x[0,1] == "."}
           # Make absolute paths
-          entries.map!{|x| File.join(directory, x)}
+          #entries.map!{|x| File.join(directory, x)}
           
-          filenames, @subdirectory_names = entries.partition{|f| File.file?(f)}
+          # TODO: Optimisation - do lstat on all directory entries and use that to determine what is a file
+          filenames, @subdirectory_names = entries.partition{|f| File.file?(File.join(directory, f))}
           @stats.clear
-          filenames.each do |f|
-            @stats[f] = File.lstat(f)
-          end
+          filenames.each {|f| @stats[f] = File.lstat(File.join(directory, f))}
         end
       end
     else
