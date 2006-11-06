@@ -10,7 +10,7 @@
 require 'thread'
 require 'snapshot'
 
-class FileMonitorBase
+class FileMonitor
   attr_writer :observer
 
   def file_added(full_path, stat)
@@ -29,21 +29,5 @@ class FileMonitorBase
     raise("No observer set") if @observer.nil?
     #puts "File CHANGED: #{full_path}"
     @observer.file_changed(File.dirname(full_path), File.basename(full_path), stat)
-  end
-  
-end
-
-class SimpleFileMonitor < FileMonitorBase
-  def initialize(directory)
-    @directory = directory
-    @snapshot = SnapshotRecursive.new
-  end
-  
-  def update   
-    new_snapshot = SnapshotRecursive.new(@directory)
-    Difference.added_files_recursive(@snapshot, new_snapshot).each {|x| file_added(x, new_snapshot.stat(x))}
-    Difference.removed_files_recursive(@snapshot, new_snapshot).each {|x| file_removed(x)}
-    Difference.changed_files_recursive(@snapshot, new_snapshot).each {|x| file_changed(x, new_snapshot.stat(x))}
-    @snapshot = new_snapshot
   end
 end

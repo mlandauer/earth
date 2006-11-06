@@ -1,4 +1,4 @@
-class PosixFileMonitor < FileMonitorBase
+class PosixFileMonitor < FileMonitor
   def initialize(directory)
     @directory = directory
     @snapshots = Hash.new
