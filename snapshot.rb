@@ -7,11 +7,11 @@
 #
 # $Id$
 
-class SnapshotNonRecursive
+class Snapshot
   attr_reader :subdirectory_names
 
   def deep_copy
-    SnapshotNonRecursive.new(@stats.clone, @subdirectory_names.clone)
+    Snapshot.new(@stats.clone, @subdirectory_names.clone)
   end
   
   def initialize(stats = Hash.new, subdirectory_names = [])
@@ -59,7 +59,7 @@ class SnapshotNonRecursive
   end
 end
 
-class Snapshot
+class SnapshotRecursive
   attr_reader :snapshots, :stats
 
   def initialize(directory = nil)
@@ -84,7 +84,7 @@ class Snapshot
       end
       @snapshots.clear
       subdirectories.each do |d|
-        snapshot = Snapshot.new(d)
+        snapshot = SnapshotRecursive.new(d)
         @snapshots[d] = snapshot
       end
     end
@@ -166,7 +166,7 @@ module Difference
   def Difference.added_files_recursive(snap1, snap2)
     changes = added_files(snap1, snap2)
     added_directories(snap1, snap2).each do |directory|
-      changes += added_files_recursive(Snapshot.new, snap2.snapshots[directory])
+      changes += added_files_recursive(SnapshotRecursive.new, snap2.snapshots[directory])
     end
     common_directories(snap1, snap2).each do |d|
       changes += added_files_recursive(snap1.snapshots[d], snap2.snapshots[d])

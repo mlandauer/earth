@@ -10,7 +10,7 @@
 require "file_monitor"
 require "fileutils"
 
-class TestFileMonitor < Test::Unit::TestCase
+class TestSimpleFileMonitor < Test::Unit::TestCase
   def setup
     # Put some test files in the directory test_data
     @dir = File.expand_path('test_data')
@@ -24,7 +24,7 @@ class TestFileMonitor < Test::Unit::TestCase
     FileUtils.touch @file2
     
     @queue = FileMonitorQueue.new
-    @monitor = FileMonitor.new(@dir)
+    @monitor = SimpleFileMonitor.new(@dir)
     @monitor.observer = @queue
   end
   

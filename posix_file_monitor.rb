@@ -2,7 +2,7 @@ class PosixFileMonitor < FileMonitorBase
   def initialize(directory)
     @directory = directory
     @snapshots = Hash.new
-    @snapshots[directory] = SnapshotNonRecursive.new
+    @snapshots[directory] = Snapshot.new
   end
   
   def remove_directory(directory)
@@ -14,7 +14,7 @@ class PosixFileMonitor < FileMonitorBase
   end
   
   def add_directory(directory)
-    snapshot = SnapshotNonRecursive.new
+    snapshot = Snapshot.new
     @snapshots[directory] = snapshot
     old_snapshot = snapshot.deep_copy
     snapshot.update(directory)

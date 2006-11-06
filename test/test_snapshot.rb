@@ -15,7 +15,7 @@ class TestSnapshot < Test::Unit::TestCase
     FileUtils.touch @file1
     FileUtils.touch @file2
     
-    @snapshot = Snapshot.new(@dir)
+    @snapshot = SnapshotRecursive.new(@dir)
   end
   
   def teardown
@@ -24,8 +24,8 @@ class TestSnapshot < Test::Unit::TestCase
   end
   
   def test_empty
-    assert(!Snapshot.new.exist?(File.join(@dir, 'file1')))
-    assert(!Snapshot.new.exist?(File.join(@dir, 'file2')))
+    assert(!SnapshotRecursive.new.exist?(File.join(@dir, 'file1')))
+    assert(!SnapshotRecursive.new.exist?(File.join(@dir, 'file2')))
   end
   
   def test_simple
@@ -45,9 +45,9 @@ class TestSnapshot < Test::Unit::TestCase
   def test_changed_files
     # Changes the access and modification time on the file to be one minute in the past
     File.utime(Time.now - 60, Time.now - 60, @file2)
-    s1 = Snapshot.new(@dir)
+    s1 = SnapshotRecursive.new(@dir)
     FileUtils.touch @file2
-    s2 = Snapshot.new(@dir)
+    s2 = SnapshotRecursive.new(@dir)
     assert_equal([@file2], Difference.changed_files_recursive(s1, s2))
   end
 end

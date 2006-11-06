@@ -33,14 +33,14 @@ class FileMonitorBase
   
 end
 
-class FileMonitor < FileMonitorBase
+class SimpleFileMonitor < FileMonitorBase
   def initialize(directory)
     @directory = directory
-    @snapshot = Snapshot.new
+    @snapshot = SnapshotRecursive.new
   end
   
   def update   
-    new_snapshot = Snapshot.new(@directory)
+    new_snapshot = SnapshotRecursive.new(@directory)
     Difference.added_files_recursive(@snapshot, new_snapshot).each {|x| file_added(x, new_snapshot.stat(x))}
     Difference.removed_files_recursive(@snapshot, new_snapshot).each {|x| file_removed(x)}
     Difference.changed_files_recursive(@snapshot, new_snapshot).each {|x| file_changed(x, new_snapshot.stat(x))}
