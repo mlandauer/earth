@@ -24,7 +24,7 @@ end
 
 directory = ARGV[0]
 
-db_updater = MonitorWithDatabase.new
+db_updater = FileDatabaseUpdater.new
 monitor = PosixFileMonitor.new(directory)
 monitor.observer = db_updater
 

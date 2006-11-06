@@ -1,7 +1,7 @@
 require 'file_monitor.rb'
 require 'file_info'
 
-class MonitorWithDatabase
+class FileDatabaseUpdater
   def initialize
     # Clear out database
     FileInfo.delete_all
