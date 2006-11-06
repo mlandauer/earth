@@ -13,21 +13,21 @@ require 'snapshot'
 class FileMonitor
   attr_writer :observer
 
-  def file_added(full_path, stat)
+  def file_added(directory, name, stat)
     raise("No observer set") if @observer.nil?
     #puts "File ADDED: #{full_path}"
-    @observer.file_added(File.dirname(full_path), File.basename(full_path), stat)
+    @observer.file_added(directory, name, stat)
   end
   
-  def file_removed(full_path)
+  def file_removed(directory, name)
     raise("No observer set") if @observer.nil?
     #puts "File REMOVED: #{full_path}"
-    @observer.file_removed(File.dirname(full_path), File.basename(full_path))
+    @observer.file_removed(directory, name)
   end
   
-  def file_changed(full_path, stat)
+  def file_changed(directory, name, stat)
     raise("No observer set") if @observer.nil?
     #puts "File CHANGED: #{full_path}"
-    @observer.file_changed(File.dirname(full_path), File.basename(full_path), stat)
+    @observer.file_changed(directory, name, stat)
   end
 end
