@@ -1,13 +1,9 @@
 class PosixFileMonitor < FileMonitor
   def initialize(directory)
-    @directory = directory
-    @snapshots = Hash.new
-    @snapshots[directory] = Snapshot.new
+    @snapshots = {directory => Snapshot.new}
   end
   
   def remove_directory(directory)
-    #puts "Removing directory #{directory}"
-    # First remove subdirectories
     @snapshots[directory].subdirectory_names.each {|x| remove_directory(x)}
     @snapshots[directory].file_names.each {|x| file_removed(x)}
     @snapshots.delete(directory)
