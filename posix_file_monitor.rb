@@ -1,6 +1,6 @@
 class PosixFileMonitor < FileMonitor
   def initialize(directory)
-    @snapshots = {directory => Snapshot.new}
+    @snapshots = {File.expand_path(directory) => Snapshot.new}
   end
   
   def remove_directory(directory)

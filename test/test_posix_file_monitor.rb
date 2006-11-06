@@ -13,7 +13,8 @@ require "fileutils"
 class TestPosixFileMonitor < Test::Unit::TestCase
   def setup
     # Put some test files in the directory test_data
-    @dir = File.expand_path('test_data')
+    @relative_dir = 'test_data'
+    @dir = File.expand_path(@relative_dir)
     @file1 = File.join(@dir, 'file1')
     @dir1 = File.join(@dir, 'dir1')
     @file2 = File.join(@dir1, 'file1')
@@ -31,7 +32,9 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     File.utime(past, past, @file2)
     
     @queue = FileMonitorQueue.new
-    @monitor = PosixFileMonitor.new(@dir)
+    # By passing the relative path we are ensuring that the 
+    # translation to absolute path happens
+    @monitor = PosixFileMonitor.new(@relative_dir)
     @monitor.observer = @queue
   end
   
