@@ -6,6 +6,7 @@ class FileDatabaseUpdater
   def initialize
     # Clear out database
     FileInfo.delete_all
+    DirectoryInfo.delete_all
   end
   
   def file_added(path, name, stat)
@@ -24,5 +25,13 @@ class FileDatabaseUpdater
     file.uid = stat.uid
     file.gid = stat.gid
     file.save
+  end
+  
+  def directory_added(path)
+    DirectoryInfo.create(:server => Socket.gethostname, :path => path)
+  end
+  
+  def directory_removed(path)
+    DirectoryInfo.delete_all(['server = ? AND path = ?', Socket.gethostname, path])
   end
 end

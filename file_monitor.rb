@@ -15,19 +15,19 @@ class FileMonitor
 
   def file_added(directory, name, stat)
     raise("No observer set") if @observer.nil?
-    #puts "File ADDED: #{full_path}"
+    #puts "File ADDED: #{name} in directory #{directory}"
     @observer.file_added(directory, name, stat)
   end
   
   def file_removed(directory, name)
     raise("No observer set") if @observer.nil?
-    #puts "File REMOVED: #{full_path}"
+    #puts "File REMOVED: #{name} in directory #{directory}"
     @observer.file_removed(directory, name)
   end
   
   def file_changed(directory, name, stat)
     raise("No observer set") if @observer.nil?
-    #puts "File CHANGED: #{full_path}"
+    #puts "File CHANGED: #{name} in directory #{directory}"
     @observer.file_changed(directory, name, stat)
   end
   

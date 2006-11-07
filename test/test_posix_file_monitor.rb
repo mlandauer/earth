@@ -61,6 +61,7 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     @queue.clear
     File.chmod(0000, @dir1)
     @monitor.update
+    assert_equal(DirectoryAdded.new(@dir1), @queue.pop)
     assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
     assert(@queue.empty?)
     # Add permissions back
@@ -70,8 +71,9 @@ class TestPosixFileMonitor < Test::Unit::TestCase
   def test_added
     @queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
+    assert_equal(DirectoryAdded.new(@dir1), @queue.pop)
     assert_equal(FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
+    assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
     assert(@queue.empty?)
   end
   
@@ -83,6 +85,7 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     @monitor.update
     assert_equal(FileRemoved.new(@dir1, 'file1'), @queue.pop)
     assert_equal(FileRemoved.new(@dir, 'file1'), @queue.pop)
+    assert_equal(DirectoryRemoved.new(@dir1), @queue.pop)
     assert(@queue.empty?)
   end
   
@@ -94,21 +97,24 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     FileUtils.touch file3
     @queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
     assert_equal(FileChanged.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
+    assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
     assert(@queue.empty?)
   end
 
   def test_removed2
-    FileUtils.mkdir 'test_data/dir1/dir2'
-    FileUtils.touch 'test_data/dir1/dir2/file'
+    dir2 = File.join(@dir1, 'dir2')
+    FileUtils.mkdir dir2
+    FileUtils.touch File.join(dir2, 'file')
     @monitor.update
-    FileUtils.rm_rf 'test_data/dir1'
+    FileUtils.rm_rf @dir1
     @queue.clear
     @monitor.update
     
-    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1/dir2'), 'file'), @queue.pop)
-    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1'), 'file1'), @queue.pop)
+    assert_equal(FileRemoved.new(dir2, 'file'), @queue.pop)
+    assert_equal(FileRemoved.new(@dir1, 'file1'), @queue.pop)
+    assert_equal(DirectoryRemoved.new(dir2), @queue.pop)
+    assert_equal(DirectoryRemoved.new(@dir1), @queue.pop)
     assert(@queue.empty?)
   end
 

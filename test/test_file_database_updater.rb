@@ -11,6 +11,7 @@ class TestFileDatabaseUpdater < Test::Unit::TestCase
 
   def setup
     @dir = File.expand_path('test_data')
+    @dir1 = File.join(@dir, 'dir1')
     @updater = FileDatabaseUpdater.new
     # 1st of January 2000
     @stat1 = Stat.new(Time.local(2000, 1, 1), 24, 100, 200)
@@ -19,7 +20,8 @@ class TestFileDatabaseUpdater < Test::Unit::TestCase
   
   # Database should be empty on startup
   def test_empty
-    assert(FileInfo.find_all.empty?)
+    assert_equal(0, FileInfo.count)
+    assert_equal(0, DirectoryInfo.count)
   end
   
   def test_simple
@@ -35,6 +37,24 @@ class TestFileDatabaseUpdater < Test::Unit::TestCase
     assert_equal('file1', files[1].name)
     assert_equal(@stat2.mtime, files[1].modified)
     assert_equal(@stat2.size, files[1].size)
+  end
+  
+  def test_add_directory
+    @updater.directory_added(@dir)
+    @updater.directory_added(@dir1)
+    directories = DirectoryInfo.find_all
+    assert_equal(2, directories.size)
+    assert_equal(@dir, directories[0].path)
+    assert_equal(@dir1, directories[1].path)
+  end
+  
+  def test_remove_directory
+    @updater.directory_added(@dir)
+    @updater.directory_added(@dir1)
+    @updater.directory_removed(@dir1)
+    directories = DirectoryInfo.find_all
+    assert_equal(1, directories.size)
+    assert_equal(@dir, directories[0].path)
   end
   
   def test_delete
