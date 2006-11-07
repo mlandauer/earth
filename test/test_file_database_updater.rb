@@ -1,17 +1,20 @@
 require "fileutils"
 require "file_database_updater"
 require "file_info"
+require "rubygems" 
+require_gem "sys-admin" 
+include Sys
 
 class TestFileDatabaseUpdater < Test::Unit::TestCase
   # Duck typing comes in handy here. Making fake File::Stat object
-  Stat = Struct.new(:mtime, :size)
+  Stat = Struct.new(:mtime, :size, :uid, :gid)
 
   def setup
     @dir = File.expand_path('test_data')
     @updater = FileDatabaseUpdater.new
     # 1st of January 2000
-    @stat1 = Stat.new(Time.local(2000, 1, 1), 24)
-    @stat2 = Stat.new(Time.local(2001, 1, 1), 53)
+    @stat1 = Stat.new(Time.local(2000, 1, 1), 24, 100, 200)
+    @stat2 = Stat.new(Time.local(2001, 1, 1), 53, 100, 200)
   end
   
   # Database should be empty on startup
@@ -60,5 +63,13 @@ class TestFileDatabaseUpdater < Test::Unit::TestCase
     files = FileInfo.find_all
     assert_equal(1, files.size)
     assert_equal(Socket::gethostname, files[0].server)
+  end
+  
+  def test_ownership
+    @updater.file_added(@dir, 'file1', @stat1)
+    files = FileInfo.find_all
+    assert_equal(1, files.size)
+    assert_equal(@stat1.uid, files[0].uid)
+    assert_equal(@stat1.gid, files[0].gid)
   end
 end

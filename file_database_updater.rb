@@ -8,8 +8,8 @@ class FileDatabaseUpdater
   end
   
   def file_added(path, name, stat)
-    FileInfo.create(:path => path, :name => name, :modified => stat.mtime, :size => stat.size,
-      :server => Socket.gethostname)
+    FileInfo.create(:server => Socket.gethostname, :path => path, :name => name,
+      :modified => stat.mtime, :size => stat.size, :uid => stat.uid, :gid => stat.gid)
   end
   
   def file_removed(path, name)
@@ -20,6 +20,8 @@ class FileDatabaseUpdater
     file = FileInfo.find(:first, :conditions => ['path = ? AND name = ?', path, name])
     file.modified = stat.mtime
     file.size = stat.size
+    file.uid = stat.uid
+    file.gid = stat.gid
     file.save
   end
 end
