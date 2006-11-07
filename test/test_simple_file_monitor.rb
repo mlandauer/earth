@@ -94,5 +94,4 @@ class TestSimpleFileMonitor < Test::Unit::TestCase
     assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
     assert(@queue.empty?)
   end
-  
 end
