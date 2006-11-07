@@ -485,3 +485,977 @@ Rendering file_info/edit
   [4;36;1mFileInfo Columns (0.001147)[0m   [0;1mSHOW FIELDS FROM file_info[0m
 Rendered file_info/_form (0.01063)
 Completed in 0.04335 (23 reqs/sec) | Rendering: 0.02492 (57%) | DB: 0.00275 (6%) | 200 OK [http://earth/file_info/edit/3596]
+
+
+Processing Base#index (for 10.2.0.66 at 2006-11-07 17:21:42) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {}
+
+
+ActionController::RoutingError (Recognition failed for "/find"):
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/routing.rb:522:in `recognition_failed'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/routing.rb:512:in `recognize!'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (404 Page Not Found)
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 17:21:51) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+
+
+ActionController::MissingTemplate (Missing template script/../config/../app/views/file_info/find.rhtml):
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:1034:in `assert_existence_of_template_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:724:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 17:23:40) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+
+
+ActionController::MissingTemplate (Missing template script/../config/../app/views/file_info/find.rhtml):
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:1034:in `assert_existence_of_template_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:724:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 17:24:17) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.01755 (56 reqs/sec) | Rendering: 0.01642 (93%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#edit (for 10.2.0.66 at 2006-11-07 17:29:45) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"edit", "controller"=>"file_info"}
+
+
+ActiveRecord::RecordNotFound (Couldn't find FileInfo without an ID):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:939:in `find_from_ids'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:382:in `find'
+    .//app/controllers/file_info_controller.rb:34:in `edit'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 17:30:10) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.02061 (48 reqs/sec) | Rendering: 0.01903 (92%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#update (for 10.2.0.66 at 2006-11-07 17:30:16) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"commit"=>"Find", "action"=>"update", "controller"=>"file_info"}
+
+
+ActiveRecord::RecordNotFound (Couldn't find FileInfo without an ID):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:939:in `find_from_ids'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:382:in `find'
+    .//app/controllers/file_info_controller.rb:38:in `update'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#update (for 10.2.0.66 at 2006-11-07 17:32:57) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"commit"=>"Find", "action"=>"update", "controller"=>"file_info"}
+
+
+ActiveRecord::RecordNotFound (Couldn't find FileInfo without an ID):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:939:in `find_from_ids'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:382:in `find'
+    .//app/controllers/file_info_controller.rb:38:in `update'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#update (for 10.2.0.66 at 2006-11-07 17:33:00) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"commit"=>"Find", "action"=>"update", "controller"=>"file_info"}
+
+
+ActiveRecord::RecordNotFound (Couldn't find FileInfo without an ID):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:939:in `find_from_ids'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:382:in `find'
+    .//app/controllers/file_info_controller.rb:38:in `update'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#update (for 10.2.0.66 at 2006-11-07 17:33:44) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"commit"=>"Find", "action"=>"update", "controller"=>"file_info"}
+
+
+ActiveRecord::RecordNotFound (Couldn't find FileInfo without an ID):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:939:in `find_from_ids'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:382:in `find'
+    .//app/controllers/file_info_controller.rb:38:in `update'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 17:33:56) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.02081 (48 reqs/sec) | Rendering: 0.01972 (94%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:33:58) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001166)[0m   [0mSHOW FIELDS FROM file_info[0m
+
+
+ActionView::TemplateError (You have a nil object when you didn't expect it!
+You might have expected an instance of Array.
+The error occured while evaluating nil.each) on line #10 of app/views/file_info/results.rhtml:
+7:   <% end %>
+8:   </tr>
+9:   
+10: <% for file_info in @file_info %>
+11:   <tr>
+12:   <% for column in FileInfo.content_columns %>
+13:     <td><%=h file_info.send(column.name) %></td>
+
+    #{RAILS_ROOT}/app/views/file_info/results.rhtml:10:in `_run_rhtml_file_info_results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:316:in `compile_and_render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:292:in `render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:251:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:726:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:36:06) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000986)[0m   [0;1mSELECT * FROM file_info [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001194)[0m   [0mSHOW FIELDS FROM file_info[0m
+
+
+ActionView::TemplateError (You have a nil object when you didn't expect it!
+You might have expected an instance of Array.
+The error occured while evaluating nil.each) on line #10 of app/views/file_info/results.rhtml:
+7:   <% end %>
+8:   </tr>
+9:   
+10: <% for file_info in @file_info %>
+11:   <tr>
+12:   <% for column in FileInfo.content_columns %>
+13:     <td><%=h file_info.send(column.name) %></td>
+
+    #{RAILS_ROOT}/app/views/file_info/results.rhtml:10:in `_run_rhtml_file_info_results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:316:in `compile_and_render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:292:in `render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:251:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:726:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:36:46) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.001058)[0m   [0;1mSELECT * FROM file_info [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001145)[0m   [0mSHOW FIELDS FROM file_info[0m
+
+
+ActionView::TemplateError (You have a nil object when you didn't expect it!
+The error occured while evaluating nil.current) on line #22 of app/views/file_info/results.rhtml:
+19: <% end %>
+20: </table>
+21: 
+22: <%= link_to 'Previous page', { :page => @file_info_pages.current.previous } if @file_info_pages.current.previous %>
+23: <%= link_to 'Next page', { :page => @file_info_pages.current.next } if @file_info_pages.current.next %> 
+24: 
+25: <br />
+
+    #{RAILS_ROOT}/app/views/file_info/results.rhtml:22:in `_run_rhtml_file_info_results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:316:in `compile_and_render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:292:in `render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:251:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:726:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:38:18) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.001045)[0m   [0;1mSELECT * FROM file_info [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001170)[0m   [0mSHOW FIELDS FROM file_info[0m
+Completed in 0.16903 (5 reqs/sec) | Rendering: 0.15500 (91%) | DB: 0.00336 (1%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 17:40:23) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.01620 (61 reqs/sec) | Rendering: 0.01513 (93%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:43:20) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.001044)[0m   [0;1mSELECT * FROM file_info [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001166)[0m   [0mSHOW FIELDS FROM file_info[0m
+Completed in 0.24005 (4 reqs/sec) | Rendering: 0.22621 (94%) | DB: 0.00221 (0%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:43:37) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.001042)[0m   [0;1mSELECT * FROM file_info [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001162)[0m   [0mSHOW FIELDS FROM file_info[0m
+Completed in 0.24968 (4 reqs/sec) | Rendering: 0.22962 (91%) | DB: 0.00220 (0%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:44:24) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000989)[0m   [0;1mSELECT * FROM file_info [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001146)[0m   [0mSHOW FIELDS FROM file_info[0m
+Completed in 0.17247 (5 reqs/sec) | Rendering: 0.15398 (89%) | DB: 0.00214 (1%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 17:44:32) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.01061 (94 reqs/sec) | Rendering: 0.00933 (87%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:44:37) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"foobar", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.001074)[0m   [0;1mSELECT * FROM file_info [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001158)[0m   [0mSHOW FIELDS FROM file_info[0m
+Completed in 0.24639 (4 reqs/sec) | Rendering: 0.15362 (62%) | DB: 0.00223 (0%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 17:49:08) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.01550 (64 reqs/sec) | Rendering: 0.01441 (92%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:49:12) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"suite.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000671)[0m   [0;1mSELECT * FROM file_info WHERE (name = 'suite.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001159)[0m   [0mSHOW FIELDS FROM file_info[0m
+Completed in 0.02945 (33 reqs/sec) | Rendering: 0.01361 (46%) | DB: 0.00183 (6%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:49:23) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000674)[0m   [0;1mSELECT * FROM file_info WHERE (name = '*') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001136)[0m   [0mSHOW FIELDS FROM file_info[0m
+Completed in 0.02881 (34 reqs/sec) | Rendering: 0.01199 (41%) | DB: 0.00181 (6%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:49:33) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"suit", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000679)[0m   [0;1mSELECT * FROM file_info WHERE (name = 'suit') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001328)[0m   [0mSHOW FIELDS FROM file_info[0m
+Completed in 0.03356 (29 reqs/sec) | Rendering: 0.01364 (40%) | DB: 0.00201 (5%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 17:55:59) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.01348 (74 reqs/sec) | Rendering: 0.01225 (90%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:56:01) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"suit", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000000)[0m   [0;1mMysql::Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE MATCH (name) AGAINST 'suit')' at line 1: SELECT * FROM file_info WHERE (WHERE MATCH (name) AGAINST 'suit') [0m
+
+
+ActiveRecord::StatementInvalid (Mysql::Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE MATCH (name) AGAINST 'suit')' at line 1: SELECT * FROM file_info WHERE (WHERE MATCH (name) AGAINST 'suit') ):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/abstract_adapter.rb:120:in `log'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:184:in `execute'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:336:in `select'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:175:in `select_all'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:390:in `find_by_sql'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:924:in `find_every'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:381:in `find'
+    .//app/controllers/file_info_controller.rb:57:in `results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 17:56:28) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.00904 (110 reqs/sec) | Rendering: 0.00796 (88%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:56:29) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"suit", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000000)[0m   [0mMysql::Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''suit')' at line 1: SELECT * FROM file_info WHERE (MATCH (name) AGAINST 'suit') [0m
+
+
+ActiveRecord::StatementInvalid (Mysql::Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''suit')' at line 1: SELECT * FROM file_info WHERE (MATCH (name) AGAINST 'suit') ):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/abstract_adapter.rb:120:in `log'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:184:in `execute'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:336:in `select'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:175:in `select_all'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:390:in `find_by_sql'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:924:in `find_every'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:381:in `find'
+    .//app/controllers/file_info_controller.rb:57:in `results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 17:57:35) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.01006 (99 reqs/sec) | Rendering: 0.00897 (89%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:57:39) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"suit", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000000)[0m   [0;1mMysql::Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'NATURAL LANGUAGE MODE))' at line 1: SELECT * FROM file_info WHERE (MATCH (name) AGAINST ('suit' IN NATURAL LANGUAGE MODE)) [0m
+
+
+ActiveRecord::StatementInvalid (Mysql::Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'NATURAL LANGUAGE MODE))' at line 1: SELECT * FROM file_info WHERE (MATCH (name) AGAINST ('suit' IN NATURAL LANGUAGE MODE)) ):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/abstract_adapter.rb:120:in `log'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:184:in `execute'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:336:in `select'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:175:in `select_all'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:390:in `find_by_sql'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:924:in `find_every'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:381:in `find'
+    .//app/controllers/file_info_controller.rb:57:in `results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 17:58:20) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"suit", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000000)[0m   [0mMysql::Error: The used table type doesn't support FULLTEXT indexes: SELECT * FROM file_info WHERE (MATCH (name) AGAINST ('suit')) [0m
+
+
+ActiveRecord::StatementInvalid (Mysql::Error: The used table type doesn't support FULLTEXT indexes: SELECT * FROM file_info WHERE (MATCH (name) AGAINST ('suit')) ):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/abstract_adapter.rb:120:in `log'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:184:in `execute'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:336:in `select'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:175:in `select_all'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:390:in `find_by_sql'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:924:in `find_every'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:381:in `find'
+    .//app/controllers/file_info_controller.rb:57:in `results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 18:01:39) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"suit", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000000)[0m   [0;1mMysql::Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'suit'%')' at line 1: SELECT * FROM file_info WHERE (NAME LIKE '%'suit'%') [0m
+
+
+ActiveRecord::StatementInvalid (Mysql::Error: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'suit'%')' at line 1: SELECT * FROM file_info WHERE (NAME LIKE '%'suit'%') ):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/abstract_adapter.rb:120:in `log'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:184:in `execute'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:336:in `select'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:175:in `select_all'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:390:in `find_by_sql'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:924:in `find_every'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:381:in `find'
+    .//app/controllers/file_info_controller.rb:57:in `results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 18:03:29) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"suit", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000679)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE '%suit%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001191)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Completed in 0.03397 (29 reqs/sec) | Rendering: 0.01640 (48%) | DB: 0.00187 (5%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-07 18:03:42) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.01710 (58 reqs/sec) | Rendering: 0.01585 (92%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 18:03:48) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000891)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE '%rb%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001138)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Completed in 0.09997 (10 reqs/sec) | Rendering: 0.08655 (86%) | DB: 0.00203 (2%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 18:05:06) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000769)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE '%earth%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001126)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Completed in 0.11977 (8 reqs/sec) | Rendering: 0.01917 (16%) | DB: 0.00189 (1%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#edit (for 10.2.0.66 at 2006-11-07 18:05:13) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"edit", "id"=>"3706", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000447)[0m   [0mSELECT * FROM file_info WHERE (file_info.id = '3706') LIMIT 1[0m
+Rendering  within layouts/file_info
+Rendering file_info/edit
+  [4;36;1mFileInfo Columns (0.001173)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Rendered file_info/_form (0.00997)
+Completed in 0.05030 (19 reqs/sec) | Rendering: 0.02777 (55%) | DB: 0.00162 (3%) | 200 OK [http://earth/file_info/edit/3706]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 18:06:49) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000931)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE '%rb%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001136)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Completed in 0.11978 (8 reqs/sec) | Rendering: 0.09501 (79%) | DB: 0.00207 (1%) | 200 OK [http://earth/file_info/results]

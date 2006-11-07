@@ -1,0 +1,7 @@
+<h1>Find a File </h1>
+
+<%= start_form_tag :action => 'results', :id => @file_info %>
+  <%= text_field_tag 'find_value' %>
+  <%= submit_tag 'Find' %>
+<%= end_form_tag %>
+
