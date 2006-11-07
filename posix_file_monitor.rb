@@ -1,9 +1,11 @@
 # For FileAdded struct
-require 'file_monitor_queue'
+require 'changes'
 
 class PosixFileMonitor < FileMonitor
-  def initialize(directory)
+  def initialize(directory, observer)
+    super(observer)
     @snapshots = {File.expand_path(directory) => Snapshot.new}
+    directory_added(File.expand_path(directory))
   end
   
   def remove_directory(directory)

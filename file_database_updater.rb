@@ -10,16 +10,25 @@ class FileDatabaseUpdater
   end
   
   def file_added(path, name, stat)
-    FileInfo.create(:server => Socket.gethostname, :path => path, :name => name,
+    # TODO: Currently very inefficient because need to a find before any add
+    directory = DirectoryInfo.find(:first, :conditions => ['server = ? AND path = ?', Socket.gethostname, path])
+    raise "No directory found" if directory.nil?
+    FileInfo.create(:directory_info => directory, :name => name,
       :modified => stat.mtime, :size => stat.size, :uid => stat.uid, :gid => stat.gid)
   end
   
   def file_removed(path, name)
-    FileInfo.delete_all(['path = ? AND name = ?', path, name])
+    # TODO: Currently very inefficient because need to a find before any add
+    directory = DirectoryInfo.find(:first, :conditions => ['server = ? AND path = ?', Socket.gethostname, path])
+    raise "No directory found" if directory.nil?
+    FileInfo.delete_all(['directory_info_id = ? AND name = ?', directory.id, name])
   end
   
   def file_changed(path, name, stat)
-    file = FileInfo.find(:first, :conditions => ['path = ? AND name = ?', path, name])
+    # TODO: Doing this in a very stupid way to start with
+    directory = DirectoryInfo.find(:first, :conditions => ['server = ? AND path = ?', Socket.gethostname, path])
+    raise "No directory found" if directory.nil?
+    file = FileInfo.find(:first, :conditions => ['directory_info_id = ? AND name = ?', directory.id, name])
     file.modified = stat.mtime
     file.size = stat.size
     file.uid = stat.uid

@@ -24,8 +24,7 @@ class TestSimpleFileMonitor < Test::Unit::TestCase
     FileUtils.touch @file2
     
     @queue = FileMonitorQueue.new
-    @monitor = SimpleFileMonitor.new(@dir)
-    @monitor.observer = @queue
+    @monitor = SimpleFileMonitor.new(@dir, @queue)
   end
   
   def teardown
@@ -34,9 +33,9 @@ class TestSimpleFileMonitor < Test::Unit::TestCase
   end
 
   def test_added
-    @queue.clear
     @monitor.update
     # The directory added message needs to appear before the file added message
+    assert_equal(DirectoryAdded.new(@dir), @queue.pop)
     assert_equal(DirectoryAdded.new(@dir1), @queue.pop)
     assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
     assert_equal(FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)

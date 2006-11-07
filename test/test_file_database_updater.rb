@@ -25,15 +25,17 @@ class TestFileDatabaseUpdater < Test::Unit::TestCase
   end
   
   def test_simple
+    @updater.directory_added(@dir)
     @updater.file_added(@dir, 'file1', @stat1)
-    @updater.file_added(File.join(@dir, 'dir1'), 'file1', @stat2)
+    @updater.directory_added(@dir1)
+    @updater.file_added(@dir1, 'file1', @stat2)
     files = FileInfo.find_all
     assert_equal(2, files.size)
-    assert_equal(@dir, files[0].path)
+    assert_equal(@dir, files[0].directory_info.path)
     assert_equal('file1', files[0].name)
     assert_equal(@stat1.mtime, files[0].modified)
     assert_equal(@stat1.size, files[0].size)
-    assert_equal(File.join(@dir, 'dir1'), files[1].path)
+    assert_equal(@dir1, files[1].directory_info.path)
     assert_equal('file1', files[1].name)
     assert_equal(@stat2.mtime, files[1].modified)
     assert_equal(@stat2.size, files[1].size)
@@ -58,34 +60,39 @@ class TestFileDatabaseUpdater < Test::Unit::TestCase
   end
   
   def test_delete
+    @updater.directory_added(@dir)
     @updater.file_added(@dir, 'file1', @stat1)
-    @updater.file_added(File.join(@dir, 'dir1'), 'file1', @stat2)
+    @updater.directory_added(@dir1)
+    @updater.file_added(@dir1, 'file1', @stat2)
     @updater.file_removed(@dir, 'file1')
     files = FileInfo.find_all
     assert_equal(1, files.size)
-    assert_equal(File.join(@dir, 'dir1'), files[0].path)    
+    assert_equal(File.join(@dir, 'dir1'), files[0].directory_info.path)    
     assert_equal('file1', files[0].name)    
   end
   
   def test_change
+    @updater.directory_added(@dir)
     @updater.file_added(@dir, 'file1', @stat1)
     @updater.file_changed(@dir, 'file1', @stat2)
     files = FileInfo.find_all
     assert_equal(1, files.size)
-    assert_equal(@dir, files[0].path)    
+    assert_equal(@dir, files[0].directory_info.path)    
     assert_equal('file1', files[0].name)    
     assert_equal(@stat2.mtime, files[0].modified)
     assert_equal(@stat2.size, files[0].size)
   end
   
   def test_machine_name
+    @updater.directory_added(@dir)
     @updater.file_added(@dir, 'file1', @stat1)
     files = FileInfo.find_all
     assert_equal(1, files.size)
-    assert_equal(Socket::gethostname, files[0].server)
+    assert_equal(Socket::gethostname, files[0].directory_info.server)
   end
   
   def test_ownership
+    @updater.directory_added(@dir)
     @updater.file_added(@dir, 'file1', @stat1)
     files = FileInfo.find_all
     assert_equal(1, files.size)

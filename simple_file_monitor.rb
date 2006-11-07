@@ -1,7 +1,9 @@
 class SimpleFileMonitor < FileMonitor
-  def initialize(directory)
-    @directory = directory
+  def initialize(directory, observer)
+    super(observer)
+    @directory = File.expand_path(directory)
     @snapshot = SnapshotRecursive.new
+    directory_added(@directory)
   end
   
   def update   

@@ -25,8 +25,7 @@ end
 directory = ARGV[0]
 
 updater = FileDatabaseUpdater.new
-monitor = PosixFileMonitor.new(directory)
-monitor.observer = updater
+monitor = PosixFileMonitor.new(directory, updater)
 
 while true do
   puts "Updating..."

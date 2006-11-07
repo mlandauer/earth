@@ -34,8 +34,7 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     @queue = FileMonitorQueue.new
     # By passing the relative path we are ensuring that the 
     # translation to absolute path happens
-    @monitor = PosixFileMonitor.new(@relative_dir)
-    @monitor.observer = @queue
+    @monitor = PosixFileMonitor.new(@relative_dir, @queue)
   end
   
   def teardown
@@ -69,8 +68,8 @@ class TestPosixFileMonitor < Test::Unit::TestCase
   end
   
   def test_added
-    @queue.clear
     @monitor.update
+    assert_equal(DirectoryAdded.new(@dir), @queue.pop)
     assert_equal(DirectoryAdded.new(@dir1), @queue.pop)
     assert_equal(FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
     assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)

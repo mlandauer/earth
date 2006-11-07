@@ -11,34 +11,31 @@ require 'thread'
 require 'snapshot'
 
 class FileMonitor
-  attr_writer :observer
-
+  def initialize(observer)
+    @observer = observer
+  end
+  
   def file_added(directory, name, stat)
-    raise("No observer set") if @observer.nil?
     #puts "File ADDED: #{name} in directory #{directory}"
     @observer.file_added(directory, name, stat)
   end
   
   def file_removed(directory, name)
-    raise("No observer set") if @observer.nil?
     #puts "File REMOVED: #{name} in directory #{directory}"
     @observer.file_removed(directory, name)
   end
   
   def file_changed(directory, name, stat)
-    raise("No observer set") if @observer.nil?
     #puts "File CHANGED: #{name} in directory #{directory}"
     @observer.file_changed(directory, name, stat)
   end
   
   def directory_added(directory)
-    raise("No observer set") if @observer.nil?
     #puts "Directory ADDED: #{directory}"
     @observer.directory_added(directory)
   end
   
   def directory_removed(directory)
-    raise("No observer set") if @observer.nil?
     #puts "Directory REMOVED: #{directory}"
     @observer.directory_removed(directory)
   end
