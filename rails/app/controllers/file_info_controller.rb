@@ -48,4 +48,7 @@ class FileInfoController < ApplicationController
     FileInfo.find(params[:id]).destroy
     redirect_to :action => 'list'
   end
+
+  def find
+  end
 end

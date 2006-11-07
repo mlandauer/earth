@@ -270,3 +270,218 @@ Processing FileInfoController#index (for 10.2.0.66 at 2006-11-07 16:43:17) [GET]
 Rendering layoutfalseactionlist within layouts/file_info
 Rendering file_info/list
 Completed in 0.03958 (25 reqs/sec) | Rendering: 0.02303 (58%) | DB: 0.00210 (5%) | 200 OK [http://earth/file_info?page=2]
+  [4;36;1mSQL (0.000000)[0m   [0;1mMysql::Error: Table 'schema_info' already exists: CREATE TABLE schema_info (version int(11))[0m
+  [4;35;1mSQL (0.000000)[0m   [0mMysql::Error: Table 'schema_info' already exists: CREATE TABLE schema_info (version int(11))[0m
+  [4;36;1mSQL (0.000518)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000270)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000230)[0m   [0;1mSELECT version FROM schema_info[0m
+  [4;35;1mSQL (0.000217)[0m   [0mSELECT version FROM schema_info[0m
+  [4;36;1mSQL (0.000222)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to AddServerColumn (5)
+  [4;35;1mSQL (0.018424)[0m   [0mALTER TABLE file_info ADD `server` varchar(255)[0m
+  [4;36;1mSQL (0.000360)[0m   [0;1mUPDATE schema_info SET version = 5[0m
+  [4;35;1mSQL (0.000376)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to AddOwnershipColumns (6)
+  [4;36;1mSQL (0.013857)[0m   [0;1mALTER TABLE file_info ADD `owner_user` varchar(255)[0m
+  [4;35;1mSQL (0.013418)[0m   [0mALTER TABLE file_info ADD `owner_group` varchar(255)[0m
+  [4;36;1mSQL (0.000378)[0m   [0;1mUPDATE schema_info SET version = 6[0m
+  [4;35;1mSQL (0.000276)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to ChangeOwnershipInteger (7)
+  [4;36;1mSQL (0.029704)[0m   [0;1mALTER TABLE file_info DROP `owner_user`[0m
+  [4;35;1mSQL (0.013820)[0m   [0mALTER TABLE file_info DROP `owner_group`[0m
+  [4;36;1mSQL (0.014024)[0m   [0;1mALTER TABLE file_info ADD `uid` int(11)[0m
+  [4;35;1mSQL (0.013483)[0m   [0mALTER TABLE file_info ADD `gid` int(11)[0m
+  [4;36;1mSQL (0.000404)[0m   [0;1mUPDATE schema_info SET version = 7[0m
+  [4;35;1mSQL (0.000451)[0m   [0mSELECT version FROM schema_info[0m
+Migrating to CreateDirectoryInfoTable (8)
+  [4;36;1mSQL (0.009658)[0m   [0;1mCREATE TABLE directory_info (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `server` varchar(255) NOT NULL, `path` varchar(255) NOT NULL) ENGINE=InnoDB[0m
+  [4;35;1mSQL (0.000383)[0m   [0mUPDATE schema_info SET version = 8[0m
+  [4;36;1mSQL (0.000258)[0m   [0;1mSELECT version FROM schema_info[0m
+Migrating to AddKeyToDirectoryInfo (9)
+  [4;35;1mSQL (0.020381)[0m   [0mALTER TABLE file_info ADD `directory_info_id` int(11)[0m
+  [4;36;1mSQL (0.013711)[0m   [0;1mALTER TABLE file_info DROP `path`[0m
+  [4;35;1mSQL (0.013403)[0m   [0mALTER TABLE file_info DROP `server`[0m
+  [4;36;1mSQL (0.000383)[0m   [0;1mUPDATE schema_info SET version = 9[0m
+  [4;35;1mSQL (0.000292)[0m   [0mSELECT * FROM schema_info[0m
+  [4;36;1mSQL (0.000439)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.001220)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mSQL (0.000522)[0m   [0;1mSHOW KEYS FROM directory_info[0m
+  [4;35;1mSQL (0.001195)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mSQL (0.000576)[0m   [0;1mSHOW KEYS FROM file_info[0m
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-07 17:14:05) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+  [4;36;1mFileInfo Columns (0.001299)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+  [4;35;1mSQL (0.000618)[0m   [0mSELECT count(*) AS count_all FROM file_info [0m
+  [4;36;1mFileInfo Load (0.000409)[0m   [0;1mSELECT * FROM file_info LIMIT 0, 10[0m
+Rendering layoutfalseactionlist within layouts/file_info
+Rendering file_info/list
+Completed in 0.11689 (8 reqs/sec) | Rendering: 0.04109 (35%) | DB: 0.00233 (1%) | 200 OK [http://earth/file_info]
+
+
+Processing FileInfoController#edit (for 10.2.0.66 at 2006-11-07 17:14:14) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"edit", "id"=>"3596", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000430)[0m   [0mSELECT * FROM file_info WHERE (file_info.id = '3596') LIMIT 1[0m
+Rendering  within layouts/file_info
+Rendering file_info/edit
+  [4;36;1mFileInfo Columns (0.001133)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+
+
+ActionView::TemplateError (undefined method `path' for #<FileInfo:0xb79d0690>) on line #5 of app/views/file_info/_form.rhtml:
+2: 
+3: <!--[form:file_info]-->
+4: <p><label for="file_info_path">Path</label><br/>
+5: <%= text_area 'file_info', 'path'  %></p>
+6: 
+7: <p><label for="file_info_name">Name</label><br/>
+8: <%= text_area 'file_info', 'name'  %></p>
+
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1792:in `method_missing'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/helpers/form_helper.rb:341:in `value_before_type_cast'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/helpers/form_helper.rb:274:in `to_text_area_tag'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/helpers/form_helper.rb:188:in `text_area'
+    #{RAILS_ROOT}/app/views/file_info/_form.rhtml:5:in `_run_rhtml_file_info__form'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:316:in `compile_and_render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:292:in `render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:251:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:266:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/partials.rb:59:in `render_partial'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:29:in `benchmark'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/1.8/benchmark.rb:307:in `realtime'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:29:in `benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/partials.rb:58:in `render_partial'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:278:in `render'
+    #{RAILS_ROOT}/app/views/file_info/edit.rhtml:4:in `_run_rhtml_file_info_edit'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:316:in `compile_and_render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:292:in `render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:251:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:726:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#edit (for 10.2.0.66 at 2006-11-07 17:14:47) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"edit", "id"=>"3596", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000464)[0m   [0mSELECT * FROM file_info WHERE (file_info.id = '3596') LIMIT 1[0m
+Rendering  within layouts/file_info
+Rendering file_info/edit
+  [4;36;1mFileInfo Columns (0.001136)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+
+
+ActionView::TemplateError (undefined method `path' for #<FileInfo:0xb79fe914>) on line #5 of app/views/file_info/_form.rhtml:
+2: 
+3: <!--[form:file_info]-->
+4: <p><label for="file_info_path">Path</label><br/>
+5: <%= text_area 'file_info', 'path'  %></p>
+6: 
+7: <p><label for="file_info_name">Name</label><br/>
+8: <%= text_area 'file_info', 'name'  %></p>
+
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1792:in `method_missing'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/helpers/form_helper.rb:341:in `value_before_type_cast'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/helpers/form_helper.rb:274:in `to_text_area_tag'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/helpers/form_helper.rb:188:in `text_area'
+    #{RAILS_ROOT}/app/views/file_info/_form.rhtml:5:in `_run_rhtml_file_info__form'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:316:in `compile_and_render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:292:in `render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:251:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:266:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/partials.rb:59:in `render_partial'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:29:in `benchmark'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/1.8/benchmark.rb:307:in `realtime'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:29:in `benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/partials.rb:58:in `render_partial'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:278:in `render'
+    #{RAILS_ROOT}/app/views/file_info/edit.rhtml:4:in `_run_rhtml_file_info_edit'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:316:in `compile_and_render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:292:in `render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:251:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:726:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+  [4;36;1mFileInfo Columns (0.001274)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+
+
+Processing FileInfoController#edit (for 10.2.0.66 at 2006-11-07 17:15:31) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"edit", "id"=>"3596", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000470)[0m   [0mSELECT * FROM file_info WHERE (file_info.id = '3596') LIMIT 1[0m
+Rendering  within layouts/file_info
+Rendering file_info/edit
+  [4;36;1mFileInfo Columns (0.001147)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Rendered file_info/_form (0.01063)
+Completed in 0.04335 (23 reqs/sec) | Rendering: 0.02492 (57%) | DB: 0.00275 (6%) | 200 OK [http://earth/file_info/edit/3596]
