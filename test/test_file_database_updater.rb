@@ -54,4 +54,11 @@ class TestFileDatabaseUpdater < Test::Unit::TestCase
     assert_equal(@stat2.mtime, files[0].modified)
     assert_equal(@stat2.size, files[0].size)
   end
+  
+  def test_machine_name
+    @updater.file_added(@dir, 'file1', @stat1)
+    files = FileInfo.find_all
+    assert_equal(1, files.size)
+    assert_equal(Socket::gethostname, files[0].server)
+  end
 end

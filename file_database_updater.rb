@@ -8,7 +8,8 @@ class FileDatabaseUpdater
   end
   
   def file_added(path, name, stat)
-    FileInfo.create(:path => path, :name => name, :modified => stat.mtime, :size => stat.size)
+    FileInfo.create(:path => path, :name => name, :modified => stat.mtime, :size => stat.size,
+      :server => Socket.gethostname)
   end
   
   def file_removed(path, name)
