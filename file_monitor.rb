@@ -36,4 +36,10 @@ class FileMonitor
     #puts "Directory ADDED: #{directory}"
     @observer.directory_added(directory)
   end
+  
+  def directory_removed(directory)
+    raise("No observer set") if @observer.nil?
+    #puts "Directory REMOVED: #{directory}"
+    @observer.directory_removed(directory)
+  end
 end

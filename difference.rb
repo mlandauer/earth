@@ -62,4 +62,8 @@ module Difference
     end
     changes
   end
+  
+  def Difference.removed_directories_recursive(snap1, snap2)
+    added_directories_recursive(snap2, snap1)
+  end
 end

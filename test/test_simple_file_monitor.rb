@@ -51,6 +51,8 @@ class TestSimpleFileMonitor < Test::Unit::TestCase
     @monitor.update
     assert_equal(FileRemoved.new(@dir, 'file1'), @queue.pop)
     assert_equal(FileRemoved.new(@dir1, 'file1'), @queue.pop)
+    # Messages for removing directories should appear after the files
+    assert_equal(DirectoryRemoved.new(@dir1), @queue.pop)
     assert(@queue.empty?)
   end
   
@@ -66,15 +68,20 @@ class TestSimpleFileMonitor < Test::Unit::TestCase
   end
 
   def test_removed2
-    FileUtils.mkdir 'test_data/dir1/dir2'
-    FileUtils.touch 'test_data/dir1/dir2/file'
+    dir2 = File.join(@dir1, 'dir2')
+    
+    FileUtils.mkdir dir2
+    FileUtils.touch File.join(dir2, 'file')
     @monitor.update
     FileUtils.rm_rf 'test_data/dir1'
     @queue.clear
     @monitor.update
     
-    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1'), 'file1'), @queue.pop)
-    assert_equal(FileRemoved.new(File.expand_path('test_data/dir1/dir2'), 'file'), @queue.pop)
+    assert_equal(FileRemoved.new(@dir1, 'file1'), @queue.pop)
+    assert_equal(FileRemoved.new(dir2, 'file'), @queue.pop)
+    # Messages for removing directories should appear after the files
+    assert_equal(DirectoryRemoved.new(@dir1), @queue.pop)
+    assert_equal(DirectoryRemoved.new(dir2), @queue.pop)
     assert(@queue.empty?)
   end
 
