@@ -36,6 +36,8 @@ class TestSimpleFileMonitor < Test::Unit::TestCase
   def test_added
     @queue.clear
     @monitor.update
+    # The directory added message needs to appear before the file added message
+    assert_equal(DirectoryAdded.new(@dir1), @queue.pop)
     assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
     assert_equal(FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
     assert(@queue.empty?)

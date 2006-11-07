@@ -30,4 +30,10 @@ class FileMonitor
     #puts "File CHANGED: #{full_path}"
     @observer.file_changed(directory, name, stat)
   end
+  
+  def directory_added(directory)
+    raise("No observer set") if @observer.nil?
+    #puts "Directory ADDED: #{directory}"
+    @observer.directory_added(directory)
+  end
 end

@@ -51,4 +51,15 @@ module Difference
   def Difference.removed_files_recursive(snap1, snap2)
     added_files_recursive(snap2, snap1)
   end
+  
+  def Difference.added_directories_recursive(snap1, snap2)
+    changes = added_directories(snap1, snap2)
+    added_directories(snap1, snap2).each do |directory|
+      changes += added_directories_recursive(SnapshotRecursive.new, snap2.snapshots[directory])
+    end
+    common_directories(snap1, snap2).each do |d|
+      changes += added_directories_recursive(snap1.snapshots[d], snap2.snapshots[d])
+    end
+    changes
+  end
 end
