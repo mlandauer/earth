@@ -2,6 +2,7 @@
 
 <table>
   <tr>
+  <th>Path</th>
   <% for column in FileInfo.content_columns %>
     <th><%= column.human_name %></th>
   <% end %>
@@ -9,6 +10,7 @@
   
 <% for file_info in @file_info %>
   <tr>
+  <td> <%=h file_info.directory_info.path %> </td>
   <% for column in FileInfo.content_columns %>
     <td><%=h file_info.send(column.name) %></td>
   <% end %>
