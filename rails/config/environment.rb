@@ -51,3 +51,6 @@ end
 # end
 
 # Include your application configuration below
+Inflector.inflections do |inflect|
+  inflect.irregular 'info', 'info'
+end
