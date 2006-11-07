@@ -41,6 +41,7 @@ class PosixFileMonitor < FileMonitor
     # Doing this outside the loop above so that we are not adding and removing from @snapshots
     # while we're in the middle of the loop
     # TODO: Take account of possible duplicates in added_directories and removed_directories
+    # TODO: file_added and directory_added messages do appear currently in a strange order
     added_directories.each {|x| add_directory(x)}
     added_files.each {|x| file_added(x.path, x.name, x.stat)}
     removed_directories.each {|x| remove_directory(x)}
