@@ -1683,3 +1683,1630 @@ Rendering file_info/results
   [4;36;1mDirectoryInfo Load (0.000408)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 79) LIMIT 1[0m
   [4;35;1mDirectoryInfo Load (0.000412)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
 Completed in 0.19162 (5 reqs/sec) | Rendering: 0.15150 (79%) | DB: 0.02641 (13%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-07 18:25:35) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000716)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%earth%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001160)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000420)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.001100)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.03729 (26 reqs/sec) | Rendering: 0.02278 (61%) | DB: 0.00340 (9%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 11:34:28) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000958)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%earth%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001027)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000343)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000804)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.10681 (9 reqs/sec) | Rendering: 0.05094 (47%) | DB: 0.00313 (2%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 11:34:38) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000730)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%earth%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001142)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000416)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000932)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.03447 (29 reqs/sec) | Rendering: 0.02100 (60%) | DB: 0.00322 (9%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:06:40) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"suit", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000727)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%suit%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001149)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000436)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000941)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.04724 (21 reqs/sec) | Rendering: 0.03162 (66%) | DB: 0.00325 (6%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:07:08) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"suit", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000712)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%suit%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001179)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000422)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.001133)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.03907 (25 reqs/sec) | Rendering: 0.02315 (59%) | DB: 0.00345 (8%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-09 16:07:21) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.02564 (39 reqs/sec) | Rendering: 0.02453 (95%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-09 16:08:45) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.01025 (97 reqs/sec) | Rendering: 0.00915 (89%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:08:48) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000990)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%rb%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001165)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000456)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000945)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mDirectoryInfo Load (0.000447)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000648)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000448)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000417)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000423)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000418)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000415)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000420)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000469)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000431)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000428)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000423)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000422)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000418)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000625)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000416)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000415)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000411)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000422)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000413)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000414)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000420)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000412)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000412)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000413)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.001516)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000417)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000412)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 50) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000415)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 50) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000403)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 51) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000407)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 51) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000398)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 52) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000400)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000395)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000393)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000409)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000412)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000406)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000404)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 59) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000393)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000398)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000402)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000411)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000401)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000403)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000397)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000399)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000389)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000412)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 65) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000399)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 72) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000407)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 74) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000401)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 79) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000398)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 52) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000395)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 79) LIMIT 1[0m
+Completed in 0.20237 (4 reqs/sec) | Rendering: 0.16124 (79%) | DB: 0.02735 (13%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:09:25) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+
+
+NameError (undefined local variable or method `list' for #<FileInfoController:0xb7a1dff8>):
+    .//app/controllers/file_info_controller.rb:3:in `index'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:09:58) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+
+
+NameError (undefined local variable or method `list' for #<FileInfoController:0xb7950508>):
+    .//app/controllers/file_info_controller.rb:3:in `index'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:10:10) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering layoutfalseactionfind within layouts/file_info
+Rendering file_info/find
+Completed in 0.01046 (95 reqs/sec) | Rendering: 0.00941 (89%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/]
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:10:19) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+
+
+ActionController::MissingTemplate (Missing template script/../config/../app/views/file_info/index.rhtml):
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:1034:in `assert_existence_of_template_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:724:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:10:30) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+
+
+ActionController::MissingTemplate (Missing template script/../config/../app/views/file_info/index.rhtml):
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:1034:in `assert_existence_of_template_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:724:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:10:35) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering layoutfalseactionfind within layouts/file_info
+Rendering file_info/find
+Completed in 0.00967 (103 reqs/sec) | Rendering: 0.00863 (89%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/]
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:11:20) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering layoutfalseactionfind within layouts/file_info
+Rendering file_info/find
+Completed in 0.01552 (64 reqs/sec) | Rendering: 0.01417 (91%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:11:23) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000960)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%rb%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001160)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000420)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000964)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mDirectoryInfo Load (0.000629)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000409)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000396)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000402)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000408)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000400)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000404)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000408)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000393)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000399)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000410)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000401)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000411)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000590)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000402)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000401)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000395)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000402)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000407)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000412)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000398)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000403)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000396)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000422)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000409)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000409)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000684)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000425)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 50) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000413)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 50) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000415)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 51) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000399)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 51) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000415)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 52) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000399)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000423)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000402)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000410)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000404)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000410)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000398)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 59) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000618)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000401)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000406)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000404)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000409)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000391)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000407)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000414)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000411)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000403)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 65) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000407)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 72) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000402)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 74) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000415)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 79) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000398)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 52) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000422)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 79) LIMIT 1[0m
+Completed in 0.14705 (6 reqs/sec) | Rendering: 0.09802 (66%) | DB: 0.02632 (17%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:13:44) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>".rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000926)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%.rb%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001154)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000428)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000949)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mDirectoryInfo Load (0.000412)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000412)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000405)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000453)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000399)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000417)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000394)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000400)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000409)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000424)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000397)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000414)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000403)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000399)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000408)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000413)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000409)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000402)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000405)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000409)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000411)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000400)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000419)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000403)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000409)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000408)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000409)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000395)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 50) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000409)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 50) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000867)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 51) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000432)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 51) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000397)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 52) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000393)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000404)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000396)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000410)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000396)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000399)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000393)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 59) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000400)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000395)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000583)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000405)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000401)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000400)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000399)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000403)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000395)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000606)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 65) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000401)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 72) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000407)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 74) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000397)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 79) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000399)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 52) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000398)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 79) LIMIT 1[0m
+Completed in 0.12045 (8 reqs/sec) | Rendering: 0.08094 (67%) | DB: 0.02618 (21%) | 200 OK [http://earth/file_info/results]
+
+
+Processing Base#index (for 10.2.0.66 at 2006-11-09 16:19:07) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"*.rb", "commit"=>"Find"}
+
+
+SyntaxError (./script/../config/../app/controllers/file_info_controller.rb:12: syntax error, unexpected '}', expecting ']'
+     @file_info = FileInfo.find(:all, :conditions => ["NAME LIKE ?", @find_value}])
+                                                                                 ^):
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:140:in `load'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:140:in `load'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:56:in `require_or_load'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:30:in `depend_on'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:85:in `require_dependency'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/routing.rb:285:in `attempt_load'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/routing.rb:281:in `attempt_load'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/routing.rb:237:in `traverse_to_controller'
+    generated/routing/recognition.rb:3:in `recognize_path'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/routing.rb:511:in `recognize!'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:19:18) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"*.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000967)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001139)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000406)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000944)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mDirectoryInfo Load (0.000425)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000400)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000405)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000599)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000417)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000399)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000413)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000405)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000394)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000404)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000417)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000404)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000394)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000401)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000394)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000414)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000406)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000409)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000395)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000413)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000396)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000412)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000392)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000411)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000406)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000421)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000394)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000416)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 50) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000400)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 50) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000413)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 51) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000625)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 51) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000421)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 52) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000396)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000413)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000392)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000407)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000404)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000423)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000397)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 59) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000413)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000435)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000406)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000399)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000392)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000407)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000410)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000400)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000392)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000416)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 65) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000476)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 72) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000412)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 74) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000408)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 79) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000415)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 52) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000418)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 79) LIMIT 1[0m
+Completed in 0.21387 (4 reqs/sec) | Rendering: 0.17208 (80%) | DB: 0.02590 (12%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:19:34) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"test*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000737)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'test%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001134)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000423)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000950)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mDirectoryInfo Load (0.000420)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000413)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000447)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000413)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000404)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000409)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 64) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000434)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 72) LIMIT 1[0m
+Completed in 0.04484 (22 reqs/sec) | Rendering: 0.02767 (61%) | DB: 0.00618 (13%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:20:00) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"test*.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000699)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE 'test%.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001146)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+  [4;35;1mDirectoryInfo Load (0.000621)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Columns (0.000946)[0m   [0;1mSHOW FIELDS FROM directory_info[0m
+  [4;35;1mDirectoryInfo Load (0.000419)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000412)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000394)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000394)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000408)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000409)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 72) LIMIT 1[0m
+Completed in 0.06381 (15 reqs/sec) | Rendering: 0.03942 (61%) | DB: 0.00585 (9%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:20:14) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"test*monitor", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000723)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE 'test%monitor') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001149)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Completed in 0.02617 (38 reqs/sec) | Rendering: 0.01078 (41%) | DB: 0.00187 (7%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:20:26) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"test*monitor*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000697)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE 'test%monitor*') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001334)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Completed in 0.02123 (47 reqs/sec) | Rendering: 0.00851 (40%) | DB: 0.00203 (9%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:21:44) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"test*monitor*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000714)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE 'test%monitor*') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001373)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Completed in 0.04512 (22 reqs/sec) | Rendering: 0.02094 (46%) | DB: 0.00209 (4%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:22:20) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"test*monitor*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000743)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE 'test%monitor*') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001160)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Completed in 0.03075 (32 reqs/sec) | Rendering: 0.01342 (43%) | DB: 0.00190 (6%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:24:20) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"test*monitor*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000721)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE 'test%monitor*') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001204)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Completed in 0.05394 (18 reqs/sec) | Rendering: 0.01346 (24%) | DB: 0.00192 (3%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:24:27) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering layoutfalseactionfind within layouts/file_info
+Rendering file_info/find
+Completed in 0.00990 (101 reqs/sec) | Rendering: 0.00873 (88%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:24:35) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"test*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000764)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE 'test%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001160)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+  [4;35;1mDirectoryInfo Load (0.000417)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Columns (0.000958)[0m   [0;1mSHOW FIELDS FROM directory_info[0m
+  [4;35;1mDirectoryInfo Load (0.000420)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000407)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000413)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000398)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000406)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000398)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 64) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000405)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 72) LIMIT 1[0m
+Completed in 0.07406 (13 reqs/sec) | Rendering: 0.04702 (63%) | DB: 0.00615 (8%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:26:20) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering layoutfalseactionfind within layouts/file_info
+Rendering file_info/find
+Completed in 0.01214 (82 reqs/sec) | Rendering: 0.01108 (91%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/]
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:27:03) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering layoutfalseactionfind within layouts/file_info
+Rendering file_info/find
+Completed in 0.01141 (87 reqs/sec) | Rendering: 0.01008 (88%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:27:35) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000905)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001519)[0m   [0mSHOW FIELDS FROM file_info[0m
+Completed in 0.02417 (41 reqs/sec) | Rendering: 0.01003 (41%) | DB: 0.00242 (10%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:27:38) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering layoutfalseactionfind within layouts/file_info
+Rendering file_info/find
+Completed in 0.01492 (67 reqs/sec) | Rendering: 0.01389 (93%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/]
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:27:57) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering layoutfalseactionfind within layouts/file_info
+Rendering file_info/find
+Completed in 0.01649 (60 reqs/sec) | Rendering: 0.01521 (92%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:28:07) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"*.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.001044)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001168)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000494)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000965)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mDirectoryInfo Load (0.000444)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000422)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000428)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000425)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000438)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000419)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000465)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000423)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000417)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000420)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000459)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000417)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 44) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000406)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000434)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000417)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000417)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000423)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000419)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 45) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000488)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000413)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000419)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000416)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000424)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000469)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000421)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000475)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000417)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 47) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000429)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 50) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000420)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 50) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000408)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 51) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000411)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 51) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000408)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 52) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000455)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000417)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000496)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 56) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000417)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000441)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000463)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 57) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000419)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 59) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000421)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000437)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000421)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000443)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000409)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000466)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000415)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000423)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000414)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 60) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000411)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 65) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000419)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 72) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000414)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 74) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000489)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 79) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000432)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 52) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000337)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 79) LIMIT 1[0m
+Completed in 0.11893 (8 reqs/sec) | Rendering: 0.07980 (67%) | DB: 0.02684 (22%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 16:37:03) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering layoutfalseactionfind within layouts/file_info
+Rendering file_info/find
+Completed in 0.01000 (100 reqs/sec) | Rendering: 0.00891 (89%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/]
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-09 16:37:23) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.00884 (113 reqs/sec) | Rendering: 0.00778 (88%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:40:24) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"*.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000968)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001149)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000423)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000960)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mDirectoryInfo Load (0.000419)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000410)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000393)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000414)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000393)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000415)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000394)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000398)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000405)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000440)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000411)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000404)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000410)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000395)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000412)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000396)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000469)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000393)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000405)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000397)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000398)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000410)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000398)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000410)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000416)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000413)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000393)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000414)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 93) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000394)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 93) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000402)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 94) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000396)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 94) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000403)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 95) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000406)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 95) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000404)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 99) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000406)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 99) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000399)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 99) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000408)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 100) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000396)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 100) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000408)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 100) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000397)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 102) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000404)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000392)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000402)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000404)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000402)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000406)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000404)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000410)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000394)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000418)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 108) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000396)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 115) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000404)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 117) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000391)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 122) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000397)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 122) LIMIT 1[0m
+Completed in 0.13572 (7 reqs/sec) | Rendering: 0.08562 (63%) | DB: 0.02537 (18%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:40:39) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"test*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000746)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'test%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001144)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000389)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000941)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mDirectoryInfo Load (0.000430)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000394)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000412)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000394)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000411)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 100) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000394)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 107) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000427)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 115) LIMIT 1[0m
+Completed in 0.06749 (14 reqs/sec) | Rendering: 0.04172 (61%) | DB: 0.00608 (9%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 16:54:50) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"test*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000725)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE 'test%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001173)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+  [4;35;1mDirectoryInfo Load (0.000417)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Columns (0.000937)[0m   [0;1mSHOW FIELDS FROM directory_info[0m
+  [4;35;1mDirectoryInfo Load (0.000415)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000405)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000394)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000398)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000390)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 100) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000562)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 107) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000401)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 115) LIMIT 1[0m
+Completed in 0.04835 (20 reqs/sec) | Rendering: 0.02957 (61%) | DB: 0.00622 (12%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:35:50) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000673)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001153)[0m   [0mSHOW FIELDS FROM file_info[0m
+Completed in 0.02312 (43 reqs/sec) | Rendering: 0.00961 (41%) | DB: 0.00183 (7%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:35:55) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000733)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001365)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000430)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.001124)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.03454 (28 reqs/sec) | Rendering: 0.02028 (58%) | DB: 0.00365 (10%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:36:06) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000710)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001148)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000416)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000928)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.04311 (23 reqs/sec) | Rendering: 0.02613 (60%) | DB: 0.00320 (7%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:46:02) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000655)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001188)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000380)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000954)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.04348 (22 reqs/sec) | Rendering: 0.02626 (60%) | DB: 0.00318 (7%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:46:42) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000985)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001014)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000345)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000812)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.11812 (8 reqs/sec) | Rendering: 0.03904 (33%) | DB: 0.00316 (2%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:46:48) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000856)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001122)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000378)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000928)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.04981 (20 reqs/sec) | Rendering: 0.02992 (60%) | DB: 0.00328 (6%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:47:16) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000689)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001148)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000381)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.001097)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.06100 (16 reqs/sec) | Rendering: 0.03734 (61%) | DB: 0.00331 (5%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#find (for 10.2.0.66 at 2006-11-09 17:47:32) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"find", "controller"=>"file_info"}
+Rendering  within layouts/file_info
+Rendering file_info/find
+Completed in 0.01705 (58 reqs/sec) | Rendering: 0.01549 (90%) | 200 OK [http://earth/file_info/find]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:47:34) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+
+
+Mysql::Error (Access denied for user 'earthaaa'@'localhost' (using password: YES)):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:330:in `real_connect'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:330:in `connect'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:87:in `initialize'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:36:in `mysql_connection'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/abstract/connection_specification.rb:251:in `connection_without_query_cache='
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/query_cache.rb:54:in `connection='
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/abstract/connection_specification.rb:220:in `retrieve_connection'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/abstract/connection_specification.rb:78:in `connection'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1305:in `quote_bound_value'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1287:in `replace_bind_variables'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1287:in `replace_bind_variables'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1276:in `sanitize_sql'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1062:in `add_conditions!'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1012:in `construct_finder_sql'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:924:in `find_every'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:381:in `find'
+    .//app/controllers/file_info_controller.rb:12:in `results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:47:55) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+
+
+Mysql::Error (Access denied for user 'earthaaa'@'localhost' (using password: YES)):
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:330:in `real_connect'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:330:in `connect'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:87:in `initialize'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/mysql_adapter.rb:36:in `mysql_connection'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/abstract/connection_specification.rb:251:in `connection_without_query_cache='
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/query_cache.rb:54:in `connection='
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/abstract/connection_specification.rb:220:in `retrieve_connection'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/connection_adapters/abstract/connection_specification.rb:78:in `connection'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1305:in `quote_bound_value'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1287:in `replace_bind_variables'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1287:in `replace_bind_variables'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1276:in `sanitize_sql'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1062:in `add_conditions!'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1012:in `construct_finder_sql'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:924:in `find_every'
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:381:in `find'
+    .//app/controllers/file_info_controller.rb:12:in `results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:941:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    ./script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 17:48:14) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering layoutfalseactionfind within layouts/file_info
+Rendering file_info/find
+Completed in 0.01616 (61 reqs/sec) | Rendering: 0.01481 (91%) | 200 OK [http://earth/file_info/]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:50:46) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000939)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001211)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000359)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000924)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.13527 (7 reqs/sec) | Rendering: 0.04619 (34%) | DB: 0.00343 (2%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:56:32) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000704)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001153)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000393)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000921)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.05837 (17 reqs/sec) | Rendering: 0.03695 (63%) | DB: 0.00317 (5%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:56:47) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000695)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001140)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000409)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000924)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.04492 (22 reqs/sec) | Rendering: 0.02802 (62%) | DB: 0.00317 (7%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:57:05) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000685)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001152)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000412)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000924)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.06611 (15 reqs/sec) | Rendering: 0.04129 (62%) | DB: 0.00317 (4%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:57:33) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000721)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001151)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000426)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000937)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.05143 (19 reqs/sec) | Rendering: 0.03026 (58%) | DB: 0.00324 (6%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:57:51) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000723)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001151)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000403)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000927)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.11363 (8 reqs/sec) | Rendering: 0.09981 (87%) | DB: 0.00320 (2%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 17:58:10) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000681)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001144)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000392)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000923)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.04551 (21 reqs/sec) | Rendering: 0.02853 (62%) | DB: 0.00314 (6%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:08:29) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000744)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mDirectoryInfo Columns (0.000940)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mFileInfo Columns (0.001129)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+  [4;35;1mDirectoryInfo Load (0.000380)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+Completed in 0.09432 (10 reqs/sec) | Rendering: 0.07968 (84%) | DB: 0.00319 (3%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:08:46) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000700)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+
+
+ActionView::TemplateError (undefined method `content_columnss' for DirectoryInfo:Class) on line #5 of app/views/file_info/results.rhtml:
+2: 
+3: <table border='1' cellpadding='4' cellspacing='0'>
+4:   <tr>
+5:   <th>Path <%= DirectoryInfo.content_columnss %></th>
+6:   <% for column in FileInfo.content_columns %>
+7:     <th><%= column.human_name %></th>
+8:   <% end %>
+
+    /usr/lib/ruby/gems/1.8/gems/activerecord-1.14.4/lib/active_record/base.rb:1129:in `method_missing'
+    #{RAILS_ROOT}/app/views/file_info/results.rhtml:5:in `_run_rhtml_file_info_results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:316:in `compile_and_render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:292:in `render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:251:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:726:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#index (for 10.2.0.66 at 2006-11-09 18:08:59) [GET]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"action"=>"index", "controller"=>"file_info"}
+Rendering layoutfalseactionfind within layouts/file_info
+Rendering file_info/find
+Completed in 0.01520 (65 reqs/sec) | Rendering: 0.01416 (93%) | DB: 0.00000 (0%) | 200 OK [http://earth/file_info/]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:09:02) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000666)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mDirectoryInfo Columns (0.000962)[0m   [0;1mSHOW FIELDS FROM directory_info[0m
+  [4;35;1mFileInfo Columns (0.001073)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000381)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+Completed in 0.16225 (6 reqs/sec) | Rendering: 0.13774 (84%) | DB: 0.00308 (1%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:09:20) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000670)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+
+
+ActionView::TemplateError (uninitialized constant DirectoryPInfo) on line #5 of app/views/file_info/results.rhtml:
+2: 
+3: <table border='1' cellpadding='4' cellspacing='0'>
+4:   <tr>
+5:   <th>Path <%= DirectoryPInfo.content_columns[0] %></th>
+6:   <% for column in FileInfo.content_columns %>
+7:     <th><%= column.human_name %></th>
+8:   <% end %>
+
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:123:in `const_missing'
+    #{RAILS_ROOT}/app/views/file_info/results.rhtml:5:in `_run_rhtml_file_info_results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:316:in `compile_and_render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:292:in `render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:251:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:726:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:11:04) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000729)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001416)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000537)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.001257)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.16781 (5 reqs/sec) | Rendering: 0.14134 (84%) | DB: 0.00394 (2%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:12:46) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000715)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mDirectoryInfo Columns (0.000961)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mFileInfo Columns (0.001106)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+  [4;35;1mDirectoryInfo Load (0.000396)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+Completed in 0.08017 (12 reqs/sec) | Rendering: 0.06613 (82%) | DB: 0.00318 (3%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:13:10) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000706)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mDirectoryInfo Columns (0.000995)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mFileInfo Columns (0.001125)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+  [4;35;1mDirectoryInfo Load (0.000420)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+Completed in 0.09388 (10 reqs/sec) | Rendering: 0.07875 (83%) | DB: 0.00325 (3%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:15:54) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000692)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mDirectoryInfo Columns (0.000960)[0m   [0mSHOW FIELDS FROM directory_info[0m
+
+
+ActionView::TemplateError (You have a nil object when you didn't expect it!
+The error occured while evaluating nil.human_name) on line #5 of app/views/file_info/results.rhtml:
+2: 
+3: <table border='1' cellpadding='4' cellspacing='0'>
+4:   <tr>
+5:   <th>Path <%= DirectoryInfo.content_columns[2].human_name %></th>
+6:   <% for column in FileInfo.content_columns %>
+7:     <th><%= column.human_name %></th>
+8:   <% end %>
+
+    #{RAILS_ROOT}/app/views/file_info/results.rhtml:5:in `_run_rhtml_file_info_results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:316:in `compile_and_render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:292:in `render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:251:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:726:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:18:01) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000875)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mDirectoryInfo Columns (0.000952)[0m   [0mSHOW FIELDS FROM directory_info[0m
+
+
+ActionView::TemplateError (You have a nil object when you didn't expect it!
+The error occured while evaluating nil.human_name) on line #5 of app/views/file_info/results.rhtml:
+2: 
+3: <table border='1' cellpadding='4' cellspacing='0'>
+4:   <tr>
+5:   <th>Path <%= DirectoryInfo.content_columns[2].human_name %></th>
+6:   <% for column in FileInfo.content_columns %>
+7:     <th><%= column.human_name %></th>
+8:   <% end %>
+
+    #{RAILS_ROOT}/app/views/file_info/results.rhtml:5:in `_run_rhtml_file_info_results'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:316:in `compile_and_render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:292:in `render_template'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_view/base.rb:251:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:726:in `render_file'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:648:in `render_with_no_layout'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/layout.rb:245:in `render_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:53:in `render'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:942:in `perform_action_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:368:in `perform_action_without_benchmark'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/1.8/benchmark.rb:293:in `measure'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/benchmarking.rb:69:in `perform_action_without_rescue'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/rescue.rb:82:in `perform_action'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/base.rb:408:in `process_without_filters'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/filters.rb:377:in `process_without_session_management_support'
+    /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/session_management.rb:117:in `process'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/dispatcher.rb:38:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:115:in `handle_dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:81:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:104:in `service'
+    /usr/lib/ruby/1.8/webrick/httpserver.rb:65:in `run'
+    /usr/lib/ruby/1.8/webrick/server.rb:173:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:162:in `start_thread'
+    /usr/lib/ruby/1.8/webrick/server.rb:95:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:92:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:23:in `start'
+    /usr/lib/ruby/1.8/webrick/server.rb:82:in `start'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/webrick_server.rb:67:in `dispatch'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/servers/webrick.rb:59
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    /usr/lib/ruby/gems/1.8/gems/rails-1.1.6/lib/commands/server.rb:30
+    /usr/lib/site_ruby/1.8/rubygems/custom_require.rb:27:in `require'
+    /usr/lib/ruby/gems/1.8/gems/activesupport-1.3.1/lib/active_support/dependencies.rb:147:in `require'
+    script/server:3
+
+
+Rendering /usr/lib/ruby/gems/1.8/gems/actionpack-1.12.5/lib/action_controller/templates/rescues/layout.rhtml (500 Internal Error)
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:20:16) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"earth.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000678)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'earth.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001118)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000389)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000916)[0m   [0mSHOW FIELDS FROM directory_info[0m
+Completed in 0.05990 (16 reqs/sec) | Rendering: 0.03772 (62%) | DB: 0.00405 (6%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:23:40) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"*.rb", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000921)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE '%.rb') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001215)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000380)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000905)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mDirectoryInfo Load (0.000381)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000368)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000361)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000392)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000357)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000360)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000374)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000365)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000366)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000359)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000385)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000358)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 87) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000356)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000361)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000366)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000367)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000358)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000360)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000359)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000357)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000363)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000363)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000361)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000353)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.009118)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000421)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000362)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 90) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000364)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 93) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000367)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 93) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000367)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 94) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000364)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 94) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000360)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 95) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000386)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 95) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000359)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 99) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000358)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 99) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000368)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 99) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000365)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 100) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000369)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 100) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000365)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 100) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000386)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 102) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000358)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000358)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000362)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000367)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000368)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000358)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000389)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000357)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000357)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 103) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000375)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 108) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000373)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 115) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000360)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 117) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000445)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 122) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000394)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 122) LIMIT 1[0m
+Completed in 0.15085 (6 reqs/sec) | Rendering: 0.09667 (64%) | DB: 0.03207 (21%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:23:53) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"test*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;36;1mFileInfo Load (0.000729)[0m   [0;1mSELECT * FROM file_info WHERE (NAME LIKE 'test%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;35;1mFileInfo Columns (0.001142)[0m   [0mSHOW FIELDS FROM file_info[0m
+  [4;36;1mDirectoryInfo Load (0.000387)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Columns (0.000933)[0m   [0mSHOW FIELDS FROM directory_info[0m
+  [4;36;1mDirectoryInfo Load (0.000393)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000360)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000386)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000356)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000391)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 100) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000356)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 107) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000375)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 115) LIMIT 1[0m
+Completed in 0.05308 (18 reqs/sec) | Rendering: 0.03347 (63%) | DB: 0.00581 (10%) | 200 OK [http://earth/file_info/results]

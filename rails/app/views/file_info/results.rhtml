@@ -1,6 +1,6 @@
-<h1>Results of a Find on <%= @find_value %></h1>
+<h1>Find results for the string "<%= @find_value %>"</h1>
 
-<table>
+<table border='1' cellpadding='4' cellspacing='0'>
   <tr>
   <th>Path</th>
   <% for column in FileInfo.content_columns %>
@@ -14,13 +14,8 @@
   <% for column in FileInfo.content_columns %>
     <td><%=h file_info.send(column.name) %></td>
   <% end %>
-    <td><%= link_to 'Show', :action => 'show', :id => file_info %></td>
-    <td><%= link_to 'Edit', :action => 'edit', :id => file_info %></td>
-    <td><%= link_to 'Destroy', { :action => 'destroy', :id => file_info }, :confirm => 'Are you sure?', :post => true %></td>
   </tr>
 <% end %>
 </table>
 
 <br />
-
-<%= link_to 'New file_info', :action => 'new' %>

@@ -13,8 +13,8 @@
 development:
   adapter: mysql
   database: earth_development
-  username: kenji
-  password: password
+  username: earth
+  password: earth
   host: localhost
 
 # Warning: The database defined as 'test' will be erased and

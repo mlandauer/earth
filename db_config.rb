@@ -4,7 +4,7 @@ require_gem "activerecord"
 ActiveRecord::Base.establish_connection(
   :adapter  => "mysql",
   :host     => "localhost",
-  :database => "earth_test",
+  :database => "earth_development",
   :username => "earth",
   :password => "earth"
 )
