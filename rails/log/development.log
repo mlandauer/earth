@@ -3310,3 +3310,35 @@ Rendering file_info/results
   [4;35;1mDirectoryInfo Load (0.000356)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 107) LIMIT 1[0m
   [4;36;1mDirectoryInfo Load (0.000375)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 115) LIMIT 1[0m
 Completed in 0.05308 (18 reqs/sec) | Rendering: 0.03347 (63%) | DB: 0.00581 (10%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:31:35) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"*test*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000696)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE '%test*') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001124)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+Completed in 0.04215 (23 reqs/sec) | Rendering: 0.01827 (43%) | DB: 0.00182 (4%) | 200 OK [http://earth/file_info/results]
+
+
+Processing FileInfoController#results (for 10.2.0.66 at 2006-11-09 18:36:10) [POST]
+  Session ID: 9988ed2b4eab79004adf9bd2c1c78530
+  Parameters: {"find_value"=>"*test*", "commit"=>"Find", "action"=>"results", "controller"=>"file_info"}
+  [4;35;1mFileInfo Load (0.000777)[0m   [0mSELECT * FROM file_info WHERE (NAME LIKE '%test%') [0m
+Rendering  within layouts/file_info
+Rendering file_info/results
+  [4;36;1mFileInfo Columns (0.001162)[0m   [0;1mSHOW FIELDS FROM file_info[0m
+  [4;35;1mDirectoryInfo Load (0.000446)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Columns (0.001100)[0m   [0;1mSHOW FIELDS FROM directory_info[0m
+  [4;35;1mDirectoryInfo Load (0.000386)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000365)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000361)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000364)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 88) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000367)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 100) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000371)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 107) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000383)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 115) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000363)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 117) LIMIT 1[0m
+  [4;35;1mDirectoryInfo Load (0.000363)[0m   [0mSELECT * FROM directory_info WHERE (directory_info.id = 122) LIMIT 1[0m
+  [4;36;1mDirectoryInfo Load (0.000379)[0m   [0;1mSELECT * FROM directory_info WHERE (directory_info.id = 122) LIMIT 1[0m
+Completed in 0.09274 (10 reqs/sec) | Rendering: 0.05362 (57%) | DB: 0.00719 (7%) | 200 OK [http://earth/file_info/results]
