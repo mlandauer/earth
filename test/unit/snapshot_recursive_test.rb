@@ -1,7 +1,4 @@
-require 'fileutils'
-require 'snapshot'
-
-class TestSnapshotRecursive < Test::Unit::TestCase
+class SnapshotRecursiveTest < Test::Unit::TestCase
   def setup
     # Put some test files in the directory test_data
     @dir = File.expand_path('test_data')

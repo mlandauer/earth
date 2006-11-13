@@ -1,11 +1,4 @@
-require "fileutils"
-require "file_database_updater"
-require "file_info"
-require "rubygems" 
-require_gem "sys-admin" 
-include Sys
-
-class TestFileDatabaseUpdater < Test::Unit::TestCase
+class FileDatabaseUpdaterTest < Test::Unit::TestCase
   # Duck typing comes in handy here. Making fake File::Stat object
   Stat = Struct.new(:mtime, :size, :uid, :gid)
 

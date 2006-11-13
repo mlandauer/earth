@@ -7,10 +7,7 @@
 #
 # $Id$
 
-require "file_monitor"
-require "fileutils"
-
-class TestPosixFileMonitor < Test::Unit::TestCase
+class PosixFileMonitorTest < Test::Unit::TestCase
   def setup
     # Put some test files in the directory test_data
     @relative_dir = 'test_data'
