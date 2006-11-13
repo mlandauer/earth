@@ -111,5 +111,20 @@ module FileMonitorTest
     assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
     assert(@queue.empty?)
   end
+
+  # If the daemon doesn't have permission to list the directory
+  # it should ignore it
+  def test_permissions_directory
+    # Remove all permission from directory
+    mode = File.stat(@dir1).mode
+    @queue.clear
+    File.chmod(0000, @dir1)
+    @monitor.update
+    assert_equal(DirectoryAdded.new(@dir1), @queue.pop)
+    assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
+    assert(@queue.empty?)
+    # Add permissions back
+    File.chmod(mode, @dir1)
+  end
 end
 

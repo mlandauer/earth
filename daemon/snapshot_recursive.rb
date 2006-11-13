@@ -9,22 +9,24 @@ class SnapshotRecursive
     unless directory.nil?
       # Internally store everything as absolute path
       directory = File.expand_path(directory)
-      entries = Dir.entries(directory)
-      # Ignore all files and directories starting with '.'
-      entries.delete_if {|x| x[0,1] == "."}
-  
-      # Make absolute paths
-      entries.map!{|x| File.join(directory, x)}
-      
-      filenames, subdirectories = entries.partition{|f| File.file?(f)}
-      @stats.clear
-      filenames.each do |f|
-        @stats[f] = File.lstat(f)
-      end
-      @snapshots.clear
-      subdirectories.each do |d|
-        snapshot = SnapshotRecursive.new(d)
-        @snapshots[d] = snapshot
+      if File.lstat(directory).readable?
+        entries = Dir.entries(directory)
+        # Ignore all files and directories starting with '.'
+        entries.delete_if {|x| x[0,1] == "."}
+    
+        # Make absolute paths
+        entries.map!{|x| File.join(directory, x)}
+        
+        filenames, subdirectories = entries.partition{|f| File.file?(f)}
+        @stats.clear
+        filenames.each do |f|
+          @stats[f] = File.lstat(f)
+        end
+        @snapshots.clear
+        subdirectories.each do |d|
+          snapshot = SnapshotRecursive.new(d)
+          @snapshots[d] = snapshot
+        end
       end
     end
   end
