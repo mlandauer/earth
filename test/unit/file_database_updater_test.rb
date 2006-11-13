@@ -1,14 +1,11 @@
-class FileDatabaseUpdaterTest < Test::Unit::TestCase
-  # Duck typing comes in handy here. Making fake File::Stat object
-  Stat = Struct.new(:mtime, :size, :uid, :gid)
+require File.dirname(__FILE__) + '/file_monitor_observer_test'
 
-  def setup
-    @dir = File.expand_path('test_data')
-    @dir1 = File.join(@dir, 'dir1')
-    @updater = FileDatabaseUpdater.new
-    # 1st of January 2000
-    @stat1 = Stat.new(Time.local(2000, 1, 1), 24, 100, 200)
-    @stat2 = Stat.new(Time.local(2001, 1, 1), 53, 100, 200)
+class FileDatabaseUpdaterTest < Test::Unit::TestCase
+  include FileMonitorObserverTest
+
+  # Factory method 
+  def updater
+    FileDatabaseUpdater.new
   end
   
   # Database should be empty on startup
