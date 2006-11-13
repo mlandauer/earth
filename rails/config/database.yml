@@ -23,8 +23,8 @@ development:
 test:
   adapter: mysql
   database: earth_test
-  username:
-  password:
+  username: earth
+  password: earth
   host: localhost
 
 production:
