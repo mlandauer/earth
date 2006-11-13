@@ -110,8 +110,8 @@ class TestPosixFileMonitor < Test::Unit::TestCase
     @queue.clear
     @monitor.update
     
-    assert_equal(FileRemoved.new(@dir1, 'file1'), @queue.pop)
     assert_equal(FileRemoved.new(dir2, 'file'), @queue.pop)
+    assert_equal(FileRemoved.new(@dir1, 'file1'), @queue.pop)
     assert_equal(DirectoryRemoved.new(dir2), @queue.pop)
     assert_equal(DirectoryRemoved.new(@dir1), @queue.pop)
     assert(@queue.empty?)
