@@ -7,28 +7,16 @@
 #
 # $Id$
 
-class SimpleFileMonitorTest < Test::Unit::TestCase
-  def setup
-    # Put some test files in the directory test_data
-    @dir = File.expand_path('test_data')
-    @file1 = File.join(@dir, 'file1')
-    @dir1 = File.join(@dir, 'dir1')
-    @file2 = File.join(@dir1, 'file1')
+require File.dirname(__FILE__) + '/file_monitor_test'
 
-    FileUtils.rm_rf @dir
-    FileUtils.mkdir_p @dir1
-    FileUtils.touch @file1
-    FileUtils.touch @file2
-    
-    @queue = FileMonitorQueue.new
-    @monitor = SimpleFileMonitor.new(@dir, @queue)
+class SimpleFileMonitorTest < Test::Unit::TestCase
+  include FileMonitorTest
+
+  # Factory method
+  def file_monitor(dir, queue)
+    SimpleFileMonitor.new(dir, queue)
   end
   
-  def teardown
-    # Tidy up
-    FileUtils.rm_rf 'test_data'
-  end
-
   def test_added
     @monitor.update
     # The directory added message needs to appear before the file added message
