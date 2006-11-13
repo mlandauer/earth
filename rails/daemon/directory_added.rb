@@ -1,0 +1,1 @@
+DirectoryAdded = Struct.new(:path)

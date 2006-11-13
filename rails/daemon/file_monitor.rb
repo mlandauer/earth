@@ -8,7 +8,6 @@
 # $Id$
 
 require 'thread'
-require 'snapshot'
 
 class FileMonitor
   def initialize(observer)

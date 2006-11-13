@@ -1,5 +1,3 @@
-require 'file_monitor.rb'
-require 'file_info'
 require 'socket'
 
 class FileDatabaseUpdater

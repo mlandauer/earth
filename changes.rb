@@ -1,5 +1,0 @@
-FileAdded = Struct.new(:path, :name, :stat)
-FileRemoved = Struct.new(:path, :name)
-FileChanged = Struct.new(:path, :name, :stat)
-DirectoryAdded = Struct.new(:path)
-DirectoryRemoved = Struct.new(:path)

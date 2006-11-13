@@ -9,7 +9,7 @@
 #
 # $Id$
 
-require 'file_database_updater'
+require '../config/environment'
 
 def usage
   puts "#{$0} <directory>"

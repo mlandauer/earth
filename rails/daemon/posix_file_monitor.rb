@@ -1,5 +1,5 @@
 # For FileAdded struct
-require 'changes'
+#require 'changes'
 
 class PosixFileMonitor < FileMonitor
   def initialize(directory, observer)
