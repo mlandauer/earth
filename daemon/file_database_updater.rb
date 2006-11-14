@@ -18,10 +18,7 @@ class FileDatabaseUpdater
   
   def file_changed(directory, name, stat)
     file = FileInfo.find(:first, :conditions => ['directory_info_id = ? AND name = ?', directory.id, name])
-    file.modified = stat.mtime
-    file.size = stat.size
-    file.uid = stat.uid
-    file.gid = stat.gid
+    file.stat = stat
     file.save
   end
   
