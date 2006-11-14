@@ -29,7 +29,7 @@ class FileDatabaseUpdater
     DirectoryInfo.create(:server => Socket.gethostname, :path => path)
   end
   
-  def directory_removed(path)
-    DirectoryInfo.delete_all(['server = ? AND path = ?', Socket.gethostname, path])
+  def directory_removed(directory)
+    directory.destroy
   end
 end

@@ -24,7 +24,7 @@ class SimpleFileMonitor < FileMonitor
       file_removed(@directories[File.dirname(x)], File.basename(x))
     end
     Difference.removed_directories_recursive(@snapshot, new_snapshot).each do |x|
-      directory_removed(x)
+      directory_removed(@directories[x])
       @directories.delete(x)
     end
     @snapshot = new_snapshot

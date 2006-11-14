@@ -11,7 +11,8 @@ class PosixFileMonitor < FileMonitor
     # TODO: Check the line below
     @snapshots[directory].file_names.each {|x| file_removed(File.join(directory, x))}
     @snapshots.delete(directory)
-    directory_removed(directory)
+    directory_removed(@directories[directory])
+    @directories.delete(directory)
   end
   
   def add_directory(directory)

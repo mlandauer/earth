@@ -51,8 +51,8 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   
   def test_remove_directory
     @updater.directory_added(@dir)
-    @updater.directory_added(@dir1)
-    @updater.directory_removed(@dir1)
+    dir1 = @updater.directory_added(@dir1)
+    @updater.directory_removed(dir1)
     directories = DirectoryInfo.find_all
     assert_equal(1, directories.size)
     assert_equal(@dir, directories[0].path)
