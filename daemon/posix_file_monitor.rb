@@ -6,30 +6,29 @@ class PosixFileMonitor < FileMonitor
     @directories = {File.expand_path(directory) => dir}
   end
   
-  def remove_directory(directory)
-    @snapshots[directory].subdirectory_names.each {|x| remove_directory(File.join(directory, x))}
-    directory_removed(@directories[directory])
-    @snapshots.delete(directory)
-    @directories.delete(directory)
+  def remove_directory(path)
+    directory = @directories[path]
+
+    @snapshots[path].subdirectory_names.each {|x| remove_directory(File.join(path, x))}
+    @snapshots[path].file_names.each {|x| file_removed(directory, x)}
+    directory_removed(directory)
+    @snapshots.delete(path)
+    @directories.delete(path)
   end
   
-  def add_directory(directory)
-    dir = directory_added(directory)
+  def add_directory(path)
+    dir = directory_added(path)
     snapshot = Snapshot.new
-    @snapshots[directory] = snapshot
-    @directories[directory] = dir
+    @snapshots[path] = snapshot
+    @directories[path] = dir
     old_snapshot = snapshot.deep_copy
-    snapshot.update(directory)
+    snapshot.update(path)
 
     Difference.added_files(old_snapshot, snapshot).each {|x| file_added(dir, x, snapshot.stat(x))}
-    Difference.added_directories(old_snapshot, snapshot).each {|x| add_directory(File.join(directory, x))}
+    Difference.added_directories(old_snapshot, snapshot).each {|x| add_directory(File.join(path, x))}
   end
   
   def update
-    added_directories = []
-    removed_directories = []
-    added_files = []
-       
     @snapshots.each do |path, snapshot|
       directory = @directories[path]
       old_snapshot = snapshot.deep_copy
