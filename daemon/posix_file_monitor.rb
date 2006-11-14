@@ -8,8 +8,6 @@ class PosixFileMonitor < FileMonitor
   
   def remove_directory(directory)
     @snapshots[directory].subdirectory_names.each {|x| remove_directory(File.join(directory, x))}
-    # TODO: Check the line below
-    @snapshots[directory].file_names.each {|x| file_removed(File.join(directory, x))}
     directory_removed(@directories[directory])
     @snapshots.delete(directory)
     @directories.delete(directory)
@@ -44,13 +42,7 @@ class PosixFileMonitor < FileMonitor
       Difference.added_directories(old_snapshot, snapshot).map{|d| File.join(path, d)}.each {|x| add_directory(x)}
       Difference.added_files(old_snapshot, snapshot).map {|x| FileInfo.new(directory, x, snapshot.stat(x))}.each {|x| file_added(x.directory, x.name, x.stat)}
       Difference.removed_files(old_snapshot, snapshot).each {|x| file_removed(directory, x)}
-      removed_directories += Difference.removed_directories(old_snapshot, snapshot).map{|d| File.join(path, d)}
+      Difference.removed_directories(old_snapshot, snapshot).map{|d| File.join(path, d)}.each {|x| remove_directory(x)}
     end
-    
-    # Doing this outside the loop above so that we are not removing from @snapshots
-    # while we're in the middle of the loop
-    # TODO: Take account of possible duplicates in removed_directories
-    # TODO: file_added and directory_added messages do appear currently in a strange order
-    removed_directories.each {|x| remove_directory(x)}
   end
 end
