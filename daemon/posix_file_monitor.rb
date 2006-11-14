@@ -27,7 +27,7 @@ class PosixFileMonitor < FileMonitor
     Difference.added_directories(old_snapshot, snapshot).each {|x| add_directory(File.join(directory, x))}
   end
   
-  FileInfo = Struct.new(:path, :name, :stat)
+  FileInfo = Struct.new(:directory, :name, :stat)
 
   def update
     added_directories = []
@@ -41,7 +41,7 @@ class PosixFileMonitor < FileMonitor
 
       added_directories += Difference.added_directories(old_snapshot, snapshot).map{|d| File.join(path, d)}
       removed_directories += Difference.removed_directories(old_snapshot, snapshot).map{|d| File.join(path, d)}
-      added_files += Difference.added_files(old_snapshot, snapshot).map {|x| FileInfo.new(path, x, snapshot.stat(x))}
+      added_files += Difference.added_files(old_snapshot, snapshot).map {|x| FileInfo.new(directory, x, snapshot.stat(x))}
       
       Difference.removed_files(old_snapshot, snapshot).each {|x| file_removed(directory, x)}
       Difference.changed_files(old_snapshot, snapshot).each {|x| file_changed(directory, x, snapshot.stat(x))}
@@ -52,7 +52,7 @@ class PosixFileMonitor < FileMonitor
     # TODO: Take account of possible duplicates in added_directories and removed_directories
     # TODO: file_added and directory_added messages do appear currently in a strange order
     added_directories.each {|x| add_directory(x)}
-    added_files.each {|x| file_added(@directories[x.path], x.name, x.stat)}
+    added_files.each {|x| file_added(x.directory, x.name, x.stat)}
     removed_directories.each {|x| remove_directory(x)}
   end
 end
