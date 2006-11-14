@@ -43,7 +43,8 @@ module FileMonitorTest
   end
   
   def assert_directory_added_equal(path, change)
-    assert_equal(DirectoryAdded.new(path), change)
+    assert_kind_of(DirectoryAdded, change)
+    assert_equal(path, change.directory.path)
   end
   
   def assert_directory_removed_equal(path, change)
