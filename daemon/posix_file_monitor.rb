@@ -32,16 +32,17 @@ class PosixFileMonitor < FileMonitor
     removed_directories = []
     added_files = []
     
-    @snapshots.each do |directory, snapshot|
+    @snapshots.each do |path, snapshot|
+      directory = @directories[path]
       old_snapshot = snapshot.deep_copy
-      snapshot.update(directory)
+      snapshot.update(path)
 
-      added_directories += Difference.added_directories(old_snapshot, snapshot).map{|d| File.join(directory, d)}
-      removed_directories += Difference.removed_directories(old_snapshot, snapshot).map{|d| File.join(directory, d)}
-      added_files += Difference.added_files(old_snapshot, snapshot).map {|x| FileAdded.new(directory, x, snapshot.stat(x))}
+      added_directories += Difference.added_directories(old_snapshot, snapshot).map{|d| File.join(path, d)}
+      removed_directories += Difference.removed_directories(old_snapshot, snapshot).map{|d| File.join(path, d)}
+      added_files += Difference.added_files(old_snapshot, snapshot).map {|x| FileAdded.new(path, x, snapshot.stat(x))}
       
-      Difference.removed_files(old_snapshot, snapshot).each {|x| file_removed(@directories[directory], x)}
-      Difference.changed_files(old_snapshot, snapshot).each {|x| file_changed(@directories[directory], x, snapshot.stat(x))}
+      Difference.removed_files(old_snapshot, snapshot).each {|x| file_removed(directory, x)}
+      Difference.changed_files(old_snapshot, snapshot).each {|x| file_changed(directory, x, snapshot.stat(x))}
     end
     
     # Doing this outside the loop above so that we are not adding and removing from @snapshots
