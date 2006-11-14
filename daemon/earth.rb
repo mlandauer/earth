@@ -12,25 +12,35 @@
 require '../config/environment'
 
 def usage
-  puts "#{$0} <directory>"
+  puts "#{$0}"
   puts "Monitor a local directory recursively for changes and keep up-to-date"
-  puts "information in a database."
+  puts "information in a database. To set the directory to watch use the web"
+  puts "admin front end."
   exit 1
 end
 
-if ARGV.length != 1
+if ARGV.length != 0
   usage
 end
 
 directory = ARGV[0]
 
-updater = FileDatabaseUpdater.new
-monitor = PosixFileMonitor.new(directory, updater)
-
-while true do
-  puts "Updating..."
-  monitor.update
-  puts "Sleeping..."
-  sleep(10)
+server = Server.find_this_server
+if server.nil?
+  raise "This server is not registered in the database. Use the web admin front-end to add it"
 end
 
+while true do
+  updater = FileDatabaseUpdater.new
+  directory = Server.find_this_server.watch_directory
+  monitor = PosixFileMonitor.new(directory, updater)
+  
+  while Server.find_this_server.watch_directory == directory do
+    puts "Updating..."
+    monitor.update
+    puts "Sleeping..."
+    sleep(10)
+  end
+  
+  puts "The watch directory has changed. So, restarting daemon"
+end
