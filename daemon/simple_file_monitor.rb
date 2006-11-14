@@ -3,17 +3,30 @@ class SimpleFileMonitor < FileMonitor
     super(observer)
     @directory = File.expand_path(directory)
     @snapshot = SnapshotRecursive.new
-    directory_added(@directory)
+    dir = directory_added(@directory)
+    @directories = {@directory => dir}
   end
   
   def update   
     new_snapshot = SnapshotRecursive.new(@directory)
-    Difference.changed_files_recursive(@snapshot, new_snapshot).each {|x| file_changed(File.dirname(x), File.basename(x), new_snapshot.stat(x))}
+    Difference.changed_files_recursive(@snapshot, new_snapshot).each do |x|
+      file_changed(@directories[File.dirname(x)], File.basename(x), new_snapshot.stat(x))
+    end
 
-    Difference.added_directories_recursive(@snapshot, new_snapshot).each {|x| directory_added(x)}
-    Difference.added_files_recursive(@snapshot, new_snapshot).each {|x| file_added(File.dirname(x), File.basename(x), new_snapshot.stat(x))}
-    Difference.removed_files_recursive(@snapshot, new_snapshot).each {|x| file_removed(File.dirname(x), File.basename(x))}
-    Difference.removed_directories_recursive(@snapshot, new_snapshot).each {|x| directory_removed(x)}
+    Difference.added_directories_recursive(@snapshot, new_snapshot).each do |x|
+      dir = directory_added(x)
+      @directories[x] = dir;
+    end
+    Difference.added_files_recursive(@snapshot, new_snapshot).each do |x|
+      file_added(@directories[File.dirname(x)], File.basename(x), new_snapshot.stat(x))
+    end
+    Difference.removed_files_recursive(@snapshot, new_snapshot).each do |x|
+      file_removed(@directories[File.dirname(x)], File.basename(x))
+    end
+    Difference.removed_directories_recursive(@snapshot, new_snapshot).each do |x|
+      directory_removed(x)
+      @directories.delete(x)
+    end
     @snapshot = new_snapshot
   end
 end
