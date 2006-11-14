@@ -14,9 +14,8 @@ class FileMonitorQueue < Queue
   end
   
   def directory_added(path)
-    directory = DirectoryInfo.new(path)
-    push(DirectoryAdded.new(directory))
-    directory
+    push(DirectoryAdded.new(path))
+    DirectoryInfo.new(path)
   end
   
   def directory_removed(directory)
