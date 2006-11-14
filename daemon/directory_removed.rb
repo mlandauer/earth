@@ -1,1 +1,0 @@
-DirectoryRemoved = Struct.new(:path)

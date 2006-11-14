@@ -1,4 +1,11 @@
+
 class FileMonitorQueue < Queue
+  DirectoryRemoved = Struct.new(:path)
+  DirectoryAdded = Struct.new(:path)
+  FileAdded = Struct.new(:path, :name, :stat)
+  FileChanged = Struct.new(:path, :name, :stat)
+  FileRemoved = Struct.new(:path, :name)
+
   DirectoryInfo = Struct.new(:path)
 
   def file_added(directory, name, stat)

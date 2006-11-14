@@ -45,11 +45,11 @@ module FileMonitorTest
   def test_added
     @monitor.update
     # The directory added message needs to appear before the file added message
-    assert_equal(DirectoryAdded.new(@dir), @queue.pop)
-    assert_equal(DirectoryAdded.new(@dir1), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1), @queue.pop)
     # Files added deep inside the directory structure should occur before those higher up
-    assert_equal(FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
-    assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
+    assert_equal(FileMonitorQueue::FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
+    assert_equal(FileMonitorQueue::FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
     assert(@queue.empty?)
   end
 
@@ -60,10 +60,10 @@ module FileMonitorTest
     @queue.clear
     @monitor.update
     # Files removed deep inside the directory structure should occur before those higher up
-    assert_equal(FileRemoved.new(@dir1, 'file1'), @queue.pop)
-    assert_equal(FileRemoved.new(@dir, 'file1'), @queue.pop)
+    assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
+    assert_equal(FileMonitorQueue::FileRemoved.new(@dir, 'file1'), @queue.pop)
     # Messages for removing directories should appear after the files
-    assert_equal(DirectoryRemoved.new(@dir1), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir1), @queue.pop)
     assert(@queue.empty?)
   end
 
@@ -78,12 +78,12 @@ module FileMonitorTest
     @monitor.update
     
     # Files removed deep inside the directory structure should occur before those higher up
-    assert_equal(FileRemoved.new(dir2, 'file'), @queue.pop)
-    assert_equal(FileRemoved.new(@dir1, 'file1'), @queue.pop)
+    assert_equal(FileMonitorQueue::FileRemoved.new(dir2, 'file'), @queue.pop)
+    assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
     # Messages for removing directories should appear after the files and deeper directories
     # should be removed first
-    assert_equal(DirectoryRemoved.new(dir2), @queue.pop)
-    assert_equal(DirectoryRemoved.new(@dir1), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryRemoved.new(dir2), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir1), @queue.pop)
     assert(@queue.empty?)
   end
   
@@ -97,8 +97,8 @@ module FileMonitorTest
     @queue.clear
     @monitor.update
     # Currently "changed" messages appear before "added" messages
-    assert_equal(FileChanged.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
-    assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
+    assert_equal(FileMonitorQueue::FileChanged.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
+    assert_equal(FileMonitorQueue::FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
     assert(@queue.empty?)
   end
   
@@ -108,7 +108,7 @@ module FileMonitorTest
     FileUtils.touch file3
     @queue.clear
     @monitor.update
-    assert_equal(FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
+    assert_equal(FileMonitorQueue::FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
     assert(@queue.empty?)
   end
 
@@ -120,8 +120,8 @@ module FileMonitorTest
     @queue.clear
     File.chmod(0000, @dir1)
     @monitor.update
-    assert_equal(DirectoryAdded.new(@dir1), @queue.pop)
-    assert_equal(FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1), @queue.pop)
+    assert_equal(FileMonitorQueue::FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
     assert(@queue.empty?)
     # Add permissions back
     File.chmod(mode, @dir1)
