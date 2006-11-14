@@ -25,8 +25,6 @@ class PosixFileMonitor < FileMonitor
     Difference.added_directories(old_snapshot, snapshot).each {|x| add_directory(File.join(directory, x))}
   end
   
-  FileInfo = Struct.new(:directory, :name, :stat)
-
   def update
     added_directories = []
     removed_directories = []
@@ -39,10 +37,10 @@ class PosixFileMonitor < FileMonitor
 
       Difference.changed_files(old_snapshot, snapshot).each {|x| file_changed(directory, x, snapshot.stat(x))}
     
-      Difference.added_directories(old_snapshot, snapshot).map{|d| File.join(path, d)}.each {|x| add_directory(x)}
-      Difference.added_files(old_snapshot, snapshot).map {|x| FileInfo.new(directory, x, snapshot.stat(x))}.each {|x| file_added(x.directory, x.name, x.stat)}
+      Difference.added_directories(old_snapshot, snapshot).each {|d| add_directory(File.join(path, d))}
+      Difference.added_files(old_snapshot, snapshot).each {|x| file_added(directory, x, snapshot.stat(x))}
       Difference.removed_files(old_snapshot, snapshot).each {|x| file_removed(directory, x)}
-      Difference.removed_directories(old_snapshot, snapshot).map{|d| File.join(path, d)}.each {|x| remove_directory(x)}
+      Difference.removed_directories(old_snapshot, snapshot).each {|d| remove_directory(File.join(path, d))}
     end
   end
 end
