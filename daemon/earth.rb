@@ -23,8 +23,6 @@ if ARGV.length != 0
   usage
 end
 
-directory = ARGV[0]
-
 server = Server.find_this_server
 if server.nil?
   raise "This server is not registered in the database. Use the web admin front-end to add it"
