@@ -1,13 +1,22 @@
-require File.dirname(__FILE__) + '/file_monitor_observer_test'
-
 class FileDatabaseUpdaterTest < Test::Unit::TestCase
-  include FileMonitorObserverTest
+  # Duck typing comes in handy here. Making fake File::Stat object
+  Stat = Struct.new(:mtime, :size, :uid, :gid)
 
-  # Factory method 
-  def updater
-    FileDatabaseUpdater.new
+  def setup
+    @dir = File.expand_path('test_data')
+    @dir1 = File.join(@dir, 'dir1')
+    @updater = FileDatabaseUpdater.new
+    # 1st of January 2000
+    @stat1 = Stat.new(Time.local(2000, 1, 1), 24, 100, 200)
+    @stat2 = Stat.new(Time.local(2001, 1, 1), 53, 100, 200)
   end
   
+  # When we call add_directory it should return a directory object
+  def test_add_directory_returned_value
+    d = @updater.directory_added(@dir)
+    assert_equal(@dir, d.path)
+  end
+
   # Database should be empty on startup
   def test_empty
     assert_equal(0, FileInfo.count)
