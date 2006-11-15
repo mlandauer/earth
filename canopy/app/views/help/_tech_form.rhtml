@@ -1,0 +1,24 @@
+
+
+<dl>
+
+<h3>Tech Request Form</h3>
+
+
+<dt><label for="tech_requestor">Your email:</label></dt>
+<dd><%= text_field 'tech', 'requestor' %></dd>
+<dt><label for="tech_machine">What machine is this request about?:</label></dt>
+<dd><%= text_field 'tech', 'machine' %></dd>
+<dt><label for="tech_description">A terse phrase identifying the problem:</label></dt>
+<dd><%= text_field 'tech', 'description' %></dd>
+<dt><label for="tech_impact">What is the Impact (time and effect):</label></dt>
+<dd><%= text_field 'tech', 'impact' %></dd>
+<dt><label for="tech_deadline">Is there a deadline for this?</label></dt>
+<dd><%= text_field 'tech', 'deadline' %></dd>
+
+
+
+<dt><label for="tech_request">Details of your Request (<a href="http://admin.rsp.com.au/rsp_apps2/rsp_faq/index.php?i_submit=print_view&id=51" alt="Link to FAQ describing a good tech request" target="_new">What to include</a>):</label></dt>
+<dd><%= text_area 'tech', 'request', { "rows" => 8, "cols" => 50 } %></dd>
+
+</dl>

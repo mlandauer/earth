@@ -1,0 +1,27 @@
+<dl>
+
+<h3>Meeting Room Booking Request</h3>
+
+<dt><label for="meetingroom_requestor">Name of Person Requesting the Meeting Room:</label></dt>
+<dd><%= text_field 'meetingroom', 'requestor' %></dd>
+<dt><label for="meetingroom_email">Email of Requestor:</label></dt>
+<dd><%= text_field 'meetingroom', 'email' %></dd>
+<dt><label for="meetingroom_office">Office:</label></dt>
+<dd><%= select('meetingroom', 'office', @office) %></dd>
+<dt><label for="meetingroom_date">Date:</label></dt>
+<div><dd><%= date_picker_field 'meetingroom', 'date' %></dd></div>
+<dt><label for="meetingroom_starttime">Start Time:</label></dt>
+<dd><%= select_time(datetime = Time.now, :prefix => "starttime", :minute_step => 15) %></dd>
+<dt><label for="meetingroom_endtime">End Time:</label></dt>
+<dd><%= select_time(datetime = (Time.now + 30.minutes), :prefix => "endtime", :minute_step => 15) %></dd>
+<dt><label for="meetingroom_room">Which Room Would you Like?:</label></dt>
+<dd><%= select('meetingroom', 'room', @room) %></dd>
+<dt><label for="meetingroom_title">Title of the Meeting:</label></dt>
+<dd><%= text_field 'meetingroom', 'title' %></dd>
+<dt><label for="meetingroom_attendees">Attendees:</label></dt>
+<dd><%= text_field 'meetingroom', 'attendees' %></dd>
+<dt><label for="meetingroom_comments">Comments <small>(for other requests such as repeating meetings or food or 
+beverages needed)</small>:</label></dt>
+<dd><%= text_area 'meetingroom', 'comments', { "rows" => 5, "cols" => 50 } %></dd>
+
+</dl>

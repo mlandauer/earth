@@ -1,0 +1,75 @@
+
+
+<dl>
+
+<h2>[RISING SUN PICTURES INTRANET]</h2>
+
+<h3>About you</h3>
+<dt><label for="intranet_who">Name:</label></dt>
+<dd><%= text_field 'intranet', 'who' %></dd>
+<dt><label for="intranet_group">Group (i.e. VFX, Business, etc.):</label></dt>
+<dd><%= text_field 'intranet', 'group' %></dd>
+<dt><label for="intranet_howlong">Length of Time at RSP:</label></dt>
+<dd><%= text_field 'intranet', 'howlong' %></dd>
+<dt><label for="intranet_employment">Fulltime or other:</label></dt>
+<dd><%= text_field 'intranet', 'employment' %></dd>
+
+<h3>Current Intranet</h3>
+
+<p><a href="http://admin.rsp.com.au/" target="_new" alt="Intranet from RSP">http://admin.rsp.com.au/</a></p>
+
+<dt><label for="intranet_howoften">During an average day, how often do you access the intranet?:</label></dt>
+<dd><%= text_field 'intranet', 'howoften' %></dd>
+<dt><label for="intranet_top3uses">What are the top three uses you have for the intranet?:</label></dt>
+<dd><%= text_area 'intranet', 'top3uses', { "rows" => 4, "cols" => 50 } %></dd>
+<dt><label for="intranet_easy">When you joined RSP, how easy was the intranet to use?</label></dt>
+<dd><%= text_field 'intranet', 'easy' %></dd>
+<dt><label for="intranet_useful">How useful was it?</label></dt>
+<dd><%= text_field 'intranet', 'useful' %></dd>
+<dt><label for="intranet_mostusefulpart">What is the most useful part of the intranet overall?</label></dt>
+<dd><%= text_field 'intranet', 'mostusefulpart' %></dd>
+<dt><label for="intranet_dislike">What aspects do you like least about the intranet?</label></dt>
+<dd><%= text_field 'intranet', 'dislike' %></dd>
+
+<h3>Ideal Intranet</h3>
+
+<dt><label for="intranet_idealtasks">What tasks would you like to be able to perform on the intranet that you are currently unable to perform?</label></dt>
+<dd><%= text_area 'intranet', 'idealtasks', { "rows" => 4, "cols" => 50 } %></dd>
+
+<dt><label for="intranet_idealuseful">Ideally, what would be the most useful part of the intranet?</label></dt>
+<dd><%= text_area 'intranet', 'idealuseful', { "rows" => 4, "cols" => 50 } %></dd>
+
+<dt><label for="intranet_idealinformation">What information would you like to have access to on the intranet?</label></dt>
+<dd><%= text_area 'intranet', 'idealinformation', { "rows" => 4, "cols" => 50 } %></dd>
+
+<dt><label for="intranet_ideallearn">How does our intranet differ to others that you have used? What can we learn from your experiences?</label></dt>
+<dd><%= text_area 'intranet', 'ideallearn', { "rows" => 4, "cols" => 50 } %></dd>
+
+<dt><label for="intranet_idealusefulnewemployees">How can we make the intranet a useful tool for new employees?</label></dt>
+<dd><%= text_area 'intranet', 'idealusefulnewemployees', { "rows" => 4, "cols" => 50 } %></dd>
+
+<dt><label for="intranet_idealblog">Would you blog?</label></dt>
+<dd><%= text_field 'intranet', 'idealblog' %></dd>
+
+<dt><label for="intranet_idealreadblog">Would you read other people’s blogs?</label></dt>
+<dd><%= text_field 'intranet', 'idealreadblog' %></dd>
+
+<p>Please rate the following statements in order of importance to you:</p>
+
+<dt><label for="intranet_ratenavigation">It is easy to navigate within and between the pages</label></dt>
+<dd><%= select('intranet', 'ratenavigation', @ratings) %></dd>
+<dt><label for="intranet_ratelinks">The links and menus are easy to identify and consistent</label></dt>
+<dd><%= select('intranet', 'ratelinks', @ratings) %></dd>
+<dt><label for="intranet_rategrouping">The grouping of information is helpful and relevant</label></dt>
+<dd><%= select('intranet', 'rategrouping', @ratings) %></dd>
+<dt><label for="intranet_ratelayout">The layout and design is consistent</label></dt>
+<dd><%= select('intranet', 'ratelayout', @ratings) %></dd>
+<dt><label for="intranet_rategraphics">The images, graphics and colours enhance the overall appeal</label></dt>
+<dd><%= select('intranet', 'rategraphics', @ratings) %></dd>
+
+
+
+<dt><label for="intranet_comments">Any additional comments?:</label></dt>
+<dd><%= text_area 'intranet', 'comments', { "rows" => 8, "cols" => 50 } %></dd>
+
+</dl>

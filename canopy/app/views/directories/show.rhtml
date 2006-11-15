@@ -1,0 +1,60 @@
+<div id="Breadcrums">
+<%= link_to("Top Level", { :action => 'show' })%> :: <%= link_to(@server, {:action => 'show', :server => @server, :obs => '/'})%> ::
+<% unless @root == "/" or @server.to_str.empty? %>
+<% position = @root.split(/\//)[1..-2].length %>
+<% @root.split(/\//)[1..-2].each { |p| %>
+  <%= link_to(p, :action => 'show', :server => @server, :obs => @root.split(/\//)[0..(-1-position)].join('/')<<"/") %> :: 
+  <% position -= 1 %>
+<% } %>
+<% end %>
+<%= @root.split(/\//).last %>
+</div>
+
+<div id="Navigation">
+    <strong>Subdirectories</strong>
+<table>
+  <tr><th>dir</th><th>size</th></tr>
+
+<% @my_children.each { |e| 
+  e.each { |key,value| %>
+<tr>
+ <td><% if @server.to_str.empty? %>
+    <%= link_to key, { :action => 'show', :server => key, :obs => "/" } %>
+   <% else %>
+    <%= link_to key.to_str.gsub(/#{@root}/, '').gsub(/\/$/, ''), { :action => 'show', :server => @server, :obs => key } %>
+   <% end %>
+ </td>
+ <td><%= human_size(value)%></td>
+</tr>
+
+<% } } %>
+
+</table>
+</div>
+
+<div id="Content">
+
+  <div id="FlashGraph">
+    <%= render_component(:action => "flash_graph")%>
+  </div>
+
+<div id="GraphSelection">
+  <%= link_to_remote( "2D Columns", 
+                      :update => "FlashGraph", 
+                      :url => { :action => "flash_graph", 
+                                :graph_type => "2D Column"} )%> | 
+  <%= link_to_remote( "3D Columns",
+                      :update => "FlashGraph", 
+                      :url => { :action => "flash_graph", 
+                                :graph_type => "3D Column"} )%> |
+  <%= link_to_remote( "2D Pie",
+                      :update => "FlashGraph", 
+                      :url => { :action => "flash_graph", 
+                                :graph_type => "2D Pie"} )%> |
+  <%= link_to_remote( "3D Pie",
+                      :update => "FlashGraph", 
+                      :url => { :action => "flash_graph", 
+                                :graph_type => "3D Pie"} )%>
+</p>
+
+</div>

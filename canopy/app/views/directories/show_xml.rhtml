@@ -1,0 +1,13 @@
+<% if session[:graph_type].include? "Column" %>
+<graph caption="Directory Sizes (in <%= @scaled_size %>)" subCaption="<%= @root %>" yaxisname="Size" xaxisname="Directories" hovercapbg="FFFFDD" hovercapborder="000000" numdivlines="4" formatNumber="1" formatNumberScale="0" rotateNames="1" decimalPrecision="1">
+<% elsif session[:graph_type].include? "Pie" %>
+<graph caption="Directory Sizes (in <%= @scaled_size %>)" subCaption="<%= @root %>" showPercentageValues="1" showNames="1" showValues="1" animation="1" shadowXShift="4" shadowYShift="4" shadowAlpha="40" formatNumberScale="0" pieFillAlpha="95" decimalPrecision="1">
+<% end %>
+<% @elements.each { |e| %>
+  <% if @server.to_str.empty? %>
+    <set name="<%= e['name'] %>" value="<%= e['value'] %>" link="<%= url_for( { :action => 'show', :server => e['name'], :obs => "/" } )%>" />
+  <% else %>
+    <set name="<%= e['name'].to_str.gsub(/#{@root}/, '').gsub(/\/$/, '') %>" value="<%= e['value'] %>" link="<%= url_for( { :action => 'show', :server => @server, :obs => e['name'] } )%>"/>
+  <% end %>
+<% } %>
+</graph>

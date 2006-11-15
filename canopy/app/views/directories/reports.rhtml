@@ -1,0 +1,22 @@
+<h1>Reports</h1>
+
+<div id="FormBlock">
+<%= form_remote_tag(:update => "graph_div",
+                    :url => { :action => "report_show" }  ) %>
+
+<dt><label for="report_server">Servers:</label></dt>
+<dd><%= select("report", "server", @servers )%></dd>
+
+<dt><label for="growers_obs">Observation Point (<small>eg: /pub/cweb/cc/ -you <strong>need</strong> the trailing slash-</small>):</label></dt>
+<dd><%= text_field("report", "filter", "size" => 20) %></dd>
+
+<%= submit_tag("Generate Report...")%>
+
+<%= end_form_tag %>
+</div>
+
+<div id="graph_div">
+  
+  
+  
+</div>

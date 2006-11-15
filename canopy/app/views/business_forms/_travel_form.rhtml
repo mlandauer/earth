@@ -1,0 +1,62 @@
+
+
+<dl>
+
+<h3>Travel Request Form</h3>
+
+
+<dt><label for="travel_traveller">Name of Person Travelling:</label></dt>
+<dd><%= text_field 'travel', 'traveller' %></dd>
+<dt><label for="travel_mobile">Contact Mobile No:</label></dt>
+<dd><%= text_field 'travel', 'mobile' %></dd>
+<dt><label for="travel_email">Contact email address:</label></dt>
+<dd><%= text_field 'travel', 'email' %></dd>
+<dt><label for="travel_job">RSP Job Number:</label></dt>
+<dd><%= text_field 'travel', 'job' %></dd>
+<dt><label for="travel_allowance">No. of Nights Travel Allowance:</label></dt>
+<dd><%= text_field 'travel', 'allowance' %></dd>
+<dt><label for="travel_authorised">Authorised by (CEO, Group Head or Producer):</label></dt>
+<dd><%= text_field 'travel', 'authorised' %></dd>
+
+<h3>Flight Booking Information</h3>
+
+<dt><label for="travel_outdeparting">Departing From:</label></dt>
+<dd><%= text_field 'travel', 'outdeparting' %></dd>
+<dt><label for="travel_outdestination">Destination:</label></dt>
+<dd><%= text_field 'travel', 'outdestination' %></dd>
+<dt><label for="travel_outdate">Date Departing:</label></dt>
+<div><dd><%= date_picker_field 'travel', 'outdate' %></dd></div>
+<dt><label for="travel_outflight">Flight Time and Number to be Booked:</label></dt>
+<dd><%= text_field 'travel', 'outflight' %></dd>
+
+<h3>Return Flight Required?</h3>
+<dt><label for="travel_indeparting">Departing From:</label></dt>
+<dd><%= text_field 'travel', 'indeparting' %></dd>
+<dt><label for="travel_indestination">Destination:</label></dt>
+<dd><%= text_field 'travel', 'indestination' %></dd>
+<dt><label for="travel_indate">Date Departing:</label></dt>
+<div><dd><%= date_picker_field 'travel', 'indate' %></dd></div>
+<dt><label for="travel_inflight">Flight Time and Number to be Booked:</label></dt>
+<dd><%= text_field 'travel', 'inflight' %></dd>
+
+<h3>Accommodation Booking Information</h3>
+
+<dt><label for="travel_accommodation">Accommodation required?:</label></dt>
+<dd><%= check_box 'travel', 'accommodation' %><small>(tick if required)</small></dd>
+<dt><label for="travel_accommodationtype">Type of Accommodation:</label></dt>
+<dd><%= text_field 'travel', 'accommodationtype' %></dd>
+<dt><label for="travel_accommodationcheckin">Check in Date:</label></dt>
+<div><dd><%= date_picker_field 'travel', 'accommodationcheckin' %></dd></div>
+<dt><label for="travel_accommodationcheckout">Check out Date:</label></dt>
+<div><dd><%= date_picker_field 'travel', 'accommodationcheckout' %></dd></div>
+<dt><label for="travel_accommodationlocation">Location:</label></dt>
+<dd><%= text_field 'travel', 'accommodationlocation' %></dd>
+<dt><label for="travel_accommodationbudget">Estimated per night Budget for Booking:</label></dt>
+<dd><%= text_field 'travel', 'accommodationbudget' %></dd>
+
+<h3>Additional Comments</h3>
+
+<dt><label for="travel_additionalcomments">Enter your comments:</label></dt>
+<dd><%= text_area 'travel', 'additionalcomments', { "rows" => 5, "cols" => 50 } %></dd>
+
+</dl>

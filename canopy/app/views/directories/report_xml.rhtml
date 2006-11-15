@@ -1,0 +1,14 @@
+<graph caption='Storage Trends (<%= session[:period] %>)' subCaption='In <%= @scaled_size %>' numdivlines='9' showgridbg='1' lineThickness='1' animation='0' showNames='1' showValues='0' numVDivLines='22' yaxisminvalue='0' formatNumberScale='1' rotateNames='1' showLimits='1' decimalPrecision='1' showAlternateHGridColor='1' divLineDecimalPrecision='0' limitsDecimalPrecision='0' showAreaBorder='1' showhovercap='1'>
+<categories >
+<% @categories.each { |c| %>
+  <category name="<%= c.to_date %>" />
+<% } %>
+</categories>
+<% @datasets.each { |key, value| %>
+  <dataset seriesname='<%= Regexp.new('/([^/]+)/$').match(key)[1] %>' color='<%= @colours[rand(10)] %>'>
+    <% value.each { |v| %>
+      <set value='<%= v %>' />
+    <% } %>
+  </dataset>
+<% } %>
+</graph>

@@ -1,0 +1,8 @@
+<div id="FormBlock">
+<%= form_tag( { :action => 'purchase_request' }, { :onSubmit => "return issbm;", :enctype => "multipart/form-data" } ) %>
+  <%= render_partial "purchase_form" %>
+
+  <input type="submit" value="Request" onmouseup="issbm=true;" onmouseout="issbm=false;" />
+
+<%= end_form_tag %>
+</div>

@@ -1,0 +1,8 @@
+<p>The following are the top <strong><%= @limit %></strong> <emphasis>movers</emphasis> for <tt>[ <%= @observation_point %> ]</tt>
+between <%= @before %> and <%= @after %>.</p>
+
+<ol>
+<% @top_growers.each { |tg| %>
+  <li><tt>[ <%= tg.observation_point %> ]</tt> has <% if tg.increased_storage.to_i > 0 %>increased<% elsif tg.increased_storage.to_i < 0 %>decreased<% else %>remain unchanged<% end %> <% unless tg.increased_storage.to_i == 0 %>by <%= human_size(tg.increased_storage.to_i.abs.kilobytes) %><% end %></li>
+<% } %>
+</ol>

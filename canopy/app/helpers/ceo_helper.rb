@@ -1,0 +1,2 @@
+module CeoHelper
+end

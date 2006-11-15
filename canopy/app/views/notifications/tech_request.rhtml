@@ -1,0 +1,24 @@
+Hey,
+
+A TECH REQUEST has been submitted.
+
+Email of Requestor:   <%= @tech['requestor'] %>
+Subject:              <%= @tech['description'] %>
+Machine:              <%= @tech['machine'] %>
+Impact:               <%= @tech['impact'] %>
+Deadlines:            <%= @tech['deadline'] %>
+
+Description of Problem:
+
+<%= @tech['request'] %>
+
+---
+
+Generated at <%= Time.now %>
+<% if @tech['resolved_name'] %>
+From <%= @tech['resolved_name'] %>
+<% else %>
+From <%= @tech['remote_ip'] %>
+<% end %>
+
+=== END OF TECH REQUEST ===

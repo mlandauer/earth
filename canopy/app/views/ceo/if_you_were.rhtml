@@ -1,0 +1,77 @@
+<h1>If you were CEO...</h1>
+
+<%= form_tag( :action => 'if_you_were_request' ) %>
+
+<p>Your name: <%= text_field 'ceo', 'requestor' %><small>(optional)</small></p>
+
+<h3>What three things would you want the company to achieve next year?</h3>
+
+<ol>
+  <li><%= text_field 'ceo', 'achievement_1', :size => 40 %></li>
+  <li><%= text_field 'ceo', 'achievement_2', :size => 40 %></li>
+  <li><%= text_field 'ceo', 'achievement_3', :size => 40 %></li>
+</ol>
+
+<h3>To maintain, strengthen and grow our culture, what behaviours do we want to:</h3>
+
+<strong>Recognise</strong>
+
+<ol>
+  <li><%= text_field 'ceo', 'recognise_1', :size => 40 %></li>
+  <li><%= text_field 'ceo', 'recognise_2', :size => 40 %></li>
+  <li><%= text_field 'ceo', 'recognise_3', :size => 40 %></li>
+</ol>
+
+<strong>Penalise</strong>
+
+<ol>
+  <li><%= text_field 'ceo', 'penalise_1', :size => 40 %></li>
+  <li><%= text_field 'ceo', 'penalise_2', :size => 40 %></li>
+  <li><%= text_field 'ceo', 'penalise_3', :size => 40 %></li>
+</ol>
+
+
+<h3>What can we do to ... </h3>
+
+<ol>
+  <li>
+    <strong>Raise our client's satisfaction with our services</strong>
+    <table>
+      <tr><td>Action:</td><td><%= text_field 'ceo', 'client_action', :size => 40 %></td></tr>
+      <tr><td>Person Responsible</td><td><%= text_field 'ceo', 'client_responsible', :size => 40 %><small>(Doesn't have to be you)</small></td></tr>
+      <tr><td>Time Required:</td><td><%= text_field 'ceo', 'client_time', :size => 40 %></td></tr>
+      <tr><td>Tracking [completion] indicator:</td><td><%= text_field 'ceo', 'client_tracking', :size => 40 %></td></tr>
+    </table>
+  </li>
+  <li>
+    <strong>Develop knowledge and skills and share those with the company</strong>
+    <table>
+      <tr><td>Action:</td><td><%= text_field 'ceo', 'skills_action', :size => 40 %></td></tr>
+      <tr><td>Person Responsible:</td><td><%= text_field 'ceo', 'skills_responsible', :size => 40 %><small>(Doesn't have to be you)</small></td></tr>
+      <tr><td>Time Required:</td><td><%= text_field 'ceo', 'skills_time', :size => 40 %></td></tr>
+      <tr><td>Tracking [completion] indicator:</td><td><%= text_field 'ceo', 'skills_tracking', :size => 40 %></td></tr>
+    </table>
+  </li>
+  <li>
+    <strong>Reduce waste</strong>
+    <table>
+      <tr><td>Action:</td><td><%= text_field 'ceo', 'waste_action', :size => 40 %></td></tr>
+      <tr><td>Person Responsible:</td><td><%= text_field 'ceo', 'waste_responsible', :size => 40 %><small>(Doesn't have to be you)</small></td></tr>
+      <tr><td>Time Required:</td><td><%= text_field 'ceo', 'waste_time', :size => 40 %></td></tr>
+      <tr><td>Tracking [completion] indicator:</td><td><%= text_field 'ceo', 'waste_tracking', :size => 40 %></td></tr>
+    </table>
+  </li>
+  <li>
+    <strong>Get better business</strong>
+    <table>
+      <tr><td>Action:</td><td><%= text_field 'ceo', 'business_action', :size => 40 %></td></tr>
+      <tr><td>Person Responsible:</td><td><%= text_field 'ceo', 'business_responsible', :size => 40 %><small>(Doesn't have to be you)</small></td></tr>
+      <tr><td>Time Required:</td><td><%= text_field 'ceo', 'business_time', :size => 40 %></td></tr>
+      <tr><td>Tracking [completion] indicator:</td><td><%= text_field 'ceo', 'business_tracking', :size => 40 %></td></tr>
+    </table>
+  </li>
+</ol>
+
+<%= submit_tag('Send...') %>
+
+<%= end_form_tag %>

@@ -1,0 +1,42 @@
+<dl>
+
+<h3>Freight Request Form</h3>
+
+<dt><label for="freight_requestor">Name of Person Requesting the Freight:</label></dt>
+<dd><%= text_field 'freight', 'requestor' %></dd>
+<dt><label for="freight_email">Email of Requestor:</label></dt>
+<dd><%= text_field 'freight', 'email' %></dd>
+<dt><label for="freight_description">Description of what is being freighted:</label></dt>
+<dd><%= text_field 'freight', 'description' %></dd>
+<dt><label for="freight_jobnumber">RSP Job Number:</label></dt>
+<dd><%= text_field 'freight', 'jobnumber' %></dd>
+<dt><label for="freight_company">To Company Name:</label></dt>
+<dd><%= text_field 'freight', 'company' %></dd>
+<dt><label for="freight_contact">To Contact Name:</label></dt>
+<dd><%= text_field 'freight', 'contact' %></dd>
+<dt><label for="freight_address">To Company address (street not PO Box):</label></dt>
+<dd><%= text_area 'freight', 'address', { "rows" => 5, "cols" => 50 } %></dd>
+<dt><label for="freight_phone">To Phone number:</label></dt>
+<dd><%= text_field 'freight', 'phone' %></dd>
+<dt><label for="freight_fromcompany">From Company Name:</label></dt>
+<dd><%= text_field 'freight', 'fromcompany' %></dd>
+<dt><label for="freight_fromcontact">From Contact Name:</label></dt>
+<dd><%= text_field 'freight', 'fromcontact' %></dd>
+<dt><label for="freight_fromaddress">From Company address (street not PO Box):</label></dt>
+<dd><%= text_area 'freight', 'fromaddress', { "rows" => 5, "cols" => 50 } %></dd>
+<dt><label for="freight_fromphone">From Phone number:</label></dt>
+<dd><%= text_field 'freight', 'fromphone' %></dd>
+
+
+<dt><label for="freight_service">Freight service required: (ie local courier, interstate next day delivery, interstate next flight delivery, overseas delivery)</label></dt>
+<dd><%= text_field 'freight', 'service' %></dd>
+<dt><label for="freight_when">When will freight be ready to be freighted:</label></dt>
+<dd><%= text_field 'freight', 'when' %></dd>
+<dt><label for="freight_weight">Weight of freight (requirement for interstate and overseas freighting):</label></dt>
+<dd><%= text_field 'freight', 'weight' %></dd>
+<dt><label for="freight_value">Value of item to be freighted (requirement for overseas freighting only):</label></dt>
+<dd><%= text_field 'freight', 'value' %></dd>
+<dt><label for="freight_comments">Comments:</label></dt>
+<dd><%= text_area 'freight', 'comments', { "rows" => 5, "cols" => 50 } %></dd>
+
+</dl>
