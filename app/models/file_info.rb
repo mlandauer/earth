@@ -12,4 +12,8 @@ class FileInfo < ActiveRecord::Base
   def FileInfo.find_by_directory_info_and_name(directory, name)
     FileInfo.find(:first, :conditions => ['directory_info_id = ? AND name = ?', directory.id, name])
   end
+  
+  def path
+    directory_info.path
+  end
 end

@@ -12,7 +12,13 @@ module FileInfoUpdaterTest
   end
 
   def test_file_added_signature
-    @updater.file_added(@updater.directory_added(@dir), 'file1', @stat1)
+    f = @updater.file_added(@updater.directory_added(@dir), 'file1', @stat1)
+    assert_equal(@dir, f.path)
+    assert_equal('file1', f.name)
+    assert_equal(@stat1.mtime, f.modified)
+    assert_equal(@stat1.size, f.size)
+    assert_equal(@stat1.uid, f.uid)
+    assert_equal(@stat1.gid, f.gid)
   end
   
   def test_file_removed_signature
