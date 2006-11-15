@@ -3,24 +3,21 @@ class PosixFileMonitor < FileMonitor
     super(observer)
     dir = directory_added(File.expand_path(directory))
     @snapshots = {File.expand_path(directory) => Snapshot.new(self, dir)}
-    @directories = {File.expand_path(directory) => dir}
   end
   
   def remove_directory(path)
-    directory = @directories[path]
+    directory = @snapshots[path].directory
 
     @snapshots[path].subdirectory_names.each {|x| remove_directory(File.join(path, x))}
     @snapshots[path].file_names.each {|x| file_removed(directory, x)}
     directory_removed(directory)
     @snapshots.delete(path)
-    @directories.delete(path)
   end
   
   def add_directory(path)
     dir = directory_added(path)
     snapshot = Snapshot.new(self, dir)
     @snapshots[path] = snapshot
-    @directories[path] = dir
     old_snapshot = snapshot.deep_copy
     snapshot.update
 
@@ -30,7 +27,7 @@ class PosixFileMonitor < FileMonitor
   
   def update
     @snapshots.each do |path, snapshot|
-      directory = @directories[path]
+      directory = snapshot.directory
       old_snapshot = snapshot.deep_copy
       snapshot.update
 

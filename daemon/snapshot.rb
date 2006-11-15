@@ -8,7 +8,7 @@
 # $Id$
 
 class Snapshot < FileMonitor
-  attr_reader :subdirectory_names
+  attr_reader :subdirectory_names, :directory
 
   def deep_copy
     Snapshot.new(@observer, @directory, @stats.clone, @subdirectory_names.clone)
