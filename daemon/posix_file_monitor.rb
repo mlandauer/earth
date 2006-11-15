@@ -8,6 +8,7 @@ class PosixFileMonitor < FileMonitor
   
   # Diverting messages from Snapshot objects
   def directory_removed(directory)
+    remove_directory(directory.path)
     @observer.directory_removed(directory)
   end
   
@@ -15,9 +16,7 @@ class PosixFileMonitor < FileMonitor
     directory = @snapshots[path].directory
 
     @snapshots[path].subdirectory_names.each do |x|
-      foo = @snapshots[File.join(path, x)].directory
-      remove_directory(foo.path)
-      directory_removed(foo)
+      directory_removed(@snapshots[File.join(path, x)].directory)
     end
     @snapshots[path].file_names.each {|x| file_removed(directory, x)}
     @snapshots.delete(path)
@@ -40,9 +39,7 @@ class PosixFileMonitor < FileMonitor
 
       Difference.removed_files(old_snapshot, snapshot).each {|x| file_removed(directory, x)}
       Difference.removed_directories(old_snapshot, snapshot).each do |d|
-        foo = @snapshots[File.join(path, d)].directory
-        remove_directory(foo.path)
-        directory_removed(foo)
+        directory_removed(@snapshots[File.join(path, d)].directory)
       end
     end
   end
