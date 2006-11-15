@@ -136,12 +136,3 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     PosixFileMonitor.new(dir, queue)
   end
 end
-
-class SimpleFileMonitorTest < Test::Unit::TestCase
-  include FileMonitorTest
-
-  # Factory method
-  def file_monitor(dir, queue)
-    SimpleFileMonitor.new(dir, queue)
-  end
-end
