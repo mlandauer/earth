@@ -1,24 +1,58 @@
-class FileDatabaseUpdaterTest < Test::Unit::TestCase
-  fixtures :servers
-
+module FileInfoUpdaterTest
   # Duck typing comes in handy here. Making fake File::Stat object
   Stat = Struct.new(:mtime, :size, :uid, :gid)
 
   def setup
     @dir = File.expand_path('test_data')
     @dir1 = File.join(@dir, 'dir1')
-    @updater = FileDatabaseUpdater.new(Server.this_server)
+    @updater = updater
     # 1st of January 2000
     @stat1 = Stat.new(Time.local(2000, 1, 1), 24, 100, 200)
     @stat2 = Stat.new(Time.local(2001, 1, 1), 53, 100, 200)
   end
+
+  def test_file_added_signature
+    @updater.file_added(@updater.directory_added(@dir), 'file1', @stat1)
+  end
   
+  def test_file_removed_signature
+    @updater.file_removed(@updater.directory_added(@dir), 'file1')
+  end
+  
+  def test_file_changed_signature
+    dir = @updater.directory_added(@dir)
+    @updater.file_added(dir, 'file1', @stat1)
+    @updater.file_changed(dir, 'file1', @stat2)
+  end
+
   # When we call add_directory it should return a directory object
-  def test_add_directory_returned_value
+  def test_directory_added_signature
     d = @updater.directory_added(@dir)
     assert_equal(@dir, d.path)
   end
+  
+  def test_directory_removed_signature
+    @updater.directory_removed(@updater.directory_added(@dir))
+  end
+end
 
+class FileMonitorQueueTest < Test::Unit::TestCase
+  include FileInfoUpdaterTest
+  
+  # Factory method
+  def updater
+    FileMonitorQueue.new
+  end
+end
+
+class FileDatabaseUpdaterTest < Test::Unit::TestCase
+  include FileInfoUpdaterTest
+
+  # Factory method
+  def updater
+    FileDatabaseUpdater.new(Server.create(:name => "test_server", :watch_directory => @dir))
+  end
+  
   # Database should be empty on startup
   def test_empty
     assert_equal(0, FileInfo.count)
@@ -89,7 +123,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     @updater.file_added(dir, 'file1', @stat1)
     files = FileInfo.find_all
     assert_equal(1, files.size)
-    assert_equal(Server.this_hostname, files[0].directory_info.server.name)
+    assert_equal("test_server", files[0].directory_info.server.name)
   end
   
   def test_ownership
