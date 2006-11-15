@@ -1,5 +1,9 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 first:
   id: 1
+  name: <%= Server.this_hostname %>
+  watch_directory: "/foo"
 another:
   id: 2
+  name: "foo"
+  watch_directory: "/bar"
