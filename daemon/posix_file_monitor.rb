@@ -29,17 +29,10 @@ class PosixFileMonitor < FileMonitor
     snapshot = Snapshot.new(self, dir)
     snapshot.update
     @snapshots[dir.path] = snapshot
+    dir
   end
 
   def update
-    @snapshots.each do |path, snapshot|
-      directory = snapshot.directory
-      old_snapshot = snapshot.deep_copy
-      snapshot.update
-
-      Difference.removed_directories(old_snapshot, snapshot).each do |d|
-        directory_removed(@snapshots[File.join(path, d)].directory)
-      end
-    end
+    @snapshots.each_value {|snapshot| snapshot.update} 
   end
 end

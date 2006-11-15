@@ -8,18 +8,19 @@
 # $Id$
 
 class Snapshot < FileMonitor
-  attr_reader :subdirectory_names, :directory, :stats
+  attr_reader :subdirectory_names, :directory, :stats, :subdirectories
 
   def deep_copy
-    Snapshot.new(@observer, @directory, @stats.clone, @subdirectory_names.clone)
+    Snapshot.new(@observer, @directory, @stats.clone, @subdirectory_names.clone, @subdirectories.clone)
   end
   
-  def initialize(observer, directory, stats = Hash.new, subdirectory_names = [])
+  def initialize(observer, directory, stats = Hash.new, subdirectory_names = [], subdirectories = Hash.new)
     super(observer)
     @directory_stat = nil
     @stats = stats
     @subdirectory_names = subdirectory_names
     @directory = directory
+    @subdirectories = subdirectories
   end
   
   def update()
@@ -46,12 +47,19 @@ class Snapshot < FileMonitor
       @directory_names = []
       @stats.clear
       @directory_stat = nil
+      @subdirectories = Hash.new
     end
 
     Difference.changed_files(old_snapshot, self).each {|x| file_changed(@directory, x, @stats[x])}
-    Difference.added_directories(old_snapshot, self).each {|d| directory_added(File.join(directory.path, d))}
+    Difference.added_directories(old_snapshot, self).each do |d|
+      @subdirectories[d] = directory_added(File.join(directory.path, d))
+    end
     Difference.added_files(old_snapshot, self).each {|x| file_added(@directory, x, @stats[x])}
     Difference.removed_files(old_snapshot, self).each {|x| file_removed(@directory, x)}
+    Difference.removed_directories(old_snapshot, self).each do |d|
+      directory_removed(@subdirectories[d])
+      @subdirectories.delete(d)
+    end
   end
   
   def file_names
