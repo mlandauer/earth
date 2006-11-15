@@ -23,17 +23,12 @@ if ARGV.length != 0
   usage
 end
 
-server = Server.find_this_server
-if server.nil?
-  raise "This server is not registered in the database. Use the web admin front-end to add it"
-end
-
 while true do
   updater = FileDatabaseUpdater.new
-  directory = Server.find_this_server.watch_directory
-  monitor = PosixFileMonitor.new(directory, updater)
+  current_watch_directory = Server.this_server.watch_directory
+  monitor = PosixFileMonitor.new(current_watch_directory, updater)
   
-  while Server.find_this_server.watch_directory == directory do
+  while Server.this_server.watch_directory == current_watch_directory do
     puts "Updating..."
     monitor.update
     puts "Sleeping..."
