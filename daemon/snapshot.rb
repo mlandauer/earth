@@ -32,8 +32,6 @@ class Snapshot
           entries = Dir.entries(directory)
           # Ignore all files and directories starting with '.'
           entries.delete_if {|x| x[0,1] == "."}
-          # Make absolute paths
-          #entries.map!{|x| File.join(directory, x)}
           
           # TODO: Optimisation - do lstat on all directory entries and use that to determine what is a file
           filenames, @subdirectory_names = entries.partition{|f| File.file?(File.join(directory, f))}
