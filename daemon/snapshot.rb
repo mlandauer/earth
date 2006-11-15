@@ -23,6 +23,8 @@ class Snapshot < FileMonitor
   end
   
   def update()
+    old_snapshot = self.deep_copy
+    
     if File.exist?(@directory.path)
       new_stat = File.lstat(@directory.path)
       if new_stat != @directory_stat
@@ -45,6 +47,8 @@ class Snapshot < FileMonitor
       @stats.clear
       @directory_stat = nil
     end
+
+    Difference.changed_files(old_snapshot, self).each {|x| file_changed(@directory, x, @stats[x])}
   end
   
   def stat(path)
