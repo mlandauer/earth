@@ -1,11 +1,13 @@
 class FileDatabaseUpdaterTest < Test::Unit::TestCase
+  fixtures :servers
+
   # Duck typing comes in handy here. Making fake File::Stat object
   Stat = Struct.new(:mtime, :size, :uid, :gid)
 
   def setup
     @dir = File.expand_path('test_data')
     @dir1 = File.join(@dir, 'dir1')
-    @updater = FileDatabaseUpdater.new
+    @updater = FileDatabaseUpdater.new(Server.this_server)
     # 1st of January 2000
     @stat1 = Stat.new(Time.local(2000, 1, 1), 24, 100, 200)
     @stat2 = Stat.new(Time.local(2001, 1, 1), 53, 100, 200)
@@ -87,7 +89,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     @updater.file_added(dir, 'file1', @stat1)
     files = FileInfo.find_all
     assert_equal(1, files.size)
-    assert_equal(Socket::gethostname, files[0].directory_info.server)
+    assert_equal(Server.this_hostname, files[0].directory_info.server.name)
   end
   
   def test_ownership

@@ -1,10 +1,11 @@
 require 'socket'
 
 class FileDatabaseUpdater
-  def initialize
+  def initialize(server)
     # Clear out database
     FileInfo.delete_all
     DirectoryInfo.delete_all
+    @server = server
   end
   
   def file_added(directory, name, stat)
@@ -23,7 +24,7 @@ class FileDatabaseUpdater
   end
   
   def directory_added(path)
-    DirectoryInfo.create(:server => Socket.gethostname, :path => path)
+    DirectoryInfo.create(:server => @server, :path => path)
   end
   
   def directory_removed(directory)

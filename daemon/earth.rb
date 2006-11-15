@@ -24,8 +24,9 @@ if ARGV.length != 0
 end
 
 while true do
-  updater = FileDatabaseUpdater.new
-  current_watch_directory = Server.this_server.watch_directory
+  server = Server.this_server
+  updater = FileDatabaseUpdater.new(server)
+  current_watch_directory = server.watch_directory
   monitor = PosixFileMonitor.new(current_watch_directory, updater)
   
   while Server.this_server.watch_directory == current_watch_directory do

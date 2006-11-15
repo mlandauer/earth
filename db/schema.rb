@@ -2,11 +2,11 @@
 # migrations feature of ActiveRecord to incrementally modify your database, and
 # then regenerate this schema definition.
 
-ActiveRecord::Schema.define(:version => 10) do
+ActiveRecord::Schema.define(:version => 11) do
 
   create_table "directory_info", :force => true do |t|
-    t.column "server", :string, :default => "", :null => false
     t.column "path", :string, :default => "", :null => false
+    t.column "server_id", :integer, :default => 0, :null => false
   end
 
   create_table "file_info", :force => true do |t|
