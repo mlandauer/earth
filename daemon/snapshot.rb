@@ -7,36 +7,36 @@
 #
 # $Id$
 
-class Snapshot
+class Snapshot < FileMonitor
   attr_reader :subdirectory_names
 
   def deep_copy
-    Snapshot.new(@stats.clone, @subdirectory_names.clone)
+    Snapshot.new(@observer, @directory, @stats.clone, @subdirectory_names.clone)
   end
   
-  def initialize(stats = Hash.new, subdirectory_names = [])
+  def initialize(observer, directory, stats = Hash.new, subdirectory_names = [])
+    super(observer)
     @directory_stat = nil
     @stats = stats
     @subdirectory_names = subdirectory_names
+    @directory = directory
   end
   
-  def update(directory)
-    directory = File.expand_path(directory)
-    
-    if File.exist?(directory)
-      new_stat = File.lstat(directory)
+  def update()
+    if File.exist?(@directory.path)
+      new_stat = File.lstat(@directory.path)
       if new_stat != @directory_stat
         @directory_stat = new_stat
         # Update contents of directory if readable
         if @directory_stat.readable?
-          entries = Dir.entries(directory)
+          entries = Dir.entries(@directory.path)
           # Ignore all files and directories starting with '.'
           entries.delete_if {|x| x[0,1] == "."}
           
           # TODO: Optimisation - do lstat on all directory entries and use that to determine what is a file
-          filenames, @subdirectory_names = entries.partition{|f| File.file?(File.join(directory, f))}
+          filenames, @subdirectory_names = entries.partition{|f| File.file?(File.join(@directory.path, f))}
           @stats.clear
-          filenames.each {|f| @stats[f] = File.lstat(File.join(directory, f))}
+          filenames.each {|f| @stats[f] = File.lstat(File.join(@directory.path, f))}
         end
       end
     else
