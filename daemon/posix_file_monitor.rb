@@ -37,7 +37,6 @@ class PosixFileMonitor < FileMonitor
       old_snapshot = snapshot.deep_copy
       snapshot.update
 
-      Difference.removed_files(old_snapshot, snapshot).each {|x| file_removed(directory, x)}
       Difference.removed_directories(old_snapshot, snapshot).each do |d|
         directory_removed(@snapshots[File.join(path, d)].directory)
       end
