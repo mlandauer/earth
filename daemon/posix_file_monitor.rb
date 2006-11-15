@@ -27,10 +27,8 @@ class PosixFileMonitor < FileMonitor
     old_snapshot = snapshot.deep_copy
     snapshot.update
 
-    Difference.added_files(old_snapshot, snapshot).each {|x| file_added(dir, x, snapshot.stat(x))}
-    Difference.added_directories(old_snapshot, snapshot).each do |x|
-      dir = directory_added(File.join(dir.path, x))
-    end
+    Difference.added_files(old_snapshot, snapshot).each {|x| file_added(dir, x, snapshot.stats[x])}
+    Difference.added_directories(old_snapshot, snapshot).each {|x| directory_added(File.join(dir.path, x))} 
   end
   
   def update
@@ -39,8 +37,7 @@ class PosixFileMonitor < FileMonitor
       old_snapshot = snapshot.deep_copy
       snapshot.update
 
-      Difference.added_directories(old_snapshot, snapshot).each {|d| directory_added(File.join(path, d))}
-      Difference.added_files(old_snapshot, snapshot).each {|x| file_added(directory, x, snapshot.stat(x))}
+      Difference.added_files(old_snapshot, snapshot).each {|x| file_added(directory, x, snapshot.stats[x])}
       Difference.removed_files(old_snapshot, snapshot).each {|x| file_removed(directory, x)}
       Difference.removed_directories(old_snapshot, snapshot).each {|d| remove_directory(File.join(path, d))}
     end

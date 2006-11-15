@@ -8,7 +8,7 @@
 # $Id$
 
 class Snapshot < FileMonitor
-  attr_reader :subdirectory_names, :directory
+  attr_reader :subdirectory_names, :directory, :stats
 
   def deep_copy
     Snapshot.new(@observer, @directory, @stats.clone, @subdirectory_names.clone)
@@ -49,10 +49,7 @@ class Snapshot < FileMonitor
     end
 
     Difference.changed_files(old_snapshot, self).each {|x| file_changed(@directory, x, @stats[x])}
-  end
-  
-  def stat(path)
-    @stats[path]
+    Difference.added_directories(old_snapshot, self).each {|d| directory_added(File.join(directory.path, d))}
   end
   
   def file_names

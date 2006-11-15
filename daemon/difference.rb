@@ -13,7 +13,7 @@ module Difference
   end
   
   def Difference.changed_files(snap1, snap2)
-    common_files(snap1, snap2).select {|f| snap1.stat(f) != snap2.stat(f)}
+    common_files(snap1, snap2).select {|f| snap1.stats[f] != snap2.stats[f]}
   end
   
   def Difference.added_directories(snap1, snap2)
