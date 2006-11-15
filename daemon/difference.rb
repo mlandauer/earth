@@ -9,7 +9,7 @@ module Difference
   
   # Files that have not been either added or removed
   def Difference.common_files(snap1, snap2)
-    snap2.file_names - added_files(snap1, snap2)
+    snap1.file_names & snap2.file_names
   end
   
   def Difference.changed_files(snap1, snap2)
@@ -26,6 +26,6 @@ module Difference
   
   # Directories that have not been either added or removed
   def Difference.common_directories(snap1, snap2)
-    snap2.subdirectory_names - added_directories(snap1, snap2)
+    snap1.subdirectory_names & snap2.subdirectory_names
   end
 end
