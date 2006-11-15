@@ -8,4 +8,8 @@ class FileInfo < ActiveRecord::Base
     self.uid = stat.uid
     self.gid = stat.gid
   end
+  
+  def FileInfo.find_by_directory_info_and_name(directory, name)
+    FileInfo.find(:first, :conditions => ['directory_info_id = ? AND name = ?', directory.id, name])
+  end
 end

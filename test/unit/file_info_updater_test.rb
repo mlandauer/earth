@@ -16,7 +16,9 @@ module FileInfoUpdaterTest
   end
   
   def test_file_removed_signature
-    @updater.file_removed(@updater.directory_added(@dir), 'file1')
+    dir = @updater.directory_added(@dir)
+    @updater.file_added(dir, 'file1', @stat1)
+    @updater.file_removed(dir, 'file1')
   end
   
   def test_file_changed_signature

@@ -9,16 +9,15 @@ class FileDatabaseUpdater
   end
   
   def file_added(directory, name, stat)
-    FileInfo.create(:directory_info => directory, :name => name,
-      :modified => stat.mtime, :size => stat.size, :uid => stat.uid, :gid => stat.gid)
+    FileInfo.create(:directory_info => directory, :name => name, :stat => stat)
   end
   
   def file_removed(directory, name)
-    FileInfo.delete_all(['directory_info_id = ? AND name = ?', directory.id, name])
+    FileInfo.find_by_directory_info_and_name(directory, name).destroy
   end
   
   def file_changed(directory, name, stat)
-    file = FileInfo.find(:first, :conditions => ['directory_info_id = ? AND name = ?', directory.id, name])
+    file = FileInfo.find_by_directory_info_and_name(directory, name)
     file.stat = stat
     file.save
   end
