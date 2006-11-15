@@ -50,6 +50,7 @@ class Snapshot < FileMonitor
 
     Difference.changed_files(old_snapshot, self).each {|x| file_changed(@directory, x, @stats[x])}
     Difference.added_directories(old_snapshot, self).each {|d| directory_added(File.join(directory.path, d))}
+    Difference.added_files(old_snapshot, self).each {|x| file_added(@directory, x, @stats[x])}
   end
   
   def file_names
