@@ -1,6 +1,6 @@
 class AddStatColumns < ActiveRecord::Migration
   def self.up
-    add_column :directory_info, :modified, :datetime, :null => false
+    add_column :directory_info, :modified, :datetime
   end
 
   def self.down
