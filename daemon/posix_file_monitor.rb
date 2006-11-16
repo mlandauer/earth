@@ -7,27 +7,24 @@ class PosixFileMonitor < FileMonitor
   end
   
   # Diverting messages from Snapshot objects
-  def directory_added(directory)
-    dir = @observer.directory_added(directory)
+  def directory_added(path)
+    directory = @observer.directory_added(path)
 
-    snapshot = Snapshot.new(self, dir)
+    snapshot = Snapshot.new(self, directory)
     snapshot.update
-    @snapshots[dir.path] = snapshot
-    dir
+    @snapshots[path] = snapshot
+    directory
   end
 
   # Diverting messages from Snapshot objects
   def directory_removed(directory)
     snapshot = @snapshots[directory.path]
-    directory = snapshot.directory
 
-    snapshot.subdirectory_names.each do |x|
-      directory_removed(@snapshots[File.join(directory.path, x)].directory)
-    end
-    snapshot.file_names.each {|x| file_removed(directory, x)}
-    @snapshots.delete(directory.path)
+    snapshot.subdirectory_names.each {|x| directory_removed(snapshot.subdirectories[x])}
+    snapshot.file_names.each {|x| file_removed(snapshot.directory, x)}
+    @snapshots.delete(snapshot.directory.path)
 
-    @observer.directory_removed(directory)
+    @observer.directory_removed(snapshot.directory)
   end
   
   def update
