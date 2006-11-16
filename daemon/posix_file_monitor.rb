@@ -4,9 +4,6 @@ class PosixFileMonitor < FileMonitor
     directory = File.expand_path(directory)
 
     @snapshots = {directory => Snapshot.new(self, @observer.directory_added(directory))}
-    # Keeps track of added an removed directories in each update cycle
-    @added_snapshots = Hash.new
-    @removed_paths = []
   end
   
   # Diverting messages from Snapshot objects
@@ -15,30 +12,23 @@ class PosixFileMonitor < FileMonitor
 
     snapshot = Snapshot.new(self, directory)
     snapshot.update
-    @added_snapshots[path] = snapshot
+    @snapshots[path] = snapshot
     directory
   end
 
   # Diverting messages from Snapshot objects
   def directory_removed(directory)
-    snapshot = @snapshots[directory.path]
-
-    snapshot.subdirectories.each_value {|directory| directory_removed(directory)}
-    snapshot.file_names.each {|x| file_removed(directory, x)}
-    @removed_paths << directory.path
-
+    @snapshots.delete(directory.path)    
     @observer.directory_removed(directory)
   end
   
   def update
-    @snapshots.each_value {|snapshot| snapshot.update}
-    # Do the adding and remove of snapshots outside of the loop above
-    # as otherwise this can cause:
+    # Do the iteration on a cloned hash so that we are not adding and
+    # removing snapshots from a hash we are iterating over. If we don't
+    # do this we can get:
     # RuntimeError: hash modified during iteration.
-    # TODO: Understand "hash modified during iteration" properly
-    @snapshots.merge!(@added_snapshots)
-    @added_snapshots.clear
-    @removed_paths.each {|p| @snapshots.delete(p)}
-    @removed_paths.clear
+    # TODO: We really need to iterate from the leaf nodes to the top so
+    # that we never delete stuff up the tree before the stuff at the bottom
+    @snapshots.clone.each_value {|snapshot| snapshot.update}
   end
 end
