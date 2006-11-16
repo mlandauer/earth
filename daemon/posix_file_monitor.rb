@@ -20,7 +20,7 @@ class PosixFileMonitor < FileMonitor
   def directory_removed(directory)
     snapshot = @snapshots[directory.path]
 
-    snapshot.subdirectory_names.each {|x| directory_removed(snapshot.subdirectories[x])}
+    snapshot.subdirectories.each_key {|x| directory_removed(snapshot.subdirectories[x])}
     snapshot.file_names.each {|x| file_removed(snapshot.directory, x)}
     @snapshots.delete(snapshot.directory.path)
 

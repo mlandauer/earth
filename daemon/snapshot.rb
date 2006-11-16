@@ -8,7 +8,7 @@
 # $Id$
 
 class Snapshot < FileMonitor
-  attr_reader :subdirectory_names, :directory, :stats, :subdirectories
+  attr_reader :directory, :subdirectories
 
   def initialize(observer, directory)
     super(observer)
@@ -53,12 +53,12 @@ class Snapshot < FileMonitor
         file_changed(@directory, x, @stats[x])
       end
     end
-    (subdirectory_names - old_subdirectory_names).each do |d|
+    (@subdirectory_names - old_subdirectory_names).each do |d|
       @subdirectories[d] = directory_added(File.join(directory.path, d))
     end
     (file_names - old_file_names).each {|x| file_added(@directory, x, @stats[x])}
     (old_file_names - file_names).each {|x| file_removed(@directory, x)}
-    (old_subdirectory_names - subdirectory_names).each do |d|
+    (old_subdirectory_names - @subdirectory_names).each do |d|
       directory_removed(@subdirectories[d])
       @subdirectories.delete(d)
     end
