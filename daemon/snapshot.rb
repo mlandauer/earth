@@ -45,7 +45,7 @@ class Snapshot < FileMonitor
       @directory_names = []
       @stats.clear
       @directory_stat = nil
-      @subdirectories = Hash.new
+      @subdirectory_names = []
     end
 
     (old_file_names & file_names).each do |x|
