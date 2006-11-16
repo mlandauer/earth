@@ -10,22 +10,20 @@
 class Snapshot < FileMonitor
   attr_reader :subdirectory_names, :directory, :stats, :subdirectories
 
-  def deep_copy
-    Snapshot.new(@observer, @directory, @stats.clone, @subdirectory_names.clone, @subdirectories.clone)
-  end
-  
-  def initialize(observer, directory, stats = Hash.new, subdirectory_names = [], subdirectories = Hash.new)
+  def initialize(observer, directory)
     super(observer)
-    @directory_stat = nil
-    @stats = stats
-    @subdirectory_names = subdirectory_names
     @directory = directory
-    @subdirectories = subdirectories
+    @directory_stat = nil
+    @stats = Hash.new
+    @subdirectory_names = []
+    @subdirectories = Hash.new
   end
   
   def update()
-    old_snapshot = self.deep_copy
-    
+    old_subdirectory_names = @subdirectory_names.clone
+    old_stats = @stats.clone
+    old_file_names = old_stats.keys
+
     if File.exist?(@directory.path)
       new_stat = File.lstat(@directory.path)
       if new_stat != @directory_stat
@@ -50,17 +48,17 @@ class Snapshot < FileMonitor
       @subdirectories = Hash.new
     end
 
-    (old_snapshot.file_names & file_names).each do |x|
-      if old_snapshot.stats[x] != @stats[x]
+    (old_file_names & file_names).each do |x|
+      if old_stats[x] != @stats[x]
         file_changed(@directory, x, @stats[x])
       end
     end
-    (subdirectory_names - old_snapshot.subdirectory_names).each do |d|
+    (subdirectory_names - old_subdirectory_names).each do |d|
       @subdirectories[d] = directory_added(File.join(directory.path, d))
     end
-    (self.file_names - old_snapshot.file_names).each {|x| file_added(@directory, x, @stats[x])}
-    (old_snapshot.file_names - self.file_names).each {|x| file_removed(@directory, x)}
-    (old_snapshot.subdirectory_names - self.subdirectory_names).each do |d|
+    (file_names - old_file_names).each {|x| file_added(@directory, x, @stats[x])}
+    (old_file_names - file_names).each {|x| file_removed(@directory, x)}
+    (old_subdirectory_names - subdirectory_names).each do |d|
       directory_removed(@subdirectories[d])
       @subdirectories.delete(d)
     end
