@@ -50,13 +50,17 @@ class Snapshot < FileMonitor
       @subdirectories = Hash.new
     end
 
-    Difference.changed_files(old_snapshot, self).each {|x| file_changed(@directory, x, @stats[x])}
-    Difference.added_directories(old_snapshot, self).each do |d|
+    (old_snapshot.file_names & file_names).each do |x|
+      if old_snapshot.stats[x] != @stats[x]
+        file_changed(@directory, x, @stats[x])
+      end
+    end
+    (subdirectory_names - old_snapshot.subdirectory_names).each do |d|
       @subdirectories[d] = directory_added(File.join(directory.path, d))
     end
-    Difference.added_files(old_snapshot, self).each {|x| file_added(@directory, x, @stats[x])}
-    Difference.removed_files(old_snapshot, self).each {|x| file_removed(@directory, x)}
-    Difference.removed_directories(old_snapshot, self).each do |d|
+    (self.file_names - old_snapshot.file_names).each {|x| file_added(@directory, x, @stats[x])}
+    (old_snapshot.file_names - self.file_names).each {|x| file_removed(@directory, x)}
+    (old_snapshot.subdirectory_names - self.subdirectory_names).each do |d|
       directory_removed(@subdirectories[d])
       @subdirectories.delete(d)
     end
