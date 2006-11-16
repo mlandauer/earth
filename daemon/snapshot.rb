@@ -13,13 +13,14 @@ class Snapshot < FileMonitor
   def initialize(observer, directory)
     super(observer)
     @directory = directory
-    @directory_stat = nil
-    @stats = Hash.new
-    @subdirectory_names = []
     @subdirectories = Hash.new
+
+    @stats = Hash.new
+    @directory_stat = nil
+    @subdirectory_names = []
   end
   
-  def update()
+  def update
     old_subdirectory_names = @subdirectory_names.clone
     old_stats = @stats.clone
     old_file_names = old_stats.keys
@@ -42,10 +43,9 @@ class Snapshot < FileMonitor
       end
     else
       # Directory has been removed
-      @directory_names = []
       @stats.clear
       @directory_stat = nil
-      @subdirectory_names = []
+      @subdirectory_names.clear
     end
 
     (old_file_names & file_names).each do |x|
