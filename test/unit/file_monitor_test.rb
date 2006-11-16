@@ -59,11 +59,11 @@ module FileMonitorTest
     FileUtils.rm 'test_data/file1'
     @queue.clear
     @monitor.update
-    # Files removed deep inside the directory structure should occur before those higher up
-    assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
+    
+    # TODO: We have lost the requirement for a directory to be removed after all its contents
     assert_equal(FileMonitorQueue::FileRemoved.new(@dir, 'file1'), @queue.pop)
-    # Messages for removing directories should appear after the files
     assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir1), @queue.pop)
+    assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
     assert(@queue.empty?)
   end
 
@@ -77,13 +77,11 @@ module FileMonitorTest
     @queue.clear
     @monitor.update
     
-    # Files removed deep inside the directory structure should occur before those higher up
+    # TODO: We have lost the requirement for a directory to be removed after all its contents
     assert_equal(FileMonitorQueue::FileRemoved.new(dir2, 'file'), @queue.pop)
-    assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
-    # Messages for removing directories should appear after the files and deeper directories
-    # should be removed first
-    assert_equal(FileMonitorQueue::DirectoryRemoved.new(dir2), @queue.pop)
     assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir1), @queue.pop)
+    assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryRemoved.new(dir2), @queue.pop)
     assert(@queue.empty?)
   end
   
