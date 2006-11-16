@@ -20,11 +20,7 @@ class Snapshot < FileMonitor
     @subdirectory_names = []
   end
   
-  def update
-    old_subdirectory_names = @subdirectory_names.clone
-    old_stats = @stats.clone
-    old_file_names = old_stats.keys
-
+  def update_contents
     if File.exist?(@directory.path)
       new_stat = File.lstat(@directory.path)
       if new_stat != @directory_stat
@@ -47,6 +43,14 @@ class Snapshot < FileMonitor
       @directory_stat = nil
       @subdirectory_names.clear
     end
+  end
+  
+  def update
+    old_subdirectory_names = @subdirectory_names.clone
+    old_stats = @stats.clone
+    old_file_names = old_stats.keys
+
+    update_contents
 
     (old_file_names & file_names).each do |x|
       if old_stats[x] != @stats[x]
