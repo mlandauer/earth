@@ -15,27 +15,22 @@ class FileMonitor
   end
   
   def file_added(directory, name, stat)
-    #puts "File ADDED: #{name} in directory #{directory}"
     @observer.file_added(directory, name, stat)
   end
   
   def file_removed(directory, name)
-    #puts "File REMOVED: #{name} in directory #{directory}"
     @observer.file_removed(directory, name)
   end
   
   def file_changed(directory, name, stat)
-    #puts "File CHANGED: #{name} in directory #{directory}"
     @observer.file_changed(directory, name, stat)
   end
   
-  def directory_added(directory)
-    #puts "Directory ADDED: #{directory}"
-    @observer.directory_added(directory)
+  def directory_added(path)
+    @observer.directory_added(path)
   end
   
   def directory_removed(directory)
-    #puts "Directory REMOVED: #{directory}"
     @observer.directory_removed(directory)
   end
 end
