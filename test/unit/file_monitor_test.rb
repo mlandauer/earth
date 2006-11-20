@@ -60,10 +60,10 @@ module FileMonitorTest
     @queue.clear
     @monitor.update
     
-    # TODO: We have lost the requirement for a directory to be removed after all its contents
+    # Starts with deepest directory
+    assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
     assert_equal(FileMonitorQueue::FileRemoved.new(@dir, 'file1'), @queue.pop)
     assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir1), @queue.pop)
-    assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
     assert(@queue.empty?)
   end
 
@@ -77,11 +77,11 @@ module FileMonitorTest
     @queue.clear
     @monitor.update
     
-    # TODO: We have lost the requirement for a directory to be removed after all its contents
+    # Starts with the deepest directory
     assert_equal(FileMonitorQueue::FileRemoved.new(dir2, 'file'), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir1), @queue.pop)
     assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
     assert_equal(FileMonitorQueue::DirectoryRemoved.new(dir2), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir1), @queue.pop)
     assert(@queue.empty?)
   end
   

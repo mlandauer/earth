@@ -13,7 +13,7 @@ class DirectoryTree
 
   def add(path, value)
     subtree = find(File.dirname(path))
-    raise "Couldn't find to add" if subtree.nil?
+    raise "Couldn't add path #{path}" if subtree.nil?
     subtree.add_to_root(File.basename(path), value)
   end
   
