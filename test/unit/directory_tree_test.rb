@@ -8,6 +8,18 @@ class DirectoryTreeTest < Test::Unit::TestCase
     @t.add("/usr/images/c2/g2.1", "Grandchild 2.1")
   end
   
+  def test_clone
+    t2 = @t.clone
+    @t.delete("/usr/images/c1/g1.1")
+    @t.add("/usr/images/c3", "Child 3")
+    t_contents = []
+    t2_contents = []
+    @t.each {|x| t_contents << x}
+    t2.each {|x| t2_contents << x}
+    assert_equal(["Grandchild 1.2", "Child 1", "Grandchild 2.1", "Child 2", "Child 3", "Parent"], t_contents)
+    assert_equal(["Grandchild 1.1", "Grandchild 1.2", "Child 1", "Grandchild 2.1", "Child 2", "Parent"], t2_contents)
+  end
+  
   def test_add_non_existent
     assert_raise(RuntimeError) {@t.add("/usr/images/foo/foo2", "foo")}
   end

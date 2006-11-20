@@ -1,11 +1,15 @@
 class DirectoryTree 
   attr_reader :path, :value, :children
 
-  def initialize(path, value)
+  def initialize(path, value, children = [])
     @path = path
     @value = value 
-    @children = [] 
+    @children = children 
   end 
+
+  def clone
+    DirectoryTree.new(@path, @value, @children.map {|x| x.clone})
+  end
 
   def add(path, value)
     subtree = find(File.dirname(path))
