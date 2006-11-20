@@ -12,11 +12,13 @@ class DirectoryTree
     return subtree 
   end
 
+  # Iterate over each node of the tree. Move from the leaf nodes
+  # back to the root
   def each 
-    yield value 
     @children.each do |child_node| 
       child_node.each { |e| yield e } 
     end 
+    yield value 
   end 
 end 
 
@@ -33,6 +35,6 @@ class DirectoryTreeTest < Test::Unit::TestCase
   def test_each
     a = []
     @t.each {|x| a << x}
-    assert_equal(["Parent", "Child 1", "Grandchild 1.1", "Grandchild 1.2", "Child 2", "Grandchild 2.1"], a)
+    assert_equal(["Grandchild 1.1", "Grandchild 1.2", "Child 1", "Grandchild 2.1", "Child 2", "Parent"], a)
   end
 end
