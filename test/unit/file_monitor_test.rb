@@ -39,17 +39,21 @@ module FileMonitorTest
     FileUtils.touch 'test_data/.another'
     @queue.clear
     @monitor.update
+    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
     assert(@queue.empty?)
   end
   
   def test_added
     @monitor.update
     # The directory added message needs to appear before the file added message
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir, File.lstat(@dir)), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1, File.lstat(@dir1)), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir, nil), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1, nil), @queue.pop)
     # Files added deep inside the directory structure should occur before those higher up
     assert_equal(FileMonitorQueue::FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir1, File.lstat(@dir1)), @queue.pop)
     assert_equal(FileMonitorQueue::FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
+    # Updates the modified time of the directory at the end
+    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
     assert(@queue.empty?)
   end
 
@@ -64,6 +68,7 @@ module FileMonitorTest
     assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
     assert_equal(FileMonitorQueue::FileRemoved.new(@dir, 'file1'), @queue.pop)
     assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir1), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
     assert(@queue.empty?)
   end
 
@@ -82,6 +87,7 @@ module FileMonitorTest
     assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
     assert_equal(FileMonitorQueue::DirectoryRemoved.new(dir2), @queue.pop)
     assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir1), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
     assert(@queue.empty?)
   end
   
@@ -97,6 +103,7 @@ module FileMonitorTest
     # Currently "changed" messages appear before "added" messages
     assert_equal(FileMonitorQueue::FileChanged.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
     assert_equal(FileMonitorQueue::FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir1, File.lstat(@dir1)), @queue.pop)
     assert(@queue.empty?)
   end
   
@@ -107,6 +114,7 @@ module FileMonitorTest
     @queue.clear
     @monitor.update
     assert_equal(FileMonitorQueue::FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir1, File.lstat(@dir1)), @queue.pop)
     assert(@queue.empty?)
   end
 
@@ -118,8 +126,10 @@ module FileMonitorTest
     @queue.clear
     File.chmod(0000, @dir1)
     @monitor.update
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1, File.lstat(@dir1)), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1, nil), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir1, File.lstat(@dir1)), @queue.pop)
     assert_equal(FileMonitorQueue::FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
     assert(@queue.empty?)
     # Add permissions back
     File.chmod(mode, @dir1)

@@ -20,8 +20,9 @@ class SnapshotTest < Test::Unit::TestCase
   
   def test_simple
     @monitor.update
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir2, File.lstat(@dir2)), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir2, nil), @queue.pop)
     assert_equal(FileMonitorQueue::FileAdded.new(@dir, 'file1', File.lstat(@file2)), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
     assert(@queue.empty?)
   end
   

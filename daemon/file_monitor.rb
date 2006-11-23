@@ -33,4 +33,8 @@ class FileMonitor
   def directory_removed(directory)
     @observer.directory_removed(directory)
   end
+  
+  def directory_changed(directory, stat)
+    @observer.directory_changed(directory, stat)
+  end
 end

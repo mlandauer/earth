@@ -52,7 +52,8 @@ class Snapshot < FileMonitor
     old_file_names = @file_names.clone
     old_subdirectory_names = @subdirectory_names.clone
     old_stats = @stats.clone
-
+    old_directory_stat = @directory_stat
+    
     update_contents
 
     (old_file_names & @file_names).each do |x|
@@ -61,13 +62,18 @@ class Snapshot < FileMonitor
       end
     end
     (@subdirectory_names - old_subdirectory_names).each do |x|
-      @subdirectories[x] = directory_added(File.join(directory.path, x), @stats[x])
+      @subdirectories[x] = directory_added(File.join(directory.path, x), nil)
     end
     (@file_names - old_file_names).each {|x| file_added(@directory, x, @stats[x])}
     (old_file_names - @file_names).each {|x| file_removed(@directory, x)}
     (old_subdirectory_names - @subdirectory_names).each do |x|
       directory_removed(@subdirectories[x])
       @subdirectories.delete(x)
+    end
+    
+    # Send the directory_changed message right at the end
+    if @directory_stat != old_directory_stat && File.exist?(@directory.path)
+      directory_changed(@directory, @directory_stat)
     end
   end
 end
