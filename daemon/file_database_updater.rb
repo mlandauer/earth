@@ -32,7 +32,7 @@ class FileDatabaseUpdater
     else
       full_path = File.join(directory.path, name)
     end
-    DirectoryInfo.create(:server => @server, :path => full_path)
+    DirectoryInfo.create(:server => @server, :path => full_path, :parent => directory)
   end
   
   def directory_removed(directory)
