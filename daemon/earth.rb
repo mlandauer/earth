@@ -27,7 +27,12 @@ while true do
   server = Server.this_server
   updater = FileDatabaseUpdater.new(server)
   current_watch_directory = server.watch_directory
-  monitor = PosixFileMonitor.new(current_watch_directory, updater)
+  
+  puts "Clearing out database"
+  FileInfo.delete_all
+  DirectoryInfo.delete_all
+  puts "Watching directory #{current_watch_directory}"
+  monitor = PosixFileMonitor.new(updater.directory_added(nil, current_watch_directory), updater)
   
   while Server.this_server.watch_directory == current_watch_directory do
     puts "Updating..."

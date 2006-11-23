@@ -2,9 +2,6 @@ require 'socket'
 
 class FileDatabaseUpdater
   def initialize(server)
-    # Clear out database
-    FileInfo.delete_all
-    DirectoryInfo.delete_all
     @server = server
   end
   

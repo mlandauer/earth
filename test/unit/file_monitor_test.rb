@@ -22,9 +22,7 @@ module FileMonitorTest
     File.utime(past, past, @file2)
     
     @queue = FileMonitorQueue.new
-    # By passing the relative path we are ensuring that the 
-    # translation to absolute path happens
-    @monitor = file_monitor(@relative_dir, @queue)
+    @monitor = file_monitor(@queue.directory_added(nil, @dir), @queue)
   end
   
   def teardown
@@ -140,7 +138,7 @@ class PosixFileMonitorTest < Test::Unit::TestCase
   include FileMonitorTest
 
   # Factory method
-  def file_monitor(dir, queue)
-    PosixFileMonitor.new(dir, queue)
+  def file_monitor(directory, queue)
+    PosixFileMonitor.new(directory, queue)
   end
 end

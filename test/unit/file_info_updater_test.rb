@@ -66,6 +66,15 @@ end
 class FileDatabaseUpdaterTest < Test::Unit::TestCase
   include FileInfoUpdaterTest
 
+  alias original_setup setup 
+  
+  def setup
+    original_setup
+    # Clears the contents of the database
+    FileInfo.delete_all
+    DirectoryInfo.delete_all
+  end
+  
   # Factory method
   def updater
     FileDatabaseUpdater.new(Server.create(:name => "test_server", :watch_directory => @dir))
