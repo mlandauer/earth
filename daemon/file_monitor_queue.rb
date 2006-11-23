@@ -22,11 +22,11 @@ class FileMonitorQueue < Queue
     push(FileChanged.new(directory.path, name, stat))
   end
   
-  def directory_added(path, name)
-    if path.nil?
+  def directory_added(directory, name)
+    if directory.nil?
       full_path = name
     else
-      full_path = File.join(path, name)
+      full_path = File.join(directory.path, name)
     end
     push(DirectoryAdded.new(full_path))
     DirectoryInfo.new(full_path, nil)

@@ -38,6 +38,9 @@ module FileInfoUpdaterTest
     d = @updater.directory_added(nil, @dir)
     assert_equal(@dir, d.path)
     assert_equal(nil, d.modified)
+    d2 = @updater.directory_added(d, 'dir1')
+    assert_equal(@dir1, d2.path)
+    assert_equal(nil, d2.modified)
   end
   
   def test_directory_removed_signature
@@ -77,7 +80,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   def test_simple
     dir = @updater.directory_added(nil, @dir)
     @updater.file_added(dir, 'file1', @stat1)
-    dir1 = @updater.directory_added(@dir, 'dir1')
+    dir1 = @updater.directory_added(dir, 'dir1')
     @updater.file_added(dir1, 'file1', @stat2)
     files = FileInfo.find_all
     assert_equal(2, files.size)
@@ -92,8 +95,8 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   end
   
   def test_add_directory
-    @updater.directory_added(nil, @dir)
-    @updater.directory_added(@dir, 'dir1')
+    dir = @updater.directory_added(nil, @dir)
+    @updater.directory_added(dir, 'dir1')
     directories = DirectoryInfo.find_all
     assert_equal(2, directories.size)
     assert_equal(@dir, directories[0].path)
@@ -104,8 +107,8 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   end
   
   def test_remove_directory
-    @updater.directory_added(nil, @dir)
-    dir1 = @updater.directory_added(@dir, 'dir1')
+    dir = @updater.directory_added(nil, @dir)
+    dir1 = @updater.directory_added(dir, 'dir1')
     @updater.directory_removed(dir1)
     directories = DirectoryInfo.find_all
     assert_equal(1, directories.size)
@@ -115,7 +118,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   def test_delete
     dir = @updater.directory_added(nil, @dir)
     @updater.file_added(dir, 'file1', @stat1)
-    dir1 = @updater.directory_added(@dir, 'dir1')
+    dir1 = @updater.directory_added(dir, 'dir1')
     @updater.file_added(dir1, 'file1', @stat2)
     @updater.file_removed(dir, 'file1')
     files = FileInfo.find_all
