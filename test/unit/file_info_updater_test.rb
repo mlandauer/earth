@@ -43,6 +43,12 @@ module FileInfoUpdaterTest
   def test_directory_removed_signature
     @updater.directory_removed(@updater.directory_added(@dir, @stat1))
   end
+  
+  def test_directory_changed_signature
+    dir = @updater.directory_added(@dir, @stat1)
+    @updater.directory_changed(dir, @stat2)
+    assert_equal(@stat2.mtime, dir.modified)
+  end
 end
 
 class FileMonitorQueueTest < Test::Unit::TestCase
@@ -91,7 +97,9 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     directories = DirectoryInfo.find_all
     assert_equal(2, directories.size)
     assert_equal(@dir, directories[0].path)
+    assert_equal(@stat1.mtime, directories[0].modified)
     assert_equal(@dir1, directories[1].path)
+    assert_equal(@stat1.mtime, directories[1].modified)
   end
   
   def test_remove_directory
@@ -125,6 +133,15 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     assert_equal('file1', files[0].name)    
     assert_equal(@stat2.mtime, files[0].modified)
     assert_equal(@stat2.size, files[0].size)
+  end
+  
+  def test_change_directory
+    dir = @updater.directory_added(@dir, @stat1)
+    @updater.directory_changed(dir, @stat2)
+    directories = DirectoryInfo.find_all
+    assert_equal(1, directories.size)
+    assert_equal(@dir, directories[0].path)
+    assert_equal(@stat2.mtime, directories[0].modified)
   end
   
   def test_machine_name

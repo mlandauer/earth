@@ -34,4 +34,9 @@ class FileDatabaseUpdater
     #puts "Directory REMOVED: #{directory.path}"
     directory.destroy
   end
+  
+  def directory_changed(directory, stat)
+    directory.stat = stat
+    directory.save
+  end
 end
