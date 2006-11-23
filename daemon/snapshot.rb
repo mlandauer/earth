@@ -32,12 +32,11 @@ class Snapshot < FileMonitor
           # Ignore all files and directories starting with '.'
           entries.delete_if {|x| x[0,1] == "."}
           
-          # TODO: Optimisation - do lstat on all directory entries and use that to determine what is a file
-          @file_names, @subdirectory_names = entries.partition{|f| File.file?(File.join(@directory.path, f))}
-          # @stats contains the stat information for both files and directories
+          # Contains the stat information for both files and directories
           @stats.clear
-          @file_names.each {|f| @stats[f] = File.lstat(File.join(@directory.path, f))}
-          @subdirectory_names.each {|d| @stats[d] = File.lstat(File.join(@directory.path, d))}
+          entries.each {|x| @stats[x] = File.lstat(File.join(@directory.path, x))}
+
+          @file_names, @subdirectory_names = entries.partition{|x| @stats[x].file?}
         end
       end
     else
