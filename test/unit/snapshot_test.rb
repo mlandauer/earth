@@ -10,7 +10,7 @@ class SnapshotTest < Test::Unit::TestCase
     FileUtils.mkdir @dir2
     
     @queue = FileMonitorQueue.new
-    @monitor = Snapshot.new(@queue, @queue.directory_added(@dir))
+    @monitor = Snapshot.new(@queue, @queue.directory_added(@dir, File.lstat(@dir)))
     @queue.clear
   end
 
@@ -20,7 +20,7 @@ class SnapshotTest < Test::Unit::TestCase
   
   def test_simple
     @monitor.update
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir2), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir2, File.lstat(@dir2)), @queue.pop)
     assert_equal(FileMonitorQueue::FileAdded.new(@dir, 'file1', File.lstat(@file2)), @queue.pop)
     assert(@queue.empty?)
   end

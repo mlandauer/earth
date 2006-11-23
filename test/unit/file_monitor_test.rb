@@ -45,8 +45,8 @@ module FileMonitorTest
   def test_added
     @monitor.update
     # The directory added message needs to appear before the file added message
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir, File.lstat(@dir)), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1, File.lstat(@dir1)), @queue.pop)
     # Files added deep inside the directory structure should occur before those higher up
     assert_equal(FileMonitorQueue::FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
     assert_equal(FileMonitorQueue::FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
@@ -118,7 +118,7 @@ module FileMonitorTest
     @queue.clear
     File.chmod(0000, @dir1)
     @monitor.update
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1), @queue.pop)
+    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1, File.lstat(@dir1)), @queue.pop)
     assert_equal(FileMonitorQueue::FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
     assert(@queue.empty?)
     # Add permissions back

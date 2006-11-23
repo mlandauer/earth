@@ -17,6 +17,7 @@ class Snapshot < FileMonitor
 
     @stats = Hash.new
     @directory_stat = nil
+    @file_names = []
     @subdirectory_names = []
   end
   
@@ -32,43 +33,42 @@ class Snapshot < FileMonitor
           entries.delete_if {|x| x[0,1] == "."}
           
           # TODO: Optimisation - do lstat on all directory entries and use that to determine what is a file
-          filenames, @subdirectory_names = entries.partition{|f| File.file?(File.join(@directory.path, f))}
+          @file_names, @subdirectory_names = entries.partition{|f| File.file?(File.join(@directory.path, f))}
+          # @stats contains the stat information for both files and directories
           @stats.clear
-          filenames.each {|f| @stats[f] = File.lstat(File.join(@directory.path, f))}
+          @file_names.each {|f| @stats[f] = File.lstat(File.join(@directory.path, f))}
+          @subdirectory_names.each {|d| @stats[d] = File.lstat(File.join(@directory.path, d))}
         end
       end
     else
       # Directory has been removed
       @stats.clear
       @directory_stat = nil
+      @file_names.clear
       @subdirectory_names.clear
     end
   end
   
   def update
+    old_file_names = @file_names.clone
     old_subdirectory_names = @subdirectory_names.clone
     old_stats = @stats.clone
-    old_file_names = old_stats.keys
 
     update_contents
 
-    (old_file_names & file_names).each do |x|
+    (old_file_names & @file_names).each do |x|
       if old_stats[x] != @stats[x]
         file_changed(@directory, x, @stats[x])
       end
     end
-    (@subdirectory_names - old_subdirectory_names).each do |d|
-      @subdirectories[d] = directory_added(File.join(directory.path, d))
+    (@subdirectory_names - old_subdirectory_names).each do |x|
+      @subdirectories[x] = directory_added(File.join(directory.path, x), @stats[x])
     end
-    (file_names - old_file_names).each {|x| file_added(@directory, x, @stats[x])}
-    (old_file_names - file_names).each {|x| file_removed(@directory, x)}
-    (old_subdirectory_names - @subdirectory_names).each do |d|
-      directory_removed(@subdirectories[d])
-      @subdirectories.delete(d)
+    (@file_names - old_file_names).each {|x| file_added(@directory, x, @stats[x])}
+    (old_file_names - @file_names).each {|x| file_removed(@directory, x)}
+    (old_subdirectory_names - @subdirectory_names).each do |x|
+      directory_removed(@subdirectories[x])
+      @subdirectories.delete(x)
     end
-  end
-  
-  def file_names
-    @stats.keys
   end
 end

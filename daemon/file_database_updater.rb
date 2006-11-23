@@ -25,9 +25,9 @@ class FileDatabaseUpdater
     file.save
   end
   
-  def directory_added(path)
+  def directory_added(path, stat)
     #puts "Directory ADDED: #{path}"
-    DirectoryInfo.create(:server => @server, :path => path)
+    DirectoryInfo.create(:server => @server, :path => path, :stat => stat)
   end
   
   def directory_removed(directory)
