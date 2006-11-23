@@ -1,7 +1,7 @@
 class FileMonitorQueue < Queue
   DirectoryRemoved = Struct.new(:path)
   DirectoryChanged = Struct.new(:path, :stat)
-  DirectoryAdded = Struct.new(:path, :stat)
+  DirectoryAdded = Struct.new(:path)
   FileAdded = Struct.new(:path, :name, :stat)
   FileChanged = Struct.new(:path, :name, :stat)
   FileRemoved = Struct.new(:path, :name)
@@ -22,9 +22,9 @@ class FileMonitorQueue < Queue
     push(FileChanged.new(directory.path, name, stat))
   end
   
-  def directory_added(path, stat)
-    push(DirectoryAdded.new(path, stat))
-    DirectoryInfo.new(path, stat ? stat.mtime : nil)
+  def directory_added(path)
+    push(DirectoryAdded.new(path))
+    DirectoryInfo.new(path, nil)
   end
   
   def directory_removed(directory)

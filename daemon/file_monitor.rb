@@ -26,8 +26,8 @@ class FileMonitor
     @observer.file_changed(directory, name, stat)
   end
   
-  def directory_added(path, stat)
-    @observer.directory_added(path, stat)
+  def directory_added(path)
+    @observer.directory_added(path)
   end
   
   def directory_removed(directory)

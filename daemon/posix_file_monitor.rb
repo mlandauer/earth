@@ -4,12 +4,12 @@ class PosixFileMonitor < FileMonitor
     directory = File.expand_path(directory)
 
     @snapshots = DirectoryTree.new(directory,
-      Snapshot.new(self, @observer.directory_added(directory, nil)))
+      Snapshot.new(self, @observer.directory_added(directory)))
   end
   
   # Diverting messages from Snapshot objects
-  def directory_added(path, stat)
-    directory = @observer.directory_added(path, stat)
+  def directory_added(path)
+    directory = @observer.directory_added(path)
 
     snapshot = Snapshot.new(self, directory)
     @snapshots.add(path, snapshot)
