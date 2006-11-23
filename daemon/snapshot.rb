@@ -62,7 +62,7 @@ class Snapshot < FileMonitor
       end
     end
     (@subdirectory_names - old_subdirectory_names).each do |x|
-      @subdirectories[x] = directory_added(File.join(directory.path, x))
+      @subdirectories[x] = directory_added(directory.path, x)
     end
     (@file_names - old_file_names).each {|x| file_added(@directory, x, @stats[x])}
     (old_file_names - @file_names).each {|x| file_removed(@directory, x)}

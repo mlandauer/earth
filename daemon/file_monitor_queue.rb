@@ -22,9 +22,14 @@ class FileMonitorQueue < Queue
     push(FileChanged.new(directory.path, name, stat))
   end
   
-  def directory_added(path)
-    push(DirectoryAdded.new(path))
-    DirectoryInfo.new(path, nil)
+  def directory_added(path, name)
+    if path.nil?
+      full_path = name
+    else
+      full_path = File.join(path, name)
+    end
+    push(DirectoryAdded.new(full_path))
+    DirectoryInfo.new(full_path, nil)
   end
   
   def directory_removed(directory)
