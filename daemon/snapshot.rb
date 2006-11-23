@@ -10,7 +10,7 @@
 class Snapshot < FileMonitor
   attr_reader :directory, :subdirectories
 
-  def initialize(observer, directory)
+  def initialize(directory, observer)
     super(observer)
     @directory = directory
     @subdirectories = Hash.new

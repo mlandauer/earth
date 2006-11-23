@@ -10,7 +10,7 @@ class SnapshotTest < Test::Unit::TestCase
     FileUtils.mkdir @dir2
     
     @queue = FileMonitorQueue.new
-    @monitor = Snapshot.new(@queue, @queue.directory_added(@dir))
+    @monitor = Snapshot.new(@queue.directory_added(@dir), @queue)
     @queue.clear
   end
 
