@@ -70,6 +70,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   
   def setup
     original_setup
+    @directory = @updater.directory_added(nil, @dir)
     # Clears the contents of the database
     FileInfo.delete_all
     DirectoryInfo.delete_all
@@ -77,7 +78,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   
   # Factory method
   def updater
-    FileDatabaseUpdater.new(Server.create(:name => "test_server", :watch_directory => @dir))
+    FileDatabaseUpdater.new(Server.create(:name => "test_server", :directory_info => @directory))
   end
   
   # Database should be empty on startup

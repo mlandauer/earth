@@ -2,8 +2,8 @@
 first:
   id: 1
   name: <%= Server.this_hostname %>
-  watch_directory: "/foo"
+  directory_info_id: 1
 another:
   id: 2
   name: "foo"
-  watch_directory: "/bar"
+  directory_info_id: 2

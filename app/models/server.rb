@@ -1,9 +1,10 @@
 require 'socket'
 
 class Server < ActiveRecord::Base
+  belongs_to :directory_info
+
   def Server.this_server
-    server = Server.find_by_name(this_hostname)
-    server ? server : raise("This server is not registered in the database. Use the web admin front-end to add it")
+    Server.find_or_create_by_name(this_hostname)
   end
   
   def Server.this_hostname
