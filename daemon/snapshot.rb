@@ -74,7 +74,10 @@ private
     @stats.clear
     entries.each {|x| @stats[x] = File.lstat(File.join(@directory.path, x))}
   
-    @file_names, @subdirectory_names = entries.partition{|x| @stats[x].file?}
+    # Seperately test for whether it's a file or a directory because it could
+    # be something like a symbolic link (which we shouldn't follow)
+    @file_names = entries.select{|x| @stats[x].file?}
+    @subdirectory_names = entries.select{|x| @stats[x].directory?}
   end
   
   def update_contents

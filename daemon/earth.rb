@@ -28,6 +28,7 @@ updater = FileDatabaseUpdater.new
 if ARGV.length == 1
   watch_directory = File.expand_path(ARGV[0])
   puts "WARNING: Watching new directory. So, clearing out database"
+  # TODO: Need to clear out database just for this server
   FileInfo.delete_all
   DirectoryInfo.delete_all
     
