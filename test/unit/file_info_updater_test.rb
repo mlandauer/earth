@@ -37,10 +37,10 @@ module FileInfoUpdaterTest
   def test_directory_added_signature
     d = @updater.directory_added(nil, @dir)
     assert_equal(@dir, d.path)
-    assert_nil(d.modified)
+    assert_nil(d.stat)
     d2 = @updater.directory_added(d, 'dir1')
     assert_equal(@dir1, d2.path)
-    assert_nil(d2.modified)
+    assert_nil(d2.stat)
   end
   
   def test_directory_removed_signature
@@ -111,9 +111,9 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     assert_equal(2, directories.size)
     assert_equal(@dir, directories[0].path)
     # When a directory is created it should have an invalid modification time
-    assert_nil(directories[0].modified)
+    assert_nil(directories[0].stat)
     assert_equal(@dir1, directories[1].path)
-    assert_nil(directories[1].modified)
+    assert_nil(directories[1].stat)
   end
   
   def test_remove_directory
