@@ -7,6 +7,11 @@ class DirectoryInfo < ActiveRecord::Base
     self.modified = stat.mtime unless stat.nil?
   end
   
+  # Only returns the last part of the path
+  def name
+    File.basename(path)
+  end
+  
   def server
     Server.find_by_directory_info_id(root.id)
   end

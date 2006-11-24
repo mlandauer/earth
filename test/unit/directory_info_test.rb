@@ -6,4 +6,8 @@ class DirectoryInfoTest < Test::Unit::TestCase
   def test_server
     assert_equal(servers(:first), directory_info(:foo_bar_twiddle).server)
   end
+  
+  def test_name
+    assert_equal("twiddle", directory_info(:foo_bar_twiddle).name)
+  end
 end
