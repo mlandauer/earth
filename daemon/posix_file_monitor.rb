@@ -2,7 +2,9 @@ class PosixFileMonitor < FileMonitor
   def initialize(directory, observer)
     super(observer)
 
-    @snapshots = DirectoryTree.new(directory.path, Snapshot.new(directory, self))
+    snapshot = Snapshot.new(directory, self)
+    @snapshots = DirectoryTree.new(directory.path, snapshot)
+    add_children_to_snapshots(directory)
   end
   
   # Diverting messages from Snapshot objects
@@ -28,5 +30,15 @@ class PosixFileMonitor < FileMonitor
   
   def update
     @snapshots.clone.each {|snapshot| snapshot.update}
+  end
+  
+private
+
+  def add_children_to_snapshots(directory)
+    directory.children.each do |x|
+      snapshot = Snapshot.new(x, self)
+      @snapshots.add(x.path, snapshot)
+      add_children_to_snapshots(x)
+    end
   end
 end

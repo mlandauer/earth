@@ -6,12 +6,9 @@ class FileMonitorQueue < Queue
   FileChanged = Struct.new(:path, :name, :stat)
   FileRemoved = Struct.new(:path, :name)
 
-  FileInfo = Struct.new(:path, :name, :modified, :size, :uid, :gid)
-  DirectoryInfo = Struct.new(:path, :modified)
-
   def file_added(directory, name, stat)
     push(FileAdded.new(directory.path, name, stat))
-    FileInfo.new(directory.path, name, stat.mtime, stat.size, stat.uid, stat.gid)
+    FileInfo.new(:directory_info => directory, :name => name, :stat => stat)
   end
   
   def file_removed(directory, name)
@@ -29,7 +26,7 @@ class FileMonitorQueue < Queue
       full_path = File.join(directory.path, name)
     end
     push(DirectoryAdded.new(full_path))
-    DirectoryInfo.new(full_path, nil)
+    DirectoryInfo.new(:path => full_path, :modified => nil)
   end
   
   def directory_removed(directory)

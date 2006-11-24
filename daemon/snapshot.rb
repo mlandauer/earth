@@ -14,7 +14,7 @@ class Snapshot < FileMonitor
     super(observer)
     @directory = directory
     @subdirectories = Hash.new
-
+    @directory.children.each {|x| @subdirectories[x.name] = x}
     @stats = Hash.new
     @directory_stat = nil
     @file_names = []
