@@ -41,19 +41,11 @@ else
     puts
     usage
   end
-  # TODO: Get current state from database
-  puts "WARNING: Should be using cached data but for the time being clearing out database"
-  FileInfo.delete_all
-  DirectoryInfo.delete_all
-  # Adding back the deleted directory
-  
-  directory = updater.directory_added(nil, directory.path)
-  server.directory_info = directory
-  server.save
+  puts "Collecting startup data from database..."
 end
 
-puts "Watching directory #{directory.path}"
 monitor = PosixFileMonitor.new(directory, updater)
+puts "Watching directory #{directory.path}"
 
 while true do
   puts "Updating..."
