@@ -78,7 +78,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   
   # Factory method
   def updater
-    FileDatabaseUpdater.new(Server.create(:name => "test_server", :directory_info => @directory))
+    FileDatabaseUpdater.new
   end
   
   # Database should be empty on startup
@@ -156,14 +156,6 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     assert_equal(1, directories.size)
     assert_equal(@dir, directories[0].path)
     assert_equal(@stat2.mtime, directories[0].modified)
-  end
-  
-  def test_machine_name
-    dir = @updater.directory_added(nil, @dir)
-    @updater.file_added(dir, 'file1', @stat1)
-    files = FileInfo.find_all
-    assert_equal(1, files.size)
-    assert_equal("test_server", files[0].directory_info.server.name)
   end
   
   def test_ownership

@@ -1,10 +1,9 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class DirectoryInfoTest < Test::Unit::TestCase
-  fixtures :directory_info
+  fixtures :directory_info, :servers
 
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+  def test_server
+    assert_equal(servers(:first), directory_info(:foo_bar_twiddle).server)
   end
 end

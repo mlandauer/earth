@@ -23,7 +23,7 @@ if ARGV.length > 1
 end
 
 server = Server.this_server
-updater = FileDatabaseUpdater.new(server)
+updater = FileDatabaseUpdater.new
 
 if ARGV.length == 1
   watch_directory = File.expand_path(ARGV[0])
@@ -45,6 +45,11 @@ else
   puts "WARNING: Should be using cached data but for the time being clearing out database"
   FileInfo.delete_all
   DirectoryInfo.delete_all
+  # Adding back the deleted directory
+  
+  directory = updater.directory_added(nil, directory.path)
+  server.directory_info = directory
+  server.save
 end
 
 puts "Watching directory #{directory.path}"
