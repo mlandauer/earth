@@ -1,6 +1,7 @@
 class DirectoryInfo < ActiveRecord::Base
   acts_as_tree
-  
+  has_many :file_info
+
   Stat = Struct.new(:mtime)
 
   # Convenience method for setting all the fields associated with stat in one hit

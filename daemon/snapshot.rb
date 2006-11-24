@@ -14,12 +14,19 @@ class Snapshot < FileMonitor
     super(observer)
     @directory = directory
     @subdirectories = Hash.new
-    @directory.children.each {|x| @subdirectories[x.name] = x}
+    @subdirectory_names = []
+    @directory.children.each do |x|
+      @subdirectories[x.name] = x
+      @subdirectory_names << x.name
+    end
     @files = Hash.new
+    @file_names = []
+    @directory.file_info.each do |x|
+      @files[x.name] = x
+      @file_names << x.name
+    end
     @stats = Hash.new
     @directory_stat = nil
-    @file_names = []
-    @subdirectory_names = []
   end
   
   def update_contents
