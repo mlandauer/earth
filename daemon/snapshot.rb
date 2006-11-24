@@ -13,20 +13,22 @@ class Snapshot < FileMonitor
   def initialize(directory, observer)
     super(observer)
     @directory = directory
+    @stats = Hash.new
     @subdirectories = Hash.new
     @subdirectory_names = []
     @directory.children.each do |x|
       @subdirectories[x.name] = x
       @subdirectory_names << x.name
+      @stats[x.name] = x.stat
     end
     @files = Hash.new
     @file_names = []
     @directory.file_info.each do |x|
       @files[x.name] = x
       @file_names << x.name
+      @stats[x.name] = x.stat
     end
     @directory_stat = directory.stat
-    @stats = Hash.new
   end
   
   def update
