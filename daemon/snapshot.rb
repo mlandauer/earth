@@ -57,22 +57,20 @@ class Snapshot < FileMonitor
     
     update_contents
 
-    (old_file_names & @file_names).each do |x|
-      if old_stats[x] != @stats[x]
-        file_changed(@files[x], @stats[x])
-      end
-    end
-    (@subdirectory_names - old_subdirectory_names).each do |x|
-      @subdirectories[x] = directory_added(@directory, x)
-    end
-    (@file_names - old_file_names).each do |x|
-      @files[x] = file_added(@directory, x, @stats[x])
-    end
-    (old_file_names - @file_names).each do |x|
+    changed_file_names = (old_file_names & @file_names).reject {|x| old_stats[x] == @stats[x]}
+    added_file_names = @file_names - old_file_names
+    removed_file_names = old_file_names - @file_names
+    added_directory_names = @subdirectory_names - old_subdirectory_names
+    removed_directory_names = old_subdirectory_names - @subdirectory_names
+
+    changed_file_names.each {|x| file_changed(@files[x], @stats[x])}
+    added_directory_names.each {|x| @subdirectories[x] = directory_added(@directory, x)}
+    added_file_names.each {|x| @files[x] = file_added(@directory, x, @stats[x])}
+    removed_file_names.each do |x|
       file_removed(@files[x])
       @files.delete(x)
     end
-    (old_subdirectory_names - @subdirectory_names).each do |x|
+    removed_directory_names.each do |x|
       directory_removed(@subdirectories[x])
       @subdirectories.delete(x)
     end
