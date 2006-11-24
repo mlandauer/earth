@@ -25,28 +25,26 @@ class Snapshot < FileMonitor
       @files[x.name] = x
       @file_names << x.name
     end
+    @directory_stat = directory.stat
     @stats = Hash.new
-    @directory_stat = nil
   end
   
   def update_contents
     if File.exist?(@directory.path)
       new_stat = File.lstat(@directory.path)
-      if new_stat != @directory_stat
-        @directory_stat = new_stat
-        # Update contents of directory if readable
-        if @directory_stat.readable?
-          entries = Dir.entries(@directory.path)
-          # Ignore all files and directories starting with '.'
-          entries.delete_if {|x| x[0,1] == "."}
-          
-          # Contains the stat information for both files and directories
-          @stats.clear
-          entries.each {|x| @stats[x] = File.lstat(File.join(@directory.path, x))}
+      # Update contents if something has changed and directory is readable
+      if new_stat.mtime != @directory_stat.mtime && new_stat.readable?
+        entries = Dir.entries(@directory.path)
+        # Ignore all files and directories starting with '.'
+        entries.delete_if {|x| x[0,1] == "."}
+        
+        # Contains the stat information for both files and directories
+        @stats.clear
+        entries.each {|x| @stats[x] = File.lstat(File.join(@directory.path, x))}
 
-          @file_names, @subdirectory_names = entries.partition{|x| @stats[x].file?}
-        end
+        @file_names, @subdirectory_names = entries.partition{|x| @stats[x].file?}
       end
+      @directory_stat = new_stat
     else
       # Directory has been removed
       @stats.clear
