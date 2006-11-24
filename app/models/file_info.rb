@@ -2,6 +2,11 @@ class FileInfo < ActiveRecord::Base
   belongs_to :directory_info
   
   Stat = Struct.new(:mtime, :size, :uid, :gid)
+  class Stat
+    def ==(s)
+      mtime == s.mtime && size == s.size && uid == s.uid && gid == s.gid
+    end
+  end
   
   # Convenience method for setting all the fields associated with stat in one hit
   def stat=(stat)
