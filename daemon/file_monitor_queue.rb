@@ -35,6 +35,6 @@ class FileMonitorQueue < Queue
   
   def directory_changed(directory, stat)
     push(DirectoryChanged.new(directory.path, stat))
-    directory.modified = stat.mtime
+    directory.stat = stat
   end
 end

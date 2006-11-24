@@ -15,10 +15,10 @@ module FileInfoUpdaterTest
     f = @updater.file_added(@updater.directory_added(nil, @dir), 'file1', @stat1)
     assert_equal(@dir, f.path)
     assert_equal('file1', f.name)
-    assert_equal(@stat1.mtime, f.modified)
-    assert_equal(@stat1.size, f.size)
-    assert_equal(@stat1.uid, f.uid)
-    assert_equal(@stat1.gid, f.gid)
+    assert_equal(@stat1.mtime, f.stat.mtime)
+    assert_equal(@stat1.size, f.stat.size)
+    assert_equal(@stat1.uid, f.stat.uid)
+    assert_equal(@stat1.gid, f.stat.gid)
   end
   
   def test_file_removed_signature
@@ -37,10 +37,10 @@ module FileInfoUpdaterTest
   def test_directory_added_signature
     d = @updater.directory_added(nil, @dir)
     assert_equal(@dir, d.path)
-    assert_equal(nil, d.modified)
+    assert_nil(d.modified)
     d2 = @updater.directory_added(d, 'dir1')
     assert_equal(@dir1, d2.path)
-    assert_equal(nil, d2.modified)
+    assert_nil(d2.modified)
   end
   
   def test_directory_removed_signature
@@ -50,7 +50,7 @@ module FileInfoUpdaterTest
   def test_directory_changed_signature
     dir = @updater.directory_added(nil, @dir)
     @updater.directory_changed(dir, @stat2)
-    assert_equal(@stat2.mtime, dir.modified)
+    assert_equal(@stat2.mtime, dir.stat.mtime)
   end
 end
 
@@ -96,12 +96,12 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     assert_equal(2, files.size)
     assert_equal(@dir, files[0].directory_info.path)
     assert_equal('file1', files[0].name)
-    assert_equal(@stat1.mtime, files[0].modified)
-    assert_equal(@stat1.size, files[0].size)
+    assert_equal(@stat1.mtime, files[0].stat.mtime)
+    assert_equal(@stat1.size, files[0].stat.size)
     assert_equal(@dir1, files[1].directory_info.path)
     assert_equal('file1', files[1].name)
-    assert_equal(@stat2.mtime, files[1].modified)
-    assert_equal(@stat2.size, files[1].size)
+    assert_equal(@stat2.mtime, files[1].stat.mtime)
+    assert_equal(@stat2.size, files[1].stat.size)
   end
   
   def test_add_directory
@@ -111,9 +111,9 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     assert_equal(2, directories.size)
     assert_equal(@dir, directories[0].path)
     # When a directory is created it should have an invalid modification time
-    assert_equal(nil, directories[0].modified)
+    assert_nil(directories[0].modified)
     assert_equal(@dir1, directories[1].path)
-    assert_equal(nil, directories[1].modified)
+    assert_nil(directories[1].modified)
   end
   
   def test_remove_directory
@@ -145,8 +145,8 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     assert_equal(1, files.size)
     assert_equal(@dir, files[0].directory_info.path)    
     assert_equal('file1', files[0].name)    
-    assert_equal(@stat2.mtime, files[0].modified)
-    assert_equal(@stat2.size, files[0].size)
+    assert_equal(@stat2.mtime, files[0].stat.mtime)
+    assert_equal(@stat2.size, files[0].stat.size)
   end
   
   def test_change_directory
@@ -155,7 +155,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     directories = DirectoryInfo.find_all
     assert_equal(1, directories.size)
     assert_equal(@dir, directories[0].path)
-    assert_equal(@stat2.mtime, directories[0].modified)
+    assert_equal(@stat2.mtime, directories[0].stat.mtime)
   end
   
   def test_ownership
@@ -163,7 +163,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     @updater.file_added(dir, 'file1', @stat1)
     files = FileInfo.find_all
     assert_equal(1, files.size)
-    assert_equal(@stat1.uid, files[0].uid)
-    assert_equal(@stat1.gid, files[0].gid)
+    assert_equal(@stat1.uid, files[0].stat.uid)
+    assert_equal(@stat1.gid, files[0].stat.gid)
   end
 end
