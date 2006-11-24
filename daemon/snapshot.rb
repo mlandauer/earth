@@ -29,31 +29,6 @@ class Snapshot < FileMonitor
     @stats = Hash.new
   end
   
-  def update_contents
-    if File.exist?(@directory.path)
-      new_stat = File.lstat(@directory.path)
-      # Update contents if something has changed and directory is readable
-      if new_stat.mtime != @directory_stat.mtime && new_stat.readable?
-        entries = Dir.entries(@directory.path)
-        # Ignore all files and directories starting with '.'
-        entries.delete_if {|x| x[0,1] == "."}
-        
-        # Contains the stat information for both files and directories
-        @stats.clear
-        entries.each {|x| @stats[x] = File.lstat(File.join(@directory.path, x))}
-
-        @file_names, @subdirectory_names = entries.partition{|x| @stats[x].file?}
-      end
-      @directory_stat = new_stat
-    else
-      # Directory has been removed
-      @stats.clear
-      @directory_stat = nil
-      @file_names.clear
-      @subdirectory_names.clear
-    end
-  end
-  
   def update
     old_file_names = @file_names.clone
     old_subdirectory_names = @subdirectory_names.clone
@@ -85,4 +60,37 @@ class Snapshot < FileMonitor
       directory_changed(@directory, @directory_stat)
     end
   end
+
+private
+
+  def actual_update_contents
+    entries = Dir.entries(@directory.path)
+    # Ignore all files and directories starting with '.'
+    entries.delete_if {|x| x[0,1] == "."}
+    
+    # Contains the stat information for both files and directories
+    @stats.clear
+    entries.each {|x| @stats[x] = File.lstat(File.join(@directory.path, x))}
+  
+    @file_names, @subdirectory_names = entries.partition{|x| @stats[x].file?}
+  end
+  
+  def update_contents
+    # TODO: remove exist? call as it is an extra filesystem access
+    if File.exist?(@directory.path)
+      new_stat = File.lstat(@directory.path)
+      # Update contents if something has changed and directory is readable
+      if new_stat.mtime != @directory_stat.mtime && new_stat.readable?
+        actual_update_contents
+      end
+      @directory_stat = new_stat
+    else
+      # Directory has been removed
+      @stats.clear
+      @directory_stat = nil
+      @file_names.clear
+      @subdirectory_names.clear
+    end
+  end
+  
 end
