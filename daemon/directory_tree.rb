@@ -4,7 +4,8 @@ class DirectoryTree
   def initialize(path, value, children = [])
     @path = path
     @value = value 
-    @children = children 
+    @children = children
+    @all_children = {path => self}
   end 
 
   def clone
@@ -14,7 +15,8 @@ class DirectoryTree
   def add(path, value)
     subtree = find(File.dirname(path))
     raise "Couldn't add path #{path}" if subtree.nil?
-    subtree.add_to_root(File.basename(path), value)
+    t = subtree.add_to_root(File.basename(path), value)
+    @all_children[t.path] = t
   end
   
   def delete(path)
@@ -27,6 +29,7 @@ class DirectoryTree
       raise "Can not delete directory with subdirectories"
     end
     subtree_parent.children.delete(subtree)
+    @all_children.delete(path)
   end
   
   # Add an item to the root of this tree
@@ -45,19 +48,8 @@ class DirectoryTree
     yield value 
   end
   
-  # Naive implementation of find (searches through
-  # every node)
+  # Not the dumbest of implementations of find... I guess.
   def find(path)
-    if @path == path
-      return self
-    else
-      @children.each do |child|
-        s = child.find(path)
-        if s
-          return s
-        end
-      end
-    end
-    return nil
+    @all_children[path]
   end
 end 
