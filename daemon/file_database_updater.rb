@@ -19,7 +19,11 @@ class FileDatabaseUpdater
   end
   
   def directory_added(directory, name)
-    #puts "Directory ADDED: #{name} in directory #{directory.path}"
+    #if directory.nil?
+    #  puts "Directory ADDED: #{name} at root"
+    #else
+    #  puts "Directory ADDED: #{name} in directory #{directory.path}"
+    #end
     if directory.nil?
       full_path = name
     else
@@ -34,6 +38,7 @@ class FileDatabaseUpdater
   end
   
   def directory_changed(directory, stat)
+    #puts "Directory CHANGED: #{directory.path}"
     directory.stat = stat
     directory.save
   end
