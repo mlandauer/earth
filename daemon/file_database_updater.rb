@@ -6,14 +6,13 @@ class FileDatabaseUpdater
     FileInfo.create(:directory_info => directory, :name => name, :stat => stat)
   end
   
-  def file_removed(directory, name)
-    #puts "File REMOVED: #{name} in directory #{directory.path}"
-    FileInfo.find_by_directory_info_and_name(directory, name).destroy
+  def file_removed(file)
+    #puts "File REMOVED: #{file.name} in directory #{file.directory_info.path}"
+    file.destroy
   end
   
-  def file_changed(directory, name, stat)
-    #puts "File CHANGED: #{name} in directory #{directory.path}"
-    file = FileInfo.find_by_directory_info_and_name(directory, name)
+  def file_changed(file, stat)
+    #puts "File CHANGED: #{file.name} in directory #{file.path}"
     file.stat = stat
     file.save
   end

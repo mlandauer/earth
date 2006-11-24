@@ -11,12 +11,12 @@ class FileMonitorQueue < Queue
     FileInfo.new(:directory_info => directory, :name => name, :stat => stat)
   end
   
-  def file_removed(directory, name)
-    push(FileRemoved.new(directory.path, name))
+  def file_removed(file)
+    push(FileRemoved.new(file.path, file.name))
   end
   
-  def file_changed(directory, name, stat)
-    push(FileChanged.new(directory.path, name, stat))
+  def file_changed(file, stat)
+    push(FileChanged.new(file.path, file.name, stat))
   end
   
   def directory_added(directory, name)

@@ -15,6 +15,7 @@ class Snapshot < FileMonitor
     @directory = directory
     @subdirectories = Hash.new
     @directory.children.each {|x| @subdirectories[x.name] = x}
+    @files = Hash.new
     @stats = Hash.new
     @directory_stat = nil
     @file_names = []
@@ -58,14 +59,19 @@ class Snapshot < FileMonitor
 
     (old_file_names & @file_names).each do |x|
       if old_stats[x] != @stats[x]
-        file_changed(@directory, x, @stats[x])
+        file_changed(@files[x], @stats[x])
       end
     end
     (@subdirectory_names - old_subdirectory_names).each do |x|
       @subdirectories[x] = directory_added(@directory, x)
     end
-    (@file_names - old_file_names).each {|x| file_added(@directory, x, @stats[x])}
-    (old_file_names - @file_names).each {|x| file_removed(@directory, x)}
+    (@file_names - old_file_names).each do |x|
+      @files[x] = file_added(@directory, x, @stats[x])
+    end
+    (old_file_names - @file_names).each do |x|
+      file_removed(@files[x])
+      @files.delete(x)
+    end
     (old_subdirectory_names - @subdirectory_names).each do |x|
       directory_removed(@subdirectories[x])
       @subdirectories.delete(x)

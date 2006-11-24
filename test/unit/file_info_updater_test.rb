@@ -23,14 +23,14 @@ module FileInfoUpdaterTest
   
   def test_file_removed_signature
     dir = @updater.directory_added(nil, @dir)
-    @updater.file_added(dir, 'file1', @stat1)
-    @updater.file_removed(dir, 'file1')
+    file = @updater.file_added(dir, 'file1', @stat1)
+    @updater.file_removed(file)
   end
   
   def test_file_changed_signature
     dir = @updater.directory_added(nil, @dir)
-    @updater.file_added(dir, 'file1', @stat1)
-    @updater.file_changed(dir, 'file1', @stat2)
+    file = @updater.file_added(dir, 'file1', @stat1)
+    @updater.file_changed(file, @stat2)
   end
 
   # When we call add_directory it should return a directory object
@@ -127,20 +127,20 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   
   def test_delete
     dir = @updater.directory_added(nil, @dir)
-    @updater.file_added(dir, 'file1', @stat1)
+    file1 = @updater.file_added(dir, 'file1', @stat1)
     dir1 = @updater.directory_added(dir, 'dir1')
     @updater.file_added(dir1, 'file1', @stat2)
-    @updater.file_removed(dir, 'file1')
+    @updater.file_removed(file1)
     files = FileInfo.find_all
     assert_equal(1, files.size)
-    assert_equal(File.join(@dir, 'dir1'), files[0].directory_info.path)    
+    assert_equal(@dir1, files[0].directory_info.path)    
     assert_equal('file1', files[0].name)    
   end
   
   def test_change
     dir = @updater.directory_added(nil, @dir)
-    @updater.file_added(dir, 'file1', @stat1)
-    @updater.file_changed(dir, 'file1', @stat2)
+    file = @updater.file_added(dir, 'file1', @stat1)
+    @updater.file_changed(file, @stat2)
     files = FileInfo.find_all
     assert_equal(1, files.size)
     assert_equal(@dir, files[0].directory_info.path)    
