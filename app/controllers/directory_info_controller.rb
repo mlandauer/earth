@@ -4,8 +4,6 @@ class DirectoryInfoController < ApplicationController
   end
   
   def size
-    if params[:id]
-      @directory = DirectoryInfo.find(params[:id])
-    end
+    @directory = DirectoryInfo.find(params[:id])
   end
 end
