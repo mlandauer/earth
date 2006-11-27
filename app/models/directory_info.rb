@@ -41,4 +41,17 @@ class DirectoryInfo < ActiveRecord::Base
   def server
     Server.find_by_directory_info_id(root.id)
   end
+  
+  # Size of the files contained directly in this directory
+  def size
+    a = FileInfo.sum(:size, :conditions => ['directory_info_id = ?', id])
+    # For some reason the above will return 0 when there aren't any files
+    return a ? a : 0
+  end
+  
+  def recursive_size
+    total = size
+    children.each {|x| total += x.recursive_size}
+    return total
+  end
 end

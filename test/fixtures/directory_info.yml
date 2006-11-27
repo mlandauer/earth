@@ -1,16 +1,19 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+# /foo -- /foo/bar -- /foo/bar/twiddle
+# /bar
 foo:
   id: 1
   parent_id: nil
   path: "/foo"
-bar:
-  id: 2
-  path: "/bar"
 foo_bar:
-  id: 3
+  id: 2
   parent_id: 1
   path: "/foo/bar"
 foo_bar_twiddle:
-  id: 4
-  parent_id: 3
+  id: 3
+  parent_id: 2
   path: "/foo/bar/twiddle"
+bar:
+  id: 4
+  parent_id: nil
+  path: "/bar"
