@@ -1,21 +1,21 @@
 <h2>Contents of <%= @directory.server.name %>:<%= @directory.path %></h2>
 
+<% units = human_units_of @max_size %>
 <table>
   <tr>
   <th>Path</th>
-  <th>Size</th>
+  <th>Size (in <%= units %>)</th>
   </tr>
 
   <tr>
   <td>Files in this directory</td>
-  <td><%=h human_size @directory.size %></td>
+  <td><%=h human_size_in units, @directory.size %></td>
   </tr>
 
 <% for directory, size in @children_and_sizes %>
   <tr>
   <td><%= link_to_if directory.has_children?, directory.name, :action => :size, :id => directory %></td>
-  <td><%=h human_size size %></td>
+  <td><%=h human_size_in units, size %></td>
   </tr>
 <% end %>
 </table>
-
