@@ -1,4 +1,4 @@
-<h2>Contents of <%= @directory.path %></h2>
+<h2>Contents of <%= @directory.server.name %>:<%= @directory.path %></h2>
 
 <table>
   <tr>
@@ -11,10 +11,10 @@
   <td><%=h human_size @directory.size %></td>
   </tr>
 
-<% for directory in @directory.children %>
+<% for directory, size in @children_and_sizes %>
   <tr>
   <td><%= link_to_if directory.has_children?, directory.name, :action => :size, :id => directory %></td>
-  <td><%=h human_size directory.recursive_size %></td>
+  <td><%=h human_size size %></td>
   </tr>
 <% end %>
 </table>
