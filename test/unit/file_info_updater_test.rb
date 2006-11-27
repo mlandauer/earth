@@ -13,7 +13,7 @@ module FileInfoUpdaterTest
 
   def test_file_added_signature
     f = @updater.file_added(@updater.directory_added(nil, @dir), 'file1', @stat1)
-    assert_equal(@dir, f.path)
+    assert_equal(@dir, f.directory.path)
     assert_equal('file1', f.name)
     assert_equal(@stat1.mtime, f.stat.mtime)
     assert_equal(@stat1.size, f.stat.size)

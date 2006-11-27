@@ -12,11 +12,11 @@ class FileMonitorQueue < Queue
   end
   
   def file_removed(file)
-    push(FileRemoved.new(file.path, file.name))
+    push(FileRemoved.new(file.directory.path, file.name))
   end
   
   def file_changed(file, stat)
-    push(FileChanged.new(file.path, file.name, stat))
+    push(FileChanged.new(file.directory.path, file.name, stat))
   end
   
   def directory_added(directory, name)
