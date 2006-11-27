@@ -1,0 +1,14 @@
+<table>
+  <tr>
+  <th>Path</th>
+  <th>Size</th>
+  </tr>
+  
+<% for directory in @directories %>
+  <tr>
+  <td><%= link_to directory.path, :action => :size, :id => directory %></td>
+  <td><%=h human_size directory.recursive_size %></td>
+  </tr>
+<% end %>
+</table>
+
