@@ -1,4 +1,4 @@
-<h2>Contents of <%= @this_directory ? @this_directory.path : "all servers" %></h2>
+<h2>Contents of <%= @directory ? @directory.path : "all servers" %></h2>
 
 <table>
   <tr>
@@ -6,14 +6,20 @@
   <th>Size</th>
   </tr>
 
-<% if @this_directory %>
+<% if @directory %>
   <tr>
   <td>Files in this directory</td>
-  <td><%=h human_size @this_directory.size %></td>
+  <td><%=h human_size @directory.size %></td>
   </tr>
 <% end %>
 
-<% for directory in @directories %>
+<% if @directory %>
+<%   directories = @directory.children %>
+<% else %>
+<%   directories = DirectoryInfo.find_all_by_parent_id(nil) %>
+<% end %>
+
+<% for directory in directories %>
   <tr>
   <td><%= link_to_if directory.has_children?, directory.path, :action => :size, :id => directory %></td>
   <td><%=h human_size directory.recursive_size %></td>
