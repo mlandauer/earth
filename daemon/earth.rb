@@ -30,13 +30,13 @@ if ARGV.length == 1
   puts "WARNING: Watching new directory. So, clearing out database"
   # TODO: Need to clear out database just for this server
   FileInfo.delete_all
-  DirectoryInfo.delete_all
+  Directory.delete_all
     
   directory = updater.directory_added(nil, watch_directory)
-  server.directory_info = directory
+  server.directory = directory
   server.save
 else
-  directory = server.directory_info
+  directory = server.directory
   if directory.nil?
     puts "Watch directory is not set for this server. Use optional <directory path> argument."
     puts

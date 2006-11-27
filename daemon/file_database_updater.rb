@@ -3,11 +3,11 @@ require 'socket'
 class FileDatabaseUpdater
   def file_added(directory, name, stat)
     #puts "File ADDED: #{name} in directory #{directory.path}"
-    FileInfo.create(:directory_info => directory, :name => name, :stat => stat)
+    FileInfo.create(:directory => directory, :name => name, :stat => stat)
   end
   
   def file_removed(file)
-    #puts "File REMOVED: #{file.name} in directory #{file.directory_info.path}"
+    #puts "File REMOVED: #{file.name} in directory #{file.directory.path}"
     file.destroy
   end
   
@@ -28,7 +28,7 @@ class FileDatabaseUpdater
     else
       full_path = File.join(directory.path, name)
     end
-    DirectoryInfo.create(:path => full_path, :parent => directory)
+    Directory.create(:path => full_path, :parent => directory)
   end
   
   def directory_removed(directory)

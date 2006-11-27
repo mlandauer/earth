@@ -10,8 +10,8 @@
 <% for server in @servers %>
   <tr>
     <td><%= server.name %></td>
-    <td><%= link_to server.directory_info.path, :controller => 'directory_info', :action => :size, :id => server.directory_info %></td>
-    <td><%= human_size server.directory_info.recursive_size %></td>
+    <td><%= link_to server.directory.path, :controller => 'directories', :action => :size, :id => server.directory %></td>
+    <td><%= human_size server.directory.recursive_size %></td>
   </tr>
 <% end %>
 </table>

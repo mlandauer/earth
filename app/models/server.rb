@@ -1,7 +1,7 @@
 require 'socket'
 
 class Server < ActiveRecord::Base
-  belongs_to :directory_info
+  belongs_to :directory
 
   def Server.this_server
     Server.find_or_create_by_name(this_hostname)

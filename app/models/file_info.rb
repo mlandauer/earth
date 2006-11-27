@@ -1,5 +1,5 @@
 class FileInfo < ActiveRecord::Base
-  belongs_to :directory_info
+  belongs_to :directory
   
   Stat = Struct.new(:mtime, :size, :uid, :gid)
   class Stat
@@ -21,11 +21,11 @@ class FileInfo < ActiveRecord::Base
     Stat.new(modified, size, uid, gid)
   end
   
-  def FileInfo.find_by_directory_info_and_name(directory, name)
-    FileInfo.find(:first, :conditions => ['directory_info_id = ? AND name = ?', directory.id, name])
+  def FileInfo.find_by_directory_and_name(directory, name)
+    FileInfo.find(:first, :conditions => ['directory_id = ? AND name = ?', directory.id, name])
   end
   
   def path
-    directory_info.path
+    directory.path
   end
 end

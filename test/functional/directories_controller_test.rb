@@ -1,12 +1,12 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require 'directory_info_controller'
+require 'directories_controller'
 
 # Re-raise errors caught by the controller.
-class DirectoryInfoController; def rescue_action(e) raise e end; end
+class DirectoriesController; def rescue_action(e) raise e end; end
 
-class DirectoryInfoControllerTest < Test::Unit::TestCase
+class DirectoriesControllerTest < Test::Unit::TestCase
   def setup
-    @controller = DirectoryInfoController.new
+    @controller = DirectoriesController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end

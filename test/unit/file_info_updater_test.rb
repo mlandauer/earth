@@ -73,7 +73,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     @directory = @updater.directory_added(nil, @dir)
     # Clears the contents of the database
     FileInfo.delete_all
-    DirectoryInfo.delete_all
+    Directory.delete_all
   end
   
   # Factory method
@@ -84,7 +84,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   # Database should be empty on startup
   def test_empty
     assert_equal(0, FileInfo.count)
-    assert_equal(0, DirectoryInfo.count)
+    assert_equal(0, Directory.count)
   end
   
   def test_simple
@@ -94,11 +94,11 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     @updater.file_added(dir1, 'file1', @stat2)
     files = FileInfo.find_all
     assert_equal(2, files.size)
-    assert_equal(@dir, files[0].directory_info.path)
+    assert_equal(@dir, files[0].directory.path)
     assert_equal('file1', files[0].name)
     assert_equal(@stat1.mtime, files[0].stat.mtime)
     assert_equal(@stat1.size, files[0].stat.size)
-    assert_equal(@dir1, files[1].directory_info.path)
+    assert_equal(@dir1, files[1].directory.path)
     assert_equal('file1', files[1].name)
     assert_equal(@stat2.mtime, files[1].stat.mtime)
     assert_equal(@stat2.size, files[1].stat.size)
@@ -107,7 +107,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   def test_add_directory
     dir = @updater.directory_added(nil, @dir)
     @updater.directory_added(dir, 'dir1')
-    directories = DirectoryInfo.find_all
+    directories = Directory.find_all
     assert_equal(2, directories.size)
     assert_equal(@dir, directories[0].path)
     # When a directory is created it should have an invalid modification time
@@ -120,7 +120,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     dir = @updater.directory_added(nil, @dir)
     dir1 = @updater.directory_added(dir, 'dir1')
     @updater.directory_removed(dir1)
-    directories = DirectoryInfo.find_all
+    directories = Directory.find_all
     assert_equal(1, directories.size)
     assert_equal(@dir, directories[0].path)
   end
@@ -133,7 +133,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     @updater.file_removed(file1)
     files = FileInfo.find_all
     assert_equal(1, files.size)
-    assert_equal(@dir1, files[0].directory_info.path)    
+    assert_equal(@dir1, files[0].directory.path)    
     assert_equal('file1', files[0].name)    
   end
   
@@ -143,7 +143,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     @updater.file_changed(file, @stat2)
     files = FileInfo.find_all
     assert_equal(1, files.size)
-    assert_equal(@dir, files[0].directory_info.path)    
+    assert_equal(@dir, files[0].directory.path)    
     assert_equal('file1', files[0].name)    
     assert_equal(@stat2.mtime, files[0].stat.mtime)
     assert_equal(@stat2.size, files[0].stat.size)
@@ -152,7 +152,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   def test_change_directory
     dir = @updater.directory_added(nil, @dir)
     @updater.directory_changed(dir, @stat2)
-    directories = DirectoryInfo.find_all
+    directories = Directory.find_all
     assert_equal(1, directories.size)
     assert_equal(@dir, directories[0].path)
     assert_equal(@stat2.mtime, directories[0].stat.mtime)

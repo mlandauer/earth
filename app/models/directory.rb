@@ -12,7 +12,7 @@ class File
   end
 end
 
-class DirectoryInfo < ActiveRecord::Base
+class Directory < ActiveRecord::Base
   acts_as_tree
   has_many :file_info
 
@@ -39,12 +39,12 @@ class DirectoryInfo < ActiveRecord::Base
   end
   
   def server
-    Server.find_by_directory_info_id(root.id)
+    Server.find_by_directory_id(root.id)
   end
   
   # Size of the files contained directly in this directory
   def size
-    a = FileInfo.sum(:size, :conditions => ['directory_info_id = ?', id])
+    a = FileInfo.sum(:size, :conditions => ['directory_id = ?', id])
     # For some reason the above will return nil when there aren't any files
     return a ? a : 0
   end

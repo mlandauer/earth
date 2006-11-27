@@ -11,8 +11,8 @@
   
 <% for file_info in @file_info %>
   <tr>
-  <td><%=h file_info.directory_info.server.name %></td>
-  <td><%=h file_info.directory_info.path %></td>
+  <td><%=h file_info.directory.server.name %></td>
+  <td><%=h file_info.directory.path %></td>
   <% for column in FileInfo.content_columns %>
     <td><%=h file_info.send(column.name) %></td>
   <% end %>

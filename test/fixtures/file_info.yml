@@ -3,23 +3,23 @@
 # In directory /foo
 file1:
   id: 1
-  directory_info_id: 1
+  directory_id: 1
   name: a
   size: 1
 file2:
   id: 2
-  directory_info_id: 1
+  directory_id: 1
   name: b
   size: 2
 
 # In directory /foo/bar
 file3:
   id: 3
-  directory_info_id: 2
+  directory_id: 2
   name: a
   size: 3
 file4:
   id: 4
-  directory_info_id: 2
+  directory_id: 2
   name: b
   size: 4

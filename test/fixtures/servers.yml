@@ -2,8 +2,8 @@
 first:
   id: 1
   name: <%= Server.this_hostname %>
-  directory_info_id: 1
+  directory_id: 1
 another:
   id: 2
   name: "foo"
-  directory_info_id: 2
+  directory_id: 2
