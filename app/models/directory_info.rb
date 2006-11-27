@@ -50,8 +50,6 @@ class DirectoryInfo < ActiveRecord::Base
   end
   
   def recursive_size
-    total = size
-    children.each {|x| total += x.recursive_size}
-    return total
+    size + children.map {|x| x.recursive_size}.inject(0) {|total, x| total + x}
   end
 end
