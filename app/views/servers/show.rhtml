@@ -1,0 +1,8 @@
+<% for column in Server.content_columns %>
+<p>
+  <b><%= column.human_name %>:</b> <%=h @server.send(column.name) %>
+</p>
+<% end %>
+
+<%= link_to 'Edit', :action => 'edit', :id => @server %> |
+<%= link_to 'Back', :action => 'list' %>

@@ -1,2 +1,0 @@
-class ServerController < ApplicationController
-end
