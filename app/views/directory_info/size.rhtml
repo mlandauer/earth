@@ -1,3 +1,5 @@
+<h2>Contents of <%= @this_directory ? @this_directory.path : "all servers" %></h2>
+
 <table>
   <tr>
   <th>Path</th>
@@ -6,7 +8,7 @@
   
 <% for directory in @directories %>
   <tr>
-  <td><%= link_to directory.path, :action => :size, :id => directory %></td>
+  <td><%= link_to_if directory.has_children?, directory.path, :action => :size, :id => directory %></td>
   <td><%=h human_size directory.recursive_size %></td>
   </tr>
 <% end %>
