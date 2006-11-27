@@ -49,7 +49,12 @@ class DirectoryInfo < ActiveRecord::Base
     return a ? a : 0
   end
   
+  # Returns an array of this directory and all children and their children and...
+  def self_and_descendants
+    children.inject([self]) {|d, x| d.concat(x.self_and_descendants)}
+  end
+  
   def recursive_size
-    size + children.map {|x| x.recursive_size}.inject(0) {|total, x| total + x}
+    self_and_descendants.map{|x| x.size}.inject(0) {|total, x| total + x}
   end
 end
