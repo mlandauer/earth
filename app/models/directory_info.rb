@@ -45,7 +45,7 @@ class DirectoryInfo < ActiveRecord::Base
   # Size of the files contained directly in this directory
   def size
     a = FileInfo.sum(:size, :conditions => ['directory_info_id = ?', id])
-    # For some reason the above will return 0 when there aren't any files
+    # For some reason the above will return nil when there aren't any files
     return a ? a : 0
   end
   
