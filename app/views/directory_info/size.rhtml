@@ -5,7 +5,14 @@
   <th>Path</th>
   <th>Size</th>
   </tr>
-  
+
+<% if @this_directory %>
+  <tr>
+  <td>Files in this directory</td>
+  <td><%=h human_size @this_directory.size %></td>
+  </tr>
+<% end %>
+
 <% for directory in @directories %>
   <tr>
   <td><%= link_to_if directory.has_children?, directory.path, :action => :size, :id => directory %></td>
