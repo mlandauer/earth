@@ -4,18 +4,22 @@
   <tr>
   <th>Server</th>
   <th>Path</th>
-  <% for column in FileInfo.content_columns %>
-    <th><%= column.human_name %></th>
-  <% end %>
+  <th>Name</th>
+  <th>Modified</th>
+  <th>Size</th>
+  <th>Uid</th>
+  <th>Gid</th>
   </tr>
   
 <% for file_info in @file_info %>
   <tr>
   <td><%=h file_info.directory.server.name %></td>
   <td><%=h file_info.directory.path %></td>
-  <% for column in FileInfo.content_columns %>
-    <td><%=h file_info.send(column.name) %></td>
-  <% end %>
+  <td><%=h file_info.name %>
+  <td><%=h file_info.modified %>
+  <td><%=h file_info.size %>
+  <td><%=h file_info.uid %>
+  <td><%=h file_info.gid %>
   </tr>
 <% end %>
 </table>
