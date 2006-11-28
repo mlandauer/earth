@@ -35,4 +35,13 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal(directories(:foo).size + directories(:foo_bar).size, directories(:foo).recursive_size)
     assert_equal(directories(:foo_bar).size, directories(:foo_bar).recursive_size)
   end
+  
+  def test_self_and_descendants
+    assert_equal([directories(:foo), directories(:foo_bar), directories(:foo_bar_twiddle)],
+      directories(:foo).self_and_descendants)
+    assert_equal([directories(:foo_bar), directories(:foo_bar_twiddle)],
+      directories(:foo_bar).self_and_descendants)
+    assert_equal([directories(:foo_bar_twiddle)],
+      directories(:foo_bar_twiddle).self_and_descendants)
+  end
 end
