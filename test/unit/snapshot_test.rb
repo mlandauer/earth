@@ -9,9 +9,13 @@ class SnapshotTest < Test::Unit::TestCase
     FileUtils.touch @file2
     FileUtils.mkdir @dir2
     
-    @queue = FileMonitorQueue.new
-    @monitor = Snapshot.new(@queue.directory_added(nil, @dir), @queue)
-    @queue.clear
+    # Clears the contents of the database
+    FileInfo.delete_all
+    Directory.delete_all
+
+    @queue = FileDatabaseUpdater.new
+    directory = @queue.directory_added(nil, @dir)
+    @monitor = Snapshot.new(directory, @queue)
   end
 
   def teardown
@@ -20,20 +24,31 @@ class SnapshotTest < Test::Unit::TestCase
   
   def test_simple
     @monitor.update
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir2), @queue.pop)
-    assert_equal(FileMonitorQueue::FileAdded.new(@dir, 'file1', File.lstat(@file2)), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
-    assert(@queue.empty?)
+
+    directories = Directory.find_all
+    assert_equal(2, directories.size)
+    assert_equal(@dir, directories[0].path)
+    assert_equal(File.lstat(@dir), directories[0].stat)
+    assert_equal(@dir2, directories[1].path)
+    assert_nil(directories[1].stat)
+
+    files = FileInfo.find_all
+    assert_equal(1, files.size)
+    assert_equal(@dir, files[0].directory.path)
+    assert_equal('file1', files[0].name)
   end
   
   def test_removed_watched_directory
     @monitor.update
     FileUtils.rm_rf @dir
-    @queue.clear
     @monitor.update
     
-    assert_equal(FileMonitorQueue::FileRemoved.new(@dir, 'file1'), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir2), @queue.pop)
-    assert(@queue.empty?)
+    directories = Directory.find_all
+    assert_equal(1, directories.size)
+    assert_equal(@dir, directories[0].path)
+    # Not checking the stat of the top directory as it has been deleted
+    
+    files = FileInfo.find_all
+    assert_equal(0, files.size)
   end
 end
