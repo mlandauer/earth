@@ -1,6 +1,4 @@
-# By mixing in these tests, we can run these test for all classes
-# derived from FileMonitor
-module FileMonitorTest
+class PosixFileMonitorTest < Test::Unit::TestCase
   def setup
     # Put some test files in the directory test_data
     @relative_dir = 'test_data'
@@ -26,7 +24,7 @@ module FileMonitorTest
     Directory.delete_all
 
     @queue = FileDatabaseUpdater.new
-    @monitor = file_monitor(@queue.directory_added(nil, @dir), @queue)
+    @monitor = PosixFileMonitor.new(@queue.directory_added(nil, @dir), @queue)
   end
   
   def teardown
@@ -174,14 +172,5 @@ module FileMonitorTest
 
     # Add permissions back
     File.chmod(mode, @dir1)
-  end
-end
-
-class PosixFileMonitorTest < Test::Unit::TestCase
-  include FileMonitorTest
-
-  # Factory method
-  def file_monitor(directory, queue)
-    PosixFileMonitor.new(directory, queue)
   end
 end

@@ -1,16 +1,21 @@
-module FileInfoUpdaterTest
+class FileDatabaseUpdaterTest < Test::Unit::TestCase
   # Duck typing comes in handy here. Making fake File::Stat object
   Stat = Struct.new(:mtime, :size, :uid, :gid)
 
   def setup
     @dir = File.expand_path('test_data')
     @dir1 = File.join(@dir, 'dir1')
-    @updater = updater
+    @updater = FileDatabaseUpdater.new
     # 1st of January 2000
     @stat1 = Stat.new(Time.local(2000, 1, 1), 24, 100, 200)
     @stat2 = Stat.new(Time.local(2001, 1, 1), 53, 100, 200)
-  end
 
+    @directory = @updater.directory_added(nil, @dir)
+    # Clears the contents of the database
+    FileInfo.delete_all
+    Directory.delete_all
+  end
+  
   def test_file_added_signature
     f = @updater.file_added(@updater.directory_added(nil, @dir), 'file1', @stat1)
     assert_equal(@dir, f.directory.path)
@@ -52,26 +57,7 @@ module FileInfoUpdaterTest
     @updater.directory_changed(dir, @stat2)
     assert_equal(@stat2.mtime, dir.stat.mtime)
   end
-end
 
-class FileDatabaseUpdaterTest < Test::Unit::TestCase
-  include FileInfoUpdaterTest
-
-  alias original_setup setup 
-  
-  def setup
-    original_setup
-    @directory = @updater.directory_added(nil, @dir)
-    # Clears the contents of the database
-    FileInfo.delete_all
-    Directory.delete_all
-  end
-  
-  # Factory method
-  def updater
-    FileDatabaseUpdater.new
-  end
-  
   # Database should be empty on startup
   def test_empty
     assert_equal(0, FileInfo.count)
