@@ -62,12 +62,7 @@ class Directory < ActiveRecord::Base
     return a ? a : 0
   end
   
-  # Returns an array of this directory and all children and their children and...
-  def self_and_descendants
-    full_set
-  end
-  
   def recursive_size
-    self_and_descendants.map{|x| x.size}.inject(0) {|total, x| total + x}
+    full_set.map{|x| x.size}.inject(0) {|total, x| total + x}
   end
 end
