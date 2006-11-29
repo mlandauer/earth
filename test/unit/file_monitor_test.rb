@@ -21,7 +21,11 @@ module FileMonitorTest
     File.utime(past, past, @file1)
     File.utime(past, past, @file2)
     
-    @queue = FileMonitorQueue.new
+    # Clears the contents of the database
+    FileInfo.delete_all
+    Directory.delete_all
+
+    @queue = FileDatabaseUpdater.new
     @monitor = file_monitor(@queue.directory_added(nil, @dir), @queue)
   end
   
@@ -32,42 +36,45 @@ module FileMonitorTest
   end
   
   def test_ignore_dot_files
-    @monitor.update
     FileUtils.touch 'test_data/.an_invisible_file'
     FileUtils.touch 'test_data/.another'
-    @queue.clear
-    @monitor.update
-    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
-    assert(@queue.empty?)
+    @monitor.update    
+    assert_nil(FileInfo.find_by_name('.an_invisible_file'))
+    assert_nil(FileInfo.find_by_name('.another'))
   end
   
   def test_added
     @monitor.update
-    # The directory added message needs to appear before the file added message
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1), @queue.pop)
-    # Files added deep inside the directory structure should occur before those higher up
-    assert_equal(FileMonitorQueue::FileAdded.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir1, File.lstat(@dir1)), @queue.pop)
-    assert_equal(FileMonitorQueue::FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
-    # Updates the modified time of the directory at the end
-    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
-    assert(@queue.empty?)
+    directories = Directory.find_all
+    assert_equal(2, directories.size)
+    assert_equal(@dir, directories[0].path)
+    assert_equal(File.lstat(@dir), directories[0].stat)
+    assert_equal(@dir1, directories[1].path)
+    assert_equal(File.lstat(@dir1), directories[1].stat)
+    
+    files = FileInfo.find_all
+    assert_equal(2, files.size)
+    assert_equal(@dir1, files[0].directory.path)
+    assert_equal('file1', files[0].name)
+    assert_equal(File.lstat(@file2), files[0].stat)
+    assert_equal(@dir, files[1].directory.path)
+    assert_equal('file1', files[1].name)
+    assert_equal(File.lstat(@file1), files[1].stat)
   end
 
   def test_removed
     @monitor.update
     FileUtils.rm_rf 'test_data/dir1'
     FileUtils.rm 'test_data/file1'
-    @queue.clear
     @monitor.update
     
-    # Starts with deepest directory
-    assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
-    assert_equal(FileMonitorQueue::FileRemoved.new(@dir, 'file1'), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir1), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
-    assert(@queue.empty?)
+    directories = Directory.find_all
+    assert_equal(1, directories.size)
+    assert_equal(@dir, directories[0].path)
+    assert_equal(File.lstat(@dir), directories[0].stat)
+
+    files = FileInfo.find_all
+    assert_equal(0, files.size)
   end
 
   def test_removed2
@@ -77,16 +84,18 @@ module FileMonitorTest
     FileUtils.touch File.join(dir2, 'file')
     @monitor.update
     FileUtils.rm_rf @dir1
-    @queue.clear
     @monitor.update
     
-    # Starts with the deepest directory
-    assert_equal(FileMonitorQueue::FileRemoved.new(dir2, 'file'), @queue.pop)
-    assert_equal(FileMonitorQueue::FileRemoved.new(@dir1, 'file1'), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryRemoved.new(dir2), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryRemoved.new(@dir1), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
-    assert(@queue.empty?)
+    directories = Directory.find_all
+    assert_equal(1, directories.size)
+    assert_equal(@dir, directories[0].path)
+    assert_equal(File.lstat(@dir), directories[0].stat)
+
+    files = FileInfo.find_all
+    assert_equal(1, files.size)
+    assert_equal(@dir, files[0].directory.path)
+    assert_equal('file1', files[0].name)
+    assert_equal(File.lstat(@file1), files[0].stat)
   end
   
   def test_changed
@@ -96,24 +105,51 @@ module FileMonitorTest
     # This is only strictly true for the PosixFileMonitor
     file3 = File.join(@dir1, 'file2')
     FileUtils.touch file3
-    @queue.clear
     @monitor.update
-    # Currently "changed" messages appear before "added" messages
-    assert_equal(FileMonitorQueue::FileChanged.new(@dir1, 'file1', File.lstat(@file2)), @queue.pop)
-    assert_equal(FileMonitorQueue::FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir1, File.lstat(@dir1)), @queue.pop)
-    assert(@queue.empty?)
+    
+    directories = Directory.find_all
+    assert_equal(2, directories.size)
+    assert_equal(@dir, directories[0].path)
+    assert_equal(File.lstat(@dir), directories[0].stat)
+    assert_equal(@dir1, directories[1].path)
+    assert_equal(File.lstat(@dir1), directories[1].stat)
+
+    files = FileInfo.find_all
+    assert_equal(3, files.size)
+    assert_equal(@dir1, files[0].directory.path)
+    assert_equal('file1', files[0].name)
+    assert_equal(File.lstat(@file2), files[0].stat)
+    assert_equal(@dir, files[1].directory.path)
+    assert_equal('file1', files[1].name)
+    assert_equal(File.lstat(@file1), files[1].stat)
+    assert_equal(@dir1, files[2].directory.path)
+    assert_equal('file2', files[2].name)
+    assert_equal(File.lstat(file3), files[2].stat)
   end
   
   def test_added_in_subdirectory
     @monitor.update
     file3 = File.join(@dir1, 'file2')
     FileUtils.touch file3
-    @queue.clear
     @monitor.update
-    assert_equal(FileMonitorQueue::FileAdded.new(@dir1, 'file2', File.lstat(file3)), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir1, File.lstat(@dir1)), @queue.pop)
-    assert(@queue.empty?)
+    
+    directories = Directory.find_all
+    assert_equal(2, directories.size)
+    assert_equal(@dir, directories[0].path)
+    assert_equal(File.lstat(@dir), directories[0].stat)
+    assert_equal(@dir1, directories[1].path)
+    assert_equal(File.lstat(@dir1), directories[1].stat)
+    files = FileInfo.find_all
+    assert_equal(3, files.size)
+    assert_equal(@dir1, files[0].directory.path)
+    assert_equal('file1', files[0].name)
+    assert_equal(File.lstat(@file2), files[0].stat)
+    assert_equal(@dir, files[1].directory.path)
+    assert_equal('file1', files[1].name)
+    assert_equal(File.lstat(@file1), files[1].stat)
+    assert_equal(@dir1, files[2].directory.path)
+    assert_equal('file2', files[2].name)
+    assert_equal(File.lstat(file3), files[2].stat)
   end
 
   # If the daemon doesn't have permission to list the directory
@@ -121,14 +157,21 @@ module FileMonitorTest
   def test_permissions_directory
     # Remove all permission from directory
     mode = File.stat(@dir1).mode
-    @queue.clear
     File.chmod(0000, @dir1)
     @monitor.update
-    assert_equal(FileMonitorQueue::DirectoryAdded.new(@dir1), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir1, File.lstat(@dir1)), @queue.pop)
-    assert_equal(FileMonitorQueue::FileAdded.new(@dir, 'file1', File.lstat(@file1)), @queue.pop)
-    assert_equal(FileMonitorQueue::DirectoryChanged.new(@dir, File.lstat(@dir)), @queue.pop)
-    assert(@queue.empty?)
+    
+    directories = Directory.find_all
+    assert_equal(2, directories.size)
+    assert_equal(@dir, directories[0].path)
+    assert_equal(File.lstat(@dir), directories[0].stat)
+    assert_equal(@dir1, directories[1].path)
+    assert_equal(File.lstat(@dir1), directories[1].stat)
+    files = FileInfo.find_all
+    assert_equal(1, files.size)
+    assert_equal(@dir, files[0].directory.path)
+    assert_equal('file1', files[0].name)
+    assert_equal(File.lstat(@file1), files[0].stat)
+
     # Add permissions back
     File.chmod(mode, @dir1)
   end
