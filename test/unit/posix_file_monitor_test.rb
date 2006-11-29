@@ -46,6 +46,16 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     assert_equal(File.lstat(path), file.stat)
   end
 
+  def assert_directories(paths, directories)
+    assert_equal(paths.size, directories.size)
+    paths.each_index{|i| assert_directory(paths[i], directories[i])}
+  end
+  
+  def assert_files(paths, files)
+    assert_equal(paths.size, files.size)
+    paths.each_index{|i| assert_file(paths[i], files[i])}
+  end
+  
   def test_ignore_dot_files
     FileUtils.touch 'test_data/.an_invisible_file'
     FileUtils.touch 'test_data/.another'
@@ -56,15 +66,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
   
   def test_added
     @monitor.update
-    directories = Directory.find_all
-    assert_equal(2, directories.size)
-    assert_directory(@dir, directories[0])
-    assert_directory(@dir1, directories[1])
-    
-    files = FileInfo.find_all
-    assert_equal(2, files.size)
-    assert_file(@file2, files[0])
-    assert_file(@file1, files[1])
+    assert_directories([@dir, @dir1], Directory.find_all)
+    assert_files([@file2, @file1], FileInfo.find_all)
   end
 
   def test_removed
@@ -73,12 +76,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     FileUtils.rm 'test_data/file1'
     @monitor.update
     
-    directories = Directory.find_all
-    assert_equal(1, directories.size)
-    assert_directory(@dir, directories[0])
-
-    files = FileInfo.find_all
-    assert_equal(0, files.size)
+    assert_directories([@dir], Directory.find_all)
+    assert_files([], FileInfo.find_all)
   end
 
   def test_removed2
@@ -90,13 +89,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     FileUtils.rm_rf @dir1
     @monitor.update
     
-    directories = Directory.find_all
-    assert_equal(1, directories.size)
-    assert_directory(@dir, directories[0])
-
-    files = FileInfo.find_all
-    assert_equal(1, files.size)
-    assert_file(@file1, files[0])
+    assert_directories([@dir], Directory.find_all)
+    assert_files([@file1], FileInfo.find_all)
   end
   
   def test_changed
@@ -108,16 +102,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     FileUtils.touch file3
     @monitor.update
     
-    directories = Directory.find_all
-    assert_equal(2, directories.size)
-    assert_directory(@dir, directories[0])
-    assert_directory(@dir1, directories[1])
-
-    files = FileInfo.find_all
-    assert_equal(3, files.size)
-    assert_file(@file2, files[0])
-    assert_file(@file1, files[1])
-    assert_file(file3, files[2])
+    assert_directories([@dir, @dir1], Directory.find_all)
+    assert_files([@file2, @file1, file3], FileInfo.find_all)
   end
   
   def test_added_in_subdirectory
@@ -126,15 +112,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     FileUtils.touch file3
     @monitor.update
     
-    directories = Directory.find_all
-    assert_equal(2, directories.size)
-    assert_directory(@dir, directories[0])
-    assert_directory(@dir1, directories[1])
-    files = FileInfo.find_all
-    assert_equal(3, files.size)
-    assert_file(@file2, files[0])
-    assert_file(@file1, files[1])
-    assert_file(file3, files[2])
+    assert_directories([@dir, @dir1], Directory.find_all)
+    assert_files([@file2, @file1, file3], FileInfo.find_all)
   end
 
   # If the daemon doesn't have permission to list the directory
@@ -145,13 +124,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     File.chmod(0000, @dir1)
     @monitor.update
     
-    directories = Directory.find_all
-    assert_equal(2, directories.size)
-    assert_directory(@dir, directories[0])
-    assert_directory(@dir1, directories[1])
-    files = FileInfo.find_all
-    assert_equal(1, files.size)
-    assert_file(@file1, files[0])
+    assert_directories([@dir, @dir1], Directory.find_all)
+    assert_files([@file1], FileInfo.find_all)
 
     # Add permissions back
     File.chmod(mode, @dir1)
