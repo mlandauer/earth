@@ -54,15 +54,6 @@ module FileInfoUpdaterTest
   end
 end
 
-class FileMonitorQueueTest < Test::Unit::TestCase
-  include FileInfoUpdaterTest
-  
-  # Factory method
-  def updater
-    FileMonitorQueue.new
-  end
-end
-
 class FileDatabaseUpdaterTest < Test::Unit::TestCase
   include FileInfoUpdaterTest
 
