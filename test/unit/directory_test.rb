@@ -32,7 +32,9 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_recursive_size
-    assert_equal(directories(:foo).size + directories(:foo_bar).size, directories(:foo).recursive_size)
-    assert_equal(directories(:foo_bar).size, directories(:foo_bar).recursive_size)
+    assert_equal(file_info(:file1).size + file_info(:file2).size + file_info(:file3).size + file_info(:file4).size,
+      directories(:foo).recursive_size)
+    assert_equal(file_info(:file3).size + file_info(:file4).size,
+      directories(:foo_bar).recursive_size)
   end
 end
