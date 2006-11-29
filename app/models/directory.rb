@@ -13,7 +13,7 @@ class File
 end
 
 class Directory < ActiveRecord::Base
-  acts_as_tree
+  acts_as_nested_set
   has_many :file_info
 
   Stat = Struct.new(:mtime)
@@ -38,8 +38,17 @@ class Directory < ActiveRecord::Base
     File.basename(path)
   end
   
+  # Finds the root of this directory. This is different from root
+  # which is a class method that finds an arbitrary root when there
+  # are multiple roots. Is this is a more sensible implementation for
+  # "better nested set"?
+  def root_of_this
+    r = ancestors[0]
+    r.nil? ? self : r
+  end
+  
   def server
-    Server.find_by_directory_id(root.id)
+    Server.find_by_directory_id(root_of_this.id)
   end
   
   # Size of the files contained directly in this directory
@@ -51,7 +60,7 @@ class Directory < ActiveRecord::Base
   
   # Returns an array of this directory and all children and their children and...
   def self_and_descendants
-    children.inject([self]) {|d, x| d.concat(x.self_and_descendants)}
+    full_set
   end
   
   def recursive_size

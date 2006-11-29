@@ -24,11 +24,12 @@ class FileDatabaseUpdater
     #  puts "Directory ADDED: #{name} in directory #{directory.path}"
     #end
     if directory.nil?
-      full_path = name
+      Directory.create(:path => name)
     else
-      full_path = File.join(directory.path, name)
+      new_directory = Directory.create(:path => File.join(directory.path, name))
+      new_directory.move_to_child_of directory
+      new_directory
     end
-    Directory.create(:path => full_path, :parent => directory)
   end
   
   def directory_removed(directory)
