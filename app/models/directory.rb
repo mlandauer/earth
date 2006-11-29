@@ -38,6 +38,10 @@ class Directory < ActiveRecord::Base
     File.basename(path)
   end
   
+  def has_children?
+    children_count > 0
+  end
+  
   # Finds the root of this directory. This is different from root
   # which is a class method that finds an arbitrary root when there
   # are multiple roots. Is this is a more sensible implementation for
