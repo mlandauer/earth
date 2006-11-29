@@ -63,6 +63,7 @@ class Directory < ActiveRecord::Base
   end
   
   def recursive_size
-    full_set.map{|x| x.size}.inject(0) {|total, x| total + x}
+    Directory.sum(:size, :conditions => "lft >= #{lft} AND rgt <= #{rgt}",
+      :joins => "LEFT JOIN file_info ON file_info.directory_id = directories.id").to_i
   end
 end
