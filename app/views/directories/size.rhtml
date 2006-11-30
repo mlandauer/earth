@@ -1,4 +1,4 @@
-<h2>Contents of <%= @directory.server.name %>:<%= @directory.path %></h2>
+<h2>Contents of <%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %></h2>
 
 <% units = human_units_of @max_size %>
 <table>
