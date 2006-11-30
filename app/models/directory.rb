@@ -33,10 +33,12 @@ class Directory < ActiveRecord::Base
     Stat.new(modified) unless modified.nil?
   end
   
+  # Because it's expensive to calculate the path we cache the values
   def path
-    # TODO: Hmmm. Not happy with the reload here. Need to think more...
-    reload
-    self_and_ancestors.map{|x| x.name}.join('/')
+    if @cached_path.nil?
+      @cached_path = path_uncached
+    end
+    return @cached_path
   end
   
   def has_children?
@@ -67,4 +69,13 @@ class Directory < ActiveRecord::Base
     Directory.sum(:size, :conditions => "lft >= #{lft} AND rgt <= #{rgt}",
       :joins => "LEFT JOIN file_info ON file_info.directory_id = directories.id").to_i
   end
+  
+private
+
+  def path_uncached
+    # TODO: Hmmm. Not happy with the reload here. Need to think more...
+    reload
+    self_and_ancestors.map{|x| x.name}.join('/')
+  end
+  
 end
