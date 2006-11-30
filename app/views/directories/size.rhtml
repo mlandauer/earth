@@ -9,14 +9,14 @@
 
   <tr>
   <td>Files in this directory</td>
-  <td><%=h human_size_in units, @directory.size %></td>
+  <td><%=h human_size_in(units, @directory.size) %></td>
   <td><%= units %></td>
   </tr>
 
 <% for directory, size in @children_and_sizes %>
   <tr>
   <td><%= link_to_if directory.has_children?, directory.name, :action => :size, :id => directory %></td>
-  <td><%=h human_size_in units, size %></td>
+  <td><%=h human_size_in(units, size) %></td>
   <td><%= units %></td>
   </tr>
 <% end %>
