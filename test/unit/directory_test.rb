@@ -7,7 +7,15 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal(servers(:first), directories(:foo_bar_twiddle).server)
   end
   
+  def test_path
+    assert_equal("/foo", directories(:foo).path)
+    assert_equal("/foo/bar", directories(:foo_bar).path)
+    assert_equal("/foo/bar/twiddle", directories(:foo_bar_twiddle).path)
+  end
+  
   def test_name
+    assert_equal("foo", directories(:foo).name)
+    assert_equal("bar", directories(:foo_bar).name)
     assert_equal("twiddle", directories(:foo_bar_twiddle).name)
   end
   
