@@ -14,7 +14,7 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_name
-    assert_equal("foo", directories(:foo).name)
+    assert_equal("/foo", directories(:foo).name)
     assert_equal("bar", directories(:foo_bar).name)
     assert_equal("twiddle", directories(:foo_bar_twiddle).name)
   end

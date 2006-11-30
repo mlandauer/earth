@@ -8,16 +8,10 @@ class PosixFileMonitor < FileMonitor
   end
   
   # Diverting messages from Snapshot objects
-  def directory_added(directory, name)
-    if directory.nil?
-      full_path = name
-    else
-      full_path = File.join(directory.path, name)
-    end
-    directory = @observer.directory_added(directory, name)
-
+  def directory_added(parent_directory, name)
+    directory = @observer.directory_added(parent_directory, name)
     snapshot = Snapshot.new(directory, self)
-    @snapshots.add(full_path, snapshot)
+    @snapshots.add(directory.path, snapshot)
     snapshot.update
     directory
   end

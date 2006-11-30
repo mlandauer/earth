@@ -33,9 +33,10 @@ class Directory < ActiveRecord::Base
     Stat.new(modified) unless modified.nil?
   end
   
-  # Only returns the last part of the path
-  def name
-    File.basename(path)
+  def path
+    # TODO: Hmmm. Not happy with the reload here. Need to think more...
+    reload
+    self_and_ancestors.map{|x| x.name}.join('/')
   end
   
   def has_children?

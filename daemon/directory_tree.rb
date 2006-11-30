@@ -22,8 +22,11 @@ class DirectoryTree
   def delete(path)
     subtree_parent = find(File.dirname(path))
     subtree = find(path)
-    if subtree_parent.nil? or subtree.nil?
-      raise "Can not delete" 
+    if subtree_parent.nil?
+      raise "Can not delete because couldn't find #{File.dirname(path)}. path = #{path}"
+    end
+    if subtree.nil?
+      raise "Can not delete because couldn't find #{path}. path = #{path}" 
     end
     if !subtree.children.empty?
       raise "Can not delete directory with subdirectories"
