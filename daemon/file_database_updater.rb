@@ -31,6 +31,7 @@ class FileDatabaseUpdater
   
   def directory_changed(directory, stat)
     #puts "Directory CHANGED: #{directory.path}"
+    directory.reload
     directory.stat = stat
     directory.save
   end

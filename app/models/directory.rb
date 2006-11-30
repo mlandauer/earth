@@ -42,6 +42,7 @@ class Directory < ActiveRecord::Base
   end
   
   def has_children?
+    reload
     children_count > 0
   end
   
@@ -50,8 +51,8 @@ class Directory < ActiveRecord::Base
   # are multiple roots. Is this is a more sensible implementation for
   # "better nested set"?
   def root_of_this
-    r = ancestors[0]
-    r.nil? ? self : r
+    reload
+    self_and_ancestors[0]
   end
   
   def server
