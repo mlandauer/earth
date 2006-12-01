@@ -10,4 +10,9 @@ class Server < ActiveRecord::Base
   def Server.this_hostname
     Socket.gethostname
   end
+  
+  # Delete all directories on this server
+  def delete_all_directories
+    directory.full_set.each {|d| d.destroy}
+  end
 end

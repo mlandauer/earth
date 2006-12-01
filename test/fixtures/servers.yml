@@ -6,4 +6,4 @@ first:
 another:
   id: 2
   name: "foo"
-  directory_id: 2
+  directory_id: 4

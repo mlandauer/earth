@@ -15,5 +15,14 @@ class ServerTest < Test::Unit::TestCase
     server = Server.this_server
     assert_equal(Server.this_hostname, server.name)
     assert_nil(server.directory)
-  end  
+  end
+  
+  def test_delete_all_directories
+    Server.this_server.delete_all_directories
+    directories = Directory.find_all
+    assert_equal(1, directories.size)
+    assert_equal(directories(:bar), directories[0])
+    files = FileInfo.find_all
+    assert_equal(0, files.size)
+  end
 end
