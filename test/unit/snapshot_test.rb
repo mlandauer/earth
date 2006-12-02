@@ -10,6 +10,7 @@ class SnapshotTest < Test::Unit::TestCase
     FileUtils.mkdir @dir2
     
     # Clears the contents of the database
+    Server.delete_all
     FileInfo.delete_all
     Directory.delete_all
 
