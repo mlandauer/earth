@@ -12,6 +12,7 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
 
     @directory = @updater.directory_added(nil, @dir)
     # Clears the contents of the database
+    Server.delete_all
     FileInfo.delete_all
     Directory.delete_all
   end

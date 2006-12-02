@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ServerTest < Test::Unit::TestCase
-  fixtures :servers, :directories
+  fixtures :directories, :servers, :file_info
 
   def test_this_server
     server = Server.this_server
@@ -18,7 +18,7 @@ class ServerTest < Test::Unit::TestCase
   end
   
   def test_delete_all_directories
-    Server.this_server.delete_all_directories
+    Server.this_server.destroy
     directories = Directory.find_all
     assert_equal(1, directories.size)
     assert_equal(directories(:bar), directories[0])

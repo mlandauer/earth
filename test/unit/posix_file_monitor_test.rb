@@ -20,6 +20,7 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     File.utime(past, past, @file2)
     
     # Clears the contents of the database
+    Server.delete_all
     FileInfo.delete_all
     Directory.delete_all
 
