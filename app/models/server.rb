@@ -11,8 +11,11 @@ class Server < ActiveRecord::Base
     Socket.gethostname
   end
 
-  # When destroying this server destroy all associated directories
+  # When destroying this server destroy all associated directories and files
   def after_destroy
-    directory.full_set.each {|d| d.destroy}
+    directory.full_set.each do |d|
+      FileInfo.delete_all ['directory_id = ?', d.id]
+    end
+    directory.destroy
   end  
 end
