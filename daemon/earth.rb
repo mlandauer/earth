@@ -22,6 +22,10 @@ if ARGV.length > 1
   usage
 end
 
+config_file = "../config/earth.yml"
+update_time = eval(YAML.load(File.open(config_file))["update_time"])
+puts "Update time is set to #{update_time} seconds. To change edit #{config_file}"
+
 server = Server.this_server
 updater = FileDatabaseUpdater.new
 
@@ -50,6 +54,6 @@ puts "Watching directory #{directory.path}"
 while true do
   puts "Updating..."
   monitor.update
-  puts "Sleeping for ten seconds..."
-  sleep(10)
+  puts "Sleeping for #{update_time} seconds..."
+  sleep(update_time)
 end
