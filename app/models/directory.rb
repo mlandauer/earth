@@ -14,7 +14,7 @@ end
 
 class Directory < ActiveRecord::Base
   acts_as_nested_set
-  has_many :file_info, :dependent => :delete_all
+  has_many :file_info
 
   Stat = Struct.new(:mtime)
   class Stat
