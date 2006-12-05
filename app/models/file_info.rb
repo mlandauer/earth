@@ -20,8 +20,4 @@ class FileInfo < ActiveRecord::Base
   def stat
     Stat.new(modified, size, uid, gid)
   end
-  
-  def FileInfo.find_by_directory_and_name(directory, name)
-    FileInfo.find(:first, :conditions => ['directory_id = ? AND name = ?', directory.id, name])
-  end
 end
