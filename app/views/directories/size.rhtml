@@ -22,7 +22,6 @@
 <% end %>
 </table>
 
-<CENTER>
-<% points = @children_and_sizes.collect {|x| {'name' => x[0].path, 'value' => x[1]}} %>
-<%= chart points, :caption => 'Size', :sub_caption => 'Oh yes, the size', :type => :column, :width => 565, :height => 420, :bgcolor => "#FFFFFF", :xaxisname => "Directory", :yaxisname => "Size" %>
-</CENTER>
+<% points = [{'name' => 'Files in this directory', 'value' => human_size_in(units, @directory.size).to_f}] %>
+<% points = points + @children_and_sizes.collect {|x| {'name' => x[0].name, 'value' => human_size_in(units, x[1]).to_f}} %>
+<%= chart points, :type => :bar, :width => 565, :height => 420, :bgcolor => "#FFFFFF", :xaxisname => "Path", :yaxisname => "Size (in #{units})" %>

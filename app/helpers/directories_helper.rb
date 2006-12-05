@@ -22,7 +22,7 @@ module DirectoriesHelper
   def chart(points, options)
     object = chart_flash_object(options[:type])
     xm = Builder::XmlMarkup.new(:ident=>2)
-    xml = xm.graph('caption' => options[:caption], 'subCaption' => options[:sub_caption], 'yaxisname' => options[:yaxisname], 'xaxisname' => options[:xaxisname], 'numdivlines' => 3, 'zeroPlaneColor' => '333333', 'zeroPlaneAlpha' => 40) {
+    xml = xm.graph('yaxisname' => options[:yaxisname], 'xaxisname' => options[:xaxisname], 'numdivlines' => 3, 'zeroPlaneColor' => '333333', 'zeroPlaneAlpha' => 40) {
       points.each do |p|
         xm.set(p)
       end
@@ -50,6 +50,8 @@ private
   def chart_flash_object(type)
     case
       when type == :column: "FC2Column"
+      when type == :pie: "FC2Pie3D"
+      when type == :bar: "FC2Bar"
       else nil
     end
   end
