@@ -22,8 +22,8 @@
 <% end %>
 </table>
 
-<% points = [{'name' => 'Files in this directory', 'value' => human_size_in(units, @directory.size).to_f}] %>
 <%
+points = [{'name' => 'Files in this directory', 'value' => human_size_in(units, @directory.size).to_f}]
 points = points + @children_and_sizes.collect do |x|
     directory = x[0]
     size = x[1]

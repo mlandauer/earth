@@ -44,6 +44,35 @@ TYPE="application/x-shockwave-flash" PLUGINSPAGE="http://www.macromedia.com/go/g
 EOF
   end
   
+  def HSVtoRGB(h, s, v)
+	if s == 0 
+		# achromatic (grey)
+		r = v
+		g = v
+		b = v
+		return;
+	end
+	h = h / 60			# sector 0 to 5
+	i = floor( h )
+	f = h - i			# factorial part of h
+	p = v * ( 1 - s )
+	q = v * ( 1 - s * f )
+	t = v * ( 1 - s * ( 1 - f ) )
+	case
+      when i == 0: r = v; g = t; b = p
+      when i == 1: r = q; g = v; b = p
+      when i == 2: r = p; g = v; b = t
+      when i == 3: r = p; g = q; b = v
+      when i == 4: r = t; g = p; b = v
+	  else         r = v; g = p; b = q
+	end
+	return [r, g, b]
+  end
+  
+  def to_hex(color)
+    "#" + color[0].to_s(16) + color[1].to_s(16) + color[2].to_s(16) 
+  end
+
 private
 
   # Given a graph type return the flash object name
