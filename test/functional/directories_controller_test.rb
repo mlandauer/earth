@@ -5,14 +5,25 @@ require 'directories_controller'
 class DirectoriesController; def rescue_action(e) raise e end; end
 
 class DirectoriesControllerTest < Test::Unit::TestCase
+  fixtures :directories, :servers, :file_info
+
   def setup
     @controller = DirectoriesController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end
 
-  # Replace this with your real tests.
-  def test_truth
-    assert true
+  def test_size
+    get :size, :id => directories(:foo).id
+    
+    assert_response :success
+    assert_template 'size'
+
+    assert_equal(directories(:foo), assigns(:directory))
+    assert_equal(directories(:foo).size, assigns(:directory_size))
+    assert_equal([[directories(:foo_bar), directories(:foo_bar).recursive_size]],
+      assigns(:children_and_sizes))
+    # Hardcoded value below
+    assert_equal(7, assigns(:max_size))
   end
 end
