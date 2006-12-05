@@ -23,5 +23,15 @@
 </table>
 
 <% points = [{'name' => 'Files in this directory', 'value' => human_size_in(units, @directory.size).to_f}] %>
-<% points = points + @children_and_sizes.collect {|x| {'name' => x[0].name, 'value' => human_size_in(units, x[1]).to_f}} %>
+<%
+points = points + @children_and_sizes.collect do |x|
+    directory = x[0]
+    size = x[1]
+    h = {'name' => directory.name, 'value' => human_size_in(units, size).to_f}
+    if directory.has_children?
+        h['link'] = url_for :action => :size, :id => directory
+    end
+    h
+end
+%>
 <%= chart points, :type => :bar, :width => 565, :height => 420, :bgcolor => "#FFFFFF", :xaxisname => "Path", :yaxisname => "Size (in #{units})" %>
