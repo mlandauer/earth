@@ -9,6 +9,18 @@ module DirectoriesHelper
     end
   end
   
+  def human_size_in(units, size)
+    scaled = scale_for_human_size(units, size)
+    text = ('%.1f' % scaled).sub('.0', '')
+    if text == '0' && scaled > 0
+      return '> 0'
+    else
+      return text
+    end
+  end
+  
+private
+
   def scale_for_human_size(units, size)
     case
       when units == 'Bytes': size
@@ -21,13 +33,4 @@ module DirectoriesHelper
     nil
   end
   
-  def human_size_in(units, size)
-    scaled = scale_for_human_size(units, size)
-    text = ('%.1f' % scaled).sub('.0', '')
-    if text == '0' && scaled > 0
-      return '> 0'
-    else
-      return text
-    end
-  end
 end
