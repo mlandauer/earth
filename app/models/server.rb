@@ -13,9 +13,11 @@ class Server < ActiveRecord::Base
 
   # When destroying this server destroy all associated directories and files
   def after_destroy
-    directory.full_set.each do |d|
-      FileInfo.delete_all ['directory_id = ?', d.id]
+    if directory
+      directory.full_set.each do |d|
+        FileInfo.delete_all ['directory_id = ?', d.id]
+      end
+      directory.destroy
     end
-    directory.destroy
   end  
 end
