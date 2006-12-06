@@ -18,8 +18,12 @@ class FileDatabaseUpdater
   end
   
   def directory_added(parent_directory, name)
-    directory = Directory.create(:name => name)
-    directory.move_to_child_of parent_directory unless parent_directory.nil?
+    if parent_directory.nil?
+      directory = Directory.create(:name => name, :path => name)
+    else
+      directory = Directory.create(:name => name, :path => File.join(parent_directory.path, name))
+      directory.move_to_child_of parent_directory
+    end
     #puts "Directory ADDED: #{directory.path}"
     directory
   end
