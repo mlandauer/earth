@@ -13,7 +13,7 @@ class DirectoriesControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
   end
 
-  def test_size
+  def test_size_with_id
     get :size, :id => directories(:foo).id
     
     assert_response :success
@@ -26,4 +26,13 @@ class DirectoriesControllerTest < Test::Unit::TestCase
     # Hardcoded value below
     assert_equal(7, assigns(:max_size))
   end
+  
+  #def test_size_with_server_and_path
+  #  get :size, :server => Server.this_hostname, :path => "/foo/bar/twiddle"
+  #  
+  #  assert_response :success
+  #  assert_template 'size'
+  #  
+  #  assert_equal(directories(:foo_bar_twiddle), assigns(:directory))
+  #end
 end
