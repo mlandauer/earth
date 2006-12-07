@@ -26,20 +26,19 @@ config_file = "../config/earth.yml"
 update_time = eval(YAML.load(File.open(config_file))["update_time"])
 puts "Update time is set to #{update_time} seconds. To change edit #{config_file}"
 
-server = Server.this_server
-updater = FileDatabaseUpdater.new
+this_server = Server.this_server
+updater = FileDatabaseUpdater.new(this_server)
 
 if ARGV.length == 1
   watch_directory = File.expand_path(ARGV[0])
   puts "WARNING: Watching new directory. So, clearing out database"
-  server.destroy
+  this_server.directories.clear
     
   directory = updater.directory_added(nil, watch_directory)
-  server = Server.this_server
-  server.directory = directory
-  server.save
 else
-  directory = server.directory
+  directories = Directory.roots_for_server(this_server)
+  raise "Currently not properly supporting multiple watch directories" if directories.size > 1
+  directory = directories[0]
   if directory.nil?
     puts "Watch directory is not set for this server. Use optional <directory path> argument."
     puts

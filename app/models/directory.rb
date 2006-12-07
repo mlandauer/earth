@@ -14,7 +14,8 @@ end
 
 class Directory < ActiveRecord::Base
   acts_as_nested_set
-  has_many :file_info
+  has_many :file_info, :dependent => :delete_all
+  belongs_to :server
 
   Stat = Struct.new(:mtime)
   class Stat
@@ -55,10 +56,6 @@ class Directory < ActiveRecord::Base
     self_and_ancestors[0]
   end
   
-  def server
-    Server.find_by_directory_id(root_of_this.id)
-  end
-  
   # Size of the files contained directly in this directory
   def size
     a = FileInfo.sum(:size, :conditions => ['directory_id = ?', id])
@@ -69,6 +66,12 @@ class Directory < ActiveRecord::Base
   def recursive_size
     Directory.sum(:size, :conditions => "lft >= #{lft} AND rgt <= #{rgt}",
       :joins => "LEFT JOIN file_info ON file_info.directory_id = directories.id").to_i
+  end
+  
+  # Return all the root directories for the given server as an array
+  # TODO: Currently not tested
+  def Directory.roots_for_server(server)
+    Directory.roots.find_all{|d| d.server_id == server.id}
   end
   
 private

@@ -1,6 +1,10 @@
 require 'socket'
 
 class FileDatabaseUpdater
+  def initialize(server)
+    @server = server
+  end
+  
   def file_added(directory, name, stat)
     #puts "File ADDED: #{name} in directory #{directory.path}"
     FileInfo.create(:directory => directory, :name => name, :stat => stat)
@@ -19,9 +23,9 @@ class FileDatabaseUpdater
   
   def directory_added(parent_directory, name)
     if parent_directory.nil?
-      directory = Directory.create(:name => name, :path => name)
+      directory = @server.directories.create(:name => name, :path => name)
     else
-      directory = Directory.create(:name => name, :path => File.join(parent_directory.path, name))
+      directory = @server.directories.create(:name => name, :path => File.join(parent_directory.path, name))
       directory.move_to_child_of parent_directory
     end
     #puts "Directory ADDED: #{directory.path}"

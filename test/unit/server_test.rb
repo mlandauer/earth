@@ -6,7 +6,7 @@ class ServerTest < Test::Unit::TestCase
   def test_this_server
     server = Server.this_server
     assert_equal(Server.this_hostname, server.name)
-    assert_equal("/foo", server.directory.path)
+    assert_equal([directories(:foo), directories(:foo_bar), directories(:foo_bar_twiddle)], server.directories)
   end
   
   def test_server_not_in_db
@@ -14,7 +14,6 @@ class ServerTest < Test::Unit::TestCase
     # Should create a server record if it doesn't already exist
     server = Server.this_server
     assert_equal(Server.this_hostname, server.name)
-    assert_nil(server.directory)
   end
   
   def test_delete_all_directories

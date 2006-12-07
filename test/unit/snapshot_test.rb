@@ -14,7 +14,7 @@ class SnapshotTest < Test::Unit::TestCase
     FileInfo.delete_all
     Directory.delete_all
 
-    @queue = FileDatabaseUpdater.new
+    @queue = FileDatabaseUpdater.new(Server.this_server)
     directory = @queue.directory_added(nil, @dir)
     @monitor = Snapshot.new(directory, @queue)
   end

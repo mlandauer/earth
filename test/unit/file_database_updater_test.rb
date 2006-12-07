@@ -3,18 +3,17 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
   Stat = Struct.new(:mtime, :size, :uid, :gid)
 
   def setup
-    @dir = File.expand_path('test_data')
-    @dir1 = File.join(@dir, 'dir1')
-    @updater = FileDatabaseUpdater.new
-    # 1st of January 2000
-    @stat1 = Stat.new(Time.local(2000, 1, 1), 24, 100, 200)
-    @stat2 = Stat.new(Time.local(2001, 1, 1), 53, 100, 200)
-
-    @directory = @updater.directory_added(nil, @dir)
     # Clears the contents of the database
     Server.delete_all
     FileInfo.delete_all
     Directory.delete_all
+
+    @dir = File.expand_path('test_data')
+    @dir1 = File.join(@dir, 'dir1')
+    @updater = FileDatabaseUpdater.new(Server.this_server)
+    # 1st of January 2000
+    @stat1 = Stat.new(Time.local(2000, 1, 1), 24, 100, 200)
+    @stat2 = Stat.new(Time.local(2001, 1, 1), 53, 100, 200)
   end
   
   def test_file_added_signature
@@ -92,6 +91,13 @@ class FileDatabaseUpdaterTest < Test::Unit::TestCase
     assert_nil(directories[0].stat)
     assert_equal(@dir1, directories[1].path)
     assert_nil(directories[1].stat)
+  end
+  
+  def test_server
+    @updater.directory_added(nil, @dir)
+    directories = Directory.find_all
+    assert_equal(1, directories.size)
+    assert_equal(Server.this_server, directories[0].server)
   end
   
   def test_remove_directory

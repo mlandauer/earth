@@ -5,22 +5,25 @@ foo:
   parent_id: nil
   lft: 1
   rgt: 6
+  server_id: 1
 foo_bar:
   id: 2
   name: "bar"
   parent_id: 1
   lft: 2
   rgt: 5
+  server_id: 1
 foo_bar_twiddle:
   id: 3
   name: "twiddle"
   parent_id: 2
   lft: 3
   rgt: 4
+  server_id: 1
 bar:
   id: 4
   name: "/bar"
   parent_id: nil
   lft: 7
   rgt: 8
-  
+  server_id: 2
