@@ -22,5 +22,10 @@ class DirectoriesController < ApplicationController
         @max_size = @directory_size
       end
     end
+    
+    respond_to do |wants|
+      wants.html
+      wants.xml {render :action => "size.rxml", :layout => false}
+    end
   end
 end
