@@ -1,19 +1,26 @@
 class DirectoriesController < ApplicationController
   def size
-    #if params[:server] && params[:path]
-    #  @directory = Directory.find_by_server_name_and_path(params[:server], params[:path])
-    #else
+    if params[:server] && params[:path]
+      server = Server.find_by_name(params[:server])
+      raise "Couldn't find server #{params[:server]}" if server.nil?
+      @directory = Directory.find_by_server_id_and_path(server.id, params[:path])
+      raise "Couldn't find directory #{params[:path]}" if @directory.nil?
+    else
       @directory = Directory.find(params[:id])
-    #end
+    end
     
     @directory_size = @directory.size
     @children_and_sizes = @directory.children.map{|x| [x, x.recursive_size]}
     # Sort the directories so that the largest comes first
     @children_and_sizes.sort!{|a,b| b[1] <=> a[1]}
-    @max_size = @children_and_sizes.first[1]
-    # Include the size of this directory
-    if @directory_size > @max_size
+    if @children_and_sizes.empty?
       @max_size = @directory_size
+    else
+      @max_size = @children_and_sizes.first[1]
+      # Include the size of this directory
+      if @directory_size > @max_size
+        @max_size = @directory_size
+      end
     end
   end
 end

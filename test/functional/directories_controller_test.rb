@@ -27,12 +27,12 @@ class DirectoriesControllerTest < Test::Unit::TestCase
     assert_equal(7, assigns(:max_size))
   end
   
-  #def test_size_with_server_and_path
-  #  get :size, :server => Server.this_hostname, :path => "/foo/bar/twiddle"
-  #  
-  #  assert_response :success
-  #  assert_template 'size'
-  #  
-  #  assert_equal(directories(:foo_bar_twiddle), assigns(:directory))
-  #end
+  def test_size_with_server_and_path
+    get :size, :server => Server.this_hostname, :path => "/foo/bar/twiddle"
+    
+    assert_response :success
+    assert_template 'size'
+    
+    assert_equal(directories(:foo_bar_twiddle), assigns(:directory))
+  end
 end
