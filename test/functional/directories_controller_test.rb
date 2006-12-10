@@ -36,9 +36,12 @@ class DirectoriesControllerTest < Test::Unit::TestCase
     
     assert_equal(directories(:foo_bar), assigns(:directory))
     
-    assert_tag :tag => "files",
+    # Just check for one the two files
+    assert_tag :tag => "file",
+      :attributes => {:name => "a"},
       :parent => {:tag => "directory", :attributes => {:path => "/foo/bar"}},
-      :child => {:tag => "size_in_bytes", :content => directories(:foo_bar).size.to_s}
+      :child => {:tag => "size_in_bytes", :content => file_info(:file3).size.to_s}
+    # There should only be one directory (in this case)
     assert_tag :tag => "directory",
       :attributes => {:name => "twiddle"},
       :parent => {:tag => "directory", :attributes => {:path => "/foo/bar"}},

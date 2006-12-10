@@ -1,8 +1,10 @@
 xml.instruct!
 
 xml.directory("path" => @directory.path) do
-  xml.files do
-    xml.size_in_bytes(@directory.size)
+  @directory.file_info.each do |file|
+    xml.file("name" => file.name) do
+      xml.size_in_bytes(file.size)
+    end
   end
   @children_and_sizes.each do |directory, size|
     xml.directory("name" => directory.name) do
