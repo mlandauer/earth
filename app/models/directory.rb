@@ -74,6 +74,22 @@ class Directory < ActiveRecord::Base
     Directory.roots.find_all{|d| d.server_id == server.id}
   end
   
+  def parent=(parent)
+    self.parent_id = parent.id
+  end
+  
+  def parent_id=(id)
+    write_attribute(:parent_id, id)
+    @parent_id_updated = true
+  end
+  
+  def after_save
+    if @parent_id_updated
+      move_to_child_of(parent)
+      @parent_id_updated = false
+    end
+  end
+  
 private
 
   def path_uncached

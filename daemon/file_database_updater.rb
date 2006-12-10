@@ -25,8 +25,7 @@ class FileDatabaseUpdater
     if parent_directory.nil?
       directory = @server.directories.create(:name => name, :path => name)
     else
-      directory = @server.directories.create(:name => name, :path => File.join(parent_directory.path, name))
-      directory.move_to_child_of parent_directory
+      directory = @server.directories.create(:name => name, :path => File.join(parent_directory.path, name), :parent => parent_directory)
     end
     #puts "Directory ADDED: #{directory.path}"
     directory

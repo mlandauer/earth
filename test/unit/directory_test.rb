@@ -13,6 +13,33 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal("/foo/bar/twiddle", directories(:foo_bar_twiddle).path)
   end
   
+  # Tests an alternative interface to "move_to_child_of"
+  def test_set_parent 
+    assert_equal(2, directories(:foo_bar).lft)
+    assert_equal(5, directories(:foo_bar).rgt)
+    dir = Directory.create(:name => "another", :path => "/foo/bar/another")
+    dir.parent = directories(:foo_bar)
+    dir.save
+    assert_equal(directories(:foo_bar).id, dir.parent_id)
+    assert_equal(3, dir.lft)
+    assert_equal(4, dir.rgt)
+    
+    directories(:foo_bar).reload
+    assert_equal(2, directories(:foo_bar).lft)
+    assert_equal(7, directories(:foo_bar).rgt)
+  end
+  
+  def test_set_parent_on_create
+    dir = Directory.create(:name => "another", :path => "/foo/bar/another", :parent => directories(:foo_bar))
+    assert_equal(directories(:foo_bar).id, dir.parent_id)
+    assert_equal(3, dir.lft)
+    assert_equal(4, dir.rgt)
+    
+    directories(:foo_bar).reload
+    assert_equal(2, directories(:foo_bar).lft)
+    assert_equal(7, directories(:foo_bar).rgt)    
+  end
+  
   def test_name
     assert_equal("/foo", directories(:foo).name)
     assert_equal("bar", directories(:foo_bar).name)
