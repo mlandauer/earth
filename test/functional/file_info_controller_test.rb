@@ -26,7 +26,9 @@ class FileInfoControllerTest < Test::Unit::TestCase
   end
   
   def test_results
-    put :results, :find_value => "a"
+    post :find, :find_value => "a"
+    assert_response :success
+    assert_template 'results'
     assert_equal("a", assigns(:find_value))
     assert_equal([file_info(:file1), file_info(:file3)], assigns(:file_info))
   end
