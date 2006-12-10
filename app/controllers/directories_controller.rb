@@ -3,7 +3,7 @@ class DirectoriesController < ApplicationController
     if params[:server] && params[:path]
       server = Server.find_by_name(params[:server])
       raise "Couldn't find server #{params[:server]}" if server.nil?
-      @directory = Directory.find_by_server_id_and_path(server.id, params[:path])
+      @directory = server.directories.find_by_path(params[:path])
       raise "Couldn't find directory #{params[:path]}" if @directory.nil?
     else
       @directory = Directory.find(params[:id])
