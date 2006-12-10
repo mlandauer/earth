@@ -36,11 +36,12 @@ class DirectoriesControllerTest < Test::Unit::TestCase
     
     assert_equal(directories(:foo_bar), assigns(:directory))
     
-    assert_tag :tag => "files", :parent => {:tag => "directory"},
+    assert_tag :tag => "files",
+      :parent => {:tag => "directory", :attributes => {:path => "/foo/bar"}},
       :child => {:tag => "size_in_bytes", :content => directories(:foo_bar).size.to_s}
-    assert_tag :tag => "directory", :parent => {:tag => "directory"},
-      :child => {:tag => "name", :content => "twiddle"}
-    assert_tag :tag => "directory", :parent => {:tag => "directory"},
+    assert_tag :tag => "directory",
+      :attributes => {:name => "twiddle"},
+      :parent => {:tag => "directory", :attributes => {:path => "/foo/bar"}},
       :child => {:tag => "size_in_bytes", :content => directories(:foo_bar_twiddle).recursive_size.to_s}
   end
 end
