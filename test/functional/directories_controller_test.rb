@@ -28,11 +28,19 @@ class DirectoriesControllerTest < Test::Unit::TestCase
   end
   
   def test_size_with_server_and_path
-    get :size, :server => Server.this_hostname, :path => "/foo/bar/twiddle"
+    @request.env['HTTP_ACCEPT'] = 'application/xml'
+    get :size, {:server => Server.this_hostname, :path => "/foo/bar"}
     
     assert_response :success
-    assert_template 'size'
+    assert_template 'size.rxml'
     
-    assert_equal(directories(:foo_bar_twiddle), assigns(:directory))
+    assert_equal(directories(:foo_bar), assigns(:directory))
+    
+    assert_tag :tag => "files", :parent => {:tag => "directory"},
+      :child => {:tag => "size_in_bytes", :content => directories(:foo_bar).size.to_s}
+    assert_tag :tag => "directory", :parent => {:tag => "directory"},
+      :child => {:tag => "name", :content => "twiddle"}
+    assert_tag :tag => "directory", :parent => {:tag => "directory"},
+      :child => {:tag => "size_in_bytes", :content => directories(:foo_bar_twiddle).recursive_size.to_s}
   end
 end
