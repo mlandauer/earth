@@ -38,7 +38,7 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_set_parent_on_create
-    dir = Directory.create(:name => "another", :path => "/foo/bar/another", :parent => directories(:foo_bar))
+    dir = Directory.create(:name => "another", :parent => directories(:foo_bar))
     assert_equal(directories(:foo_bar).id, dir.parent_id)
     assert_equal(3, dir.lft)
     assert_equal(4, dir.rgt)

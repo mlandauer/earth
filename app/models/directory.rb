@@ -93,10 +93,14 @@ class Directory < ActiveRecord::Base
   # Set the path attribute based on name and parent_id
   def before_save
     if parent_id
-      self.path = File.join(parent.path, name)
+      write_attribute(:path, File.join(parent.path, name))
     else
-      self.path = name
+      write_attribute(:path, name)
     end
+  end
+  
+  def path=(path)
+    raise "Can't set path directly. Set name instead."
   end
   
 private
