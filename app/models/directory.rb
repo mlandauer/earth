@@ -75,7 +75,7 @@ class Directory < ActiveRecord::Base
   end
   
   def parent=(parent)
-    self.parent_id = parent.id
+    self.parent_id = parent.id unless parent.nil?
   end
   
   def parent_id=(id)
@@ -87,6 +87,15 @@ class Directory < ActiveRecord::Base
     if @parent_id_updated
       move_to_child_of(parent)
       @parent_id_updated = false
+    end
+  end
+  
+  # Set the path attribute based on name and parent_id
+  def before_save
+    if parent_id
+      self.path = File.join(parent.path, name)
+    else
+      self.path = name
     end
   end
   

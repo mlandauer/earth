@@ -22,11 +22,7 @@ class FileDatabaseUpdater
   end
   
   def directory_added(parent_directory, name)
-    if parent_directory.nil?
-      directory = @server.directories.create(:name => name, :path => name)
-    else
-      directory = @server.directories.create(:name => name, :path => File.join(parent_directory.path, name), :parent => parent_directory)
-    end
+    directory = @server.directories.create(:name => name, :parent => parent_directory)
     #puts "Directory ADDED: #{directory.path}"
     directory
   end
