@@ -21,28 +21,26 @@ class Ownership
   end
   
   def user_name
-    #TODO: Don't make a new connection to the server for every request
-    if @@ldap_server_name
-      LDAP::Conn.new(@@ldap_server_name, @@ldap_server_port).bind do |conn|
-        conn.search(@@ldap_user_base, LDAP::LDAP_SCOPE_SUBTREE, "#{@@ldap_user_id_field}=#{@uid}") do |e|
-          return e.vals(@@ldap_user_name_field)[0]
-        end
-      end
-    else
-      return uid.to_s
-    end
+    lookup(@@ldap_user_base, @@ldap_user_id_field, @@ldap_user_name_field, uid)
   end
   
   def group_name
+    lookup @@ldap_group_base, @@ldap_group_id_field, @@ldap_group_name_field, gid
+  end
+  
+  private
+  
+  def lookup(base, id_field, name_field, id)
     #TODO: Don't make a new connection to the server for every request
     if @@ldap_server_name
       LDAP::Conn.new(@@ldap_server_name, @@ldap_server_port).bind do |conn|
-        conn.search(@@ldap_group_base, LDAP::LDAP_SCOPE_SUBTREE, "#{@@ldap_group_id_field}=#{@gid}") do |e|
-          return e.vals(@@ldap_group_name_field)[0]
+        conn.search(base, LDAP::LDAP_SCOPE_SUBTREE, "#{id_field}=#{id}") do |e|
+          return e.vals(name_field)[0]
         end
       end
     else
-      return gid.to_s
+      return id.to_s
     end
   end
+  
 end
