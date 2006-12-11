@@ -8,7 +8,7 @@
   <th>Modified</th>
   <th>Size</th>
   <th>User</th>
-  <th>Gid</th>
+  <th>Group</th>
   </tr>
   
 <% for file_info in @file_info %>
@@ -19,7 +19,7 @@
   <td><%=h file_info.modified %>
   <td><%=h file_info.size %>
   <td><%=h file_info.ownership.user_name %>
-  <td><%=h file_info.gid %>
+  <td><%=h file_info.ownership.group_name %>
   </tr>
 <% end %>
 </table>
