@@ -17,7 +17,7 @@ class Ownership
     @uid = uid
   end
   
-  def name
+  def user_name
     #TODO: Don't make a new connection to the server for every request
     if @@ldap_server_name
       LDAP::Conn.new(@@ldap_server_name, @@ldap_server_port).bind do |conn|
