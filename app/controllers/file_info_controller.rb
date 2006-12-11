@@ -1,4 +1,6 @@
 class FileInfoController < ApplicationController
+  layout 'master'
+
   def index
     find
     render :action => 'find'

@@ -1,4 +1,6 @@
 class ServersController < ApplicationController
+  layout 'master'
+
   def index
     list
     render :action => 'list'
