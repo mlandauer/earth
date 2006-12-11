@@ -1,5 +1,6 @@
 class FileInfo < ActiveRecord::Base
   belongs_to :directory
+  composed_of :user, :class_name => "User", :mapping => [%w(uid uid)]
   
   Stat = Struct.new(:mtime, :size, :uid, :gid)
   class Stat
