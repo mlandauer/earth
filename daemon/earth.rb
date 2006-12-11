@@ -9,18 +9,41 @@
 #
 # $Id$
 
-require '../config/environment'
+require 'optparse'
 
-def usage
-  puts "#{$0} [<directory path>]"
-  puts "Monitor a local directory recursively for changes and keep up-to-date"
-  puts "information in a database."
+development_mode = false
+
+opts = OptionParser.new
+opts.banner = <<END_OF_STRING
+Monitor a local directory recursively for changes and keep up-to-date
+information in a database
+Usage: #{$0} [-d] [<directory path>]
+END_OF_STRING
+opts.on("-d", "--development", "Run the daemon in development mode.") { development_mode = true }
+opts.on_tail("-h", "--help", "Show this message") do
+  puts opts
+  exit
+end
+
+begin
+  opts.parse!(ARGV)
+rescue
+  puts opts
   exit 1
 end
 
 if ARGV.length > 1
-  usage
+  puts opts
+  exit 1
 end
+
+# Set environment to run in
+if development_mode
+  ENV["RAILS_ENV"] = "development"
+else
+  ENV["RAILS_ENV"] = "production"
+end
+require '../config/environment'
 
 config_file = "../config/earth.yml"
 update_time = eval(YAML.load(File.open(config_file))["update_time"])
