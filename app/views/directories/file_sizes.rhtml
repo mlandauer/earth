@@ -1,0 +1,21 @@
+<h2>Files in <%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %></h2>
+
+<% max_size = @directory.file_info.map{|f| f.size}.max %>
+<% units = human_units_of max_size %>
+<table>
+  <tr>
+  <th>Name</th>
+  <th colspan=2>Size</th>
+  </tr>
+
+<% @directory.file_info.each do |file|%>
+  <tr>
+  <td><%= file.name %></td>
+  <td><%= human_size_in(units, file.size) %></td>
+  <td><%= units %></td>
+  </tr>
+<% end %>
+</table>
+
+<% points = @directory.file_info.map {|f| {'name' => f.name, 'value' => human_size_in(units, f.size).to_f}} %>
+<%= chart points, :type => :bar, :width => 565, :height => 420, :bgcolor => "#FFFFFF", :xaxisname => "Name", :yaxisname => "Size (in #{units})" %>

@@ -28,4 +28,9 @@ class DirectoriesController < ApplicationController
       wants.xml {render :action => "size.rxml", :layout => false}
     end
   end
+  
+  def file_sizes
+    @directory = Directory.find(params[:id])
+  end
+  
 end

@@ -47,4 +47,13 @@ class DirectoriesControllerTest < Test::Unit::TestCase
       :parent => {:tag => "directory", :attributes => {:path => "/foo/bar"}},
       :child => {:tag => "size_in_bytes", :content => directories(:foo_bar_twiddle).recursive_size.to_s}
   end
+  
+  def test_file_sizes
+    get :file_sizes, :id => directories(:foo).id
+    
+    assert_response :success
+    assert_template 'file_sizes'
+    
+    assert_equal(directories(:foo), assigns(:directory))
+  end
 end
