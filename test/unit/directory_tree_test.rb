@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/../test_helper'
+
 class DirectoryTreeTest < Test::Unit::TestCase
   def setup
     @t = DirectoryTree.new("/usr/images", "Parent")
