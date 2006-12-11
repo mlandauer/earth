@@ -12,16 +12,16 @@ class Ownership
   end
   
   def user_name
-    lookup config["ldap_user_lookup"], uid
+    lookup uid, config["ldap_user_lookup"]
   end
   
   def group_name
-    lookup config["ldap_group_lookup"], gid
+    lookup gid, config["ldap_group_lookup"]
   end
   
   private
   
-  def lookup(lookup_config, id)
+  def lookup(id, lookup_config)
     #TODO: Don't make a new connection to the server for every request
     if config["ldap_server_name"]
       LDAP::Conn.new(config["ldap_server_name"], config["ldap_server_port"]).bind do |conn|
