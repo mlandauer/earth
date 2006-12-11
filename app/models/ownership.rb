@@ -1,6 +1,6 @@
 require "ldap"
 
-class User
+class Ownership
   cattr_accessor :ldap_server_name, :ldap_server_port, :ldap_base_dn, :ldap_uid_field, :ldap_name_field
   
   config_file = File.dirname(__FILE__) + "/../../config/earth.yml"
