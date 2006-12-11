@@ -1,3 +1,22 @@
+<style>
+    .graph { 
+        position: relative; /* IE is dumb */
+        width: 200px; 
+        border: 1px solid #B1D632; 
+        padding: 2px; 
+    }
+    .graph .bar { 
+        display: block;
+        position: relative;
+        background: #B1D632; 
+        text-align: center; 
+        color: #333; 
+        height: 2em; 
+        line-height: 2em;            
+    }
+    .graph .bar span { position: absolute; left: 1em; }
+</style>
+
 <h2>Contents of <%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %></h2>
 
 <% units = human_units_of @max_size %>
@@ -5,12 +24,19 @@
   <tr>
   <th>Path</th>
   <th colspan=2>Size</th>
+  <th></th>
   </tr>
 
   <tr>
   <td><%= link_to "Files in this directory", :action => :file_sizes, :id => @directory %></td>
   <td><%=h human_size_in(units, @directory.size) %></td>
   <td><%= units %></td>
+  <td>
+    <div class="graph">
+        <strong class="bar" style="width: <%= 100 * @directory.size / @max_size %>%;">
+        </strong>
+    </div>
+  </td>
   </tr>
 
 <% for directory, size in @children_and_sizes %>
@@ -18,23 +44,12 @@
   <td><%= link_to_if directory.has_children?, directory.name, :action => :size, :id => directory %></td>
   <td><%=h human_size_in(units, size) %></td>
   <td><%= units %></td>
+  <td>
+    <div class="graph">
+        <strong class="bar" style="width: <%= 100 * size / @max_size %>%;">
+        </strong>
+    </div>
+  </td>
   </tr>
 <% end %>
 </table>
-
-<%
-points = [{
-    'name' => 'Files in this directory',
-    'value' => human_size_in(units, @directory.size).to_f,
-    'link' => url_for(:action => :file_sizes, :id => @directory)}]
-points = points + @children_and_sizes.collect do |x|
-    directory = x[0]
-    size = x[1]
-    h = {'name' => directory.name, 'value' => human_size_in(units, size).to_f}
-    if directory.has_children?
-        h['link'] = url_for :action => :size, :id => directory
-    end
-    h
-end
-%>
-<%= chart points, :type => :bar, :width => 565, :height => 420, :bgcolor => "#FFFFFF", :xaxisname => "Path", :yaxisname => "Size (in #{units})" %>

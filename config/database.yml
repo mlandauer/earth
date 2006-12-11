@@ -30,6 +30,6 @@ test:
 production:
   adapter: mysql
   database: earth_production
-  username:
-  password:
+  username: earth
+  password: earth
   host: localhost
