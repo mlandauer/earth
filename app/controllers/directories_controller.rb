@@ -1,6 +1,4 @@
 class DirectoriesController < ApplicationController
-  layout 'master'
-  
   def size
     if params[:server] && params[:path]
       server = Server.find_by_name(params[:server])
