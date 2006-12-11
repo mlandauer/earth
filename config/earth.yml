@@ -7,9 +7,11 @@ update_time: 2.minutes
 # Configuration for doing user and group name lookup from uid and gid
 ldap_server_name: 'ldap.syd.rsp.com.au'
 ldap_server_port: 389
-ldap_user_base: "ou=people, dc=rsp, dc=com, dc=au"
-ldap_user_id_field: "uidNumber"
-ldap_user_name_field: "uid"
-ldap_group_base: "ou=group, dc=rsp, dc=com, dc=au"
-ldap_group_id_field: "gidNumber"
-ldap_group_name_field: "cn"
+ldap_user_lookup:
+  base: "ou=people, dc=rsp, dc=com, dc=au"
+  id_field: "uidNumber"
+  name_field: "uid"
+ldap_group_lookup:
+  base: "ou=group, dc=rsp, dc=com, dc=au"
+  id_field: "gidNumber"
+  name_field: "cn"
