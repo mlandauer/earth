@@ -9,11 +9,11 @@ class OwnershipTest < Test::Unit::TestCase
   end
   
   def test_no_ldap_configured
-    saved_ldap_server_name = Ownership.ldap_server_name
-    Ownership.ldap_server_name = nil
+    saved_ldap_server_name = Ownership.config["ldap_server_name"]
+    Ownership.config["ldap_server_name"] = nil
     ownership = Ownership.new(100, 200)
     assert_equal("100", ownership.user_name)
     assert_equal("200", ownership.group_name)
-    Ownership.ldap_server_name = saved_ldap_server_name
+    Ownership.config["ldap_server_name"] = saved_ldap_server_name
   end
 end
