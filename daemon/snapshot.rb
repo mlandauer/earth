@@ -14,6 +14,7 @@ class Snapshot
     @observer = observer
     @server = directory.server
     @directory = directory
+    
     @subdirectories = Hash.new
     @directory.children.each do |x|
       @subdirectories[x.name] = x
@@ -22,7 +23,6 @@ class Snapshot
     @directory.file_info.each do |x|
       @files[x.name] = x
     end
-    @directory_stat = directory.stat
   end
   
   def update
@@ -37,15 +37,17 @@ class Snapshot
     old_file_names = @files.keys
     old_subdirectory_names = @subdirectories.keys
     
-    old_directory_stat = @directory_stat
+    directory_stat = @directory.stat
+    
+    old_directory_stat = directory_stat
     
     # TODO: remove exist? call as it is an extra filesystem access
     if File.exist?(@directory.path)
       new_stat = File.lstat(@directory.path)
-      if new_stat == @directory_stat
+      if new_stat == directory_stat
         return
       end
-      @directory_stat = new_stat
+      directory_stat = new_stat
       # Update contents if something has changed and directory is readable
       if new_stat.readable?
         file_names, subdirectory_names, stats = contents(@directory)
@@ -54,10 +56,8 @@ class Snapshot
       end
     else
       # Directory has been removed
-      stats = Hash.new
-      @directory_stat = nil
-      file_names = []
-      subdirectory_names = []
+      directory_stat = nil
+      file_names, subdirectory_names, stats = [], [], Hash.new
     end
 
     changed_file_names = (old_file_names & file_names).reject {|x| old_stats[x] == stats[x]}
@@ -89,9 +89,9 @@ class Snapshot
     end
     
     # Update the directory stat information at the end
-    if @directory_stat != old_directory_stat && File.exist?(@directory.path)
+    if File.exist?(@directory.path)
       @directory.reload
-      @directory.stat = @directory_stat
+      @directory.stat = directory_stat
       @directory.save
     end
   end
