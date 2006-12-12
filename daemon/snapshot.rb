@@ -49,7 +49,7 @@ class Snapshot
       end
       directory_stat = new_stat
       # Update contents if something has changed and directory is readable
-      if new_stat.readable?
+      if new_stat.readable? && new_stat.executable?
         file_names, subdirectory_names, stats = contents(@directory)
       else
         file_names, subdirectory_names, stats = [], [], Hash.new

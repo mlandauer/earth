@@ -131,4 +131,17 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     # Add permissions back
     File.chmod(mode, @dir1)
   end
+  
+  def test_directory_executable_permissions
+    # Make a directory readable but not executable
+    mode = File.stat(@dir1).mode
+    File.chmod(0444, @dir1)
+    @monitor.update
+    
+    assert_directories([@dir, @dir1], Directory.find_all)
+    assert_files([@file1], FileInfo.find_all)
+
+    # Add permissions back
+    File.chmod(mode, @dir1)
+  end
 end
