@@ -7,21 +7,41 @@
 /* Default */
 
 body {
-  font-family: "Gill Sans", Arial, Helvetica, sans-serif;
-  font-size: 12pt;
-  background-color: #fff;
+	font-family: "Gill Sans", Arial, Helvetica, sans-serif;
+	font-size: 12pt;
+	background-color: #fff;
+	/* let's make sure there's no border or padding */
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
 }
 
 /* Structural Elements */
 
 #Container {
-  
-}
-
-#MainFrame {
-  
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	background-color: #f2f2f2; 
 }
 
 #Banner {
   
+}
+
+#Content {
+  padding: 0px;
+}
+
+#MainFrame {
+  width: 100%;
+	background: #fff;
+	padding: 5px;
+	border: 1px solid #c2c2c2;
+}
+
+/*	Highlights */
+TD.Highlight {
+	background: #5991f5;
+	color: #ffffff;
 }
