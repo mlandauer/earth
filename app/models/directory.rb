@@ -34,26 +34,9 @@ class Directory < ActiveRecord::Base
     Stat.new(modified) unless modified.nil?
   end
   
-  # Because it's expensive to calculate the path we cache the values
-  def path
-    if @cached_path.nil?
-      @cached_path = path_uncached
-    end
-    return @cached_path
-  end
-  
   def has_children?
     reload
     children_count > 0
-  end
-  
-  # Finds the root of this directory. This is different from root
-  # which is a class method that finds an arbitrary root when there
-  # are multiple roots. Is this is a more sensible implementation for
-  # "better nested set"?
-  def root_of_this
-    reload
-    self_and_ancestors[0]
   end
   
   # Size of the files contained directly in this directory
@@ -102,13 +85,4 @@ class Directory < ActiveRecord::Base
   def path=(path)
     raise "Can't set path directly. Set name instead."
   end
-  
-private
-
-  def path_uncached
-    # TODO: Hmmm. Not happy with the reload here. Need to think more...
-    reload
-    self_and_ancestors.map{|x| x.name}.join('/')
-  end
-  
 end
