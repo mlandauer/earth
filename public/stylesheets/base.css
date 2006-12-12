@@ -45,3 +45,22 @@ TD.Highlight {
 	background: #5991f5;
 	color: #ffffff;
 }
+
+/* This is needed for the CSS graphs */
+
+.graph { 
+    position: relative; /* IE is dumb */
+    width: 200px; 
+    border: 1px solid #B1D632; 
+    padding: 2px; 
+}
+.graph .bar { 
+    display: block;
+    position: relative;
+    background: #B1D632; 
+    text-align: center; 
+    color: #333; 
+    height: 1em; 
+    line-height: 1em;            
+}
+.graph .bar span { position: absolute; left: 1em; }
