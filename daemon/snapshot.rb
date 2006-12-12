@@ -43,7 +43,24 @@ class Snapshot
     
     old_directory_stat = @directory_stat
     
-    update_contents
+    # TODO: remove exist? call as it is an extra filesystem access
+    if File.exist?(@directory.path)
+      new_stat = File.lstat(@directory.path)
+      if new_stat == @directory_stat
+        return
+      end
+      @directory_stat = new_stat
+      # Update contents if something has changed and directory is readable
+      if new_stat.readable?
+        @file_names, @subdirectory_names, @stats = contents(@directory)
+      end
+    else
+      # Directory has been removed
+      @stats.clear
+      @directory_stat = nil
+      @file_names.clear
+      @subdirectory_names.clear
+    end
 
     changed_file_names = (old_file_names & @file_names).reject {|x| old_stats[x] == @stats[x]}
     added_file_names = @file_names - old_file_names
@@ -83,40 +100,20 @@ class Snapshot
 
 private
 
-  def actual_update_contents
-    entries = Dir.entries(@directory.path)
+  def contents(directory)
+    entries = Dir.entries(directory.path)
     # Ignore all files and directories starting with '.'
     entries.delete_if {|x| x[0,1] == "."}
     
     # Contains the stat information for both files and directories
-    @stats.clear
-    entries.each {|x| @stats[x] = File.lstat(File.join(@directory.path, x))}
+    stats = Hash.new
+    entries.each {|x| stats[x] = File.lstat(File.join(directory.path, x))}
   
     # Seperately test for whether it's a file or a directory because it could
     # be something like a symbolic link (which we shouldn't follow)
-    @file_names = entries.select{|x| @stats[x].file?}
-    @subdirectory_names = entries.select{|x| @stats[x].directory?}
+    file_names = entries.select{|x| stats[x].file?}
+    subdirectory_names = entries.select{|x| stats[x].directory?}
+    
+    return file_names, subdirectory_names, stats
   end
-  
-  def update_contents
-    # TODO: remove exist? call as it is an extra filesystem access
-    if File.exist?(@directory.path)
-      new_stat = File.lstat(@directory.path)
-      if new_stat == @directory_stat
-        return
-      end
-      @directory_stat = new_stat
-      # Update contents if something has changed and directory is readable
-      if new_stat.readable?
-        actual_update_contents
-      end
-    else
-      # Directory has been removed
-      @stats.clear
-      @directory_stat = nil
-      @file_names.clear
-      @subdirectory_names.clear
-    end
-  end
-  
 end
