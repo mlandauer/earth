@@ -97,11 +97,14 @@ private
     # TODO: remove exist? call as it is an extra filesystem access
     if File.exist?(@directory.path)
       new_stat = File.lstat(@directory.path)
-      # Update contents if something has changed and directory is readable
-      if new_stat != @directory_stat && new_stat.readable?
-        actual_update_contents
+      if new_stat == @directory_stat
+        return
       end
       @directory_stat = new_stat
+      # Update contents if something has changed and directory is readable
+      if new_stat.readable?
+        actual_update_contents
+      end
     else
       # Directory has been removed
       @stats.clear
