@@ -37,26 +37,21 @@ class Snapshot
     old_file_names = @files.keys
     old_subdirectory_names = @subdirectories.keys
     
-    directory_stat = @directory.stat
-    
-    old_directory_stat = directory_stat
-    
     # TODO: remove exist? call as it is an extra filesystem access
     if File.exist?(@directory.path)
-      new_stat = File.lstat(@directory.path)
-      if new_stat == directory_stat
+      new_directory_stat = File.lstat(@directory.path)
+      if new_directory_stat == @directory.stat
         return
       end
-      directory_stat = new_stat
       # Update contents if something has changed and directory is readable
-      if new_stat.readable? && new_stat.executable?
+      if new_directory_stat.readable? && new_directory_stat.executable?
         file_names, subdirectory_names, stats = contents(@directory)
       else
         file_names, subdirectory_names, stats = [], [], Hash.new
       end
     else
       # Directory has been removed
-      directory_stat = nil
+      new_directory_stat = nil
       file_names, subdirectory_names, stats = [], [], Hash.new
     end
 
@@ -91,7 +86,7 @@ class Snapshot
     # Update the directory stat information at the end
     if File.exist?(@directory.path)
       @directory.reload
-      @directory.stat = directory_stat
+      @directory.stat = new_directory_stat
       @directory.save
     end
   end
