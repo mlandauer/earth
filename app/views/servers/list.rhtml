@@ -1,6 +1,8 @@
-<h1>Listing servers</h1>
+<div id="MainFrame">
+  
+<h3>Listing servers</h3>
 
-<table>
+<table cellpadding="0" cellspacing="0">
   <tr>
     <th>Server name</th>
     <th>Watch directory</th>
@@ -9,7 +11,7 @@
   
 <% for server in @servers %>
   <% for directory in Directory.roots_for_server(server) %>
-  <tr>
+  <tr<%= (@alt = (@alt ? false : true)) ? " class=\"shade\"" : "" %>>
     <td><%= server.name %></td>
     <td><%= link_to directory.path, :controller => 'directories', :action => :size, :id => directory %></td>
     <td><%= human_size directory.recursive_size %></td>
@@ -22,3 +24,4 @@
 <%= link_to 'Next page', { :page => @server_pages.current.next } if @server_pages.current.next %> 
 
 <br />
+</div>

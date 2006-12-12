@@ -9,7 +9,7 @@
 body {
 	font-family: "Gill Sans", Arial, Helvetica, sans-serif;
 	font-size: 12pt;
-	background-color: #fff;
+	background-color: #f2f2f2;
 	/* let's make sure there's no border or padding */
 	padding: 0px;
 	margin: 0px;
@@ -40,10 +40,24 @@ body {
 	border: 1px solid #c2c2c2;
 }
 
-/*	Highlights */
-TD.Highlight {
-	background: #5991f5;
-	color: #ffffff;
+/*	Tables */
+th.highlight {
+  border-bottom: 1px solid #8a8a8a;
+}
+
+th {
+  font-weight: normal;
+	text-align: left;
+	font-style: italic;
+}
+
+tr.shade td {
+  background: #e5e5e5;
+}
+
+td {
+  padding-left: 4px;
+  padding-right: 4px;
 }
 
 /* This is needed for the CSS graphs */
@@ -51,7 +65,6 @@ TD.Highlight {
 .graph { 
     position: relative; /* IE is dumb */
     width: 200px; 
-    border: 1px solid #B1D632; 
     padding: 2px; 
 }
 .graph .bar { 

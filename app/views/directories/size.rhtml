@@ -1,23 +1,27 @@
 <div id="MainFrame">
   
-<h2>Contents of <%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %></h2>
+<h3>Contents of <tt><%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %></tt></h3>
 
 <% units = human_units_of @max_size %>
-<table>
-  <%= "<tr><th colspan=4>Directories</th></tr>" unless @children_and_sizes.empty? %>
-<% for directory, size in @children_and_sizes %>
-  <tr>
-  <td><%= link_to directory.name, :action => :size, :id => directory %></td>
-  <td><%=h human_size_in(units, size) %></td>
-  <td><%= units %></td>
-  <td>
-    <div class="graph">
-        <div class="bar" style="width: <%= 100 * size / @max_size %>%;"/>
-    </div>
-  </td>
-  </tr>
-<% end %>
-  <tr><td></td></tr>
+<table cellspacing="0" cellpadding="0">
+  <% unless @children_and_sizes.empty? %>
+    <tr>
+      <th class="highlight" colspan="4">Directories</th>
+    </tr>
+    <% for directory, size in @children_and_sizes %>
+      <tr<%= (@alt = (@alt ? false : true)) ? " class=\"shade\"" : "" %>>
+        <td><%= link_to directory.name, :action => :size, :id => directory %></td>
+        <td><%=h human_size_in(units, size) %></td>
+        <td><%= units %></td>
+        <td>
+          <div class="graph">
+              <div class="bar" style="width: <%= 100 * size / @max_size %>%;"/>
+          </div>
+        </td>
+      </tr>
+    <%  end
+    end %>
+  <tr><td>&nbsp;</td></tr>
 <%
     if @directory.file_info.empty?
         max_size_files = 0
@@ -26,18 +30,22 @@
     end
 %>
   <% units_files = human_units_of max_size_files %>
-  <%= "<tr><th colspan=4>Files</th></tr>" unless @directory.file_info.empty? %>
-<% @directory.file_info.each do |file| %>
-    <tr>
-    <td><%= file.name %></td>
-    <td><%= human_size_in(units_files, file.size) %></td>
-    <td><%= units_files %></td>
-    <td>
-        <div class="graph">
-            <div class="bar" style="width: <%= 100 * file.size / max_size_files %>%;"/>
-        </div>
-    </td>
+  <% unless @directory.file_info.empty? %>
+  <tr>
+    <th class="highlight" colspan="4">Files</th>
+  </tr>
+  <% @directory.file_info.each do |file| %>
+    <tr<%= (@alt = (@alt ? false : true)) ? " class=\"shade\"" : "" %>>
+      <td><%= file.name %></td>
+      <td><%= human_size_in(units_files, file.size) %></td>
+      <td><%= units_files %></td>
+      <td>
+          <div class="graph">
+              <div class="bar" style="width: <%= 100 * file.size / max_size_files %>%;"/>
+          </div>
+      </td>
     </tr>
-<% end %>
+  <% end
+  end %>
 </table>
 </div>
