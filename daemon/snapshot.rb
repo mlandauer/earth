@@ -26,6 +26,18 @@ class Snapshot
   end
   
   def update
+    # TODO: remove exist? call as it is an extra filesystem access
+    if File.exist?(@directory.path)
+      new_directory_stat = File.lstat(@directory.path)
+    else
+      new_directory_stat = nil
+    end
+    
+    # If directory hasn't changed then return
+    if new_directory_stat == @directory.stat
+      return
+    end
+   
     # Set old_stats, old_file_names and old_subdirectory_names from @files and @subdirectories
     old_stats = Hash.new
     @subdirectories.each do |name, x|
@@ -37,22 +49,9 @@ class Snapshot
     old_file_names = @files.keys
     old_subdirectory_names = @subdirectories.keys
     
-    # TODO: remove exist? call as it is an extra filesystem access
-    if File.exist?(@directory.path)
-      new_directory_stat = File.lstat(@directory.path)
-      if new_directory_stat == @directory.stat
-        return
-      end
-      # Update contents if something has changed and directory is readable
-      if new_directory_stat.readable? && new_directory_stat.executable?
-        file_names, subdirectory_names, stats = contents(@directory)
-      else
-        file_names, subdirectory_names, stats = [], [], Hash.new
-      end
-    else
-      # Directory has been removed
-      new_directory_stat = nil
-      file_names, subdirectory_names, stats = [], [], Hash.new
+    file_names, subdirectory_names, stats = [], [], Hash.new
+    if new_directory_stat && new_directory_stat.readable? && new_directory_stat.executable?
+      file_names, subdirectory_names, stats = contents(@directory)
     end
 
     changed_file_names = (old_file_names & file_names).reject {|x| old_stats[x] == stats[x]}
