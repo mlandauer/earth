@@ -21,24 +21,7 @@
 
 <% units = human_units_of @max_size %>
 <table>
-  <tr>
-  <th>Path</th>
-  <th colspan=2>Size</th>
-  <th></th>
-  </tr>
-
-  <tr>
-  <td><%= link_to "Files in this directory", :action => :file_sizes, :id => @directory %></td>
-  <td><%=h human_size_in(units, @directory.size) %></td>
-  <td><%= units %></td>
-  <td>
-    <div class="graph">
-        <strong class="bar" style="width: <%= 100 * @directory.size / @max_size %>%;">
-        </strong>
-    </div>
-  </td>
-  </tr>
-
+  <%= "<tr><th colspan=4>Directories</th></tr>" unless @children_and_sizes.empty? %>
 <% for directory, size in @children_and_sizes %>
   <tr>
   <td><%= link_to directory.name, :action => :size, :id => directory %></td>
@@ -46,10 +29,31 @@
   <td><%= units %></td>
   <td>
     <div class="graph">
-        <strong class="bar" style="width: <%= 100 * size / @max_size %>%;">
-        </strong>
+        <div class="bar" style="width: <%= 100 * size / @max_size %>%;"/>
     </div>
   </td>
   </tr>
+<% end %>
+  <tr><td></td></tr>
+<%
+    if @directory.file_info.empty?
+        max_size_files = 0
+    else
+        max_size_files = @directory.file_info.map {|f| f.size}.max
+    end
+%>
+  <% units_files = human_units_of max_size_files %>
+  <%= "<tr><th colspan=4>Files</th></tr>" unless @directory.file_info.empty? %>
+<% @directory.file_info.each do |file| %>
+    <tr>
+    <td><%= file.name %></td>
+    <td><%= human_size_in(units_files, file.size) %></td>
+    <td><%= units_files %></td>
+    <td>
+        <div class="graph">
+            <div class="bar" style="width: <%= 100 * file.size / max_size_files %>%;"/>
+        </div>
+    </td>
+    </tr>
 <% end %>
 </table>

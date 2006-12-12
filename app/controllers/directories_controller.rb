@@ -14,13 +14,12 @@ class DirectoriesController < ApplicationController
     # Sort the directories so that the largest comes first
     @children_and_sizes.sort!{|a,b| b[1] <=> a[1]}
     if @children_and_sizes.empty?
-      @max_size = @directory_size
+      @max_size = 0
     else
       @max_size = @children_and_sizes.first[1]
-      # Include the size of this directory
-      if @directory_size > @max_size
-        @max_size = @directory_size
-      end
+    end
+    if @max_size == 0
+      @max_size = 1
     end
     
     respond_to do |wants|
@@ -28,9 +27,4 @@ class DirectoriesController < ApplicationController
       wants.xml {render :action => "size.rxml", :layout => false}
     end
   end
-  
-  def file_sizes
-    @directory = Directory.find(params[:id])
-  end
-  
 end
