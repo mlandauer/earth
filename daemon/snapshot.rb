@@ -46,56 +46,38 @@ class Snapshot
     added_directory_names = @subdirectory_names - old_subdirectory_names
     removed_directory_names = old_subdirectory_names - @subdirectory_names
 
-    changed_file_names.each {|x| file_changed(@files[x], @stats[x])}
-    added_directory_names.each {|x| @subdirectories[x] = directory_added(@directory, x)}
-    added_file_names.each {|x| @files[x] = file_added(@directory, x, @stats[x])}
-    removed_file_names.each do |x|
-      file_removed(@files[x])
-      @files.delete(x)
+    changed_file_names.each do |name|
+      @files[name].stat = @stats[name]
+      @files[name].save
     end
-    removed_directory_names.each do |x|
-      directory_removed(@subdirectories[x])
-      @subdirectories.delete(x)
+    added_directory_names.each do |name|
+      directory = @server.directories.create(:name => name, :parent => @directory)
+      @observer.directory_added(directory) unless @observer.nil?
+      @subdirectories[name] = directory
+    end
+    added_file_names.each do |name|
+      @files[name] = FileInfo.create(:directory => @directory, :name => name, :stat => @stats[name])
+    end
+    removed_file_names.each do |name|
+      @files[name].destroy
+      @files.delete(name)
+    end
+    removed_directory_names.each do |name|
+      @observer.directory_removed(@subdirectories[name]) unless @observer.nil?
+      @subdirectories[name].destroy
+      @subdirectories.delete(name)
     end
     
-    # Send the directory_changed message right at the end
+    # Update the directory stat information at the end
     if @directory_stat != old_directory_stat && File.exist?(@directory.path)
-      directory_changed(@directory, @directory_stat)
+      @directory.reload
+      @directory.stat = @directory_stat
+      @directory.save
     end
   end
 
 private
 
-  def directory_added(parent_directory, name)
-    directory = @server.directories.create(:name => name, :parent => parent_directory)
-    @observer.directory_added(directory) unless @observer.nil?
-    directory
-  end
-  
-  def directory_removed(directory)
-    @observer.directory_removed(directory) unless @observer.nil?
-    directory.destroy
-  end
-  
-  def directory_changed(directory, stat)
-    directory.reload
-    directory.stat = stat
-    directory.save
-  end
-
-  def file_added(directory, name, stat)
-    FileInfo.create(:directory => directory, :name => name, :stat => stat)
-  end
-  
-  def file_removed(file)
-    file.destroy
-  end
-  
-  def file_changed(file, stat)
-    file.stat = stat
-    file.save
-  end
-  
   def actual_update_contents
     entries = Dir.entries(@directory.path)
     # Ignore all files and directories starting with '.'
