@@ -16,7 +16,8 @@
     }
     .graph .bar span { position: absolute; left: 1em; }
 </style>
-
+<div id="MainFrame">
+  
 <h2>Contents of <%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %></h2>
 
 <% units = human_units_of @max_size %>
@@ -57,3 +58,4 @@
     </tr>
 <% end %>
 </table>
+</div>
