@@ -19,10 +19,6 @@ class Snapshot
     @directory.children.each do |x|
       @subdirectories[x.name] = x
     end
-    @files = Hash.new
-    @directory.file_info.each do |x|
-      @files[x.name] = x
-    end
   end
   
   def update
@@ -38,15 +34,23 @@ class Snapshot
       return
     end
    
-    # Set old_stats, old_file_names and old_subdirectory_names from @files and @subdirectories
+    # Set files from @directory
+    # This will only load the files when we know that a directory has changed.
+    # TODO: Check what happens when new files are created and files are deleted
+    files = Hash.new
+    @directory.file_info.each do |x|
+      files[x.name] = x
+    end
+    
+    # Set old_stats, old_file_names and old_subdirectory_names from files and @subdirectories
     old_stats = Hash.new
     @subdirectories.each do |name, x|
       old_stats[name] = x.stat
     end
-    @files.each do |name, x|
+    files.each do |name, x|
       old_stats[name] = x.stat
     end
-    old_file_names = @files.keys
+    old_file_names = files.keys
     old_subdirectory_names = @subdirectories.keys
     
     file_names, subdirectory_names, stats = [], [], Hash.new
@@ -61,8 +65,8 @@ class Snapshot
     removed_directory_names = old_subdirectory_names - subdirectory_names
 
     changed_file_names.each do |name|
-      @files[name].stat = stats[name]
-      @files[name].save
+      files[name].stat = stats[name]
+      files[name].save
     end
     added_directory_names.each do |name|
       directory = @server.directories.create(:name => name, :parent => @directory)
@@ -70,11 +74,11 @@ class Snapshot
       @subdirectories[name] = directory
     end
     added_file_names.each do |name|
-      @files[name] = FileInfo.create(:directory => @directory, :name => name, :stat => stats[name])
+      files[name] = @directory.file_info.create(:name => name, :stat => stats[name])
     end
     removed_file_names.each do |name|
-      @files[name].destroy
-      @files.delete(name)
+      files[name].destroy
+      files.delete(name)
     end
     removed_directory_names.each do |name|
       @observer.directory_removed(@subdirectories[name]) unless @observer.nil?
