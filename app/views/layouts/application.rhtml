@@ -5,13 +5,21 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<%= stylesheet_link_tag 'base' %>
+	<%=	javascript_include_tag :defaults %>
 	<title>Earth</title>
 	
 </head>
 
 <body>
 
-<%= yield  %>
+<div id="Container">
+	<div id="Banner">
+		<!-- Holding Space for a Banner -->
+	</div>
+	<div id="Content">
+		<%= yield  %>
+	</div>
+</div>
 
 </body>
 </html>
