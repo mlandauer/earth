@@ -84,17 +84,14 @@ private
   end
 
   def file_added(directory, name, stat)
-    #puts "File ADDED: #{name} in directory #{directory.path}"
     FileInfo.create(:directory => directory, :name => name, :stat => stat)
   end
   
   def file_removed(file)
-    #puts "File REMOVED: #{file.name} in directory #{file.directory.path}"
     file.destroy
   end
   
   def file_changed(file, stat)
-    #puts "File CHANGED: #{file.name} in directory #{file.path}"
     file.stat = stat
     file.save
   end
