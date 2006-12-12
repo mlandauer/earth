@@ -24,8 +24,9 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     FileInfo.delete_all
     Directory.delete_all
 
-    @queue = FileDatabaseUpdater.new(Server.this_server)
-    @monitor = PosixFileMonitor.new(@queue.directory_added(nil, @dir), @queue)
+    server = Server.this_server
+    @queue = FileDatabaseUpdater.new(server)
+    @monitor = PosixFileMonitor.new(server.directories.create(:name => @dir), @queue)
   end
   
   def teardown

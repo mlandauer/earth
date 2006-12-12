@@ -1,7 +1,7 @@
 class PosixFileMonitor < FileMonitor
   def initialize(directory, observer)
     super(observer)
-
+    @server = directory.server
     snapshot = Snapshot.new(directory, self)
     @snapshots = DirectoryTree.new(directory.path, snapshot)
     # Retrieve all subdirectories from the database
@@ -11,19 +11,15 @@ class PosixFileMonitor < FileMonitor
     end
   end
   
-  # Diverting messages from Snapshot objects
-  def directory_added(parent_directory, name)
-    directory = @observer.directory_added(parent_directory, name)
+  def directory_added(directory)
     snapshot = Snapshot.new(directory, self)
     @snapshots.add(directory.path, snapshot)
     snapshot.update
     directory
   end
 
-  # Diverting messages from Snapshot objects
   def directory_removed(directory)
     @snapshots.delete(directory.path)
-    @observer.directory_removed(directory)
   end
   
   def update

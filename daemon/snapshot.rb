@@ -12,6 +12,7 @@ class Snapshot < FileMonitor
 
   def initialize(directory, observer)
     super(observer)
+    @server = directory.server
     @directory = directory
     @stats = Hash.new
     @subdirectories = Hash.new
@@ -65,6 +66,39 @@ class Snapshot < FileMonitor
 
 private
 
+  def directory_added(parent_directory, name)
+    directory = @server.directories.create(:name => name, :parent => parent_directory)
+    @observer.directory_added(directory)
+    directory
+  end
+  
+  def directory_removed(directory)
+    @observer.directory_removed(directory)
+    directory.destroy
+  end
+  
+  def directory_changed(directory, stat)
+    directory.reload
+    directory.stat = stat
+    directory.save
+  end
+
+  def file_added(directory, name, stat)
+    #puts "File ADDED: #{name} in directory #{directory.path}"
+    FileInfo.create(:directory => directory, :name => name, :stat => stat)
+  end
+  
+  def file_removed(file)
+    #puts "File REMOVED: #{file.name} in directory #{file.directory.path}"
+    file.destroy
+  end
+  
+  def file_changed(file, stat)
+    #puts "File CHANGED: #{file.name} in directory #{file.path}"
+    file.stat = stat
+    file.save
+  end
+  
   def actual_update_contents
     entries = Dir.entries(@directory.path)
     # Ignore all files and directories starting with '.'
