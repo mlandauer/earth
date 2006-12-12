@@ -14,28 +14,33 @@ class Snapshot
     @observer = observer
     @server = directory.server
     @directory = directory
-    @stats = Hash.new
     @subdirectories = Hash.new
-    @subdirectory_names = []
     @directory.children.each do |x|
       @subdirectories[x.name] = x
-      @subdirectory_names << x.name
-      @stats[x.name] = x.stat
     end
     @files = Hash.new
-    @file_names = []
     @directory.file_info.each do |x|
       @files[x.name] = x
-      @file_names << x.name
-      @stats[x.name] = x.stat
     end
     @directory_stat = directory.stat
+    
+    @stats = Hash.new
+    @file_names = []
+    @subdirectory_names = []
   end
   
   def update
-    old_file_names = @file_names.clone
-    old_subdirectory_names = @subdirectory_names.clone
-    old_stats = @stats.clone
+    # Set old_stats, old_file_names and old_subdirectory_names from @files and @subdirectories
+    old_stats = Hash.new
+    @subdirectories.each do |name, x|
+      old_stats[name] = x.stat
+    end
+    @files.each do |name, x|
+      old_stats[name] = x.stat
+    end
+    old_file_names = @files.keys
+    old_subdirectory_names = @subdirectories.keys
+    
     old_directory_stat = @directory_stat
     
     update_contents
