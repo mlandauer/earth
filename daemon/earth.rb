@@ -50,14 +50,13 @@ update_time = eval(YAML.load(File.open(config_file))["update_time"])
 puts "Update time is set to #{update_time} seconds. To change edit #{config_file}"
 
 this_server = Server.this_server
-updater = FileDatabaseUpdater.new(this_server)
 
 if ARGV.length == 1
   watch_directory = File.expand_path(ARGV[0])
   puts "WARNING: Watching new directory. So, clearing out database"
   this_server.directories.clear
     
-  directory = updater.directory_added(nil, watch_directory)
+  directory = this_server.directories.create(:name => watch_directory)
 else
   directories = Directory.roots_for_server(this_server)
   raise "Currently not properly supporting multiple watch directories" if directories.size > 1
@@ -70,7 +69,7 @@ else
   puts "Collecting startup data from database..."
 end
 
-monitor = PosixFileMonitor.new(directory, updater)
+monitor = PosixFileMonitor.new(directory)
 puts "Watching directory #{directory.path}"
 
 while true do

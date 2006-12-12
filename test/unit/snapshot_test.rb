@@ -15,9 +15,8 @@ class SnapshotTest < Test::Unit::TestCase
     Directory.delete_all
 
     server = Server.this_server
-    @queue = FileDatabaseUpdater.new(server)
     directory = server.directories.create(:name => @dir)
-    @monitor = Snapshot.new(directory, @queue)
+    @monitor = Snapshot.new(directory, nil)
   end
 
   def teardown

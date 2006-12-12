@@ -7,11 +7,11 @@
 #
 # $Id$
 
-class Snapshot < FileMonitor
+class Snapshot
   attr_reader :directory, :subdirectories
 
   def initialize(directory, observer)
-    super(observer)
+    @observer = observer
     @server = directory.server
     @directory = directory
     @stats = Hash.new
@@ -68,12 +68,12 @@ private
 
   def directory_added(parent_directory, name)
     directory = @server.directories.create(:name => name, :parent => parent_directory)
-    @observer.directory_added(directory)
+    @observer.directory_added(directory) unless @observer.nil?
     directory
   end
   
   def directory_removed(directory)
-    @observer.directory_removed(directory)
+    @observer.directory_removed(directory) unless @observer.nil?
     directory.destroy
   end
   

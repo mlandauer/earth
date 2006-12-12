@@ -1,6 +1,5 @@
-class PosixFileMonitor < FileMonitor
-  def initialize(directory, observer)
-    super(observer)
+class PosixFileMonitor
+  def initialize(directory)
     @server = directory.server
     snapshot = Snapshot.new(directory, self)
     @snapshots = DirectoryTree.new(directory.path, snapshot)
