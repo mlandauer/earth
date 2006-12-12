@@ -23,10 +23,6 @@ class Snapshot
       @files[x.name] = x
     end
     @directory_stat = directory.stat
-    
-    @stats = Hash.new
-    @file_names = []
-    @subdirectory_names = []
   end
   
   def update
@@ -52,24 +48,26 @@ class Snapshot
       @directory_stat = new_stat
       # Update contents if something has changed and directory is readable
       if new_stat.readable?
-        @file_names, @subdirectory_names, @stats = contents(@directory)
+        file_names, subdirectory_names, stats = contents(@directory)
+      else
+        file_names, subdirectory_names, stats = [], [], Hash.new
       end
     else
       # Directory has been removed
-      @stats.clear
+      stats = Hash.new
       @directory_stat = nil
-      @file_names.clear
-      @subdirectory_names.clear
+      file_names = []
+      subdirectory_names = []
     end
 
-    changed_file_names = (old_file_names & @file_names).reject {|x| old_stats[x] == @stats[x]}
-    added_file_names = @file_names - old_file_names
-    removed_file_names = old_file_names - @file_names
-    added_directory_names = @subdirectory_names - old_subdirectory_names
-    removed_directory_names = old_subdirectory_names - @subdirectory_names
+    changed_file_names = (old_file_names & file_names).reject {|x| old_stats[x] == stats[x]}
+    added_file_names = file_names - old_file_names
+    removed_file_names = old_file_names - file_names
+    added_directory_names = subdirectory_names - old_subdirectory_names
+    removed_directory_names = old_subdirectory_names - subdirectory_names
 
     changed_file_names.each do |name|
-      @files[name].stat = @stats[name]
+      @files[name].stat = stats[name]
       @files[name].save
     end
     added_directory_names.each do |name|
@@ -78,7 +76,7 @@ class Snapshot
       @subdirectories[name] = directory
     end
     added_file_names.each do |name|
-      @files[name] = FileInfo.create(:directory => @directory, :name => name, :stat => @stats[name])
+      @files[name] = FileInfo.create(:directory => @directory, :name => name, :stat => stats[name])
     end
     removed_file_names.each do |name|
       @files[name].destroy
