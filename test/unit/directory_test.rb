@@ -14,9 +14,9 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_path_on_create
-    dir = Directory.create(:name => "another", :parent => directories(:foo_bar))
+    dir = Server.this_server.directories.create(:name => "another", :parent => directories(:foo_bar))
     assert_equal("/foo/bar/another", dir.path)
-    dir = Directory.create(:name => "/a/root/directory")
+    dir = Server.this_server.directories.create(:name => "/a/root/directory")
     assert_equal("/a/root/directory", dir.path)
   end
   
@@ -24,7 +24,7 @@ class DirectoryTest < Test::Unit::TestCase
   def test_set_parent 
     assert_equal(2, directories(:foo_bar).lft)
     assert_equal(5, directories(:foo_bar).rgt)
-    dir = Directory.create(:name => "another")
+    dir = Server.this_server.directories.create(:name => "another")
     dir.parent = directories(:foo_bar)
     dir.save
     assert_equal(directories(:foo_bar).id, dir.parent_id)
@@ -38,7 +38,7 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_set_parent_on_create
-    dir = Directory.create(:name => "another", :parent => directories(:foo_bar))
+    dir = Server.this_server.directories.create(:name => "another", :parent => directories(:foo_bar))
     assert_equal(directories(:foo_bar).id, dir.parent_id)
     assert_equal(3, dir.lft)
     assert_equal(4, dir.rgt)
