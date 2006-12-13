@@ -67,8 +67,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
   
   def test_added
     @monitor.update
-    assert_directories([@dir, @dir1], Directory.find_all)
-    assert_files([@file2, @file1], FileInfo.find_all)
+    assert_directories([@dir, @dir1], Directory.find(:all))
+    assert_files([@file2, @file1], FileInfo.find(:all))
   end
 
   def test_removed
@@ -77,8 +77,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     FileUtils.rm 'test_data/file1'
     @monitor.update
     
-    assert_directories([@dir], Directory.find_all)
-    assert_files([], FileInfo.find_all)
+    assert_directories([@dir], Directory.find(:all))
+    assert_files([], FileInfo.find(:all))
   end
 
   def test_removed2
@@ -90,8 +90,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     FileUtils.rm_rf @dir1
     @monitor.update
     
-    assert_directories([@dir], Directory.find_all)
-    assert_files([@file1], FileInfo.find_all)
+    assert_directories([@dir], Directory.find(:all))
+    assert_files([@file1], FileInfo.find(:all))
   end
   
   def test_changed
@@ -103,8 +103,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     FileUtils.touch file3
     @monitor.update
     
-    assert_directories([@dir, @dir1], Directory.find_all)
-    assert_files([@file2, @file1, file3], FileInfo.find_all)
+    assert_directories([@dir, @dir1], Directory.find(:all))
+    assert_files([@file2, @file1, file3], FileInfo.find(:all))
   end
   
   def test_added_in_subdirectory
@@ -113,8 +113,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     FileUtils.touch file3
     @monitor.update
     
-    assert_directories([@dir, @dir1], Directory.find_all)
-    assert_files([@file2, @file1, file3], FileInfo.find_all)
+    assert_directories([@dir, @dir1], Directory.find(:all))
+    assert_files([@file2, @file1, file3], FileInfo.find(:all))
   end
 
   # If the daemon doesn't have permission to list the directory
@@ -125,8 +125,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     File.chmod(0000, @dir1)
     @monitor.update
     
-    assert_directories([@dir, @dir1], Directory.find_all)
-    assert_files([@file1], FileInfo.find_all)
+    assert_directories([@dir, @dir1], Directory.find(:all))
+    assert_files([@file1], FileInfo.find(:all))
 
     # Add permissions back
     File.chmod(mode, @dir1)
@@ -138,8 +138,8 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     File.chmod(0444, @dir1)
     @monitor.update
     
-    assert_directories([@dir, @dir1], Directory.find_all)
-    assert_files([@file1], FileInfo.find_all)
+    assert_directories([@dir, @dir1], Directory.find(:all))
+    assert_files([@file1], FileInfo.find(:all))
 
     # Add permissions back
     File.chmod(mode, @dir1)

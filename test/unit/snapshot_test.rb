@@ -26,14 +26,14 @@ class SnapshotTest < Test::Unit::TestCase
   def test_simple
     @monitor.update
 
-    directories = Directory.find_all
+    directories = Directory.find(:all)
     assert_equal(2, directories.size)
     assert_equal(@dir, directories[0].path)
     assert_equal(File.lstat(@dir), directories[0].stat)
     assert_equal(@dir2, directories[1].path)
     assert_nil(directories[1].stat)
 
-    files = FileInfo.find_all
+    files = FileInfo.find(:all)
     assert_equal(1, files.size)
     assert_equal(@dir, files[0].directory.path)
     assert_equal('file1', files[0].name)
@@ -44,12 +44,12 @@ class SnapshotTest < Test::Unit::TestCase
     FileUtils.rm_rf @dir
     @monitor.update
     
-    directories = Directory.find_all
+    directories = Directory.find(:all)
     assert_equal(1, directories.size)
     assert_equal(@dir, directories[0].path)
     # Not checking the stat of the top directory as it has been deleted
     
-    files = FileInfo.find_all
+    files = FileInfo.find(:all)
     assert_equal(0, files.size)
   end
 end

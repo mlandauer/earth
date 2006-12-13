@@ -18,10 +18,10 @@ class ServerTest < Test::Unit::TestCase
   
   def test_delete_all_directories
     Server.this_server.destroy
-    directories = Directory.find_all
+    directories = Directory.find(:all)
     assert_equal(1, directories.size)
     assert_equal(directories(:bar), directories[0])
-    files = FileInfo.find_all
+    files = FileInfo.find(:all)
     assert_equal(0, files.size)
   end
 end

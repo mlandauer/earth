@@ -3,8 +3,8 @@
 Search for a file in the <b>earth</b> database.(* can be used as a wildcard, eg *.rb)
 <br />
 <br />
-<%= start_form_tag :action => 'find'%>
+<% form_tag :action => 'find' do %>
   <%= text_field_tag 'find_value' %>
   <%= submit_tag 'Find' %>
-<%= end_form_tag %>
+<% end %>
 
