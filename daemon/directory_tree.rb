@@ -12,10 +12,13 @@ class DirectoryTree
     DirectoryTree.new(@path, @value, @children.map {|x| x.clone})
   end
 
-  def add(path, value)
-    subtree = find(File.dirname(path))
+  def add(parent_path, name, value)
+    #parent_path = File.dirname(path)
+    #name = File.basename(path)
+    
+    subtree = find(parent_path)
     raise "Couldn't add path #{path}" if subtree.nil?
-    t = subtree.add_to_root(File.basename(path), value)
+    t = subtree.add_to_root(name, value)
     @all_children[t.path] = t
   end
   

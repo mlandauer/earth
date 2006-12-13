@@ -3,17 +3,17 @@ require File.dirname(__FILE__) + '/../test_helper'
 class DirectoryTreeTest < Test::Unit::TestCase
   def setup
     @t = DirectoryTree.new("/usr/images", "Parent")
-    @t.add("/usr/images/c1", "Child 1")
-    @t.add("/usr/images/c1/g1.1", "Grandchild 1.1")
-    @t.add("/usr/images/c1/g1.2", "Grandchild 1.2")
-    @t.add("/usr/images/c2", "Child 2")
-    @t.add("/usr/images/c2/g2.1", "Grandchild 2.1")
+    @t.add("/usr/images", "c1", "Child 1")
+    @t.add("/usr/images/c1", "g1.1", "Grandchild 1.1")
+    @t.add("/usr/images/c1", "g1.2", "Grandchild 1.2")
+    @t.add("/usr/images", "c2", "Child 2")
+    @t.add("/usr/images/c2", "g2.1", "Grandchild 2.1")
   end
   
   def test_clone
     t2 = @t.clone
     @t.delete("/usr/images/c1/g1.1")
-    @t.add("/usr/images/c3", "Child 3")
+    @t.add("/usr/images", "c3", "Child 3")
     t_contents = []
     t2_contents = []
     @t.each {|x| t_contents << x}
@@ -23,7 +23,7 @@ class DirectoryTreeTest < Test::Unit::TestCase
   end
   
   def test_add_non_existent
-    assert_raise(RuntimeError) {@t.add("/usr/images/foo/foo2", "foo")}
+    assert_raise(RuntimeError) {@t.add("/usr/images/foo", "foo2", "foo")}
   end
   
   def test_delete
