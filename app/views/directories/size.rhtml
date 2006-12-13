@@ -1,8 +1,13 @@
 <div id="MainFrame">
   
-<h3>Contents of <tt><%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %></tt></h3>
+<h3>
+  Contents of <tt><%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %></tt>
+  <%= link_to image_tag("excel.png", :size => "20x22", :alt => "Save as CSV", :class => "img",
+      :title => "Save as CSV"),
+    { :action => :save_as_csv, :id => params[:id] }  %>
+</h3>
 
-<%= button_to "Save as CSV", :action => :save_as_csv, :id => params[:id] %>
+
 
 <br>
 <% units = human_units_of @max_size %>

@@ -21,6 +21,7 @@ body {
 #Container {
 	width: 100%;
 	height: 100%;
+	overflow: hidden;
 	background-color: #f2f2f2; 
 }
 
@@ -86,3 +87,8 @@ td {
   line-height: 1em;            
 }
 .graph .bar span { position: absolute; left: 1em; }
+
+/* Images */
+.img {
+  border: 0;
+}
