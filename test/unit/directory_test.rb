@@ -96,4 +96,23 @@ class DirectoryTest < Test::Unit::TestCase
     foo.file_info.delete(file2)
     assert_no_queries {assert_equal([file1, file3], foo.file_info)}
   end
+  
+  #TODO: Write test_child_create
+
+  def test_children
+    foo = directories(:foo)
+    foo_bar = directories(:foo_bar)
+    
+    assert_equal([foo_bar], foo.children)
+    assert_no_queries{assert_equal([foo_bar], foo.children)}
+    
+    foo_fiddle = foo.child_create(:name => "fiddle")
+    assert_no_queries{assert_equal([foo_fiddle, foo_bar], foo.children)}
+    # Force a reload of children and check that the values are correct too
+    assert_queries(1){assert_equal([foo_fiddle, foo_bar], foo.children(true))}
+    foo.child_delete(foo_bar)
+    assert_no_queries{assert_equal([foo_fiddle], foo.children)}
+    assert_queries(1){assert_equal([foo_fiddle], foo.children(true))}
+  end
+  
 end

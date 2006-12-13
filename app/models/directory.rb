@@ -85,4 +85,23 @@ class Directory < ActiveRecord::Base
   def path=(path)
     raise "Can't set path directly. Set name instead."
   end
+  
+  alias :children_no_caching :children
+  def children(reload = false)
+    @children = children_no_caching if @children.nil? || reload
+    return @children
+  end
+  
+  def child_create(attributes)
+    raise "Can't set parent or server_id" if attributes[:parent] || attributes[:server_id]
+    directory = Directory.create(attributes.merge(:parent => self, :server_id => server_id))
+    # Adding this directory to children at the front to maintain the same order as children(true)
+    @children = [directory] + @children if @children
+    directory
+  end
+  
+  def child_delete(child)
+    @children.delete(child) {raise "Not a child of this directory"} if @children
+    child.destroy
+  end
 end
