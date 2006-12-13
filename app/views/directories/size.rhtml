@@ -2,6 +2,9 @@
   
 <h3>Contents of <tt><%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %></tt></h3>
 
+<%= button_to "Save as CSV", :action => :save_as_csv, :id => params[:id] %>
+
+<br>
 <% units = human_units_of @max_size %>
 <table cellspacing="0" cellpadding="0">
   <% unless @children_and_sizes.empty? %>
