@@ -12,13 +12,7 @@ class Snapshot
 
   def initialize(directory, observer)
     @observer = observer
-    @server = directory.server
-    @directory = directory
-    
-    @subdirectories = Hash.new
-    @directory.children.each do |x|
-      @subdirectories[x.name] = x
-    end
+    @directory = directory 
   end
   
   def update
@@ -33,7 +27,13 @@ class Snapshot
     if new_directory_stat == @directory.stat
       return
     end
-   
+
+    # Set subdirectories from @directory   
+    subdirectories = Hash.new
+    @directory.children.each do |x|
+      subdirectories[x.name] = x
+    end
+
     # Set files from @directory
     # This will only load the files when we know that a directory has changed.
     files = Hash.new
@@ -41,16 +41,16 @@ class Snapshot
       files[x.name] = x
     end
     
-    # Set old_stats, old_file_names and old_subdirectory_names from files and @subdirectories
+    # Set old_stats, old_file_names and old_subdirectory_names from files and subdirectories
     old_stats = Hash.new
-    @subdirectories.each do |name, x|
+    subdirectories.each do |name, x|
       old_stats[name] = x.stat
     end
     @directory.file_info.each do |x|
       old_stats[x.name] = x.stat
     end
     old_file_names = @directory.file_info.map{|f| f.name}
-    old_subdirectory_names = @subdirectories.keys
+    old_subdirectory_names = subdirectories.keys
     
     file_names, subdirectory_names, stats = [], [], Hash.new
     if new_directory_stat && new_directory_stat.readable? && new_directory_stat.executable?
@@ -68,9 +68,8 @@ class Snapshot
       files[name].save
     end
     added_directory_names.each do |name|
-      directory = @server.directories.create(:name => name, :parent => @directory)
+      directory = @directory.child_create(:name => name)
       @observer.directory_added(directory) unless @observer.nil?
-      @subdirectories[name] = directory
     end
     # By adding and removing files on the association, the cache of the association will be kept up to date
     added_file_names.each do |name|
@@ -80,9 +79,8 @@ class Snapshot
       @directory.file_info.delete(files[name])
     end
     removed_directory_names.each do |name|
-      @observer.directory_removed(@subdirectories[name]) unless @observer.nil?
-      @subdirectories[name].destroy
-      @subdirectories.delete(name)
+      @observer.directory_removed(subdirectories[name]) unless @observer.nil?
+      @directory.child_delete(subdirectories[name])
     end
     
     # Update the directory stat information at the end
