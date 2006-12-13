@@ -54,3 +54,5 @@ end
 Inflector.inflections do |inflect|
   inflect.irregular 'info', 'info'
 end
+
+Mime::Type.register "text/csv", :csv
