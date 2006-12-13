@@ -40,6 +40,16 @@ body {
 	border: 1px solid #c2c2c2;
 }
 
+/* General elements */
+
+h2 {
+	font-family: "Lucida Grande", arial, sans-serif;
+	margin: 20px 0 5px 0px;
+	color: #333;
+	font-size: 14px;
+	padding: 0;
+}
+
 /*	Tables */
 th.highlight {
   border-bottom: 1px solid #8a8a8a;
@@ -93,3 +103,4 @@ td {
   border: 0;
 	vertical-align: middle;
 }
+
