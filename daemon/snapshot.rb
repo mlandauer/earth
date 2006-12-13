@@ -36,7 +36,6 @@ class Snapshot
    
     # Set files from @directory
     # This will only load the files when we know that a directory has changed.
-    # TODO: Check what happens when new files are created and files are deleted
     files = Hash.new
     @directory.file_info.each do |x|
       files[x.name] = x
@@ -47,10 +46,10 @@ class Snapshot
     @subdirectories.each do |name, x|
       old_stats[name] = x.stat
     end
-    files.each do |name, x|
-      old_stats[name] = x.stat
+    @directory.file_info.each do |x|
+      old_stats[x.name] = x.stat
     end
-    old_file_names = files.keys
+    old_file_names = @directory.file_info.map{|f| f.name}
     old_subdirectory_names = @subdirectories.keys
     
     file_names, subdirectory_names, stats = [], [], Hash.new
@@ -73,12 +72,12 @@ class Snapshot
       @observer.directory_added(directory) unless @observer.nil?
       @subdirectories[name] = directory
     end
+    # By adding and removing files on the association, the cache of the association will be kept up to date
     added_file_names.each do |name|
-      files[name] = @directory.file_info.create(:name => name, :stat => stats[name])
+      @directory.file_info.create(:name => name, :stat => stats[name])
     end
     removed_file_names.each do |name|
-      files[name].destroy
-      files.delete(name)
+      @directory.file_info.delete(files[name])
     end
     removed_directory_names.each do |name|
       @observer.directory_removed(@subdirectories[name]) unless @observer.nil?
