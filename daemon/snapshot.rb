@@ -8,8 +8,6 @@
 # $Id$
 
 class Snapshot
-  attr_reader :directory, :subdirectories
-
   def initialize(directory, observer)
     @observer = observer
     @directory = directory 
@@ -28,56 +26,43 @@ class Snapshot
       return
     end
 
-    # Set old_stats, old_file_names and old_subdirectory_names from files and subdirectories
-    old_stats = Hash.new
-    @directory.children.each do |x|
-      old_stats[x.name] = x.stat
-    end
-    @directory.file_info.each do |x|
-      old_stats[x.name] = x.stat
-    end
-    old_file_names = @directory.file_info.map{|x| x.name}
-    old_subdirectory_names = @directory.children.map{|x| x.name}
-    
     file_names, subdirectory_names, stats = [], [], Hash.new
     if new_directory_stat && new_directory_stat.readable? && new_directory_stat.executable?
       file_names, subdirectory_names, stats = contents(@directory)
     end
 
-    changed_file_names = (old_file_names & file_names).reject {|x| old_stats[x] == stats[x]}
-    added_file_names = file_names - old_file_names
-    removed_file_names = old_file_names - file_names
-    added_directory_names = subdirectory_names - old_subdirectory_names
-    removed_directory_names = old_subdirectory_names - subdirectory_names
-
-    # Set files and subdirectories from @directory   
-    files = Hash.new
-    @directory.file_info.each do |x|
-      files[x.name] = x
-    end
-    subdirectories = Hash.new
-    @directory.children.each do |x|
-      subdirectories[x.name] = x
-    end
-
-    changed_file_names.each do |name|
-      files[name].stat = stats[name]
-      files[name].save
-    end
+    added_directory_names = subdirectory_names - @directory.children.map{|x| x.name}
     added_directory_names.each do |name|
       directory = @directory.child_create(:name => name)
       @observer.directory_added(directory) unless @observer.nil?
     end
+
     # By adding and removing files on the association, the cache of the association will be kept up to date
+    added_file_names = file_names - @directory.file_info.map{|x| x.name}
     added_file_names.each do |name|
       @directory.file_info.create(:name => name, :stat => stats[name])
     end
-    removed_file_names.each do |name|
-      @directory.file_info.delete(files[name])
+
+    @directory.file_info.each do |file|
+      # If the file still exists
+      if file_names.include?(file.name)
+        # If the file has changed
+        if file.stat != stats[file.name]
+          file.stat = stats[file.name]
+          file.save
+        end
+      # If the file has been deleted
+      else
+        @directory.file_info.delete(file)
+      end
     end
-    removed_directory_names.each do |name|
-      @observer.directory_removed(subdirectories[name]) unless @observer.nil?
-      @directory.child_delete(subdirectories[name])
+    
+    @directory.children.each do |dir|
+      # If the directory has been deleted
+      if !subdirectory_names.include?(dir.name)
+        @observer.directory_removed(dir) unless @observer.nil?
+        @directory.child_delete(dir)
+      end
     end
     
     # Update the directory stat information at the end
