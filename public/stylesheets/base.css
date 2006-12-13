@@ -70,10 +70,20 @@ td {
 .graph .bar { 
     display: block;
     position: relative;
-    background: #B1D632; 
+    background: #66CC33; 
     text-align: center; 
     color: #333; 
     height: 1em; 
     line-height: 1em;            
+}
+
+.graph .filebar {
+  display: block;
+  position: relative;
+  background: #3181C4; 
+  text-align: center; 
+  color: #333; 
+  height: 1em; 
+  line-height: 1em;            
 }
 .graph .bar span { position: absolute; left: 1em; }
