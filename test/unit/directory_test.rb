@@ -80,4 +80,20 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal(file_info(:file3).size + file_info(:file4).size,
       directories(:foo_bar).recursive_size)
   end
+  
+  # Doing this to double-check my understanding of caching with associations in ActiveRecord
+  # assert_no_queries was taken from ActiveRecord tests
+  def test_association_caching
+    file1 = file_info(:file1)
+    file2 = file_info(:file2)
+    foo = directories(:foo)
+    
+    assert_equal([file1, file2], foo.file_info)
+    assert_no_queries {assert_equal([file1, file2], foo.file_info)}
+    # Test that creating on an association like this means that the cached association gets updated too
+    file3 = foo.file_info.create(:name => "c", :size => 3)
+    assert_no_queries {assert_equal([file1, file2, file3], foo.file_info)}
+    foo.file_info.delete(file2)
+    assert_no_queries {assert_equal([file1, file3], foo.file_info)}
+  end
 end
