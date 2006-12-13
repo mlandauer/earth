@@ -1,3 +1,5 @@
+# Test change
+# 
 class PosixFileMonitor
   def initialize(directory)
     @server = directory.server
@@ -12,7 +14,7 @@ class PosixFileMonitor
   
   def directory_added(directory)
     snapshot = Snapshot.new(directory, self)
-    @snapshots.add(directory.path, snapshot)
+    @snapshots.add(directory.parent.path, directory.name, snapshot)
     snapshot.update
     directory
   end
