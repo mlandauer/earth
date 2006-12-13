@@ -89,6 +89,7 @@ td {
 .graph .bar span { position: absolute; left: 1em; }
 
 /* Images */
-.img {
+.export_img {
   border: 0;
+	vertical-align: bottom;
 }
