@@ -28,29 +28,16 @@ class Snapshot
       return
     end
 
-    # Set subdirectories from @directory   
-    subdirectories = Hash.new
-    @directory.children.each do |x|
-      subdirectories[x.name] = x
-    end
-
-    # Set files from @directory
-    # This will only load the files when we know that a directory has changed.
-    files = Hash.new
-    @directory.file_info.each do |x|
-      files[x.name] = x
-    end
-    
     # Set old_stats, old_file_names and old_subdirectory_names from files and subdirectories
     old_stats = Hash.new
-    subdirectories.each do |name, x|
-      old_stats[name] = x.stat
+    @directory.children.each do |x|
+      old_stats[x.name] = x.stat
     end
     @directory.file_info.each do |x|
       old_stats[x.name] = x.stat
     end
-    old_file_names = @directory.file_info.map{|f| f.name}
-    old_subdirectory_names = subdirectories.keys
+    old_file_names = @directory.file_info.map{|x| x.name}
+    old_subdirectory_names = @directory.children.map{|x| x.name}
     
     file_names, subdirectory_names, stats = [], [], Hash.new
     if new_directory_stat && new_directory_stat.readable? && new_directory_stat.executable?
@@ -62,6 +49,16 @@ class Snapshot
     removed_file_names = old_file_names - file_names
     added_directory_names = subdirectory_names - old_subdirectory_names
     removed_directory_names = old_subdirectory_names - subdirectory_names
+
+    # Set files and subdirectories from @directory   
+    files = Hash.new
+    @directory.file_info.each do |x|
+      files[x.name] = x
+    end
+    subdirectories = Hash.new
+    @directory.children.each do |x|
+      subdirectories[x.name] = x
+    end
 
     changed_file_names.each do |name|
       files[name].stat = stats[name]
