@@ -1,3 +1,5 @@
+require 'csv'
+
 class DirectoriesController < ApplicationController
   def size
     if params[:server] && params[:path]
