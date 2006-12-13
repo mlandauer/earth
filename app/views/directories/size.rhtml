@@ -2,18 +2,18 @@
   
 <h3>
   Contents of <tt><%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %></tt>
-  <%= link_to image_tag("excel.png", :size => "20x22", :alt => "Save as CSV", :class => "img",
-      :title => "Save as CSV"), :format => :csv %>
 </h3>
-
-
 
 <br>
 <% units = human_units_of @max_size %>
+<div id="name">
+  
+</div>
 <table cellspacing="0" cellpadding="0">
   <% unless @children_and_sizes.empty? %>
     <tr>
-      <th class="highlight" colspan="4">Directories</th>
+      <th class="highlight" colspan="4">Directories <%= link_to image_tag("excel.png", :size => "20x22", 
+        :alt => "Save as CSV", :class => "img", :title => "Save as CSV"), :format => :csv %></th>
     </tr>
     <% for directory, size in @children_and_sizes %>
       <tr<%= (@alt = (@alt ? false : true)) ? " class=\"shade\"" : "" %>>
