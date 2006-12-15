@@ -42,7 +42,7 @@ module Earth
     
     # Size of the files contained directly in this directory
     def size
-      a = File.sum(:size, :conditions => ['directory_id = ?', id])
+      a = Earth::File.sum(:size, :conditions => ['directory_id = ?', id])
       # For some reason the above will return nil when there aren't any files
       return a ? a : 0
     end
