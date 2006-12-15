@@ -6,7 +6,7 @@ class DirectoriesController; def rescue_action(e) raise e end; end
 
 class DirectoriesControllerTest < Test::Unit::TestCase
   fixtures :directories, :servers, :file_info
-  set_fixture_class :directories => Earth::Directory, :file_info => Earth::FileInfo
+  set_fixture_class :directories => Earth::Directory, :file_info => Earth::File
 
   def setup
     @controller = DirectoriesController.new

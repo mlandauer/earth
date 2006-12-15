@@ -30,18 +30,18 @@
     end %>
   <tr><td>&nbsp;</td></tr>
 <%
-    if @directory.file_info.empty?
+    if @directory.files.empty?
         max_size_files = 0
     else
-        max_size_files = @directory.file_info.map {|f| f.size}.max
+        max_size_files = @directory.files.map {|f| f.size}.max
     end
 %>
   <% units_files = human_units_of max_size_files %>
-  <% unless @directory.file_info.empty? %>
+  <% unless @directory.files.empty? %>
   <tr>
-    <th class="highlight" colspan="4">Files <small>(<%= @directory.file_info.count %>)</small></th>
+    <th class="highlight" colspan="4">Files <small>(<%= @directory.files.count %>)</small></th>
   </tr>
-  <% @directory.file_info.each do |file| %>
+  <% @directory.files.each do |file| %>
     <tr<%= (@alt = (@alt ? false : true)) ? " class=\"shade\"" : "" %>>
       <td><%= file.name %></td>
       <td><%= human_size_in(units_files, file.size) %></td>

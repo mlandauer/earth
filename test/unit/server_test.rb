@@ -22,7 +22,7 @@ class ServerTest < Test::Unit::TestCase
     directories = Earth::Directory.find(:all)
     assert_equal(1, directories.size)
     assert_equal(directories(:bar), directories[0])
-    files = Earth::FileInfo.find(:all)
+    files = Earth::File.find(:all)
     assert_equal(0, files.size)
   end
 end

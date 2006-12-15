@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class FileInfoTest < Test::Unit::TestCase
   fixtures :file_info
-  set_fixture_class :file_info => Earth::FileInfo
+  set_fixture_class :file_info => Earth::File
 
   def test_stat
     # Getting a File::Stat from a "random" file
@@ -21,7 +21,7 @@ class FileInfoTest < Test::Unit::TestCase
     assert_equal(stat.gid, s.gid)
     # And we should be able to directly compare the stats even though they are different kinds of object
     assert_kind_of(File::Stat, stat)
-    assert_kind_of(Earth::FileInfo::Stat, s)
+    assert_kind_of(Earth::File::Stat, s)
     assert_equal(stat, s)
     assert_equal(s, stat)
   end

@@ -32,12 +32,12 @@ private
     end
 
     # By adding and removing files on the association, the cache of the association will be kept up to date
-    added_file_names = file_names - directory.file_info.map{|x| x.name}
+    added_file_names = file_names - directory.files.map{|x| x.name}
     added_file_names.each do |name|
-      directory.file_info.create(:name => name, :stat => stats[name])
+      directory.files.create(:name => name, :stat => stats[name])
     end
 
-    directory.file_info.each do |file|
+    directory.files.each do |file|
       # If the file still exists
       if file_names.include?(file.name)
         # If the file has changed
@@ -47,7 +47,7 @@ private
         end
       # If the file has been deleted
       else
-        directory.file_info.delete(file)
+        directory.files.delete(file)
       end
     end
     

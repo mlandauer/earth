@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class DirectoryTest < Test::Unit::TestCase
   fixtures :directories, :file_info, :servers
-  set_fixture_class :directories => Earth::Directory, :file_info => Earth::FileInfo
+  set_fixture_class :directories => Earth::Directory, :file_info => Earth::File
 
   def test_server
     assert_equal(servers(:first), directories(:foo_bar_twiddle).server)
@@ -89,13 +89,13 @@ class DirectoryTest < Test::Unit::TestCase
     file2 = file_info(:file2)
     foo = directories(:foo)
     
-    assert_equal([file1, file2], foo.file_info)
-    assert_no_queries {assert_equal([file1, file2], foo.file_info)}
+    assert_equal([file1, file2], foo.files)
+    assert_no_queries {assert_equal([file1, file2], foo.files)}
     # Test that creating on an association like this means that the cached association gets updated too
-    file3 = foo.file_info.create(:name => "c", :size => 3)
-    assert_no_queries {assert_equal([file1, file2, file3], foo.file_info)}
-    foo.file_info.delete(file2)
-    assert_no_queries {assert_equal([file1, file3], foo.file_info)}
+    file3 = foo.files.create(:name => "c", :size => 3)
+    assert_no_queries {assert_equal([file1, file2, file3], foo.files)}
+    foo.files.delete(file2)
+    assert_no_queries {assert_equal([file1, file3], foo.files)}
   end
   
   #TODO: Write test_child_create

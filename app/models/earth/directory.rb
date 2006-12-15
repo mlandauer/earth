@@ -15,7 +15,7 @@ end
 module Earth
   class Directory < ActiveRecord::Base
     acts_as_nested_set
-    has_many :file_info, :class_name => "Earth::FileInfo", :dependent => :delete_all
+    has_many :files, :class_name => "Earth::File", :dependent => :delete_all
     belongs_to :server
   
     Stat = Struct.new(:mtime)
@@ -42,7 +42,7 @@ module Earth
     
     # Size of the files contained directly in this directory
     def size
-      a = FileInfo.sum(:size, :conditions => ['directory_id = ?', id])
+      a = File.sum(:size, :conditions => ['directory_id = ?', id])
       # For some reason the above will return nil when there aren't any files
       return a ? a : 0
     end
@@ -77,7 +77,7 @@ module Earth
     # Set the path attribute based on name and parent_id
     def before_save
       if parent_id
-        write_attribute(:path, File.join(parent.path, name))
+        write_attribute(:path, ::File.join(parent.path, name))
       else
         write_attribute(:path, name)
       end
