@@ -1,4 +1,4 @@
-class PosixFileMonitorTest < Test::Unit::TestCase
+class FileMonitorTest < Test::Unit::TestCase
   def setup
     # Put some test files in the directory test_data
     @relative_dir = 'test_data'
@@ -60,22 +60,22 @@ class PosixFileMonitorTest < Test::Unit::TestCase
   def test_ignore_dot_files
     FileUtils.touch 'test_data/.an_invisible_file'
     FileUtils.touch 'test_data/.another'
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     assert_nil(FileInfo.find_by_name('.an_invisible_file'))
     assert_nil(FileInfo.find_by_name('.another'))
   end
   
   def test_added
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     assert_directories([@dir, @dir1], Directory.find(:all))
     assert_files([@file2, @file1], FileInfo.find(:all))
   end
 
   def test_removed
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     FileUtils.rm_rf 'test_data/dir1'
     FileUtils.rm 'test_data/file1'
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     
     assert_directories([@dir], Directory.find(:all))
     assert_files([], FileInfo.find(:all))
@@ -86,32 +86,32 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     
     FileUtils.mkdir dir2
     FileUtils.touch File.join(dir2, 'file')
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     FileUtils.rm_rf @dir1
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     
     assert_directories([@dir], Directory.find(:all))
     assert_files([@file1], FileInfo.find(:all))
   end
   
   def test_changed
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     FileUtils.touch @file2
     # For the previous change to be noticed we need to create a new file as well
     # This is only strictly true for the PosixFileMonitor
     file3 = File.join(@dir1, 'file2')
     FileUtils.touch file3
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     
     assert_directories([@dir, @dir1], Directory.find(:all))
     assert_files([@file2, @file1, file3], FileInfo.find(:all))
   end
   
   def test_added_in_subdirectory
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     file3 = File.join(@dir1, 'file2')
     FileUtils.touch file3
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     
     assert_directories([@dir, @dir1], Directory.find(:all))
     assert_files([@file2, @file1, file3], FileInfo.find(:all))
@@ -123,7 +123,7 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     # Remove all permission from directory
     mode = File.stat(@dir1).mode
     File.chmod(0000, @dir1)
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     
     assert_directories([@dir, @dir1], Directory.find(:all))
     assert_files([@file1], FileInfo.find(:all))
@@ -136,7 +136,7 @@ class PosixFileMonitorTest < Test::Unit::TestCase
     # Make a directory readable but not executable
     mode = File.stat(@dir1).mode
     File.chmod(0444, @dir1)
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     
     assert_directories([@dir, @dir1], Directory.find(:all))
     assert_files([@file1], FileInfo.find(:all))
@@ -146,9 +146,9 @@ class PosixFileMonitorTest < Test::Unit::TestCase
   end
   
   def test_removed_watched_directory
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     FileUtils.rm_rf @dir
-    PosixFileMonitor.update(@directory)
+    FileMonitor.update(@directory)
     
     directories = Directory.find(:all)
     assert_equal(1, directories.size)

@@ -1,5 +1,5 @@
-class PosixFileMonitor
-  def PosixFileMonitor.update(directory)
+class FileMonitor
+  def FileMonitor.update(directory)
     directory.each do |d|
       update_non_recursive(d)
     end
@@ -7,7 +7,7 @@ class PosixFileMonitor
 
 private
 
-  def PosixFileMonitor.update_non_recursive(directory)
+  def FileMonitor.update_non_recursive(directory)
     # TODO: remove exist? call as it is an extra filesystem access
     if File.exist?(directory.path)
       new_directory_stat = File.lstat(directory.path)
@@ -66,7 +66,7 @@ private
     end
   end
 
-  def PosixFileMonitor.contents(directory)
+  def FileMonitor.contents(directory)
     entries = Dir.entries(directory.path)
     # Ignore all files and directories starting with '.'
     entries.delete_if {|x| x[0,1] == "."}
