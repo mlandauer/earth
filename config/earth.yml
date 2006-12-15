@@ -2,7 +2,7 @@
 
 # Time in which the earth daemon will aim to spot changes to the filesystem
 # For example: 5.minutes, 1.hour or 30.seconds
-update_time: 2.minutes
+update_time: 15.seconds
 
 # Configuration for doing user and group name lookup from uid and gid
 #ldap_server_name: 'ldap.syd.rsp.com.au'
