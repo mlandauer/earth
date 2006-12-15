@@ -8,7 +8,7 @@ class DirectoriesController < ApplicationController
       @directory = server.directories.find_by_path(params[:path])
       raise "Couldn't find directory #{params[:path]}" if @directory.nil?
     else
-      @directory = Directory.find(params[:id])
+      @directory = Earth::Directory.find(params[:id])
     end
     
     @directory_size = @directory.size

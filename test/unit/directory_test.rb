@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class DirectoryTest < Test::Unit::TestCase
   fixtures :directories, :file_info, :servers
+  set_fixture_class :directories => Earth::Directory
 
   def test_server
     assert_equal(servers(:first), directories(:foo_bar_twiddle).server)
@@ -63,7 +64,7 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal(stat.mtime, directories(:foo).stat.mtime)
     # And we should be able to directly compare the stats even though they are different kinds of object
     assert_kind_of(File::Stat, stat)
-    assert_kind_of(Directory::Stat, directories(:foo).stat)
+    assert_kind_of(Earth::Directory::Stat, directories(:foo).stat)
     assert_equal(stat, directories(:foo).stat)
     assert_equal(directories(:foo).stat, stat)
   end

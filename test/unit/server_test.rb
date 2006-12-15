@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class ServerTest < Test::Unit::TestCase
   fixtures :directories, :servers, :file_info
+  set_fixture_class :directories => Earth::Directory
 
   def test_this_server
     server = Server.this_server
@@ -18,7 +19,7 @@ class ServerTest < Test::Unit::TestCase
   
   def test_delete_all_directories
     Server.this_server.destroy
-    directories = Directory.find(:all)
+    directories = Earth::Directory.find(:all)
     assert_equal(1, directories.size)
     assert_equal(directories(:bar), directories[0])
     files = FileInfo.find(:all)

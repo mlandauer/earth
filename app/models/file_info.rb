@@ -1,5 +1,5 @@
 class FileInfo < ActiveRecord::Base
-  belongs_to :directory
+  belongs_to :directory, :class_name => "Earth::Directory"
   composed_of :ownership, :class_name => "Ownership", :mapping => [%w(uid uid), %w(gid gid)]
   
   Stat = Struct.new(:mtime, :size, :uid, :gid)

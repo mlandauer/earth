@@ -1,7 +1,7 @@
 require 'socket'
 
 class Server < ActiveRecord::Base
-  has_many :directories, :dependent => :destroy
+  has_many :directories, :class_name => "Earth::Directory", :dependent => :destroy
 
   def Server.this_server
     Server.find_or_create_by_name(this_hostname)

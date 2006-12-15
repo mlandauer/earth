@@ -58,7 +58,7 @@ if ARGV.length == 1
     
   directory = this_server.directories.create(:name => watch_directory)
 else
-  directories = Directory.roots_for_server(this_server)
+  directories = Earth::Directory.roots_for_server(this_server)
   raise "Currently not properly supporting multiple watch directories" if directories.size > 1
   directory = directories[0]
   if directory.nil?

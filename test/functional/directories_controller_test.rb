@@ -6,6 +6,7 @@ class DirectoriesController; def rescue_action(e) raise e end; end
 
 class DirectoriesControllerTest < Test::Unit::TestCase
   fixtures :directories, :servers, :file_info
+  set_fixture_class :directories => Earth::Directory
 
   def setup
     @controller = DirectoriesController.new
@@ -14,7 +15,7 @@ class DirectoriesControllerTest < Test::Unit::TestCase
   end
 
   def test_size_with_id
-    get :size, :id => directories(:foo).id
+    get :size, :id => 1
     
     assert_response :success
     assert_template 'size'
