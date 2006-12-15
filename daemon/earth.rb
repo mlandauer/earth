@@ -69,12 +69,11 @@ else
   puts "Collecting startup data from database..."
 end
 
-monitor = PosixFileMonitor.new(directory)
 puts "Watching directory #{directory.path}"
 
 while true do
   puts "Updating..."
-  monitor.update
+  FileMonitor.update(directory)
   puts "Sleeping for #{update_time} seconds..."
   sleep(update_time)
 end
