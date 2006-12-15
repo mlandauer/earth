@@ -115,4 +115,10 @@ class DirectoryTest < Test::Unit::TestCase
     assert_queries(1){assert_equal([foo_fiddle], foo.children(true))}
   end
   
+  def test_each
+    a = []
+    directories(:foo).each {|x| a << x.path}
+    # We should move from the leaves to the root
+    assert_equal(["/foo/bar/twiddle", "/foo/bar", "/foo"], a)
+  end
 end

@@ -104,4 +104,13 @@ class Directory < ActiveRecord::Base
     @children.delete(child) {raise "Not a child of this directory"} if @children
     child.destroy
   end
+  
+  # Iterate over each node of the tree. Move from the leaf nodes
+  # back to the root
+  def each 
+    children.each do |child_node| 
+      child_node.each { |e| yield e } 
+    end 
+    yield self 
+  end
 end
