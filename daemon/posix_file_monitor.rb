@@ -4,14 +4,12 @@ class PosixFileMonitor
   end
   
   def directory_added(directory)
-    snapshot = Snapshot.new(directory, self)
-    snapshot.update
+    Snapshot.update(directory, self)
   end
 
   def update
     @directory.each do |directory|
-      snapshot = Snapshot.new(directory, self)
-      snapshot.update
+      Snapshot.update(directory, self)
     end
   end
 end

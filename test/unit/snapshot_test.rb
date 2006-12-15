@@ -15,8 +15,8 @@ class SnapshotTest < Test::Unit::TestCase
     Directory.delete_all
 
     server = Server.this_server
-    directory = server.directories.create(:name => @dir)
-    @monitor = Snapshot.new(directory, nil)
+    @directory = server.directories.create(:name => @dir)
+    @monitor = Snapshot.new
   end
 
   def teardown
@@ -24,7 +24,7 @@ class SnapshotTest < Test::Unit::TestCase
   end
   
   def test_simple
-    @monitor.update
+    Snapshot.update(@directory, nil)
 
     directories = Directory.find(:all)
     assert_equal(2, directories.size)
@@ -40,9 +40,9 @@ class SnapshotTest < Test::Unit::TestCase
   end
   
   def test_removed_watched_directory
-    @monitor.update
+    Snapshot.update(@directory, nil)
     FileUtils.rm_rf @dir
-    @monitor.update
+    Snapshot.update(@directory, nil)
     
     directories = Directory.find(:all)
     assert_equal(1, directories.size)
