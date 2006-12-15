@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class FileInfoTest < Test::Unit::TestCase
+class Earth::FileTest < Test::Unit::TestCase
   fixtures :file_info
   set_fixture_class :file_info => Earth::File
 
