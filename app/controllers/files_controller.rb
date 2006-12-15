@@ -1,4 +1,4 @@
-class FileInfoController < ApplicationController
+class FilesController < ApplicationController
   def index
     find
     render :action => 'find'

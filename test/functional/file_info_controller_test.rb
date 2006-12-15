@@ -1,15 +1,15 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require 'file_info_controller'
+require 'files_controller'
 
 # Re-raise errors caught by the controller.
-class FileInfoController; def rescue_action(e) raise e end; end
+class FilesController; def rescue_action(e) raise e end; end
 
-class FileInfoControllerTest < Test::Unit::TestCase
+class FilesControllerTest < Test::Unit::TestCase
   fixtures :files
   set_fixture_class :files => Earth::File
 
   def setup
-    @controller = FileInfoController.new
+    @controller = FilesController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end
