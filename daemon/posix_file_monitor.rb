@@ -1,11 +1,7 @@
 class PosixFileMonitor
-  def initialize(directory)
-    @directory = directory
-  end
-  
-  def update
-    @directory.each do |directory|
-      Snapshot.update(directory)
+  def PosixFileMonitor.update_recursive(directory)
+    directory.each do |d|
+      Snapshot.update(d)
     end
   end
 end
