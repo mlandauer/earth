@@ -11,15 +11,15 @@
   <th>Group</th>
   </tr>
   
-<% for file_info in @file_info %>
+<% for file in @files %>
   <tr>
-  <td><%=h file_info.directory.server.name %></td>
-  <td><%=h file_info.directory.path %></td>
-  <td><%=h file_info.name %>
-  <td><%=h file_info.modified %>
-  <td><%=h file_info.size %>
-  <td><%=h file_info.ownership.user_name %>
-  <td><%=h file_info.ownership.group_name %>
+  <td><%=h file.directory.server.name %></td>
+  <td><%=h file.directory.path %></td>
+  <td><%=h file.name %>
+  <td><%=h file.modified %>
+  <td><%=h file.size %>
+  <td><%=h file.ownership.user_name %>
+  <td><%=h file.ownership.group_name %>
   </tr>
 <% end %>
 </table>

@@ -31,6 +31,6 @@ class FilesControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_template 'results'
     assert_equal("a", assigns(:find_value))
-    assert_equal([files(:file1), files(:file3)], assigns(:file_info))
+    assert_equal([files(:file1), files(:file3)], assigns(:files))
   end
 end
