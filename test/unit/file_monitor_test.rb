@@ -20,11 +20,11 @@ class FileMonitorTest < Test::Unit::TestCase
     File.utime(past, past, @file2)
     
     # Clears the contents of the database
-    Server.delete_all
+    Earth::Server.delete_all
     Earth::File.delete_all
     Earth::Directory.delete_all
 
-    server = Server.this_server
+    server = Earth::Server.this_server
     @directory = server.directories.create(:name => @dir)
   end
   

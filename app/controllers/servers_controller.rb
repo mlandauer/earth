@@ -9,6 +9,6 @@ class ServersController < ApplicationController
          :redirect_to => { :action => :list }
 
   def list
-    @server_pages, @servers = paginate :servers, :per_page => 10
+    @server_pages, @servers = paginate :servers, :class_name => "Earth::Server", :per_page => 10
   end
 end

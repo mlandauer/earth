@@ -49,7 +49,7 @@ config_file = "../config/earth.yml"
 update_time = eval(YAML.load(File.open(config_file))["update_time"])
 puts "Update time is set to #{update_time} seconds. To change edit #{config_file}"
 
-this_server = Server.this_server
+this_server = Earth::Server.this_server
 
 if ARGV.length == 1
   watch_directory = File.expand_path(ARGV[0])

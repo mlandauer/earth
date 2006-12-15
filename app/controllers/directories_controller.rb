@@ -3,7 +3,7 @@ require 'csv'
 class DirectoriesController < ApplicationController
   def size
     if params[:server] && params[:path]
-      server = Server.find_by_name(params[:server])
+      server = Earth::Server.find_by_name(params[:server])
       raise "Couldn't find server #{params[:server]}" if server.nil?
       @directory = server.directories.find_by_path(params[:path])
       raise "Couldn't find directory #{params[:path]}" if @directory.nil?

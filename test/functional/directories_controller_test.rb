@@ -6,7 +6,7 @@ class DirectoriesController; def rescue_action(e) raise e end; end
 
 class DirectoriesControllerTest < Test::Unit::TestCase
   fixtures :directories, :servers, :files
-  set_fixture_class :directories => Earth::Directory, :files => Earth::File
+  set_fixture_class :directories => Earth::Directory, :servers => Earth::Server, :files => Earth::File
 
   def setup
     @controller = DirectoriesController.new
@@ -30,7 +30,7 @@ class DirectoriesControllerTest < Test::Unit::TestCase
   
   def test_size_with_server_and_path
     @request.env['HTTP_ACCEPT'] = 'application/xml'
-    get :size, {:server => Server.this_hostname, :path => "/foo/bar"}
+    get :size, {:server => Earth::Server.this_hostname, :path => "/foo/bar"}
     
     assert_response :success
     assert_template 'size.rxml'
