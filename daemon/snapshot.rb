@@ -60,7 +60,6 @@ class Snapshot
     @directory.children.each do |dir|
       # If the directory has been deleted
       if !subdirectory_names.include?(dir.name)
-        @observer.directory_removed(dir) unless @observer.nil?
         @directory.child_delete(dir)
       end
     end
