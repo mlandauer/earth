@@ -7,7 +7,7 @@ class FileInfoController < ApplicationController
   def find
     if request.post?
       @find_value = params[:find_value]
-      @file_info = FileInfo.find(:all, :conditions => ["NAME LIKE ?", @find_value.tr('*','%')])
+      @file_info = Earth::FileInfo.find(:all, :conditions => ["NAME LIKE ?", @find_value.tr('*','%')])
       render :action => 'results'
     end
   end

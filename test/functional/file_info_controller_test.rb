@@ -6,6 +6,7 @@ class FileInfoController; def rescue_action(e) raise e end; end
 
 class FileInfoControllerTest < Test::Unit::TestCase
   fixtures :file_info
+  set_fixture_class :file_info => Earth::FileInfo
 
   def setup
     @controller = FileInfoController.new
