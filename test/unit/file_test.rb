@@ -1,20 +1,20 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class Earth::FileTest < Test::Unit::TestCase
-  fixtures :file_info
-  set_fixture_class :file_info => Earth::File
+  fixtures :files
+  set_fixture_class :files => Earth::File
 
   def test_stat
     # Getting a File::Stat from a "random" file
     stat = File.lstat(File.dirname(__FILE__) + '/../test_helper.rb')
-    file_info(:file1).stat = stat
+    files(:file1).stat = stat
     # Testing equality in the long winded way
-    assert_equal(stat.mtime, file_info(:file1).modified)
-    assert_equal(stat.size, file_info(:file1).size)
-    assert_equal(stat.uid, file_info(:file1).uid)
-    assert_equal(stat.gid, file_info(:file1).gid)
+    assert_equal(stat.mtime, files(:file1).modified)
+    assert_equal(stat.size, files(:file1).size)
+    assert_equal(stat.uid, files(:file1).uid)
+    assert_equal(stat.gid, files(:file1).gid)
     # And we should be able to read back as a stat object
-    s = file_info(:file1).stat
+    s = files(:file1).stat
     assert_equal(stat.mtime, s.mtime)
     assert_equal(stat.size, s.size)
     assert_equal(stat.uid, s.uid)

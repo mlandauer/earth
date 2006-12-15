@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class DirectoryTest < Test::Unit::TestCase
-  fixtures :directories, :file_info, :servers
-  set_fixture_class :directories => Earth::Directory, :file_info => Earth::File
+  fixtures :directories, :files, :servers
+  set_fixture_class :directories => Earth::Directory, :files => Earth::File
 
   def test_server
     assert_equal(servers(:first), directories(:foo_bar_twiddle).server)
@@ -70,23 +70,23 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_size
-    assert_equal(file_info(:file1).size + file_info(:file2).size, directories(:foo).size)
-    assert_equal(file_info(:file3).size + file_info(:file4).size, directories(:foo_bar).size)
+    assert_equal(files(:file1).size + files(:file2).size, directories(:foo).size)
+    assert_equal(files(:file3).size + files(:file4).size, directories(:foo_bar).size)
     assert_equal(0, directories(:foo_bar_twiddle).size)
   end
   
   def test_recursive_size
-    assert_equal(file_info(:file1).size + file_info(:file2).size + file_info(:file3).size + file_info(:file4).size,
+    assert_equal(files(:file1).size + files(:file2).size + files(:file3).size + files(:file4).size,
       directories(:foo).recursive_size)
-    assert_equal(file_info(:file3).size + file_info(:file4).size,
+    assert_equal(files(:file3).size + files(:file4).size,
       directories(:foo_bar).recursive_size)
   end
   
   # Doing this to double-check my understanding of caching with associations in ActiveRecord
   # assert_no_queries was taken from ActiveRecord tests
   def test_association_caching
-    file1 = file_info(:file1)
-    file2 = file_info(:file2)
+    file1 = files(:file1)
+    file2 = files(:file2)
     foo = directories(:foo)
     
     assert_equal([file1, file2], foo.files)

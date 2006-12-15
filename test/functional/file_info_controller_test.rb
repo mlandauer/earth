@@ -5,8 +5,8 @@ require 'file_info_controller'
 class FileInfoController; def rescue_action(e) raise e end; end
 
 class FileInfoControllerTest < Test::Unit::TestCase
-  fixtures :file_info
-  set_fixture_class :file_info => Earth::File
+  fixtures :files
+  set_fixture_class :files => Earth::File
 
   def setup
     @controller = FileInfoController.new
@@ -31,6 +31,6 @@ class FileInfoControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_template 'results'
     assert_equal("a", assigns(:find_value))
-    assert_equal([file_info(:file1), file_info(:file3)], assigns(:file_info))
+    assert_equal([files(:file1), files(:file3)], assigns(:file_info))
   end
 end

@@ -1,6 +1,5 @@
 module Earth
   class File < ActiveRecord::Base
-    set_table_name "file_info"
     belongs_to :directory, :class_name => "Earth::Directory"
     composed_of :ownership, :class_name => "Ownership", :mapping => [%w(uid uid), %w(gid gid)]
     

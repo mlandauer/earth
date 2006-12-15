@@ -5,8 +5,8 @@ require 'directories_controller'
 class DirectoriesController; def rescue_action(e) raise e end; end
 
 class DirectoriesControllerTest < Test::Unit::TestCase
-  fixtures :directories, :servers, :file_info
-  set_fixture_class :directories => Earth::Directory, :file_info => Earth::File
+  fixtures :directories, :servers, :files
+  set_fixture_class :directories => Earth::Directory, :files => Earth::File
 
   def setup
     @controller = DirectoriesController.new
@@ -41,7 +41,7 @@ class DirectoriesControllerTest < Test::Unit::TestCase
     assert_tag :tag => "file",
       :attributes => {:name => "a"},
       :parent => {:tag => "directory", :attributes => {:path => "/foo/bar"}},
-      :child => {:tag => "size_in_bytes", :content => file_info(:file3).size.to_s}
+      :child => {:tag => "size_in_bytes", :content => files(:file3).size.to_s}
     # There should only be one directory (in this case)
     assert_tag :tag => "directory",
       :attributes => {:name => "twiddle"},
