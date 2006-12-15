@@ -3,13 +3,9 @@ class PosixFileMonitor
     @directory = directory
   end
   
-  def directory_added(directory)
-    Snapshot.update(directory, self)
-  end
-
   def update
     @directory.each do |directory|
-      Snapshot.update(directory, self)
+      Snapshot.update(directory)
     end
   end
 end

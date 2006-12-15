@@ -23,26 +23,10 @@ class SnapshotTest < Test::Unit::TestCase
     FileUtils.rm_rf @dir
   end
   
-  def test_simple
-    Snapshot.update(@directory, nil)
-
-    directories = Directory.find(:all)
-    assert_equal(2, directories.size)
-    assert_equal(@dir, directories[0].path)
-    assert_equal(File.lstat(@dir), directories[0].stat)
-    assert_equal(@dir2, directories[1].path)
-    assert_nil(directories[1].stat)
-
-    files = FileInfo.find(:all)
-    assert_equal(1, files.size)
-    assert_equal(@dir, files[0].directory.path)
-    assert_equal('file1', files[0].name)
-  end
-  
   def test_removed_watched_directory
-    Snapshot.update(@directory, nil)
+    Snapshot.update(@directory)
     FileUtils.rm_rf @dir
-    Snapshot.update(@directory, nil)
+    Snapshot.update(@directory)
     
     directories = Directory.find(:all)
     assert_equal(1, directories.size)

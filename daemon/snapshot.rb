@@ -8,7 +8,7 @@
 # $Id$
 
 class Snapshot
-  def Snapshot.update(directory, observer)
+  def Snapshot.update(directory)
     # TODO: remove exist? call as it is an extra filesystem access
     if File.exist?(directory.path)
       new_directory_stat = File.lstat(directory.path)
@@ -29,7 +29,7 @@ class Snapshot
     added_directory_names = subdirectory_names - directory.children.map{|x| x.name}
     added_directory_names.each do |name|
       dir = directory.child_create(:name => name)
-      observer.directory_added(dir) unless observer.nil?
+      Snapshot.update(dir)
     end
 
     # By adding and removing files on the association, the cache of the association will be kept up to date
