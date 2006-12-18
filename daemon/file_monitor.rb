@@ -60,9 +60,10 @@ private
     
     # Update the directory stat information at the end
     if File.exist?(directory.path)
-      directory.reload
       directory.stat = new_directory_stat
-      directory.save
+      # Only update the attributes related to stat. This means we don't have to do a reload to get
+      # the lft and rgt attributes which are potentially invalid
+      directory.update_stat
     end
   end
 

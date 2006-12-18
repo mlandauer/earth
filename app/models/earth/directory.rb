@@ -35,6 +35,17 @@ module Earth
       Stat.new(modified) unless modified.nil?
     end
     
+    # Only update the attributes related to stat in the database. This means that the
+    # lft and rgt attributes can be potentially invalid.
+    def update_stat
+      connection.update(
+        "UPDATE #{self.class.table_name} " +
+        "SET `modified` = #{quote_value(modified)} " +
+        "WHERE #{self.class.primary_key} = #{quote_value(id)}",
+        "#{self.class.name} Update"
+      )
+    end
+    
     def has_children?
       reload
       children_count > 0

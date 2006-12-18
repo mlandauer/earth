@@ -133,4 +133,16 @@ class DirectoryTest < Test::Unit::TestCase
     # We should move from the leaves to the root
     assert_equal(["/foo/bar/twiddle", "/foo/bar", "/foo"], a)
   end
+  
+  # Test a method that only updates the modified field to the db from the current object
+  # This is useful in case lft and rgt are out of date and means that we don't have to do a reload
+  def test_update_stat
+    foo = directories(:foo)
+    foo.name = 'ugh'
+    foo.modified = Time.at(0)
+    foo.update_stat
+    foo2 = Earth::Directory.find(foo.id)
+    assert_equal(Time.at(0), foo2.modified) 
+    assert_equal('/foo', foo2.name) 
+  end
 end
