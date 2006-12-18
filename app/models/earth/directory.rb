@@ -114,5 +114,30 @@ module Earth
       end 
       yield self 
     end
+    
+    # Only use this if you know what you're doing
+    def set_cached_children(children)
+      @children = children
+    end
+    
+    # Load all the children and the children of children, etc. so that they
+    # can be accesed via the "children" method without requiring any db queries
+    def load_all_children
+      child_by_id = {id => self}
+      children_of = {}
+      all_children.each do |child|
+        child_by_id[child.id] = child
+        if children_of[child.parent_id].nil?
+          children_of[child.parent_id] = []
+        end
+        children_of[child.parent_id] << child
+      end
+      child_by_id.each do |id, child|
+        child.set_cached_children([])
+      end
+      children_of.each do |id, children|
+        child_by_id[id].set_cached_children(children)
+      end
+    end
   end
 end

@@ -116,6 +116,17 @@ class DirectoryTest < Test::Unit::TestCase
     assert_queries(1){assert_equal([foo_fiddle], foo.children(true))}
   end
   
+  def test_load_all_children
+    foo = directories(:foo)
+    foo_bar = directories(:foo_bar)
+    foo_bar_twiddle = directories(:foo_bar_twiddle)
+
+    assert_queries(1) {foo.load_all_children}
+    assert_no_queries{assert_equal([foo_bar], foo.children)}
+    assert_no_queries{assert_equal([foo_bar_twiddle], foo.children[0].children)}
+    assert_no_queries{assert_equal([], foo.children[0].children[0].children)}
+  end
+  
   def test_each
     a = []
     directories(:foo).each {|x| a << x.path}
