@@ -67,6 +67,7 @@ else
     usage
   end
   puts "Collecting startup data from database..."
+  directory.load_all_children
 end
 
 puts "Watching directory #{directory.path}"
