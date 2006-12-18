@@ -134,15 +134,23 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal(["/foo/bar/twiddle", "/foo/bar", "/foo"], a)
   end
   
-  # Test a method that only updates the modified field to the db from the current object
-  # This is useful in case lft and rgt are out of date and means that we don't have to do a reload
-  def test_update_stat
+  def test_update
     foo = directories(:foo)
-    foo.name = 'ugh'
+    assert_equal(1, foo.lft)
+    assert_equal(6, foo.rgt)
+    foo_bar = directories(:foo_bar)
+    # This will update the lft and rgt values of foo in the database (but not in the loaded object)
+    foo_bar.child_create(:name => "wibble")
+    assert_equal(1, foo.lft)
+    assert_equal(6, foo.rgt)
+    foo.name = 'name'
     foo.modified = Time.at(0)
-    foo.update_stat
-    foo2 = Earth::Directory.find(foo.id)
-    assert_equal(Time.at(0), foo2.modified) 
-    assert_equal('/foo', foo2.name) 
+    foo.update
+    
+    foo.reload
+    assert_equal('name', foo.name)
+    assert_equal(Time.at(0), foo.modified)
+    assert_equal(1, foo.lft)
+    assert_equal(8, foo.rgt)
   end
 end

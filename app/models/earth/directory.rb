@@ -35,16 +35,32 @@ module Earth
       Stat.new(modified) unless modified.nil?
     end
     
-    # Only update the attributes related to stat in the database. This means that the
-    # lft and rgt attributes can be potentially invalid.
-    def update_stat
+      def attributes_with_quotes(include_primary_key = true)
+        attributes.inject({}) do |quoted, (name, value)|
+          if column = column_for_attribute(name)
+            quoted[name] = quote_value(value, column) unless !include_primary_key && column.primary
+          end
+          quoted
+        end
+      end
+
+    # Override the default implementation of update to write all attributes except
+    # lft, rgt and parent_id
+    def update_except_lft_rgt_parent
+      a = attributes_with_quotes(false)
+      a.delete(left_col_name)
+      a.delete(right_col_name)
+      a.delete(parent_col_name)
       connection.update(
         "UPDATE #{self.class.table_name} " +
-        "SET `modified` = #{quote_value(modified)} " +
+        "SET #{quoted_comma_pair_list(connection, a)} " +
         "WHERE #{self.class.primary_key} = #{quote_value(id)}",
         "#{self.class.name} Update"
       )
     end
+    
+    alias :update_including_lft_rgt_parent :update
+    alias :update :update_except_lft_rgt_parent
     
     def has_children?
       reload
