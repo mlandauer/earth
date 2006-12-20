@@ -12,6 +12,20 @@ class File
   end
 end
 
+module SymetrieCom
+  module Acts
+    module NestedSet
+      module InstanceMethods
+        
+        # Overriding implementation from betternested set 
+        def before_destroy
+        end
+
+      end
+    end
+  end
+end
+
 module Earth
   class Directory < ActiveRecord::Base
     acts_as_nested_set
@@ -35,15 +49,16 @@ module Earth
       Stat.new(modified) unless modified.nil?
     end
     
-      def attributes_with_quotes(include_primary_key = true)
-        attributes.inject({}) do |quoted, (name, value)|
-          if column = column_for_attribute(name)
-            quoted[name] = quote_value(value, column) unless !include_primary_key && column.primary
-          end
-          quoted
-        end
-      end
+    # Before destroying this object instantiate and then destroy all the children first
+    # This ensures that callbacks are called such as those that destroy associated files
+    def destroy_with_children
+      children.each {|c| c.destroy_with_children}
+      destroy_without_children
+    end
 
+    # This is a Rails 1.2'ism
+    alias_method_chain :destroy, :children
+    
     # Override the default implementation of update to write all attributes except
     # lft, rgt and parent_id
     def update_except_lft_rgt_parent
@@ -168,3 +183,4 @@ module Earth
     end
   end
 end
+

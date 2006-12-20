@@ -153,4 +153,12 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal(1, foo.lft)
     assert_equal(8, foo.rgt)
   end
+  
+  # Test that deleting a directory (which also deletes all directories below it) also deletes
+  # all associated files
+  def test_destroy
+    directories(:foo).destroy
+    assert_equal([directories(:bar)], Earth::Directory.find(:all))
+    assert_equal([], Earth::File.find(:all))
+  end
 end
