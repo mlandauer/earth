@@ -90,6 +90,70 @@ module SymetrieCom
           end
         end
     
+        def has_children?
+          reload
+          children_count > 0
+        end
+    
+        def children_with_caching(reload = false)
+          @children = children_without_caching if @children.nil? || reload
+          return @children
+        end
+    
+        alias_method_chain :children, :caching
+        
+        def child_create(attributes)
+          raise "Can't set parent" if attributes[:parent]
+          directory = self.class.create(attributes.merge(:parent => self))
+          # Adding this directory to children at the front to maintain the same order as children(true)
+          @children = [directory] + @children if @children
+          directory
+        end
+    
+        def child_delete(child)
+          @children.delete(child) {raise "Not a child of this directory"} if @children
+          child.destroy
+        end
+    
+        # Load all the children and the children of children, etc. so that they
+        # can be accesed via the "children" method without requiring any db queries
+        def load_all_children
+          child_by_id = {id => self}
+          children_of = {}
+          all_children.each do |child|
+            child_by_id[child.id] = child
+            if children_of[child.parent_id].nil?
+              children_of[child.parent_id] = []
+            end
+            children_of[child.parent_id] << child
+          end
+          child_by_id.each do |id, child|
+            child.set_cached_children([])
+          end
+          children_of.each do |id, children|
+            child_by_id[id].set_cached_children(children)
+          end
+        end
+
+        # Override the default implementation of update to write all attributes except
+        # lft and rgt
+        def update
+          a = attributes_with_quotes(false)
+          a.delete(left_col_name)
+          a.delete(right_col_name)
+          connection.update(
+            "UPDATE #{self.class.table_name} " +
+            "SET #{quoted_comma_pair_list(connection, a)} " +
+            "WHERE #{self.class.primary_key} = #{quote_value(id)}",
+            "#{self.class.name} Update"
+          )
+        end
+    
+        protected
+        # Only use this if you know what you're doing
+        def set_cached_children(children)
+          @children = children
+        end
       end
     end
   end
@@ -118,27 +182,6 @@ module Earth
       Stat.new(modified) unless modified.nil?
     end
     
-    # Override the default implementation of update to write all attributes except
-    # lft and rgt
-    def update_with_lft_rgt_not_updated
-      a = attributes_with_quotes(false)
-      a.delete(left_col_name)
-      a.delete(right_col_name)
-      connection.update(
-        "UPDATE #{self.class.table_name} " +
-        "SET #{quoted_comma_pair_list(connection, a)} " +
-        "WHERE #{self.class.primary_key} = #{quote_value(id)}",
-        "#{self.class.name} Update"
-      )
-    end
-    
-    alias_method_chain :update, :lft_rgt_not_updated
-    
-    def has_children?
-      reload
-      children_count > 0
-    end
-    
     # Size of the files contained directly in this directory
     def size
       a = Earth::File.sum(:size, :conditions => ['directory_id = ?', id])
@@ -157,10 +200,11 @@ module Earth
       Directory.roots.find_all{|d| d.server_id == server.id}
     end
     
-    # Set the path attribute based on name and parent_id
+    # Set the path and server_id attributes based on name and parent_id
     def before_save
       if parent_id
         write_attribute(:path, ::File.join(parent.path, name))
+        write_attribute(:server_id, parent.server_id)
       else
         write_attribute(:path, name)
       end
@@ -170,25 +214,6 @@ module Earth
       raise "Can't set path directly. Set name instead."
     end
     
-    alias :children_no_caching :children
-    def children(reload = false)
-      @children = children_no_caching if @children.nil? || reload
-      return @children
-    end
-    
-    def child_create(attributes)
-      raise "Can't set parent or server_id" if attributes[:parent] || attributes[:server_id]
-      directory = Directory.create(attributes.merge(:parent => self, :server_id => server_id))
-      # Adding this directory to children at the front to maintain the same order as children(true)
-      @children = [directory] + @children if @children
-      directory
-    end
-    
-    def child_delete(child)
-      @children.delete(child) {raise "Not a child of this directory"} if @children
-      child.destroy
-    end
-    
     # Iterate over each node of the tree. Move from the leaf nodes
     # back to the root
     def each 
@@ -196,32 +221,6 @@ module Earth
         child_node.each { |e| yield e } 
       end 
       yield self 
-    end
-    
-    # Load all the children and the children of children, etc. so that they
-    # can be accesed via the "children" method without requiring any db queries
-    def load_all_children
-      child_by_id = {id => self}
-      children_of = {}
-      all_children.each do |child|
-        child_by_id[child.id] = child
-        if children_of[child.parent_id].nil?
-          children_of[child.parent_id] = []
-        end
-        children_of[child.parent_id] << child
-      end
-      child_by_id.each do |id, child|
-        child.set_cached_children([])
-      end
-      children_of.each do |id, children|
-        child_by_id[id].set_cached_children(children)
-      end
-    end
-    
-  protected
-    # Only use this if you know what you're doing
-    def set_cached_children(children)
-      @children = children
     end
     
   end

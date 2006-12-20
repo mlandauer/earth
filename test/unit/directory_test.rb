@@ -98,7 +98,14 @@ class DirectoryTest < Test::Unit::TestCase
     assert_no_queries {assert_equal([file1, file3], foo.files)}
   end
   
-  #TODO: Write test_child_create
+  def test_child_create
+    dir = directories(:foo).child_create(:name => "blah")
+    assert_equal("blah", dir.name)
+    assert_equal("/foo/blah", dir.path)
+    assert_equal(directories(:foo), dir.parent)
+    assert_equal(1, dir.server_id)
+    assert_equal([dir, directories(:foo_bar)], directories(:foo).children)
+  end
 
   def test_children
     foo = directories(:foo)
