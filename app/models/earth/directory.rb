@@ -157,11 +157,6 @@ module Earth
       yield self 
     end
     
-    # Only use this if you know what you're doing
-    def set_cached_children(children)
-      @children = children
-    end
-    
     # Load all the children and the children of children, etc. so that they
     # can be accesed via the "children" method without requiring any db queries
     def load_all_children
@@ -181,6 +176,13 @@ module Earth
         child_by_id[id].set_cached_children(children)
       end
     end
+    
+  protected
+    # Only use this if you know what you're doing
+    def set_cached_children(children)
+      @children = children
+    end
+    
   end
 end
 
