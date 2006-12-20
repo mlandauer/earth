@@ -5,7 +5,7 @@ require 'servers_controller'
 class ServersController; def rescue_action(e) raise e end; end
 
 class ServersControllerTest < Test::Unit::TestCase
-  fixtures :servers, :directories
+  fixtures :servers, :directories, :files
 
   def setup
     @controller = ServersController.new

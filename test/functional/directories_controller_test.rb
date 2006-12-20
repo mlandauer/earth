@@ -5,8 +5,8 @@ require 'directories_controller'
 class DirectoriesController; def rescue_action(e) raise e end; end
 
 class DirectoriesControllerTest < Test::Unit::TestCase
-  fixtures :directories, :servers, :files
-  set_fixture_class :directories => Earth::Directory, :servers => Earth::Server, :files => Earth::File
+  fixtures :servers, :directories, :files
+  set_fixture_class :servers => Earth::Server, :directories => Earth::Directory, :files => Earth::File
 
   def setup
     @controller = DirectoriesController.new

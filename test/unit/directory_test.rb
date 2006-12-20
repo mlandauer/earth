@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class DirectoryTest < Test::Unit::TestCase
-  fixtures :directories, :files, :servers
-  set_fixture_class :directories => Earth::Directory, :files => Earth::File, :servers => Earth::Server
+  fixtures :servers, :directories, :files
+  set_fixture_class :servers => Earth::Server, :directories => Earth::Directory, :files => Earth::File
 
   def test_server
     assert_equal(servers(:first), directories(:foo_bar_twiddle).server)

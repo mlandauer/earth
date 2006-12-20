@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class ServerTest < Test::Unit::TestCase
-  fixtures :directories, :servers, :files
+  fixtures :servers, :directories, :files
   set_fixture_class :directories => Earth::Directory
 
   def test_this_server
