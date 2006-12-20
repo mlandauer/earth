@@ -15,12 +15,81 @@ end
 module SymetrieCom
   module Acts
     module NestedSet
+      module ClassMethods
+        # Same as original but allows assignment of parent attribute
+        def acts_as_nested_set(options = {})          
+          
+          options[:scope] = "#{options[:scope]}_id".intern if options[:scope].is_a?(Symbol) && options[:scope].to_s !~ /_id$/
+
+          write_inheritable_attribute(:acts_as_nested_set_options,
+             { :parent_column  => (options[:parent_column] || 'parent_id'),
+               :left_column    => (options[:left_column]   || 'lft'),
+               :right_column   => (options[:right_column]  || 'rgt'),
+               :scope          => (options[:scope] || '1 = 1'),
+               :text_column    => (options[:text_column] || columns.collect{|c| (c.type == :string) ? c.name : nil }.compact.first)
+              } )
+               
+          class_inheritable_reader :acts_as_nested_set_options
+          
+          if acts_as_nested_set_options[:scope].is_a?(Symbol)
+            scope_condition_method = %(
+              def scope_condition
+                if #{acts_as_nested_set_options[:scope].to_s}.nil?
+                  "#{acts_as_nested_set_options[:scope].to_s} IS NULL"
+                else
+                  "#{acts_as_nested_set_options[:scope].to_s} = \#{#{acts_as_nested_set_options[:scope].to_s}}"
+                end
+              end
+            )
+          else
+            scope_condition_method = "def scope_condition() \"#{acts_as_nested_set_options[:scope]}\" end"
+          end
+          
+          # no bulk assignment
+          attr_protected  acts_as_nested_set_options[:left_column].intern,
+                          acts_as_nested_set_options[:right_column].intern
+          # no assignment to structure fields
+          module_eval <<-"end_eval", __FILE__, __LINE__
+            def #{acts_as_nested_set_options[:left_column]}=(x)
+              raise ActiveRecord::ActiveRecordError, "Unauthorized assignment to #{acts_as_nested_set_options[:left_column]}: it's an internal field handled by acts_as_nested_set code, use move_to_* methods instead."
+            end
+            def #{acts_as_nested_set_options[:right_column]}=(x)
+              raise ActiveRecord::ActiveRecordError, "Unauthorized assignment to #{acts_as_nested_set_options[:right_column]}: it's an internal field handled by acts_as_nested_set code, use move_to_* methods instead."
+            end
+            #{scope_condition_method}
+          end_eval
+           
+          include SymetrieCom::Acts::NestedSet::InstanceMethods
+          extend SymetrieCom::Acts::NestedSet::ClassMethods          
+        end        
+        
+      end
+      
       module InstanceMethods
         
         # Overriding implementation from betternested set 
+        # Before destroying this object instantiate and then destroy all the children first
+        # This ensures that callbacks are called such as those that for destroying associations
         def before_destroy
+          children.each {|c| c.destroy}
         end
 
+        def parent=(parent)
+          self.parent_id = parent.id unless parent.nil?
+        end
+        
+        def parent_id=(id)
+          write_attribute(:parent_id, id)
+          @parent_id_updated = true
+        end
+        
+        def after_save
+          if @parent_id_updated
+            move_to_child_of(parent)
+            @parent_id_updated = false
+          end
+        end
+    
       end
     end
   end
@@ -49,23 +118,12 @@ module Earth
       Stat.new(modified) unless modified.nil?
     end
     
-    # Before destroying this object instantiate and then destroy all the children first
-    # This ensures that callbacks are called such as those that destroy associated files
-    def destroy_with_children
-      children.each {|c| c.destroy_with_children}
-      destroy_without_children
-    end
-
-    # This is a Rails 1.2'ism
-    alias_method_chain :destroy, :children
-    
     # Override the default implementation of update to write all attributes except
-    # lft, rgt and parent_id
-    def update_except_lft_rgt_parent
+    # lft and rgt
+    def update_with_lft_rgt_not_updated
       a = attributes_with_quotes(false)
       a.delete(left_col_name)
       a.delete(right_col_name)
-      a.delete(parent_col_name)
       connection.update(
         "UPDATE #{self.class.table_name} " +
         "SET #{quoted_comma_pair_list(connection, a)} " +
@@ -74,8 +132,7 @@ module Earth
       )
     end
     
-    alias :update_including_lft_rgt_parent :update
-    alias :update :update_except_lft_rgt_parent
+    alias_method_chain :update, :lft_rgt_not_updated
     
     def has_children?
       reload
@@ -98,22 +155,6 @@ module Earth
     # TODO: Currently not tested
     def Directory.roots_for_server(server)
       Directory.roots.find_all{|d| d.server_id == server.id}
-    end
-    
-    def parent=(parent)
-      self.parent_id = parent.id unless parent.nil?
-    end
-    
-    def parent_id=(id)
-      write_attribute(:parent_id, id)
-      @parent_id_updated = true
-    end
-    
-    def after_save
-      if @parent_id_updated
-        move_to_child_of(parent)
-        @parent_id_updated = false
-      end
     end
     
     # Set the path attribute based on name and parent_id
