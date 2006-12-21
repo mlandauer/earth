@@ -64,7 +64,7 @@ else
   if directory.nil?
     puts "Watch directory is not set for this server. Use optional <directory path> argument."
     puts
-    usage
+    exit 1
   end
   puts "Collecting startup data from database..."
   directory.load_all_children
