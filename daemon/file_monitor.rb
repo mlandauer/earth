@@ -1,11 +1,39 @@
 class FileMonitor
+  def FileMonitor.run_on_new_directory(path, update_time)
+    this_server = Earth::Server.this_server
+    puts "WARNING: Watching new directory. So, clearing out database"
+    this_server.directories.clear      
+    directory = this_server.directories.create(:name => File.expand_path(path))
+    run(directory, update_time)
+  end
+  
+  def FileMonitor.run_on_existing_directory(update_time)
+    directories = Earth::Directory.roots_for_server(Earth::Server.this_server)
+    raise "Watch directory is not set for this server" if directories.empty?
+    raise "Currently not properly supporting multiple watch directories" if directories.size > 1
+    directory = directories[0]
+    puts "Collecting startup data from database..."
+    directory.load_all_children
+    run(directory, update_time)
+  end
+  
+private
+
+  def FileMonitor.run(directory, update_time)
+    puts "Watching directory #{directory.path}"
+    while true do
+      puts "Updating..."
+      update(directory)
+      puts "Sleeping for #{update_time} seconds..."
+      sleep(update_time)
+    end
+  end
+  
   def FileMonitor.update(directory)
     directory.each do |d|
       update_non_recursive(d)
     end
   end
-
-private
 
   def FileMonitor.update_non_recursive(directory)
     # TODO: remove exist? call as it is an extra filesystem access

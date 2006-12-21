@@ -52,29 +52,7 @@ puts "Update time is set to #{update_time} seconds. To change edit #{config_file
 this_server = Earth::Server.this_server
 
 if ARGV.length == 1
-  watch_directory = File.expand_path(ARGV[0])
-  puts "WARNING: Watching new directory. So, clearing out database"
-  this_server.directories.clear
-    
-  directory = this_server.directories.create(:name => watch_directory)
+  FileMonitor.run_on_new_directory(ARGV[0], update_time)
 else
-  directories = Earth::Directory.roots_for_server(this_server)
-  raise "Currently not properly supporting multiple watch directories" if directories.size > 1
-  directory = directories[0]
-  if directory.nil?
-    puts "Watch directory is not set for this server. Use optional <directory path> argument."
-    puts
-    exit 1
-  end
-  puts "Collecting startup data from database..."
-  directory.load_all_children
-end
-
-puts "Watching directory #{directory.path}"
-
-while true do
-  puts "Updating..."
-  FileMonitor.update(directory)
-  puts "Sleeping for #{update_time} seconds..."
-  sleep(update_time)
+  FileMonitor.run_on_existing_directory(update_time)
 end
