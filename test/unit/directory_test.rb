@@ -168,4 +168,50 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal([directories(:bar)], Earth::Directory.find(:all))
     assert_equal([], Earth::File.find(:all))
   end
+  
+end
+
+class TransactionalDirectoryTest < Test::Unit::TestCase
+  fixtures :servers, :directories, :files
+  set_fixture_class :servers => Earth::Server, :directories => Earth::Directory, :files => Earth::File
+  self.use_transactional_fixtures = false
+  
+  # Test that when we are calculating the size of a directory and the daemon is updating
+  # the DB at the same time, that we get consistent results from the Directory.find to the
+  # Directory.size
+  def test_concurrency
+    # Let's get ready for this test
+    @allow_concurrency = ActiveRecord::Base.allow_concurrency
+    
+    ActiveRecord::Base.allow_concurrency = true
+
+    # This is the bit where we do stuff
+    begin
+      reader = Thread.new do
+        10.times do
+          Earth::Directory.transaction do
+            foo_bar = Earth::Directory.find(2) # => /foo/bar
+            sleep(0.01)
+            assert_equal(7, foo_bar.recursive_size)
+          end
+        end
+      end
+      writer = Thread.new do
+        (1..10).each { |i|
+          Earth::Directory.find(1).child_create(:name => "bruno#{i}") # => /foo/bruno#{counter}
+        }
+      end
+
+      reader.join
+      writer.join
+    rescue Exception => e
+      # If an error occurs, we need to clean up
+      ActiveRecord::Base.allow_concurrency = @allow_concurrency
+      raise e
+    end
+  
+    # If everything went well, we still need to clean up after ourselves
+    ActiveRecord::Base.allow_concurrency = @allow_concurrency
+  end
+  
 end
