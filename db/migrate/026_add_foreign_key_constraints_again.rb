@@ -1,4 +1,4 @@
-class AddForeignKeyConstraints < ActiveRecord::Migration
+class AddForeignKeyConstraintsAgain < ActiveRecord::Migration
   def self.up
     add_foreign_key :files, :directory_id, :directories, :id
     add_foreign_key :directories, :server_id, :servers, :id
