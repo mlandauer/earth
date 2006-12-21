@@ -57,12 +57,11 @@ class FileMonitorTest < Test::Unit::TestCase
     paths.each_index{|i| assert_file(paths[i], files[i])}
   end
   
-  def test_ignore_dot_files
+  # Check that files starting with "." are not ignored
+  def test_dot_files
     FileUtils.touch 'test_data/.an_invisible_file'
-    FileUtils.touch 'test_data/.another'
     FileMonitor.update(@directory)
-    assert_nil(Earth::File.find_by_name('.an_invisible_file'))
-    assert_nil(Earth::File.find_by_name('.another'))
+    assert_equal(".an_invisible_file", Earth::File.find_by_name('.an_invisible_file').name)
   end
   
   def test_added

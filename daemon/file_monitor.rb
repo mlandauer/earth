@@ -68,8 +68,9 @@ private
 
   def FileMonitor.contents(directory)
     entries = Dir.entries(directory.path)
-    # Ignore all files and directories starting with '.'
-    entries.delete_if {|x| x[0,1] == "."}
+    # Ignore ".' and ".." directories
+    entries.delete(".")
+    entries.delete("..")
     
     # Contains the stat information for both files and directories
     stats = Hash.new
