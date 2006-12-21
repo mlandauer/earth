@@ -57,4 +57,4 @@ end
 
 Mime::Type.register "text/csv", :csv
 
-require 'lib/foreign_key_constraint_improvements'
+require 'foreign_key_constraint_improvements'
