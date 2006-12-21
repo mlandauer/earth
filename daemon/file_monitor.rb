@@ -1,4 +1,9 @@
 class FileMonitor
+  cattr_accessor :log_all_sql
+  
+  # Set this to true if you want to see the individual SQL commands
+  self.log_all_sql = false
+  
   def FileMonitor.run_on_new_directory(path, update_time)
     this_server = Earth::Server.this_server
     puts "WARNING: Watching new directory. So, clearing out database"
@@ -55,14 +60,19 @@ private
 
     added_directory_names = subdirectory_names - directory.children.map{|x| x.name}
     added_directory_names.each do |name|
-      dir = directory.child_create(:name => name)
+    
+      dir = Earth::Directory.benchmark("Creating directory with name #{name}", Logger::DEBUG, !log_all_sql) do 
+        directory.child_create(:name => name)
+      end
       update_non_recursive(dir)
     end
 
     # By adding and removing files on the association, the cache of the association will be kept up to date
     added_file_names = file_names - directory.files.map{|x| x.name}
     added_file_names.each do |name|
-      directory.files.create(:name => name, :stat => stats[name])
+      Earth::File.benchmark("Creating file with name #{name}", Logger::DEBUG, !log_all_sql) do
+        directory.files.create(:name => name, :stat => stats[name])
+      end
     end
 
     directory.files.each do |file|
@@ -71,18 +81,24 @@ private
         # If the file has changed
         if file.stat != stats[file.name]
           file.stat = stats[file.name]
-          file.save
+          Earth::File.benchmark("Updating file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
+            file.save
+          end
         end
       # If the file has been deleted
       else
-        directory.files.delete(file)
+        Earth::Directory.benchmark("Removing file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
+          directory.files.delete(file)
+        end
       end
     end
     
     directory.children.each do |dir|
       # If the directory has been deleted
       if !subdirectory_names.include?(dir.name)
-        directory.child_delete(dir)
+        Earth::Directory.benchmark("Removing directory with name #{dir.name}", Logger::DEBUG, !log_all_sql) do
+          directory.child_delete(dir)
+        end
       end
     end
     
@@ -90,7 +106,9 @@ private
     if File.exist?(directory.path)
       directory.stat = new_directory_stat
       # This will not overwrite 'lft' and 'rgt' so it doesn't matter if these are out of date
-      directory.update
+      Earth::Directory.benchmark("Updating directory with name #{directory.name}", Logger::DEBUG, !log_all_sql) do
+        directory.update
+      end
     end
   end
 
