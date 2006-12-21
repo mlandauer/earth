@@ -6,11 +6,13 @@ file1:
   directory_id: 1
   name: a
   size: 1
+  uid: 1
 file2:
   id: 2
   directory_id: 1
   name: b
   size: 2
+  uid: 1
 
 # In directory /foo/bar
 file3:
@@ -18,8 +20,10 @@ file3:
   directory_id: 2
   name: a
   size: 3
+  uid: 1
 file4:
   id: 4
   directory_id: 2
   name: b
   size: 4
+  uid: 1

@@ -4,7 +4,9 @@ Search for a file in the <b>earth</b> database.(* can be used as a wildcard, eg 
 <br />
 <br />
 <% form_tag :action => 'find' do %>
-  <%= text_field_tag 'find_value' %>
+  Filename:     <%= text_field_tag 'filename' %><br>
+  Owned by:     <%= text_field_tag 'user' %><br>
+  Bigger than:  <%= text_field_tag 'size' %> bytes<br>
   <%= submit_tag 'Find' %>
 <% end %>
 
