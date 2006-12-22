@@ -1,10 +1,10 @@
-require "ldap"
-
 class Ownership
   cattr_accessor :config
   attr_accessor :uid, :gid
     
-  @@config = YAML.load(File.open(File.dirname(__FILE__) + "/../../config/earth.yml"))
+  self.config = YAML.load(File.open(File.dirname(__FILE__) + "/../../config/earth.yml"))
+
+  require "ldap" if config["ldap_server_name"]
 
   def initialize(uid, gid)
     @uid = uid
