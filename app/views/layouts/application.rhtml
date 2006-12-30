@@ -16,9 +16,26 @@
 	<div id="Banner">
 		<!-- Holding Space for a Banner or a Logo -->
 	</div>
-	<div id="Content">
-		<%= yield  %>
-	</div>
+  <div id="Top">
+    <div id="LoginInformation">
+      <!-- Place Holder for when we need Login Information -->
+    </div>
+    <div id="Tabs">
+      <div id="TabsInside">
+	      <% # We probably should get these from some configuration file or dynamically %>
+        <% ["servers", "files"].each_with_index { |item, index| 
+              html_class = 'active' if controller.controller_class_name == (item.capitalize + "Controller") 
+              html_style = 'border-left: 1px solid #c2c2c2;' if index == 0 %>
+          <%= link_to(item, { :controller => item, :action => 'index' }, { :class => html_class, :style => html_style } ) %>
+        <%  } %>	       
+      </div>
+    </div>
+  </div>
+  <div id="Content">
+    <div id="ContentInside">
+  		<%= yield  %>      
+    </div>
+  </div>
 </div>
 
 </body>

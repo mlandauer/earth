@@ -7,12 +7,15 @@ file1:
   name: a
   size: 1
   uid: 1
+  modified: <%= 20.minutes.ago.to_s(:db) %>
+
 file2:
   id: 2
   directory_id: 1
   name: b
   size: 2
   uid: 1
+  modified: <%= 5.weeks.ago.to_s(:db) %>
 
 # In directory /foo/bar
 file3:
@@ -21,9 +24,12 @@ file3:
   name: a
   size: 3
   uid: 1
+  modified: <%= 1.year.ago.to_s(:db) %>
+  
 file4:
   id: 4
   directory_id: 2
   name: b
   size: 4
   uid: 1
+  modified: <%= 10.years.ago.to_s(:db) %>

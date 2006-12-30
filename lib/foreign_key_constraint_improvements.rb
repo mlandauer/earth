@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 #
 #  Created by Bruno Mattarollo on 2006-12-21.
-#  Copyright (c) 2006. All rights reserved.
+#  Copyright (c) 2006. Based on the RedHill Consulting redhillonrails_core
+#   plugin. These extensions are to support named Foreign Keys properly.
 
 module RedHillConsulting
   module Core
@@ -17,6 +18,19 @@ module RedHillConsulting
         end
       end
 
+    end
+
+    class ForeignKey
+
+      def to_dump
+        dump = "add_foreign_key"
+        dump << " #{table_name.inspect}, [#{column_names.collect{ |name| name.inspect }.join(', ')}]"
+        dump << ", #{references_table_name.inspect}, [#{references_column_names.collect{ |name| name.inspect }.join(', ')}]"
+        dump << ", :on_update => :#{on_update}" if on_update
+        dump << ", :on_delete => :#{on_delete}" if on_delete
+        dump << ", { :name => :#{name} } " if name
+        dump
+      end
     end
 
   end

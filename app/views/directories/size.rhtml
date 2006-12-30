@@ -1,19 +1,16 @@
-<div id="MainFrame">
-  
 <h2>
-  Contents of <tt><%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %></tt>
+  Contents of <%= @directory.server.name %>:<%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %>
 </h2>
 
-<br>
 <% units = human_units_of @max_size %>
 
 <table cellspacing="0" cellpadding="0">
   <% unless @children_and_sizes.empty? %>
     <tr>
-      <th class="highlight" colspan="4">Directories <small>(<%= @children_and_sizes.length %>)</small><%= link_to image_tag("excel.png", :size => "20x22", 
+      <th class="highlight" colspan="4"><span class="Left">Directories <small>(<%= @children_and_sizes.length %>)</small></span><span class="Right"><%= link_to image_tag("excel.png", :size => "20x22", 
         :alt => "Save as CSV", :class => "export_img", :title => "Save as CSV"), :format => :csv %>&nbsp;
       <%= link_to image_tag("xml.png", :size => "36x14", 
-        :alt => "Save as XML", :class => "export_img", :title => "Save as XML"), :format => :xml %></th>
+        :alt => "Save as XML", :class => "export_img", :title => "Save as XML"), :format => :xml %></span></th>
     </tr>
     <% for directory, size in @children_and_sizes %>
       <tr<%= (@alt = (@alt ? false : true)) ? " class=\"shade\"" : "" %>>
@@ -55,4 +52,3 @@
   <% end
   end %>
 </table>
-</div>

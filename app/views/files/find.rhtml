@@ -1,12 +1,11 @@
-<h1>Find a File </h1>
+<h2>Find a File </h2>
 
-Search for a file in the <b>earth</b> database.(* can be used as a wildcard, eg *.rb)
-<br />
-<br />
-<% form_tag :action => 'find' do %>
-  Filename:     <%= text_field_tag 'filename' %><br>
-  Owned by:     <%= text_field_tag 'user' %><br>
-  Bigger than:  <%= text_field_tag 'size' %> bytes<br>
+<p>Search for a file in the <b>earth</b> database.(* can be used as a wildcard, eg *.rb)</p>
+
+<% form_for :file, :url => { :action => 'results' } do |form| %>
+  <p>Filename:     <%= form.text_field 'filename' %></p>
+  <p>Owned by:     <%= form.text_field 'user' %></p>
+  <p>Bigger than:  <%= form.text_field 'size' %> bytes</p>
   <%= submit_tag 'Find' %>
 <% end %>
 

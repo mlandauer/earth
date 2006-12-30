@@ -1,27 +1,23 @@
-<h1>Find results for the string "<%= @filename %>"</h1>
+<h2>Find results for the string "<%= @filename_value %>"</h2>
 
-<table border='1' cellpadding='4' cellspacing='0'>
+<table cellpadding="0" cellspacing="0">
   <tr>
-  <th>Server</th>
-  <th>Path</th>
-  <th>Name</th>
-  <th>Modified</th>
-  <th>Size</th>
-  <th>User</th>
-  <th>Group</th>
+    <th class="highlight">Server</th>
+    <th class="highlight">Name</th>
+    <th class="highlight">Modified</th>
+    <th class="highlight">Size</th>
+    <th class="highlight">User</th>
+    <th class="highlight">Group</th>
   </tr>
   
 <% for file in @files %>
-  <tr>
-  <td><%=h file.directory.server.name %></td>
-  <td><%=h file.directory.path %></td>
-  <td><%=h file.name %>
-  <td><%=h file.modified %>
-  <td><%=h file.size %>
-  <td><%=h file.ownership.user_name %>
-  <td><%=h file.ownership.group_name %>
+  <tr<%= (@alt = (@alt ? false : true)) ? " class=\"shade\"" : "" %>>
+    <td><%=h file.directory.server.name %></td>
+    <td><span title="<%=h file.directory.path %>"><%=h file.name %></span></td>
+    <td><span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span></td>
+    <td><%=h file.size %></td>
+    <td><%=h file.ownership.user_name %></td>
+    <td class="last"><%=h file.ownership.group_name %></td>
   </tr>
 <% end %>
 </table>
-
-<br />
