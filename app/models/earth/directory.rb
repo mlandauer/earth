@@ -45,9 +45,11 @@ module Earth
       return a ? a : 0
     end
     
+    # This only requires the id of the current directory and so doesn't need to
+    # protected in a transaction which simplified its use
     def recursive_size
-      Directory.sum(:size, :conditions => "lft >= #{lft} AND rgt <= #{rgt}",
-        :joins => "LEFT JOIN files ON files.directory_id = directories.id").to_i
+      Directory.sum(:size, :conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
+        :joins => "LEFT JOIN directories AS parent ON parent.id = #{id} LEFT JOIN files ON files.directory_id = directories.id").to_i
     end
     
     # Return all the root directories for the given server as an array

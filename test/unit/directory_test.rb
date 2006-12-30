@@ -189,11 +189,9 @@ class TransactionalDirectoryTest < Test::Unit::TestCase
     begin
       reader = Thread.new do
         10.times do
-          Earth::Directory.transaction do
-            foo_bar = Earth::Directory.find(2) # => /foo/bar
-            sleep(0.01)
-            assert_equal(7, foo_bar.recursive_size)
-          end
+          foo_bar = Earth::Directory.find(2) # => /foo/bar
+          sleep(0.01)
+          assert_equal(7, foo_bar.recursive_size)
         end
       end
       writer = Thread.new do

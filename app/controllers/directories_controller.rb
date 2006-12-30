@@ -2,19 +2,17 @@ require 'csv'
 
 class DirectoriesController < ApplicationController
   def size
-    Earth::Directory.transaction do
-      if params[:server] && params[:path]
-        server = Earth::Server.find_by_name(params[:server])
-        raise "Couldn't find server #{params[:server]}" if server.nil?
-        @directory = server.directories.find_by_path(params[:path])
-        raise "Couldn't find directory #{params[:path]}" if @directory.nil?
-      else
-        @directory = Earth::Directory.find(params[:id])
-      end
-    
-      @directory_size = @directory.size
-      @children_and_sizes = @directory.children.map{|x| [x, x.recursive_size]}
+    if params[:server] && params[:path]
+      server = Earth::Server.find_by_name(params[:server])
+      raise "Couldn't find server #{params[:server]}" if server.nil?
+      @directory = server.directories.find_by_path(params[:path])
+      raise "Couldn't find directory #{params[:path]}" if @directory.nil?
+    else
+      @directory = Earth::Directory.find(params[:id])
     end
+  
+    @directory_size = @directory.size
+    @children_and_sizes = @directory.children.map{|x| [x, x.recursive_size]}
     
     # Sort the directories so that the largest comes first
     @children_and_sizes.sort!{|a,b| b[1] <=> a[1]}
