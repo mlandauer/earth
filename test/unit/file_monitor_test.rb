@@ -66,8 +66,8 @@ class FileMonitorTest < Test::Unit::TestCase
   
   def test_added
     FileMonitor.update(@directory)
-    assert_directories([@dir, @dir1], Earth::Directory.find(:all))
-    assert_files([@file2, @file1], Earth::File.find(:all))
+    assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
+    assert_files([@file2, @file1], Earth::File.find(:all, :order => :id))
   end
 
   def test_removed
@@ -76,8 +76,8 @@ class FileMonitorTest < Test::Unit::TestCase
     FileUtils.rm 'test_data/file1'
     FileMonitor.update(@directory)
     
-    assert_directories([@dir], Earth::Directory.find(:all))
-    assert_files([], Earth::File.find(:all))
+    assert_directories([@dir], Earth::Directory.find(:all, :order => :id))
+    assert_files([], Earth::File.find(:all, :order => :id))
   end
 
   def test_removed2
@@ -89,8 +89,8 @@ class FileMonitorTest < Test::Unit::TestCase
     FileUtils.rm_rf @dir1
     FileMonitor.update(@directory)
     
-    assert_directories([@dir], Earth::Directory.find(:all))
-    assert_files([@file1], Earth::File.find(:all))
+    assert_directories([@dir], Earth::Directory.find(:all, :order => :id))
+    assert_files([@file1], Earth::File.find(:all, :order => :id))
   end
   
   def test_changed
@@ -102,8 +102,8 @@ class FileMonitorTest < Test::Unit::TestCase
     FileUtils.touch file3
     FileMonitor.update(@directory)
     
-    assert_directories([@dir, @dir1], Earth::Directory.find(:all))
-    assert_files([@file2, @file1, file3], Earth::File.find(:all))
+    assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
+    assert_files([@file2, @file1, file3], Earth::File.find(:all, :order => :id))
   end
   
   def test_added_in_subdirectory
@@ -112,8 +112,8 @@ class FileMonitorTest < Test::Unit::TestCase
     FileUtils.touch file3
     FileMonitor.update(@directory)
     
-    assert_directories([@dir, @dir1], Earth::Directory.find(:all))
-    assert_files([@file2, @file1, file3], Earth::File.find(:all))
+    assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
+    assert_files([@file2, @file1, file3], Earth::File.find(:all, :order => :id))
   end
 
   # If the daemon doesn't have permission to list the directory
@@ -124,8 +124,8 @@ class FileMonitorTest < Test::Unit::TestCase
     File.chmod(0000, @dir1)
     FileMonitor.update(@directory)
     
-    assert_directories([@dir, @dir1], Earth::Directory.find(:all))
-    assert_files([@file1], Earth::File.find(:all))
+    assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
+    assert_files([@file1], Earth::File.find(:all, :order => :id))
 
     # Add permissions back
     File.chmod(mode, @dir1)
@@ -137,8 +137,8 @@ class FileMonitorTest < Test::Unit::TestCase
     File.chmod(0444, @dir1)
     FileMonitor.update(@directory)
     
-    assert_directories([@dir, @dir1], Earth::Directory.find(:all))
-    assert_files([@file1], Earth::File.find(:all))
+    assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
+    assert_files([@file1], Earth::File.find(:all, :order => :id))
 
     # Add permissions back
     File.chmod(mode, @dir1)
@@ -149,12 +149,12 @@ class FileMonitorTest < Test::Unit::TestCase
     FileUtils.rm_rf @dir
     FileMonitor.update(@directory)
     
-    directories = Earth::Directory.find(:all)
+    directories = Earth::Directory.find(:all, :order => :id)
     assert_equal(1, directories.size)
     assert_equal(@dir, directories[0].path)
     # Not checking the stat of the top directory as it has been deleted
     
-    files = Earth::File.find(:all)
+    files = Earth::File.find(:all, :order => :id)
     assert_equal(0, files.size)
   end
 end

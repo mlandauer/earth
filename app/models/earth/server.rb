@@ -2,7 +2,7 @@ require 'socket'
 
 module Earth
   class Server < ActiveRecord::Base
-    has_many :directories, :dependent => :destroy
+    has_many :directories, :dependent => :destroy, :order => :lft
   
     def Server.this_server
       Server.find_or_create_by_name(this_hostname)

@@ -2,7 +2,6 @@
 foo:
   id: 1
   name: "/foo"
-  parent_id: nil
   lft: 1
   rgt: 6
   server_id: 1
@@ -26,7 +25,6 @@ foo_bar_twiddle:
 bar:
   id: 4
   name: "/bar"
-  parent_id: nil
   lft: 7
   rgt: 8
   server_id: 2
