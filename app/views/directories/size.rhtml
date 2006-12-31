@@ -4,19 +4,20 @@
 
 <% units = human_units_of @max_size %>
 
-<table cellspacing="0" cellpadding="0">
-  <% unless @children_and_sizes.empty? %>
+<table id="browser" class="listing">
+  <thead>
     <tr>
-      <th class="highlight" colspan="4"><span class="Left">Directories <small>(<%= @children_and_sizes.length %>)</small></span><span class="Right"><%= link_to image_tag("excel.png", :size => "20x22", 
-        :alt => "Save as CSV", :class => "export_img", :title => "Save as CSV"), :format => :csv %>&nbsp;
-      <%= link_to image_tag("xml.png", :size => "36x14", 
-        :alt => "Save as XML", :class => "export_img", :title => "Save as XML"), :format => :xml %></span></th>
+      <th class="">Name</th>
+      <th class="">Size</th>
+      <th class=""></th>
     </tr>
+  </thead>
+  <tbody>
+  <% unless @children_and_sizes.empty? %>
     <% for directory, size in @children_and_sizes %>
-      <tr<%= (@alt = (@alt ? false : true)) ? " class=\"shade\"" : "" %>>
-        <td><%= link_to directory.name, :action => :size, :id => directory %></td>
-        <td><%=h human_size_in(units, size) %></td>
-        <td><%= units %></td>
+      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+        <td class="name Dir"><%= link_to directory.name, :action => :size, :id => directory %></td>
+        <td><%=h human_size_in(units, size) %> <%= units %></td>
         <td>
           <div class="graph">
               <div class="bar" style="width: <%= 100 * size / @max_size %>%;"/>
@@ -25,7 +26,6 @@
       </tr>
     <%  end
     end %>
-  <tr><td>&nbsp;</td></tr>
 <%
     if @directory.files.empty?
         max_size_files = 0
@@ -35,14 +35,10 @@
 %>
   <% units_files = human_units_of max_size_files %>
   <% unless @directory.files.empty? %>
-  <tr>
-    <th class="highlight" colspan="4">Files <small>(<%= @directory.files.count %>)</small></th>
-  </tr>
   <% @directory.files.each do |file| %>
-    <tr<%= (@alt = (@alt ? false : true)) ? " class=\"shade\"" : "" %>>
-      <td><%= file.name %></td>
-      <td><%= human_size_in(units_files, file.size) %></td>
-      <td><%= units_files %></td>
+    <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+      <td class="name File"><a href="#"><%= file.name %></a></td>
+      <td><%= human_size_in(units_files, file.size) %> <%= units_files %></td>
       <td>
           <div class="graph">
               <div class="filebar" style="width: <%= 100 * file.size / max_size_files %>%;"/>
@@ -51,4 +47,13 @@
     </tr>
   <% end
   end %>
+  </tbody>
 </table>
+
+<div id="ExportLinks">
+  <%= link_to image_tag("excel.png", :size => "20x22", 
+      :alt => "Save as CSV", :class => "export_img", :title => "Save as CSV"), :format => :csv %>
+      
+    <%= link_to image_tag("xml.png", :size => "36x14", 
+      :alt => "Save as XML", :class => "export_img", :title => "Save as XML"), :format => :xml %>  
+</div>

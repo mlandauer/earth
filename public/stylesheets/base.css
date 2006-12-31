@@ -15,13 +15,11 @@ body {
   text-align: center;
 }
 
-
 /* Structural Elements */
 
 #Container {
   width: 100%;
   height: 100%;
-/*  overflow: hidden; */
   background-color: #f2f2f2;
   min-width: 750px;
 }
@@ -49,16 +47,19 @@ body {
   width: 100%;
   text-align: left;
   color: #fff;
-}  
+}
+
 #Top a:link, #Top a:visited {
   text-decoration: underline;
   color: #fff;
 }
+
 #Top a:hover {
   color: #005422;
   background-color: #fff;
   text-decoration: none;
 }
+
 #Top .accesskey {
   text-decoration: underline;
 }
@@ -73,6 +74,7 @@ body {
   width: 74%;
   font-size: 11px;
 }
+
 #TabsInside {
   float: left;
   margin: 0 10px 0 0;
@@ -101,8 +103,9 @@ body {
   padding: 8px 8px 7px 8px;
   margin-bottom: -1px;
 }
+
 #Tabs .active {
-  float:left;
+  float: left;
   background: #FFF;
   color: #333;
   font-weight: bold;
@@ -111,12 +114,14 @@ body {
   margin-bottom: -1px;
   text-decoration: none;
 }
+
 #Tabs a:hover {
   text-decoration: none;
   color: #000;
   padding: 8px 8px 7px 8px;
   margin-bottom: -1px;
 }
+
 #Tabs a.float_right, #Tabs .active.float_right {
   float: right !important;
   border-left: 1px solid #c2c2c2;
@@ -124,24 +129,35 @@ body {
   border-right: none !important;
 }
 
-/* Generic elements */
+/* For the RSS and CSV export images */
+
+#ExportLinks {
+  margin-top: 50px;
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+/* Headings */
 
 h1 {
   font-size: 18px;
   line-height: 22px;
   font-weight: bold;
 }
+
 h2 {
   font-size: 16px;
   font-weight: bold;
   line-height: 20px;
   margin: 1em 0 0 0;
 }
+
 h3 {
   font-size: 14px;
   font-weight: bold;
   line-height: 18px;
 }
+
 h4 {
   font-size: 13px;
   font-weight: bold;
@@ -149,36 +165,15 @@ h4 {
   margin-bottom: 0.5em;
 }
 
-/*	Tables */
-
-th.highlight {
-  border-bottom: 1px solid #8a8a8a;
-}
-
-th {
-  font-weight: normal;
-  text-align: left;
-  font-style: italic;
-}
-
-tr.shade td {
-  background: #f0f0f0;
-}
-
-td {
-  padding: 4px;
-  border-right: 1px solid #c2c2c2;
-}
-
-td.last {
-  border-right-style: none;
-}
-
 /* This is needed for the CSS graphs */
 
 .graph {
   position: relative;
-  /* IE is dumb */
+
+
+/*
+
+IE is dumb */
   width: 200px;
   padding: 2px;
 }
@@ -227,19 +222,125 @@ td.last {
   clear: none;
 }
 
-/* Simulating Tables without using TABLE */
+/* Filesystem Browser
+  Most of this is based on the Source Code Browser CSS and HTML from 
+  Collaboa [ http://dev.collaboa.org/ ] */
 
-/* Equivalent to TABLE */
-dl {
-  
+#Content table.listing {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
 }
 
-/* Equivalent to TR */
-dt {
-  
+table.listing thead {
+  background: #ddd;
 }
 
-/* Equivalent to TD */
-dd {
-  
+table.listing th {
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 5px;
+  vertical-align: bottom;
+  text-align: center;
+}
+
+table.listing th {
+  vertical-align: top;
+}
+
+table.listing td {
+  vertical-align: middle;
+  padding: 0 2px 0 2px;
+}
+
+table.listing tr.even, table#browser tr.parent {
+  background-color: #fbfbfb;
+}
+
+table.listing tr.odd {
+  background-color: #f1f1f1;
+}
+
+div.events_even {
+  background-color: #fbfbfb;
+  clear: both;
+  display: table;
+  width: 100%
+}
+
+div.events_odd {
+  background-color: #f1f1f1;
+  clear: both;
+  display: table;
+  width: 100%
+}
+
+#Content table.listing td {
+  padding: 2px;
+}
+
+table.listing thead th a.asc {
+  background-image: url(/images/sort_asc.png);
+  background-repeat: no-repeat;
+  padding-right: 10px;
+  background-position: 100% 50%;
+}
+
+table.listing thead th a.desc {
+  background-image: url(/images/sort_desc.png);
+  background-repeat: no-repeat;
+  padding-right: 10px;
+  background-position: 100% 50%;
+}
+
+/**
+ * Repository browser
+ */
+
+#Content table#browser tr td {
+  white-space: nowrap;
+}
+
+#Content table#browser td.name {
+  width: 75%;
+}
+
+#Content table#browser td.rev {
+  width: 5%;
+}
+
+#Content table#browser td.age {
+  width: 5%;
+}
+
+#Content table#browser td.msg {
+  width: 15%;
+}
+
+#Content table#browser td.name a {
+  padding-left: 25px;
+  background-position: 4px 50%;
+  background-repeat: no-repeat;
+}
+
+#Content table#browser td.rev, #Content table#browser td.age, #Content table#browser td.size {
+  font-size: 11px;
+  text-align: center;
+}
+
+#Content table#browser td.msg {
+  font-size: 9px;
+  color: #666;
+}
+
+#Content table#browser td.File a {
+  background-image: url(/images/icon_file.png);
+}
+
+#Content table#browser td.Dir a {
+  background-image: url(/images/icon_folder.png);
+}
+
+#Content table#browser td.parent a {
+  background-image: url(/images/icon_up.gif);
 }
