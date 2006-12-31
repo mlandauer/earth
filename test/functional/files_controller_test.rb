@@ -27,7 +27,7 @@ class FilesControllerTest < Test::Unit::TestCase
   end
   
   def test_results
-    post :find, :filename => "a", :user => "1", :size => "1"
+    post :results, :file => { :filename => "a", :user => "1", :size => "1" }
     assert_response :success
     assert_template 'results'
     assert_equal("a", assigns('filename_value'))
