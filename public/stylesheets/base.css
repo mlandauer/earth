@@ -323,7 +323,8 @@ table.listing thead th a.desc {
   background-repeat: no-repeat;
 }
 
-#Content table#browser td.rev, #Content table#browser td.age, #Content table#browser td.size {
+#Content table#browser td.server, #Content table#browser td.modified, #Content table#browser td.size, #Content table#browser td.owner_user,
+#Content table#browser td.owner_group {
   font-size: 11px;
   text-align: center;
 }

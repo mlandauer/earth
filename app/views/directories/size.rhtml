@@ -17,7 +17,7 @@
     <% for directory, size in @children_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
         <td class="name Dir"><%= link_to directory.name, :action => :size, :id => directory %></td>
-        <td><%=h human_size_in(units, size) %> <%= units %></td>
+        <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
         <td>
           <div class="graph">
               <div class="bar" style="width: <%= 100 * size / @max_size %>%;"/>
@@ -38,7 +38,7 @@
   <% @directory.files.each do |file| %>
     <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
       <td class="name File"><a href="#"><%= file.name %></a></td>
-      <td><%= human_size_in(units_files, file.size) %> <%= units_files %></td>
+      <td class="size"><%= human_size_in(units_files, file.size) %> <%= units_files %></td>
       <td>
           <div class="graph">
               <div class="filebar" style="width: <%= 100 * file.size / max_size_files %>%;"/>
