@@ -11,7 +11,7 @@
 # And be sure to use new-style password hashing:
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
 development:
-  adapter: mysql
+  adapter: postgresql
   database: earth_development
   username: earth
   password: earth
@@ -21,14 +21,14 @@ development:
 # re-generated from your development database when you run 'rake'.
 # Do not set this db to the same as development or production.
 test:
-  adapter: mysql
+  adapter: postgresql
   database: earth_test
   username: earth
   password: earth
   host: localhost
 
 production:
-  adapter: mysql
+  adapter: postgresql
   database: earth_production
   username: earth
   password: earth
