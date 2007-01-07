@@ -317,6 +317,12 @@ table.listing thead th a.desc {
   width: 15%;
 }
 
+#Content table#browser td.name span {
+  padding-left: 25px;
+  background-position: 4px 50%;
+  background-repeat: no-repeat;
+}
+
 #Content table#browser td.name a {
   padding-left: 25px;
   background-position: 4px 50%;
@@ -334,7 +340,7 @@ table.listing thead th a.desc {
   color: #666;
 }
 
-#Content table#browser td.File a {
+#Content table#browser td.File span {
   background-image: url(/images/icon_file.png);
 }
 

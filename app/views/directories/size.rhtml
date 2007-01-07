@@ -37,7 +37,7 @@
   <% unless @directory.files.empty? %>
   <% @directory.files.each do |file| %>
     <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-      <td class="name File"><a href="#"><%= file.name %></a></td>
+      <td class="name File"><span><%= file.name %></span></td>
       <td class="size"><%= human_size_in(units_files, file.size) %> <%= units_files %></td>
       <td>
           <div class="graph">
