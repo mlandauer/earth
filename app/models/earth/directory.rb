@@ -68,6 +68,30 @@ module Earth
       end
     end
     
+    def path
+      self_and_ancestors.map{|x| x.name}.join('/')
+    end
+    
+    # This assumes there are no overlapping directory trees
+    def Directory.find_by_path(path)
+      current = roots.find {|d| path[0, d.name.length] == d.name}
+      if path.length == current.name.length || current.nil?
+        return current
+      end
+      remaining = path[current.name.length+1 .. -1].split("/")
+      
+      while !remaining.empty? && !current.nil? do
+        current = current.find_by_child_name(remaining.shift)
+      end
+
+      return current
+    end
+    
+    # Returns the child of this directory with the given name
+    def find_by_child_name(n)
+      Directory.find(:first, :conditions => ['parent_id = ? AND name = ?', id, n])
+    end
+    
     def path=(path)
       raise "Can't set path directly. Set name instead."
     end
