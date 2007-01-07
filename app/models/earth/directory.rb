@@ -58,13 +58,10 @@ module Earth
       Directory.roots.find_all{|d| d.server_id == server.id}
     end
     
-    # Set the path and server_id attributes based on name and parent_id
+    # Set the server_id attribute based on parent_id
     def before_save
       if parent_id
-        write_attribute(:path, ::File.join(parent.path, name))
         write_attribute(:server_id, parent.server_id)
-      else
-        write_attribute(:path, name)
       end
     end
     
@@ -90,10 +87,6 @@ module Earth
     # Returns the child of this directory with the given name
     def find_by_child_name(n)
       Directory.find(:first, :conditions => ['parent_id = ? AND name = ?', id, n])
-    end
-    
-    def path=(path)
-      raise "Can't set path directly. Set name instead."
     end
     
     # Iterate over each node of the tree. Move from the leaf nodes

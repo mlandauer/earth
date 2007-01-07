@@ -5,7 +5,6 @@ foo:
   lft: 1
   rgt: 6
   server_id: 1
-  path: "/foo"
 foo_bar:
   id: 2
   name: "bar"
@@ -13,7 +12,6 @@ foo_bar:
   lft: 2
   rgt: 5
   server_id: 1
-  path: "/foo/bar"
 foo_bar_twiddle:
   id: 3
   name: "twiddle"
@@ -21,11 +19,9 @@ foo_bar_twiddle:
   lft: 3
   rgt: 4
   server_id: 1
-  path: "/foo/bar/twiddle"
 bar:
   id: 4
   name: "/bar"
   lft: 7
   rgt: 8
   server_id: 2
-  path: "/bar"
