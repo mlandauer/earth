@@ -8,6 +8,14 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal(servers(:first), directories(:foo_bar_twiddle).server)
   end
   
+  def test_find_by_path
+    assert_equal(directories(:foo), Earth::Directory.find_by_path("/foo"))
+    assert_equal(directories(:foo_bar), Earth::Directory.find_by_path("/foo/bar"))
+    assert_equal(directories(:foo_bar_twiddle), Earth::Directory.find_by_path("/foo/bar/twiddle"))
+    assert_equal(directories(:bar), Earth::Directory.find_by_path("/bar"))
+    assert_nil(Earth::Directory.find_by_path("/foo/bar/boo"))
+  end
+  
   def test_path
     assert_equal("/foo", directories(:foo).path)
     assert_equal("/foo/bar", directories(:foo_bar).path)
