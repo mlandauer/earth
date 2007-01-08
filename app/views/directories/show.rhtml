@@ -1,5 +1,5 @@
 <h2>
-  <%= link_to "root", :controller => :servers %> &#187 <%= link_to @directory.server.name, :controller => :servers, :action => :show, :id => @directory.server.id %> &#187 <%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %>
+  <%= link_to "root", :controller => :servers %> &#187 <%= link_to @directory.server.name, :controller => :servers, :action => :show, :id => @directory.server.id %> &#187 <%= nested_set_full_outline @directory, :separator => '/', :controller => :directories, :action => :show %>
 </h2>
 
 <% units = human_units_of @max_size %>
@@ -16,7 +16,7 @@
   <% unless @children_and_sizes.empty? %>
     <% for directory, size in @children_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Dir"><%= link_to directory.name, :action => :size, :id => directory %></td>
+        <td class="name Dir"><%= link_to directory.name, :id => directory %></td>
         <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
         <td>
           <div class="graph">

@@ -1,7 +1,7 @@
 require 'csv'
 
 class DirectoriesController < ApplicationController
-  def size
+  def show
     if params[:server] && params[:path]
       server = Earth::Server.find_by_name(params[:server])
       raise "Couldn't find server #{params[:server]}" if server.nil?
@@ -27,7 +27,7 @@ class DirectoriesController < ApplicationController
     
     respond_to do |wants|
       wants.html
-      wants.xml {render :action => "size.rxml", :layout => false}
+      wants.xml {render :action => "show.rxml", :layout => false}
       wants.csv do
         @csv_report = StringIO.new
         CSV::Writer.generate(@csv_report, ',') do |csv|

@@ -25,6 +25,6 @@ class ServersControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_template 'list'
 
-    assert_not_nil assigns(:servers)
+    assert_not_nil assigns(:children_and_sizes)
   end
 end

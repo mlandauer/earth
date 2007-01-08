@@ -14,11 +14,11 @@ class DirectoriesControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
   end
 
-  def test_size_with_id
-    get :size, :id => 1
+  def test_show_with_id
+    get :show, :id => 1
     
     assert_response :success
-    assert_template 'size'
+    assert_template 'show'
 
     assert_equal(directories(:foo), assigns(:directory))
     assert_equal(directories(:foo).size, assigns(:directory_size))
@@ -28,12 +28,12 @@ class DirectoriesControllerTest < Test::Unit::TestCase
     assert_equal(7, assigns(:max_size))
   end
   
-  def test_size_with_server_and_path
+  def test_show_with_server_and_path
     @request.env['HTTP_ACCEPT'] = 'application/xml'
-    get :size, {:server => Earth::Server.this_hostname, :path => "/foo/bar"}
+    get :show, {:server => Earth::Server.this_hostname, :path => "/foo/bar"}
     
     assert_response :success
-    assert_template 'size.rxml'
+    assert_template 'show.rxml'
     
     assert_equal(directories(:foo_bar), assigns(:directory))
     

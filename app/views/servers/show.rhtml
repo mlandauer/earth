@@ -16,7 +16,7 @@
   <% unless @children_and_sizes.empty? %>
     <% for directory, size in @children_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Dir"><%= link_to directory.name, :controller => :directories, :action => :size, :id => directory %></td>
+        <td class="name Dir"><%= link_to directory.name, :controller => :directories, :action => :show, :id => directory %></td>
         <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
         <td>
           <div class="graph">
