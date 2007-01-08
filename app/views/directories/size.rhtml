@@ -1,5 +1,5 @@
 <h2>
-  <%= link_to "root", :controller => :servers %> &#187 <%= @directory.server.name %> &#187 <%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %>
+  <%= link_to "root", :controller => :servers %> &#187 <%= link_to @directory.server.name, :controller => :servers, :action => :show, :id => @directory.server.id %> &#187 <%= nested_set_full_outline @directory, :separator => '/', :controller => "directories", :action => "size" %>
 </h2>
 
 <% units = human_units_of @max_size %>

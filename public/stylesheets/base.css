@@ -348,6 +348,10 @@ table.listing thead th a.desc {
   background-image: url(/images/icon_folder.png);
 }
 
+#Content table#browser td.Server a {
+  background-image: url(/images/icon_server.png);
+}
+
 #Content table#browser td.parent a {
   background-image: url(/images/icon_up.gif);
 }

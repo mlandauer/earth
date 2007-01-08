@@ -1,24 +1,30 @@
-<h3>Listing servers</h3>
+<h2>
+  root
+</h2>
 
-<table cellpadding="0" cellspacing="0">
-  <tr>
-    <th class="highlight">Server name</th>
-    <th class="highlight">Watch directory</th>
-    <th class="highlight">Size</th>
-  </tr>
-  
-<% for server in @servers %>
-  <% for directory in Earth::Directory.roots_for_server(server) %>
-  <tr<%= (@alt = (@alt ? false : true)) ? " class=\"shade\"" : "" %>>
-    <td><%= link_to server.name, :action => :show, :id => server.id  %></td>
-    <td><%= link_to directory.path, :controller => 'directories', :action => :size, :id => directory %></td>
-    <td><%= number_to_human_size directory.recursive_size %></td>
-  </tr>
-  <% end %>
-<% end %>
+<% units = human_units_of @max_size %>
+
+<table id="browser" class="listing">
+  <thead>
+    <tr>
+      <th class="">Name</th>
+      <th class="">Size</th>
+      <th class=""></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% unless @children_and_sizes.empty? %>
+    <% for server, size in @children_and_sizes %>
+      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+        <td class="name Server"><%= link_to server.name, :action => :show, :id => server %></td>
+        <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
+        <td>
+          <div class="graph">
+              <div class="bar" style="width: <%= 100 * size / @max_size %>%;"/>
+          </div>
+        </td>
+      </tr>
+    <%  end
+    end %>
+  </tbody>
 </table>
-
-<%= link_to 'Previous page', { :page => @server_pages.current.previous } if @server_pages.current.previous %>
-<%= link_to 'Next page', { :page => @server_pages.current.next } if @server_pages.current.next %> 
-
-<br />

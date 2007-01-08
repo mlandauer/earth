@@ -11,5 +11,9 @@ module Earth
     def Server.this_hostname
       Socket.gethostname
     end
+    
+    def recursive_size
+      Earth::Directory.roots_for_server(self).map{|d| d.recursive_size}.sum
+    end
   end
 end
