@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../../test_helper'
 
-class DirectoriesHelperTest < HelperTestCase
+class ApplicationHelperTest < HelperTestCase
 
-  include DirectoriesHelper
+  include ApplicationHelper
 
   def test_human_units_of
     assert_equal("Bytes", human_units_of(500))

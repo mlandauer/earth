@@ -10,7 +10,7 @@
 <% for server in @servers %>
   <% for directory in Earth::Directory.roots_for_server(server) %>
   <tr<%= (@alt = (@alt ? false : true)) ? " class=\"shade\"" : "" %>>
-    <td><%= server.name %></td>
+    <td><%= link_to server.name, :action => :show, :id => server.id  %></td>
     <td><%= link_to directory.path, :controller => 'directories', :action => :size, :id => directory %></td>
     <td><%= number_to_human_size directory.recursive_size %></td>
   </tr>

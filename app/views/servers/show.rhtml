@@ -1,0 +1,38 @@
+<h2>
+  <%= link_to "root", :controller => :servers %> &#187 <%= @server.name %>
+</h2>
+
+<% units = human_units_of @max_size %>
+
+<table id="browser" class="listing">
+  <thead>
+    <tr>
+      <th class="">Name</th>
+      <th class="">Size</th>
+      <th class=""></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% unless @children_and_sizes.empty? %>
+    <% for directory, size in @children_and_sizes %>
+      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+        <td class="name Dir"><%= link_to directory.name, :controller => :directories, :action => :size, :id => directory %></td>
+        <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
+        <td>
+          <div class="graph">
+              <div class="bar" style="width: <%= 100 * size / @max_size %>%;"/>
+          </div>
+        </td>
+      </tr>
+    <%  end
+    end %>
+  </tbody>
+</table>
+
+<div id="ExportLinks">
+  <%= link_to image_tag("excel.png", :size => "20x22", 
+      :alt => "Save as CSV", :class => "export_img", :title => "Save as CSV"), :format => :csv %>
+      
+    <%= link_to image_tag("xml.png", :size => "36x14", 
+      :alt => "Save as XML", :class => "export_img", :title => "Save as XML"), :format => :xml %>  
+</div>
