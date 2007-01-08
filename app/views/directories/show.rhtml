@@ -22,20 +22,14 @@
       </tr>
     <%  end
     end %>
-<%
-    if @directory.files.empty?
-        max_size_files = 0
-    else
-        max_size_files = @directory.files.map {|f| f.size}.max
-    end
-%>
-  <% units_files = human_units_of max_size_files %>
-  <% unless @directory.files.empty? %>
-  <% @directory.files.each do |file| %>
+  <% files = @directory.files.sort{|a,b| b.size <=> a.size} %>
+  <% unless files.empty? %>
+  <% units_files = human_units_of files[0].size %>
+  <% files.each do |file| %>
     <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
       <td class="name File"><span><%= file.name %></span></td>
       <td class="size"><%= human_size_in(units_files, file.size) %> <%= units_files %></td>
-      <td><%= bar file.size, max_size_files, :class => "filebar"%></td>
+      <td><%= bar file.size, files[0].size, :class => "filebar"%></td>
     </tr>
   <% end
   end %>
