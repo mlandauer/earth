@@ -13,6 +13,7 @@ class DirectoriesController < ApplicationController
   
     @directories = @directory.children
     @directories_and_sizes = @directories.map{|x| [x, x.recursive_size]}
+    @files = @directory.files
     
     respond_to do |wants|
       wants.html

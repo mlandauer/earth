@@ -12,8 +12,8 @@
     </tr>
   </thead>
   <tbody>
-  <% @directories_and_sizes.sort!{|a,b| b[1] <=> a[1]} %>
   <% unless @directories_and_sizes.empty? %>
+    <% @directories_and_sizes.sort!{|a,b| b[1] <=> a[1]} %>
     <% max_size = @directories_and_sizes.first[1] %>
     <% units = human_units_of max_size %>
     <% for directory, size in @directories_and_sizes %>
@@ -24,11 +24,11 @@
       </tr>
     <%  end
     end %>
-  <% files = @directory.files.sort{|a,b| b.size <=> a.size} %>
-  <% unless files.empty? %>
-    <% max_size = files[0].size %>
+  <% unless @files.empty? %>
+    <% @files.sort!{|a,b| b.size <=> a.size} %>
+    <% max_size = @files[0].size %>
     <% units = human_units_of max_size %>
-    <% files.each do |file| %>
+    <% @files.each do |file| %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
         <td class="name File"><span><%= file.name %></span></td>
         <td class="size"><%= human_size_in(units, file.size) %> <%= units %></td>

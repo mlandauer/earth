@@ -2,8 +2,6 @@
   root
 </h2>
 
-<% units = human_units_of @max_size %>
-
 <table id="browser" class="listing">
   <thead>
     <tr>
@@ -13,12 +11,15 @@
     </tr>
   </thead>
   <tbody>
-  <% unless @children_and_sizes.empty? %>
-    <% for server, size in @children_and_sizes %>
+  <% unless @servers_and_sizes.empty? %>
+    <% @servers_and_sizes.sort!{|a,b| b[1] <=> a[1]} %>
+    <% max_size = @servers_and_sizes.first[1] %>
+    <% units = human_units_of max_size %>
+    <% for server, size in @servers_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
         <td class="name Server"><%= link_to server.name, :action => :show, :id => server %></td>
         <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
-        <td><%= bar size, @max_size, :class => "bar" %></td>
+        <td><%= bar size, max_size, :class => "bar" %></td>
       </tr>
     <%  end
     end %>

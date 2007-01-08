@@ -9,26 +9,11 @@ class ServersController < ApplicationController
          :redirect_to => { :action => :list }
 
   def list
-    @children_and_sizes = Earth::Server.find(:all).map{|x| [x, x.recursive_size]}
-    # Sort the directories so that the largest comes first
-    @children_and_sizes.sort!{|a,b| b[1] <=> a[1]}
-    if @children_and_sizes.empty?
-      @max_size = 0
-    else
-      @max_size = @children_and_sizes.first[1]
-    end
+    @servers_and_sizes = Earth::Server.find(:all).map{|x| [x, x.recursive_size]}
   end
   
   def show
     @server = Earth::Server.find(params[:id])
-    @children_and_sizes = Earth::Directory.roots_for_server(@server).map{|x| [x, x.recursive_size]}
-    
-    # Sort the directories so that the largest comes first
-    @children_and_sizes.sort!{|a,b| b[1] <=> a[1]}
-    if @children_and_sizes.empty?
-      @max_size = 0
-    else
-      @max_size = @children_and_sizes.first[1]
-    end
+    @directories_and_sizes = Earth::Directory.roots_for_server(@server).map{|x| [x, x.recursive_size]}
   end
 end
