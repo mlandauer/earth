@@ -107,7 +107,7 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_child_create
-    dir = directories(:foo).child_create(:name => "blah")
+    dir = directories(:foo).child_create(:name => "blah", :server_id => directories(:foo).server_id)
     assert_equal("blah", dir.name)
     assert_equal("/foo/blah", dir.path)
     assert_equal(directories(:foo), dir.parent)
@@ -122,7 +122,7 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal([foo_bar], foo.children)
     assert_no_queries{assert_equal([foo_bar], foo.children)}
     
-    foo_fiddle = foo.child_create(:name => "fiddle")
+    foo_fiddle = foo.child_create(:name => "fiddle", :server_id => foo.server_id)
     assert_no_queries{assert_equal([foo_fiddle, foo_bar], foo.children)}
     # Force a reload of children and check that the values are correct too
     assert_queries(1){assert_equal([foo_fiddle, foo_bar], foo.children(true))}
@@ -155,7 +155,7 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal(6, foo.rgt)
     foo_bar = directories(:foo_bar)
     # This will update the lft and rgt values of foo in the database (but not in the loaded object)
-    foo_bar.child_create(:name => "wibble")
+    foo_bar.child_create(:name => "wibble", :server_id => foo_bar.server_id)
     assert_equal(1, foo.lft)
     assert_equal(6, foo.rgt)
     foo.name = 'name'
@@ -208,7 +208,8 @@ class TransactionalDirectoryTest < Test::Unit::TestCase
     end
     writer = Thread.new do
       (1..10).each { |i|
-        Earth::Directory.find(1).child_create(:name => "bruno#{i}") # => /foo/bruno#{counter}
+        d = Earth::Directory.find(1)
+        d.child_create(:name => "bruno#{i}", :server_id => d.server_id) # => /foo/bruno#{counter}
         }
       end
 

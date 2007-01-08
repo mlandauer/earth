@@ -58,10 +58,6 @@ module Earth
       Directory.roots.find_all{|d| d.server_id == server.id}
     end
     
-    def child_create(attributes)
-      super attributes.merge(:server_id => server_id)
-    end
-    
     def path
       self_and_ancestors.map{|x| x.name}.join('/')
     end
