@@ -1,0 +1,47 @@
+<table id="browser" class="listing">
+  <thead>
+    <tr>
+      <th class="">Name</th>
+      <th class="">Size</th>
+      <th class=""></th>
+    </tr>
+  </thead>
+  <tbody>
+  <% unless @servers_and_sizes.nil? || @servers_and_sizes.empty? %>
+    <% @servers_and_sizes.sort!{|a,b| b[1] <=> a[1]} %>
+    <% max_size = @servers_and_sizes.first[1] %>
+    <% units = human_units_of max_size %>
+    <% for server, size in @servers_and_sizes %>
+      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+        <td class="name Server"><%= link_to server.name, :controller => :servers, :action => :show, :id => server %></td>
+        <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
+        <td><%= bar size, max_size, :class => "bar" %></td>
+      </tr>
+    <%  end
+    end %>
+  <% unless @directories_and_sizes.nil? || @directories_and_sizes.empty? %>
+    <% @directories_and_sizes.sort!{|a,b| b[1] <=> a[1]} %>
+    <% max_size = @directories_and_sizes.first[1] %>
+    <% units = human_units_of max_size %>
+    <% for directory, size in @directories_and_sizes %>
+      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+        <td class="name Dir"><%= link_to directory.name, :controller => :directories, :action => :show, :id => directory %></td>
+        <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
+        <td><%= bar size, max_size, :class => "bar"%></td>
+      </tr>
+    <%  end
+    end %>
+  <% unless @files.nil? || @files.empty? %>
+    <% @files.sort!{|a,b| b.size <=> a.size} %>
+    <% max_size = @files[0].size %>
+    <% units = human_units_of max_size %>
+    <% @files.each do |file| %>
+      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+        <td class="name File"><span><%= file.name %></span></td>
+        <td class="size"><%= human_size_in(units, file.size) %> <%= units %></td>
+        <td><%= bar file.size, max_size, :class => "filebar"%></td>
+      </tr>
+    <% end %>
+  <% end %>
+  </tbody>
+</table>

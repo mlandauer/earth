@@ -2,27 +2,4 @@
   <%= link_to "root", :controller => :servers %> &#187 <%= @server.name %>
 </h2>
 
-
-<table id="browser" class="listing">
-  <thead>
-    <tr>
-      <th class="">Name</th>
-      <th class="">Size</th>
-      <th class=""></th>
-    </tr>
-  </thead>
-  <tbody>
-  <% unless @directories_and_sizes.empty? %>
-    <% @directories_and_sizes.sort!{|a,b| b[1] <=> a[1]} %>
-    <% max_size = @directories_and_sizes.first[1] %>
-    <% units = human_units_of max_size %>
-    <% for directory, size in @directories_and_sizes %>
-      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Dir"><%= link_to directory.name, :controller => :directories, :action => :show, :id => directory %></td>
-        <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
-        <td><%= bar size, max_size, :class => "bar" %></td>
-      </tr>
-    <%  end
-    end %>
-  </tbody>
-</table>
+<%= render(:partial => "shared/browser") %>

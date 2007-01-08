@@ -2,42 +2,7 @@
   <%= link_to "root", :controller => :servers %> &#187 <%= link_to @directory.server.name, :controller => :servers, :action => :show, :id => @directory.server.id %> &#187 <%= nested_set_full_outline @directory, :separator => '/', :controller => :directories, :action => :show %>
 </h2>
 
-
-<table id="browser" class="listing">
-  <thead>
-    <tr>
-      <th class="">Name</th>
-      <th class="">Size</th>
-      <th class=""></th>
-    </tr>
-  </thead>
-  <tbody>
-  <% unless @directories_and_sizes.empty? %>
-    <% @directories_and_sizes.sort!{|a,b| b[1] <=> a[1]} %>
-    <% max_size = @directories_and_sizes.first[1] %>
-    <% units = human_units_of max_size %>
-    <% for directory, size in @directories_and_sizes %>
-      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Dir"><%= link_to directory.name, :id => directory %></td>
-        <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
-        <td><%= bar size, max_size, :class => "bar"%></td>
-      </tr>
-    <%  end
-    end %>
-  <% unless @files.empty? %>
-    <% @files.sort!{|a,b| b.size <=> a.size} %>
-    <% max_size = @files[0].size %>
-    <% units = human_units_of max_size %>
-    <% @files.each do |file| %>
-      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name File"><span><%= file.name %></span></td>
-        <td class="size"><%= human_size_in(units, file.size) %> <%= units %></td>
-        <td><%= bar file.size, max_size, :class => "filebar"%></td>
-      </tr>
-    <% end %>
-  <% end %>
-  </tbody>
-</table>
+<%= render(:partial => "shared/browser") %>
 
 <div id="ExportLinks">
   <%= link_to image_tag("excel.png", :size => "20x22", 
