@@ -60,12 +60,11 @@ private
 
     added_directory_names = subdirectory_names - directory.children.map{|x| x.name}
     added_directory_names.each do |name|
-    
-      Earth::Directory.transaction do
+      dir = Earth::Directory.benchmark("Creating directory with name #{directory.name}", Logger::DEBUG, !log_all_sql) do
         dir = Earth::Directory.create(:name => name, :server_id => directory.server_id)
         directory.child_add(dir)
-        update_non_recursive(dir)
       end
+      update_non_recursive(dir)
     end
 
     # By adding and removing files on the association, the cache of the association will be kept up to date
