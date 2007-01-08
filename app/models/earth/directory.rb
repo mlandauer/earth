@@ -58,11 +58,8 @@ module Earth
       Directory.roots.find_all{|d| d.server_id == server.id}
     end
     
-    # Set the server_id attribute based on parent_id
-    def before_save
-      if parent_id
-        write_attribute(:server_id, parent.server_id)
-      end
+    def child_create(attributes)
+      super attributes.merge(:server_id => server_id)
     end
     
     def path

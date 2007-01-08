@@ -90,11 +90,15 @@ module SymetrieCom
         alias_method_chain :children, :caching
         
         def child_create(attributes)
-          raise "Can't set parent" if attributes[:parent]
-          directory = self.class.create(attributes.merge(:parent => self))
-          # Adding this directory to children at the front to maintain the same order as children(true)
-          @children = [directory] + @children if @children
-          directory
+          child_add(self.class.create(attributes))
+        end
+        
+        # Add a preexisting node as a child of this node
+        def child_add(node)
+          node.move_to_child_of(self)
+          # Adding this node to children at the front to maintain the same order as children(true)
+          @children = [node] + @children if @children
+          node          
         end
     
         def child_delete(child)
