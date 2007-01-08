@@ -90,7 +90,9 @@ module SymetrieCom
         alias_method_chain :children, :caching
         
         def child_create(attributes)
-          child_add(self.class.create(attributes))
+          transaction do
+            child_add(self.class.create(attributes))
+          end
         end
         
         # Add a preexisting node as a child of this node

@@ -61,15 +61,12 @@ module Earth
     # Hmmm. How can I explain this? It's a really ugly hack. If parent_id isn't set and the normal
     # way of finding the path won't work you can explicitly set it for this object. Only used by the daemon.
     def path=(path)
-      @path = path
+      @cached_path = path
     end
     
     def path
-      if @path
-        @path
-      else
-        self_and_ancestors.map{|x| x.name}.join('/')
-      end
+      @cached_path = self_and_ancestors.map{|x| x.name}.join('/') unless @cached_path
+      @cached_path
     end
     
     # This assumes there are no overlapping directory trees
