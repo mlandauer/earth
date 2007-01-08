@@ -58,8 +58,18 @@ module Earth
       Directory.roots.find_all{|d| d.server_id == server.id}
     end
     
+    # Hmmm. How can I explain this? It's a really ugly hack. If parent_id isn't set and the normal
+    # way of finding the path won't work you can explicitly set it for this object. Only used by the daemon.
+    def path=(path)
+      @path = path
+    end
+    
     def path
-      self_and_ancestors.map{|x| x.name}.join('/')
+      if @path
+        @path
+      else
+        self_and_ancestors.map{|x| x.name}.join('/')
+      end
     end
     
     # This assumes there are no overlapping directory trees

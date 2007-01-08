@@ -22,6 +22,11 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal("/foo/bar/twiddle", directories(:foo_bar_twiddle).path)
   end
   
+  def test_path_set_directly
+    dir = Earth::Directory.create(:name => "blah", :server_id => directories(:foo).server_id, :path => "/foo/blah")
+    assert_equal("/foo/blah", dir.path)
+  end
+  
   def test_path_on_create
     dir = Earth::Server.this_server.directories.create(:name => "another", :parent => directories(:foo_bar))
     assert_equal("/foo/bar/another", dir.path)
