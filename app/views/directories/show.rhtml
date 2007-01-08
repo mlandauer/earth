@@ -2,7 +2,6 @@
   <%= link_to "root", :controller => :servers %> &#187 <%= link_to @directory.server.name, :controller => :servers, :action => :show, :id => @directory.server.id %> &#187 <%= nested_set_full_outline @directory, :separator => '/', :controller => :directories, :action => :show %>
 </h2>
 
-<% units = human_units_of @max_size %>
 
 <table id="browser" class="listing">
   <thead>
@@ -13,26 +12,30 @@
     </tr>
   </thead>
   <tbody>
-  <% unless @children_and_sizes.empty? %>
-    <% for directory, size in @children_and_sizes %>
+  <% @directories_and_sizes.sort!{|a,b| b[1] <=> a[1]} %>
+  <% unless @directories_and_sizes.empty? %>
+    <% max_size = @directories_and_sizes.first[1] %>
+    <% units = human_units_of max_size %>
+    <% for directory, size in @directories_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
         <td class="name Dir"><%= link_to directory.name, :id => directory %></td>
         <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
-        <td><%= bar size, @max_size, :class => "bar"%></td>
+        <td><%= bar size, max_size, :class => "bar"%></td>
       </tr>
     <%  end
     end %>
   <% files = @directory.files.sort{|a,b| b.size <=> a.size} %>
   <% unless files.empty? %>
-  <% units_files = human_units_of files[0].size %>
-  <% files.each do |file| %>
-    <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-      <td class="name File"><span><%= file.name %></span></td>
-      <td class="size"><%= human_size_in(units_files, file.size) %> <%= units_files %></td>
-      <td><%= bar file.size, files[0].size, :class => "filebar"%></td>
-    </tr>
-  <% end
-  end %>
+    <% max_size = files[0].size %>
+    <% units = human_units_of max_size %>
+    <% files.each do |file| %>
+      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+        <td class="name File"><span><%= file.name %></span></td>
+        <td class="size"><%= human_size_in(units, file.size) %> <%= units %></td>
+        <td><%= bar file.size, max_size, :class => "filebar"%></td>
+      </tr>
+    <% end %>
+  <% end %>
   </tbody>
 </table>
 

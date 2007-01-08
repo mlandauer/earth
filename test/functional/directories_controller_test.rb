@@ -21,11 +21,8 @@ class DirectoriesControllerTest < Test::Unit::TestCase
     assert_template 'show'
 
     assert_equal(directories(:foo), assigns(:directory))
-    assert_equal(directories(:foo).size, assigns(:directory_size))
     assert_equal([[directories(:foo_bar), directories(:foo_bar).recursive_size]],
-      assigns(:children_and_sizes))
-    # Hardcoded value below
-    assert_equal(7, assigns(:max_size))
+      assigns(:directories_and_sizes))
   end
   
   def test_show_with_server_and_path
