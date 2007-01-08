@@ -17,9 +17,6 @@ class ServersController < ApplicationController
     else
       @max_size = @children_and_sizes.first[1]
     end
-    if @max_size == 0
-      @max_size = 1
-    end
   end
   
   def show
@@ -32,9 +29,6 @@ class ServersController < ApplicationController
       @max_size = 0
     else
       @max_size = @children_and_sizes.first[1]
-    end
-    if @max_size == 0
-      @max_size = 1
     end
   end
 end

@@ -20,6 +20,16 @@ module ApplicationHelper
     end
   end
   
+  def bar(value, max_value, options)
+    # Hack to deal with divide by zero
+    if max_value == 0
+      max_value = 1
+    end
+    xml = Builder::XmlMarkup.new
+    xml.div("class" => "graph") do
+      xml.div("class" => options[:class] || "bar", "style" => "width: #{100 * value / max_value}%")
+    end
+  end
 
 private
 
