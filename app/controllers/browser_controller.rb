@@ -6,27 +6,21 @@ class BrowserController < ApplicationController
   end
 
   def show
-    if params[:server]
-      @server = Earth::Server.find_by_name(params[:server])
-      if @server.nil?
-        redirect_to(:action => 'show', :server => nil)
-        return
-      end
-      if params[:path]
-        @directory = @server.directories.find_by_path(params[:path].to_s)
-        if @directory.nil?
-          redirect_to :action => 'show', :path => nil
-          return
-        end      
-        @directories = @directory.children
-        @files = @directory.files
-      else
-        @directories = Earth::Directory.roots_for_server(@server)
-      end
-    else
+    @server = Earth::Server.find_by_name(params[:server]) if params[:server]
+    @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
+    
+    # if at the root
+    if @server.nil?
       @servers = Earth::Server.find(:all)
+    # if at the root of a server
+    elsif @server && @directory.nil?
+      @directories = Earth::Directory.roots_for_server(@server)
+    # if in a directory on a server
+    elsif @server && @directory
+      @directories = @directory.children
+      @files = @directory.files
     end
-
+    
     respond_to do |wants|
       wants.html
       wants.xml {render :action => "show.rxml", :layout => false}
