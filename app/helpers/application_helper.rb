@@ -31,6 +31,14 @@ module ApplicationHelper
     end
   end
 
+  def path_with_links(directory)
+    s = ''
+    for dir in directory.ancestors
+      s += link_to( dir[:name], { :controller => :directories, :action => :show, :server => dir.server.name, :path => dir.path }) + '/'
+    end
+    s + h(directory[:name])
+  end
+
 private
 
   def scale_for_human_size(units, size)

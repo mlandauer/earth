@@ -13,7 +13,12 @@ class ServersController < ApplicationController
   end
   
   def show
-    @server = Earth::Server.find(params[:id])
+    if params[:server]
+      @server = Earth::Server.find_by_name(params[:server])
+    else
+      @server = Earth::Server.find(params[:id])
+    end
+    raise "Couldn't find server #{params[:server]}" if @server.nil?
     @directories_and_sizes = Earth::Directory.roots_for_server(@server).map{|x| [x, x.recursive_size]}
   end
 end

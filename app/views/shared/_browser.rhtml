@@ -13,7 +13,7 @@
     <% units = human_units_of max_size %>
     <% for server, size in @servers_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Server"><%= link_to server.name, :controller => :servers, :action => :show, :id => server %></td>
+        <td class="name Server"><%= link_to server.name, :controller => :servers, :action => :show, :server => server.name %></td>
         <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
         <td><%= bar size, max_size, :class => "bar" %></td>
       </tr>
@@ -25,7 +25,7 @@
     <% units = human_units_of max_size %>
     <% for directory, size in @directories_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Dir"><%= link_to directory.name, :controller => :directories, :action => :show, :id => directory %></td>
+        <td class="name Dir"><%= link_to directory.name, :controller => :directories, :action => :show, :server => directory.server.name, :path => directory.path %></td>
         <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
         <td><%= bar size, max_size, :class => "bar"%></td>
       </tr>

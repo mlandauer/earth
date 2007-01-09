@@ -1,5 +1,7 @@
 <h2>
-  <%= link_to "root", :controller => :servers %> &#187 <%= link_to @directory.server.name, :controller => :servers, :action => :show, :id => @directory.server.id %> &#187 <%= nested_set_full_outline @directory, :separator => '/', :controller => :directories, :action => :show %>
+  <%= link_to "root", :controller => :servers %> &#187
+  <%= link_to @directory.server.name, :controller => :servers, :action => :show, :server => @directory.server.name %> &#187
+  <%= path_with_links @directory %>
 </h2>
 
 <%= render(:partial => "shared/browser") %>
