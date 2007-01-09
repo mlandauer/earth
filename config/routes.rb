@@ -18,11 +18,11 @@ ActionController::Routing::Routes.draw do |map|
   # which normally would be a seperator like '/'.
   map.connect '/browser', :controller => "browser", :action => "show"
   map.connect '/browser/:server', :controller => "browser", :action => "show",
-    :requirements => {:server => /\w+(\.\w+)+/}
+    :requirements => {:server => /\w+(\.\w+)*/}
   map.connect '/browser/:server*path', :controller => "browser", :action => "show",
-    :requirements => {:server => /\w+(\.\w+)+/}
+    :requirements => {:server => /\w+(\.\w+)*/}
   map.connect '/browser.:format/:server*path', :controller => "browser", :action => "show",
-    :requirements => {:server => /\w+(\.\w+)+/}
+    :requirements => {:server => /\w+(\.\w+)*/}
 
   # Allow downloading Web Service WSDL as a file with an extension
   # instead of a file named 'wsdl'
