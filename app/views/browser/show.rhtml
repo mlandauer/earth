@@ -6,6 +6,8 @@
   <thead>
     <tr>
       <th class="">Name</th>
+      <th class="">Modified</th>
+      <th class="">User</th>
       <th class="">Size</th>
       <th class=""></th>
     </tr>
@@ -18,6 +20,8 @@
     <% for server, size in @servers_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
         <td class="name Server"><%= link_to server.name, :server => server.name %></td>
+        <td></td>
+        <td></td>
         <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
         <td><%= bar size, max_size, :class => "bar" %></td>
       </tr>
@@ -30,6 +34,8 @@
     <% for directory, size in @directories_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
         <td class="name Dir"><%= link_to directory.name, :server => directory.server.name, :path => directory.path %></td>
+        <td></td>
+        <td></td>
         <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
         <td><%= bar size, max_size, :class => "bar"%></td>
       </tr>
@@ -42,6 +48,8 @@
     <% @files.each do |file| %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
         <td class="name File"><span><%= file.name %></span></td>
+        <td class="modified"><span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span></td>
+        <td class="owner_user"><%=h file.ownership.user_name %></td>
         <td class="size"><%= human_size_in(units, file.size) %> <%= units %></td>
         <td><%= bar file.size, max_size, :class => "filebar"%></td>
       </tr>
