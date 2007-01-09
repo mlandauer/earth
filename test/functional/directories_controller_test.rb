@@ -47,9 +47,9 @@ class DirectoriesControllerTest < Test::Unit::TestCase
   end
   
   def test_routing
-    assert_routing("/directories/show/foo.rsp.com.au/blah/foo/bar",
+    assert_routing("/browser/foo.rsp.com.au/blah/foo/bar",
       :controller => "directories", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"])
-    assert_routing("/directories/show.xml/foo.rsp.com.au/blah/foo/bar",
+    assert_routing("/browser.xml/foo.rsp.com.au/blah/foo/bar",
       :controller => "directories", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"], :format => "xml")
   end
 end

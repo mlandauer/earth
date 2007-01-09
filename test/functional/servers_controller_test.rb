@@ -15,8 +15,7 @@ class ServersControllerTest < Test::Unit::TestCase
 
   def test_index
     get :index
-    assert_response :success
-    assert_template 'list'
+    assert_response :redirect
   end
 
   def test_list
@@ -29,6 +28,6 @@ class ServersControllerTest < Test::Unit::TestCase
   end
   
   def test_routing
-    assert_routing("/servers/show/foo.rsp.com.au", :controller => "servers", :action => "show", :server => "foo.rsp.com.au")
+    assert_routing("/browser/foo.rsp.com.au", :controller => "servers", :action => "show", :server => "foo.rsp.com.au")
   end
 end
