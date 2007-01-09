@@ -14,9 +14,14 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '', :controller => "servers"
 
   # Allow pretty URL's for server and path
-  map.connect '/servers/show/*server', :controller => "servers", :action => "show"
-  map.connect '/directories/show/*path', :controller => "directories", :action => "show"
-  map.connect '/directories/show.:format/*path', :controller => "directories", :action => "show"
+  # By using the requirements option, we can force :server to be filled with names including dots
+  # which normally would be a seperator like '/'.
+  map.connect '/servers/show/:server', :controller => "servers", :action => "show",
+    :requirements => {:server => /\w+(\.\w+)+/}
+  map.connect '/directories/show/:server*path', :controller => "directories", :action => "show",
+    :requirements => {:server => /\w+(\.\w+)+/}
+  map.connect '/directories/show.:format/:server*path', :controller => "directories", :action => "show",
+    :requirements => {:server => /\w+(\.\w+)+/}
 
   # Allow downloading Web Service WSDL as a file with an extension
   # instead of a file named 'wsdl'

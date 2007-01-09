@@ -14,8 +14,7 @@ class ServersController < ApplicationController
   
   def show
     if params[:server]
-      raise "Can't specify a path here" if params[:server].length > 1
-      @server = Earth::Server.find_by_name(params[:server][0])
+      @server = Earth::Server.find_by_name(params[:server])
     else
       @server = Earth::Server.find(params[:id])
     end

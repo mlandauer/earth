@@ -29,6 +29,6 @@ class ServersControllerTest < Test::Unit::TestCase
   end
   
   def test_routing
-    assert_routing("/servers/show/foo.rsp.com.au", :controller => "servers", :action => "show", :server => ["foo.rsp.com.au"])
+    assert_routing("/servers/show/foo.rsp.com.au", :controller => "servers", :action => "show", :server => "foo.rsp.com.au")
   end
 end

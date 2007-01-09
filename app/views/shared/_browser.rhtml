@@ -25,7 +25,7 @@
     <% units = human_units_of max_size %>
     <% for directory, size in @directories_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Dir"><%= link_to directory.name, :controller => :directories, :action => :show, :path => directory.server.name + directory.path %></td>
+        <td class="name Dir"><%= link_to directory.name, :controller => :directories, :action => :show, :server => directory.server.name, :path => directory.path %></td>
         <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
         <td><%= bar size, max_size, :class => "bar"%></td>
       </tr>

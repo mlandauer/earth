@@ -27,7 +27,7 @@ class DirectoriesControllerTest < Test::Unit::TestCase
   
   def test_show_with_server_and_path
     @request.env['HTTP_ACCEPT'] = 'application/xml'
-    get :show, {:path => [Earth::Server.this_hostname, "foo", "bar"]}
+    get :show, {:server => Earth::Server.this_hostname, :path => "/foo/bar"}
     
     assert_response :success
     assert_template 'show.rxml'
@@ -48,8 +48,8 @@ class DirectoriesControllerTest < Test::Unit::TestCase
   
   def test_routing
     assert_routing("/directories/show/foo.rsp.com.au/blah/foo/bar",
-      :controller => "directories", :action => "show", :path => ["foo.rsp.com.au", "blah", "foo", "bar"])
+      :controller => "directories", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"])
     assert_routing("/directories/show.xml/foo.rsp.com.au/blah/foo/bar",
-      :controller => "directories", :action => "show", :path => ["foo.rsp.com.au", "blah", "foo", "bar"], :format => "xml")
+      :controller => "directories", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"], :format => "xml")
   end
 end

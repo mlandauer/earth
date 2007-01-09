@@ -17,7 +17,7 @@
       <td class="server"><%=h file.directory.server.name %></td>
       <td class="File name">
         <span title="<%= file.directory.path %>">
-          <%= link_to "#{file.name}", { :controller => :directories, :action => :show, :path => file.directory.server.name + file.directory.path } %>
+          <%= link_to "#{file.name}", { :controller => :directories, :action => :show, :server => file.directory.server.name, :path => file.directory.path } %>
         </span>
       </td>
       <td class="modified"><span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span></td>
