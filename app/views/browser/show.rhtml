@@ -17,7 +17,7 @@
     <% units = human_units_of max_size %>
     <% for server, size in @servers_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Server"><%= link_to server.name, :controller => :browser, :action => :show, :server => server.name %></td>
+        <td class="name Server"><%= link_to server.name, :server => server.name %></td>
         <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
         <td><%= bar size, max_size, :class => "bar" %></td>
       </tr>
@@ -29,7 +29,7 @@
     <% units = human_units_of max_size %>
     <% for directory, size in @directories_and_sizes %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Dir"><%= link_to directory.name, :controller => :browser, :action => :show, :server => directory.server.name, :path => directory.path %></td>
+        <td class="name Dir"><%= link_to directory.name, :server => directory.server.name, :path => directory.path %></td>
         <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
         <td><%= bar size, max_size, :class => "bar"%></td>
       </tr>
@@ -50,10 +50,12 @@
   </tbody>
 </table>
 
+<% if @directory %>
 <div id="ExportLinks">
   <%= link_to image_tag("excel.png", :size => "20x22", 
-      :alt => "Save as CSV", :class => "export_img", :title => "Save as CSV"), :server => (@server.name if @server), :path => (@directory.path if @directory), :format => :csv %>
+      :alt => "Save as CSV", :class => "export_img", :title => "Save as CSV"), :server => @server.name, :path => @directory.path, :format => :csv %>
       
     <%= link_to image_tag("xml.png", :size => "36x14", 
-      :alt => "Save as XML", :class => "export_img", :title => "Save as XML"), :server => (@server.name if @server), :path => (@directory.path if @directory), :format => :xml %>  
+      :alt => "Save as XML", :class => "export_img", :title => "Save as XML"), :server => @server.name, :path => @directory.path, :format => :xml %>  
 </div>
+<% end %>
