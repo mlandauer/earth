@@ -23,7 +23,7 @@
     <div id="Tabs">
       <div id="TabsInside">
 	      <% # We probably should get these from some configuration file or dynamically %>
-        <% ["servers", "files"].each_with_index { |item, index| 
+        <% ["browser", "files"].each_with_index { |item, index| 
               html_class = 'active' if controller.controller_class_name == (item.capitalize + "Controller") 
               html_style = 'border-left: 1px solid #c2c2c2;' if index == 0 %>
           <%= link_to(item, { :controller => item, :action => 'index' }, { :class => html_class, :style => html_style } ) %>
