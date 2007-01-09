@@ -2,11 +2,13 @@ require 'csv'
 
 class DirectoriesController < ApplicationController
   def show
-    if params[:server] && params[:path]
-      server = Earth::Server.find_by_name(params[:server])
-      raise "Couldn't find server #{params[:server]}" if server.nil?
-      @directory = server.directories.find_by_path(params[:path])
-      raise "Couldn't find directory #{params[:path]}" if @directory.nil?
+    if params[:path]
+      server_name = params[:path][0]
+      path_name = '/' + params[:path][1..-1].join('/')
+      server = Earth::Server.find_by_name(server_name)
+      raise "Couldn't find server #{server_name}" if server.nil?
+      @directory = server.directories.find_by_path(path_name)
+      raise "Couldn't find directory #{path_name}" if @directory.nil?
     else
       @directory = Earth::Directory.find(params[:id])
     end

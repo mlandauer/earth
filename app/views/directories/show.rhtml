@@ -8,8 +8,8 @@
 
 <div id="ExportLinks">
   <%= link_to image_tag("excel.png", :size => "20x22", 
-      :alt => "Save as CSV", :class => "export_img", :title => "Save as CSV"), :format => :csv %>
+      :alt => "Save as CSV", :class => "export_img", :title => "Save as CSV"), :path => @directory.server.name + @directory.path, :format => :csv %>
       
     <%= link_to image_tag("xml.png", :size => "36x14", 
-      :alt => "Save as XML", :class => "export_img", :title => "Save as XML"), :format => :xml %>  
+      :alt => "Save as XML", :class => "export_img", :title => "Save as XML"), :path => @directory.server.name + @directory.path, :format => :xml %>  
 </div>

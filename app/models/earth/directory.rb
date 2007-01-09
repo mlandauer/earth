@@ -72,7 +72,7 @@ module Earth
     # This assumes there are no overlapping directory trees
     def Directory.find_by_path(path)
       current = roots.find {|d| path[0, d.name.length] == d.name}
-      if path.length == current.name.length || current.nil?
+      if current.nil? || path.length == current.name.length
         return current
       end
       remaining = path[current.name.length+1 .. -1].split("/")

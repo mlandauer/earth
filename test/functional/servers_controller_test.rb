@@ -27,4 +27,8 @@ class ServersControllerTest < Test::Unit::TestCase
 
     assert_not_nil assigns(:servers_and_sizes)
   end
+  
+  def test_routing
+    assert_routing("/servers/show/foo.rsp.com.au", :controller => "servers", :action => "show", :server => ["foo.rsp.com.au"])
+  end
 end
