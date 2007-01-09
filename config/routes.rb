@@ -11,17 +11,17 @@ ActionController::Routing::Routes.draw do |map|
 
   # You can have the root of your site routed by hooking up '' 
   # -- just remember to delete public/index.html.
-  map.connect '', :controller => "servers"
+  map.connect '', :controller => "browser"
 
   # Allow pretty URL's for server and path
   # By using the requirements option, we can force :server to be filled with names including dots
   # which normally would be a seperator like '/'.
-  map.connect '/browser', :controller => "servers", :action => "list"
-  map.connect '/browser/:server', :controller => "servers", :action => "show",
+  map.connect '/browser', :controller => "browser", :action => "show"
+  map.connect '/browser/:server', :controller => "browser", :action => "show",
     :requirements => {:server => /\w+(\.\w+)+/}
-  map.connect '/browser/:server*path', :controller => "directories", :action => "show",
+  map.connect '/browser/:server*path', :controller => "browser", :action => "show",
     :requirements => {:server => /\w+(\.\w+)+/}
-  map.connect '/browser.:format/:server*path', :controller => "directories", :action => "show",
+  map.connect '/browser.:format/:server*path', :controller => "browser", :action => "show",
     :requirements => {:server => /\w+(\.\w+)+/}
 
   # Allow downloading Web Service WSDL as a file with an extension

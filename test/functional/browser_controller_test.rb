@@ -1,21 +1,21 @@
 require File.dirname(__FILE__) + '/../test_helper'
-require 'directories_controller'
+require 'browser_controller'
 
 # Re-raise errors caught by the controller.
-class DirectoriesController; def rescue_action(e) raise e end; end
+class BrowserController; def rescue_action(e) raise e end; end
 
-class DirectoriesControllerTest < Test::Unit::TestCase
+class BrowserControllerTest < Test::Unit::TestCase
   fixtures :servers, :directories, :files
   set_fixture_class :servers => Earth::Server, :directories => Earth::Directory, :files => Earth::File
 
   def setup
-    @controller = DirectoriesController.new
+    @controller = BrowserController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
   end
 
-  def test_show_with_id
-    get :show, :id => 1
+  def test_show
+    get :show, :server => Earth::Server.this_hostname, :path => "/foo"
     
     assert_response :success
     assert_template 'show'
@@ -46,10 +46,26 @@ class DirectoriesControllerTest < Test::Unit::TestCase
       :child => {:tag => "size_in_bytes", :content => directories(:foo_bar_twiddle).recursive_size.to_s}
   end
   
+  def test_index
+    get :index
+    assert_response :redirect
+  end
+
+#  def test_show_with_no_server
+#    get :show
+#
+#    assert_response :success
+#    assert_template 'show'
+#
+#    assert_not_nil assigns(:servers_and_sizes)
+#  end
+  
   def test_routing
+    assert_routing("/browser", :controller => "browser", :action => "show")
+    assert_routing("/browser/foo.rsp.com.au", :controller => "browser", :action => "show", :server => "foo.rsp.com.au")
     assert_routing("/browser/foo.rsp.com.au/blah/foo/bar",
-      :controller => "directories", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"])
+      :controller => "browser", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"])
     assert_routing("/browser.xml/foo.rsp.com.au/blah/foo/bar",
-      :controller => "directories", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"], :format => "xml")
+      :controller => "browser", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"], :format => "xml")
   end
 end
