@@ -48,6 +48,11 @@ module Earth
     # This only requires the id of the current directory and so doesn't need to
     # protected in a transaction which simplified its use
     def recursive_size
+      @cached_recursive_size = recursive_size_uncached unless @cached_recursive_size
+      @cached_recursive_size
+    end
+    
+    def recursive_size_uncached
       Directory.sum(:size, :conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
         :joins => "LEFT JOIN directories AS parent ON parent.id = #{id} LEFT JOIN files ON files.directory_id = directories.id").to_i
     end

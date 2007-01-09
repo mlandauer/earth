@@ -21,8 +21,7 @@ class BrowserControllerTest < Test::Unit::TestCase
     assert_template 'show'
 
     assert_equal(directories(:foo), assigns(:directory))
-    assert_equal([[directories(:foo_bar), directories(:foo_bar).recursive_size]],
-      assigns(:directories_and_sizes))
+    assert_equal([directories(:foo_bar)], assigns(:directories))
   end
   
   def test_show_with_server_and_path

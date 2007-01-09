@@ -13,6 +13,11 @@ module Earth
     end
     
     def recursive_size
+      @cached_recursive_size = recursive_size_uncached unless @cached_recursive_size
+      @cached_recursive_size
+    end
+    
+    def recursive_size_uncached
       Earth::Directory.roots_for_server(self).map{|d| d.recursive_size}.sum
     end
   end

@@ -13,31 +13,31 @@
     </tr>
   </thead>
   <tbody>
-  <% unless @servers_and_sizes.nil? || @servers_and_sizes.empty? %>
-    <% @servers_and_sizes.sort!{|a,b| b[1] <=> a[1]} %>
-    <% max_size = @servers_and_sizes.first[1] %>
+  <% unless @servers.nil? || @servers.empty? %>
+    <% @servers.sort!{|a,b| b.recursive_size <=> a.recursive_size} %>
+    <% max_size = @servers[0].recursive_size %>
     <% units = human_units_of max_size %>
-    <% for server, size in @servers_and_sizes %>
+    <% for server in @servers %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
         <td class="name Server"><%= link_to server.name, :server => server.name %></td>
         <td></td>
         <td></td>
-        <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
-        <td><%= bar size, max_size, :class => "bar" %></td>
+        <td class="size"><%=h human_size_in(units, server.recursive_size) %> <%= units %></td>
+        <td><%= bar server.recursive_size, max_size, :class => "bar" %></td>
       </tr>
     <%  end
     end %>
-  <% unless @directories_and_sizes.nil? || @directories_and_sizes.empty? %>
-    <% @directories_and_sizes.sort!{|a,b| b[1] <=> a[1]} %>
-    <% max_size = @directories_and_sizes.first[1] %>
+  <% unless @directories.nil? || @directories.empty? %>
+    <% @directories.sort!{|a,b| b.recursive_size <=> a.recursive_size} %>
+    <% max_size = @directories[0].recursive_size %>
     <% units = human_units_of max_size %>
-    <% for directory, size in @directories_and_sizes %>
+    <% for directory in @directories %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
         <td class="name Dir"><%= link_to directory.name, :server => directory.server.name, :path => directory.path %></td>
         <td></td>
         <td></td>
-        <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
-        <td><%= bar size, max_size, :class => "bar"%></td>
+        <td class="size"><%=h human_size_in(units, directory.recursive_size) %> <%= units %></td>
+        <td><%= bar directory.recursive_size, max_size, :class => "bar"%></td>
       </tr>
     <%  end
     end %>

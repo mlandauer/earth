@@ -18,13 +18,13 @@ class BrowserController < ApplicationController
           redirect_to :action => 'show', :path => nil
           return
         end      
-        @directories_and_sizes = @directory.children.map{|x| [x, x.recursive_size]}
+        @directories = @directory.children
         @files = @directory.files
       else
-        @directories_and_sizes = Earth::Directory.roots_for_server(@server).map{|x| [x, x.recursive_size]}
+        @directories = Earth::Directory.roots_for_server(@server)
       end
     else
-      @servers_and_sizes = Earth::Server.find(:all).map{|x| [x, x.recursive_size]}
+      @servers = Earth::Server.find(:all)
     end
 
     respond_to do |wants|
@@ -34,8 +34,8 @@ class BrowserController < ApplicationController
         @csv_report = StringIO.new
         CSV::Writer.generate(@csv_report, ',') do |csv|
           csv << ['Directory', 'Size (bytes)']
-          for directory, size in @directories_and_sizes
-            csv << [directory.name, size]
+          for directory in @directories
+            csv << [directory.name, directory.recursive_size]
           end
         end
         
