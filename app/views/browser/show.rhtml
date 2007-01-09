@@ -13,6 +13,25 @@
     </tr>
   </thead>
   <tbody>
+  <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+    <td class="name parent">
+    <%= if @directory
+          if @directory.parent_id
+            link_to "..", :path => @directory.parent.path
+          else
+            link_to "..", :server => @server.name
+          end
+        else
+          if @server
+            link_to ".."
+          end
+        end
+    %></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
   <% unless @servers.nil? || @servers.empty? %>
     <% @servers.sort!{|a,b| b.recursive_size <=> a.recursive_size} %>
     <% max_size = @servers[0].recursive_size %>
