@@ -8,13 +8,17 @@ class BrowserController < ApplicationController
   def show
     if params[:server]
       @server = Earth::Server.find_by_name(params[:server])
-      raise "Couldn't find server #{params[:server]}" if @server.nil?
+      if @server.nil?
+        redirect_to(:action => 'show', :server => nil)
+        return
+      end
       if params[:path]
         @directory = @server.directories.find_by_path(params[:path].to_s)
-        raise "Couldn't find directory #{params[:path]}" if @directory.nil?
-      
-        @directories = @directory.children
-        @directories_and_sizes = @directories.map{|x| [x, x.recursive_size]}
+        if @directory.nil?
+          redirect_to :action => 'show', :path => nil
+          return
+        end      
+        @directories_and_sizes = @directory.children.map{|x| [x, x.recursive_size]}
         @files = @directory.files
       else
         @directories_and_sizes = Earth::Directory.roots_for_server(@server).map{|x| [x, x.recursive_size]}
