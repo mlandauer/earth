@@ -31,12 +31,20 @@ module ApplicationHelper
     end
   end
 
-  def path_with_links(directory)
-    s = ''
-    for dir in directory.ancestors
-      s += link_to( dir[:name], { :controller => :directories, :action => :show, :server => dir.server.name, :path => dir.path }) + '/'
+  def breadcrumbs_with_server_and_directory(server = nil, directory = nil)
+    s = link_to_unless_current("root", :controller => :servers, :action => :list)
+    if server
+      s += ' &#187 '
+      s += link_to_unless_current(server.name, :controller => :servers, :action => :show, :server => server.name)
     end
-    s + h(directory[:name])
+    if directory
+      s += ' &#187 '
+      for dir in directory.ancestors
+        s += link_to( dir[:name], { :controller => :directories, :action => :show, :server => dir.server.name, :path => dir.path }) + '/'
+      end
+      s + h(directory[:name])
+    end
+    return s
   end
 
 private

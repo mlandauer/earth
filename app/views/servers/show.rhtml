@@ -1,5 +1,5 @@
 <h2>
-  <%= link_to "root", :controller => :servers %> &#187 <%= @server.name %>
+  <%= breadcrumbs_with_server_and_directory @server %>
 </h2>
 
 <%= render(:partial => "shared/browser") %>

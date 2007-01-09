@@ -1,7 +1,5 @@
 <h2>
-  <%= link_to "root", :controller => :servers %> &#187
-  <%= link_to @directory.server.name, :controller => :servers, :action => :show, :server => @directory.server.name %> &#187
-  <%= path_with_links @directory %>
+  <%= breadcrumbs_with_server_and_directory @directory.server, @directory %>
 </h2>
 
 <%= render(:partial => "shared/browser") %>
