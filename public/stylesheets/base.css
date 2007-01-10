@@ -230,6 +230,7 @@ IE is dumb */
   border-collapse: collapse;
   border-spacing: 0;
   width: 100%;
+  clear: both;
 }
 
 table.listing thead {
@@ -355,3 +356,6 @@ table.listing thead th a.desc {
 #Content table#browser td.parent a {
   background-image: url(/images/icon_up.gif);
 }
+
+/*  For the Title (breadcrum and the filters) of the Browser */
+

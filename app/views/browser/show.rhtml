@@ -1,92 +1,104 @@
-<h2>
-  <%= breadcrumbs_with_server_and_directory @server, @directory %>
-</h2>
+<div>
 
-<% if @show_empty %>
-  <%= link_to "Hide empty directories and servers", :overwrite_params => {:show_empty => nil} %>
-<% else %>
-  <%= link_to "Show empty directories and servers", :overwrite_params => {:show_empty => 1} %>
-<% end %>
+  <div class="Left">
+    <h2>
+      <%= breadcrumbs_with_server_and_directory @server, @directory %>
+    </h2>
 
-<% form_tag({:overwrite_params => {}}, {:method => 'get'}) do %>
-    Filter by filename: <%= text_field_tag("filter_filename", @filter_filename) %>
-    <%= submit_tag "Update", :name => nil %>
-<% end %>
-
-<table id="browser" class="listing">
-  <thead>
-    <tr>
-      <th class="">Name</th>
-      <th class="">Modified</th>
-      <th class="">User</th>
-      <th class="">Size</th>
-      <th class=""></th>
-    </tr>
-  </thead>
-  <tbody>
-  <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-    <td class="name parent">
-    <%= if @directory
-          if @directory.parent_id
-            link_to "..", :overwrite_params => {:path => @directory.parent.path}
-          else
-            link_to "..", :overwrite_params => {:server => @server.name, :path => nil}
-          end
-        else
-          if @server
-            link_to "..", :overwrite_params => {:server => nil, :path => nil}
-          end
-        end
-    %></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-  </tr>
-  <% unless @servers.nil? || @servers.empty? %>
-    <% @servers.sort!{|a,b| b.recursive_size(@filter_filename) <=> a.recursive_size(@filter_filename)} %>
-    <% max_size = @servers[0].recursive_size(@filter_filename) %>
-    <% units = human_units_of max_size %>
-    <% for server in @servers %>
-      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Server"><%= link_to server.name, :overwrite_params => {:server => server.name, :path => nil} %></td>
-        <td></td>
-        <td></td>
-        <td class="size"><%=h human_size_in(units, server.recursive_size(@filter_filename)) %> <%= units %></td>
-        <td><%= bar server.recursive_size(@filter_filename), max_size, :class => "bar" %></td>
-      </tr>
-    <%  end
-    end %>
-  <% unless @directories.nil? || @directories.empty? %>
-    <% @directories.sort!{|a,b| b.recursive_size(@filter_filename) <=> a.recursive_size(@filter_filename)} %>
-    <% max_size = @directories[0].recursive_size(@filter_filename) %>
-    <% units = human_units_of max_size %>
-    <% for directory in @directories %>
-      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Dir"><%= link_to directory.name, :overwrite_params => {:path => directory.path} %></td>
-        <td></td>
-        <td></td>
-        <td class="size"><%=h human_size_in(units, directory.recursive_size(@filter_filename)) %> <%= units %></td>
-        <td><%= bar directory.recursive_size(@filter_filename), max_size, :class => "bar"%></td>
-      </tr>
-    <%  end
-    end %>
-  <% unless @files.nil? || @files.empty? %>
-    <% @files.sort!{|a,b| b.size <=> a.size} %>
-    <% max_size = @files[0].size %>
-    <% units = human_units_of max_size %>
-    <% @files.each do |file| %>
-      <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name File"><span><%= file.name %></span></td>
-        <td class="modified"><span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span></td>
-        <td class="owner_user"><%=h file.ownership.user_name %></td>
-        <td class="size"><%= human_size_in(units, file.size) %> <%= units %></td>
-        <td><%= bar file.size, max_size, :class => "filebar"%></td>
-      </tr>
+    <small>
+    <% if @show_empty %>
+      (<%= link_to "Hide empty directories and servers", :overwrite_params => {:show_empty => nil} %>)
+    <% else %>
+      (<%= link_to "Show empty directories and servers", :overwrite_params => {:show_empty => 1} %>)
     <% end %>
-  <% end %>
-  </tbody>
-</table>
+    </small>
+  </div>
+
+  <div class="Right" style="margin: 1em 0.1em 0 0;">
+    <% form_tag({:overwrite_params => {}}, {:method => 'get'}) do %>
+        Filter by filename: <%= text_field_tag("filter_filename", @filter_filename) %>
+        <%= submit_tag "Update", :name => nil %>
+    <% end %>
+  </div>
+
+</div>
+
+<p>
+  <table id="browser" class="listing">
+    <thead>
+      <tr>
+        <th class="">Name</th>
+        <th class="">Modified</th>
+        <th class="">User</th>
+        <th class="">Size</th>
+        <th class=""></th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+      <td class="name parent">
+      <%= if @directory
+            if @directory.parent_id
+              link_to "..", :overwrite_params => {:path => @directory.parent.path}
+            else
+              link_to "..", :overwrite_params => {:server => @server.name, :path => nil}
+            end
+          else
+            if @server
+              link_to "..", :overwrite_params => {:server => nil, :path => nil}
+            end
+          end
+      %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <% unless @servers.nil? || @servers.empty? %>
+      <% @servers.sort!{|a,b| b.recursive_size(@filter_filename) <=> a.recursive_size(@filter_filename)} %>
+      <% max_size = @servers[0].recursive_size(@filter_filename) %>
+      <% units = human_units_of max_size %>
+      <% for server in @servers %>
+        <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+          <td class="name Server"><%= link_to server.name, :overwrite_params => {:server => server.name, :path => nil} %></td>
+          <td></td>
+          <td></td>
+          <td class="size"><%=h human_size_in(units, server.recursive_size(@filter_filename)) %> <%= units %></td>
+          <td><%= bar server.recursive_size(@filter_filename), max_size, :class => "bar" %></td>
+        </tr>
+      <%  end
+      end %>
+    <% unless @directories.nil? || @directories.empty? %>
+      <% @directories.sort!{|a,b| b.recursive_size(@filter_filename) <=> a.recursive_size(@filter_filename)} %>
+      <% max_size = @directories[0].recursive_size(@filter_filename) %>
+      <% units = human_units_of max_size %>
+      <% for directory in @directories %>
+        <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+          <td class="name Dir"><%= link_to directory.name, :overwrite_params => {:path => directory.path} %></td>
+          <td></td>
+          <td></td>
+          <td class="size"><%=h human_size_in(units, directory.recursive_size(@filter_filename)) %> <%= units %></td>
+          <td><%= bar directory.recursive_size(@filter_filename), max_size, :class => "bar"%></td>
+        </tr>
+      <%  end
+      end %>
+    <% unless @files.nil? || @files.empty? %>
+      <% @files.sort!{|a,b| b.size <=> a.size} %>
+      <% max_size = @files[0].size %>
+      <% units = human_units_of max_size %>
+      <% @files.each do |file| %>
+        <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+          <td class="name File"><span><%= file.name %></span></td>
+          <td class="modified"><span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span></td>
+          <td class="owner_user"><%=h file.ownership.user_name %></td>
+          <td class="size"><%= human_size_in(units, file.size) %> <%= units %></td>
+          <td><%= bar file.size, max_size, :class => "filebar"%></td>
+        </tr>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+</p>
 
 <% if @directory %>
 <div id="ExportLinks">
