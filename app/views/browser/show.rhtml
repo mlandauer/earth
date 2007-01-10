@@ -8,6 +8,11 @@
   <%= link_to "Show empty directories and servers", :overwrite_params => {:show_empty => 1} %>
 <% end %>
 
+<% form_tag({}, {:method => 'get'}) do %>
+    Filter by filename: <%= text_field_tag("filter_filename", @filter_filename) %>
+    <%= submit_tag "Update", :name => nil %>
+<% end %>
+
 <table id="browser" class="listing">
   <thead>
     <tr>
