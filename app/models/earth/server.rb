@@ -20,5 +20,13 @@ module Earth
     def recursive_size_uncached
       Earth::Directory.roots_for_server(self).map{|d| d.recursive_size}.sum
     end
+    
+    def recursive_file_count
+      Earth::Directory.roots_for_server(self).map{|d| d.recursive_file_count}.sum
+    end
+    
+    def has_files?
+      recursive_file_count > 0
+    end
   end
 end

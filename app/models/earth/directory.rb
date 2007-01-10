@@ -54,7 +54,16 @@ module Earth
     
     def recursive_size_uncached
       Directory.sum(:size, :conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
-        :joins => "LEFT JOIN directories AS parent ON parent.id = #{id} LEFT JOIN files ON files.directory_id = directories.id").to_i
+        :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN files ON files.directory_id = directories.id").to_i
+    end
+    
+    def recursive_file_count
+      Directory.count(:conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
+        :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN files ON files.directory_id = directories.id").to_i
+    end
+    
+    def has_files?
+      recursive_file_count > 0
     end
     
     # Return all the root directories for the given server as an array

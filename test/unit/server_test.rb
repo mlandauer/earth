@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class ServerTest < Test::Unit::TestCase
   fixtures :servers, :directories, :files
-  set_fixture_class :directories => Earth::Directory
+  set_fixture_class :directories => Earth::Directory, :servers => Earth::Server
 
   def test_this_server
     server = Earth::Server.this_server
@@ -24,5 +24,15 @@ class ServerTest < Test::Unit::TestCase
     assert_equal(directories(:bar), directories[0])
     files = Earth::File.find(:all)
     assert_equal(0, files.size)
+  end
+  
+  def test_recursive_file_count
+    assert_equal(4, servers(:first).recursive_file_count)
+    assert_equal(0, servers(:another).recursive_file_count)
+  end
+  
+  def test_has_files
+    assert(servers(:first).has_files?)
+    assert(!servers(:another).has_files?)
   end
 end

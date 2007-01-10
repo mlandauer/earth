@@ -182,6 +182,19 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal([], Earth::File.find(:all))
   end
   
+  def test_recursive_file_count
+    assert_equal(4, directories(:foo).recursive_file_count)
+    assert_equal(2, directories(:foo_bar).recursive_file_count)
+    assert_equal(0, directories(:foo_bar_twiddle).recursive_file_count)
+    assert_equal(0, directories(:bar).recursive_file_count)
+  end
+  
+  def test_has_files
+    assert(directories(:foo).has_files?)
+    assert(directories(:foo_bar).has_files?)
+    assert(!directories(:foo_bar_twiddle).has_files?)
+    assert(!directories(:bar).has_files?)
+  end
 end
 
 class TransactionalDirectoryTest < Test::Unit::TestCase
