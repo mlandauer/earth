@@ -10,6 +10,9 @@ class BrowserController < ApplicationController
     @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
     @show_empty = params[:show_empty]
     @filter_filename = params[:filter_filename]
+    if @filter_filename.nil? || @filter_filename == ""
+      @filter_filename = "*"
+    end
 
     # if at the root
     if @server.nil?
@@ -20,13 +23,13 @@ class BrowserController < ApplicationController
     # if in a directory on a server
     elsif @server && @directory
       @directories = @directory.children
-      @files = @directory.files
+      @files = Earth::File.find(:all, :conditions => ['directory_id = ? AND name LIKE ?', @directory.id, @filter_filename.tr('*', '%')])
     end
     
     # Filter out servers and directories that have no files
     if @show_empty.nil?
-      @servers = @servers.select{|s| s.has_files?} if @servers
-      @directories = @directories.select{|s| s.has_files?} if @directories
+      @servers = @servers.select{|s| s.has_files?(@filter_filename)} if @servers
+      @directories = @directories.select{|s| s.has_files?(@filter_filename)} if @directories
     end
     
     respond_to do |wants|
@@ -45,5 +48,17 @@ class BrowserController < ApplicationController
         send_data(@csv_report.read, :type => 'text/csv; charset=iso-8859-1; header=present', :filename => 'earth_report.csv', :disposition => 'downloaded')
       end
     end
+  end
+  
+private
+  def glob2pat(globstr)
+      patmap = {
+          '*' => '.*',
+          '?' => '.',
+          '[' => '[',
+          ']' => ']',
+      }
+      globstr.gsub!(/(.)/) { |c| patmap[c] || Regexp::escape(c) }
+      '^' + globstr + '$'
   end
 end

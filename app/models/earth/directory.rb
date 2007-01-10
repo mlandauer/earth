@@ -47,23 +47,26 @@ module Earth
     
     # This only requires the id of the current directory and so doesn't need to
     # protected in a transaction which simplified its use
-    def recursive_size
-      @cached_recursive_size = recursive_size_uncached unless @cached_recursive_size
+    def recursive_size(filename_filter = '*')
+      if @cached_recursive_size.nil? || @cached_filename_filter != filename_filter
+        @cached_recursive_size = recursive_size_uncached(filename_filter)
+        @cached_filename_filter = filename_filter
+      end
       @cached_recursive_size
     end
     
-    def recursive_size_uncached
-      Directory.sum(:size, :conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
+    def recursive_size_uncached(filename_filter = '*')
+      Directory.sum(:size, :conditions => ["directories.lft >= parent.lft AND directories.rgt <= parent.rgt AND files.name LIKE ?", filename_filter.tr('*', '%')],
         :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN files ON files.directory_id = directories.id").to_i
     end
     
-    def recursive_file_count
-      Directory.count(:conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
+    def recursive_file_count(filename_filter = '*')
+      Directory.count(:conditions => ["directories.lft >= parent.lft AND directories.rgt <= parent.rgt AND files.name LIKE ?", filename_filter.tr('*', '%')],
         :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN files ON files.directory_id = directories.id").to_i
     end
     
-    def has_files?
-      recursive_file_count > 0
+    def has_files?(filename_filter = '*')
+      recursive_file_count(filename_filter) > 0
     end
     
     # Return all the root directories for the given server as an array

@@ -44,30 +44,30 @@
     <td></td>
   </tr>
   <% unless @servers.nil? || @servers.empty? %>
-    <% @servers.sort!{|a,b| b.recursive_size <=> a.recursive_size} %>
-    <% max_size = @servers[0].recursive_size %>
+    <% @servers.sort!{|a,b| b.recursive_size(@filter_filename) <=> a.recursive_size(@filter_filename)} %>
+    <% max_size = @servers[0].recursive_size(@filter_filename) %>
     <% units = human_units_of max_size %>
     <% for server in @servers %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
         <td class="name Server"><%= link_to server.name, :overwrite_params => {:server => server.name, :path => nil} %></td>
         <td></td>
         <td></td>
-        <td class="size"><%=h human_size_in(units, server.recursive_size) %> <%= units %></td>
-        <td><%= bar server.recursive_size, max_size, :class => "bar" %></td>
+        <td class="size"><%=h human_size_in(units, server.recursive_size(@filter_filename)) %> <%= units %></td>
+        <td><%= bar server.recursive_size(@filter_filename), max_size, :class => "bar" %></td>
       </tr>
     <%  end
     end %>
   <% unless @directories.nil? || @directories.empty? %>
-    <% @directories.sort!{|a,b| b.recursive_size <=> a.recursive_size} %>
-    <% max_size = @directories[0].recursive_size %>
+    <% @directories.sort!{|a,b| b.recursive_size(@filter_filename) <=> a.recursive_size(@filter_filename)} %>
+    <% max_size = @directories[0].recursive_size(@filter_filename) %>
     <% units = human_units_of max_size %>
     <% for directory in @directories %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
         <td class="name Dir"><%= link_to directory.name, :overwrite_params => {:path => directory.path} %></td>
         <td></td>
         <td></td>
-        <td class="size"><%=h human_size_in(units, directory.recursive_size) %> <%= units %></td>
-        <td><%= bar directory.recursive_size, max_size, :class => "bar"%></td>
+        <td class="size"><%=h human_size_in(units, directory.recursive_size(@filter_filename)) %> <%= units %></td>
+        <td><%= bar directory.recursive_size(@filter_filename), max_size, :class => "bar"%></td>
       </tr>
     <%  end
     end %>
