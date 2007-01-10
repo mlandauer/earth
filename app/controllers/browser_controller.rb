@@ -16,21 +16,24 @@ class BrowserController < ApplicationController
 
     # if at the root
     if @server.nil?
-      @servers = Earth::Server.find(:all)
+      servers = Earth::Server.find(:all)
     # if at the root of a server
     elsif @server && @directory.nil?
-      @directories = Earth::Directory.roots_for_server(@server)
+      directories = Earth::Directory.roots_for_server(@server)
     # if in a directory on a server
     elsif @server && @directory
-      @directories = @directory.children
+      directories = @directory.children
       @files = Earth::File.find(:all, :conditions => ['directory_id = ? AND name LIKE ?', @directory.id, @filter_filename.tr('*', '%')])
     end
     
     # Filter out servers and directories that have no files
     if @show_empty.nil?
-      @servers = @servers.select{|s| s.has_files?(@filter_filename)} if @servers
-      @directories = @directories.select{|s| s.has_files?(@filter_filename)} if @directories
+      servers = servers.select{|s| s.has_files?(@filter_filename)} if servers
+      directories = directories.select{|s| s.has_files?(@filter_filename)} if directories
     end
+    
+    @servers_and_size = servers.map{|s| [s, s.size(@filter_filename)]} if servers
+    @directories_and_size = directories.map{|d| [d, d.size(@filter_filename)]} if directories
     
     respond_to do |wants|
       wants.html
@@ -39,8 +42,8 @@ class BrowserController < ApplicationController
         @csv_report = StringIO.new
         CSV::Writer.generate(@csv_report, ',') do |csv|
           csv << ['Directory', 'Size (bytes)']
-          for directory in @directories
-            csv << [directory.name, directory.size]
+          for directory, size in @directories_and_size
+            csv << [directory.name, size]
           end
         end
         

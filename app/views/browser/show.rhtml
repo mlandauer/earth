@@ -54,31 +54,31 @@
       <td></td>
       <td></td>
     </tr>
-    <% unless @servers.nil? || @servers.empty? %>
-      <% @servers.sort!{|a,b| b.size(@filter_filename) <=> a.size(@filter_filename)} %>
-      <% max_size = @servers[0].size(@filter_filename) %>
+    <% unless @servers_and_size.nil? || @servers_and_size.empty? %>
+      <% @servers_and_size.sort!{|a,b| b[1] <=> a[1]} %>
+      <% max_size = @servers_and_size[0][1] %>
       <% units = human_units_of max_size %>
-      <% for server in @servers %>
+      <% for server, size in @servers_and_size %>
         <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
           <td class="name Server"><%= link_to server.name, :overwrite_params => {:server => server.name, :path => nil} %></td>
           <td></td>
           <td></td>
-          <td class="size"><%=h human_size_in(units, server.size(@filter_filename)) %> <%= units %></td>
-          <td><%= bar server.size(@filter_filename), max_size, :class => "bar" %></td>
+          <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
+          <td><%= bar size, max_size, :class => "bar" %></td>
         </tr>
       <%  end
       end %>
-    <% unless @directories.nil? || @directories.empty? %>
-      <% @directories.sort!{|a,b| b.size(@filter_filename) <=> a.size(@filter_filename)} %>
-      <% max_size = @directories[0].size(@filter_filename) %>
+    <% unless @directories_and_size.nil? || @directories_and_size.empty? %>
+      <% @directories_and_size.sort!{|a,b| b[1] <=> a[1]} %>
+      <% max_size = @directories_and_size[0][1] %>
       <% units = human_units_of max_size %>
-      <% for directory in @directories %>
+      <% for directory, size in @directories_and_size %>
         <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
           <td class="name Dir"><%= link_to directory.name, :overwrite_params => {:path => directory.path} %></td>
           <td></td>
           <td></td>
-          <td class="size"><%=h human_size_in(units, directory.size(@filter_filename)) %> <%= units %></td>
-          <td><%= bar directory.size(@filter_filename), max_size, :class => "bar"%></td>
+          <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
+          <td><%= bar size, max_size, :class => "bar"%></td>
         </tr>
       <%  end
       end %>
