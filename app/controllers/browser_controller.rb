@@ -49,16 +49,4 @@ class BrowserController < ApplicationController
       end
     end
   end
-  
-private
-  def glob2pat(globstr)
-      patmap = {
-          '*' => '.*',
-          '?' => '.',
-          '[' => '[',
-          ']' => ']',
-      }
-      globstr.gsub!(/(.)/) { |c| patmap[c] || Regexp::escape(c) }
-      '^' + globstr + '$'
-  end
 end
