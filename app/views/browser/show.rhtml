@@ -2,6 +2,12 @@
   <%= breadcrumbs_with_server_and_directory @server, @directory %>
 </h2>
 
+<% if @show_empty %>
+  <%= link_to "Hide empty directories and servers", :overwrite_params => {:show_empty => nil} %>
+<% else %>
+  <%= link_to "Show empty directories and servers", :overwrite_params => {:show_empty => 1} %>
+<% end %>
+
 <table id="browser" class="listing">
   <thead>
     <tr>
@@ -17,13 +23,13 @@
     <td class="name parent">
     <%= if @directory
           if @directory.parent_id
-            link_to "..", :path => @directory.parent.path
+            link_to "..", :overwrite_params => {:path => @directory.parent.path}
           else
-            link_to "..", :server => @server.name
+            link_to "..", :overwrite_params => {:server => @server.name, :path => nil}
           end
         else
           if @server
-            link_to ".."
+            link_to "..", :overwrite_params => {:server => nil, :path => nil}
           end
         end
     %></td>
@@ -38,7 +44,7 @@
     <% units = human_units_of max_size %>
     <% for server in @servers %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Server"><%= link_to server.name, :server => server.name %></td>
+        <td class="name Server"><%= link_to server.name, :overwrite_params => {:server => server.name, :path => nil} %></td>
         <td></td>
         <td></td>
         <td class="size"><%=h human_size_in(units, server.recursive_size) %> <%= units %></td>
@@ -52,7 +58,7 @@
     <% units = human_units_of max_size %>
     <% for directory in @directories %>
       <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
-        <td class="name Dir"><%= link_to directory.name, :server => directory.server.name, :path => directory.path %></td>
+        <td class="name Dir"><%= link_to directory.name, :overwrite_params => {:path => directory.path} %></td>
         <td></td>
         <td></td>
         <td class="size"><%=h human_size_in(units, directory.recursive_size) %> <%= units %></td>

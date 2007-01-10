@@ -8,7 +8,8 @@ class BrowserController < ApplicationController
   def show
     @server = Earth::Server.find_by_name(params[:server]) if params[:server]
     @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
-    
+    @show_empty = params[:show_empty]
+
     # if at the root
     if @server.nil?
       @servers = Earth::Server.find(:all)

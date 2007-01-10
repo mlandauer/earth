@@ -32,15 +32,15 @@ module ApplicationHelper
   end
 
   def breadcrumbs_with_server_and_directory(server = nil, directory = nil)
-    s = link_to_unless_current("root")
+    s = link_to_unless_current("root", :overwrite_params => {:server => nil, :path => nil})
     if server
       s += ' &#187 '
-      s += link_to_unless_current(server.name, :server => server.name)
+      s += link_to_unless_current(server.name, :overwrite_params => {:server => server.name, :path => nil})
     end
     if directory
       s += ' &#187 '
       for dir in directory.ancestors
-        s += link_to(dir[:name], :server => dir.server.name, :path => dir.path) + '/'
+        s += link_to(dir[:name], :overwrite_params => {:path => dir.path}) + '/'
       end
       s += h(directory[:name])
     end
