@@ -83,16 +83,10 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_size
-    assert_equal(files(:file1).size + files(:file2).size, directories(:foo).size)
-    assert_equal(files(:file3).size + files(:file4).size, directories(:foo_bar).size)
-    assert_equal(0, directories(:foo_bar_twiddle).size)
-  end
-  
-  def test_recursive_size
     assert_equal(files(:file1).size + files(:file2).size + files(:file3).size + files(:file4).size,
-      directories(:foo).recursive_size)
+      directories(:foo).size)
     assert_equal(files(:file3).size + files(:file4).size,
-      directories(:foo_bar).recursive_size)
+      directories(:foo_bar).size)
   end
   
   # Doing this to double-check my understanding of caching with associations in ActiveRecord
@@ -220,7 +214,7 @@ class TransactionalDirectoryTest < Test::Unit::TestCase
         Earth::Directory.transaction do
           foo_bar = Earth::Directory.find(2) # => /foo/bar
           sleep(0.01)
-          assert_equal(7, foo_bar.recursive_size)
+          assert_equal(7, foo_bar.size)
         end
       end
     end

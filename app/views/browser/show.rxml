@@ -8,7 +8,7 @@ xml.directory("path" => @directory.path) do
   end
   @directories.each do |directory|
     xml.directory("name" => directory.name) do
-      xml.size_in_bytes(directory.recursive_size)
+      xml.size_in_bytes(directory.size)
     end
   end
 end

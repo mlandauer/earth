@@ -12,16 +12,16 @@ module Earth
       Socket.gethostname
     end
     
-    def recursive_size(filename_filter = '*')
-      if @cached_recursive_size.nil? || @cached_filename_filter != filename_filter
-        @cached_recursive_size = recursive_size_uncached(filename_filter)
+    def size(filename_filter = '*')
+      if @cached_size.nil? || @cached_filename_filter != filename_filter
+        @cached_size = size_uncached(filename_filter)
         @cached_filename_filter = filename_filter
       end
-      @cached_recursive_size
+      @cached_size
     end
     
-    def recursive_size_uncached(filename_filter = '*')
-      Earth::Directory.roots_for_server(self).map{|d| d.recursive_size(filename_filter)}.sum
+    def size_uncached(filename_filter = '*')
+      Earth::Directory.roots_for_server(self).map{|d| d.size(filename_filter)}.sum
     end
     
     def recursive_file_count(filename_filter = '*')

@@ -38,24 +38,19 @@ module Earth
       Stat.new(modified) unless modified.nil?
     end
     
-    # Size of the files contained directly in this directory
-    def size
-      a = Earth::File.sum(:size, :conditions => ['directory_id = ?', id])
-      # For some reason the above will return nil when there aren't any files
-      return a ? a : 0
-    end
-    
+    # Returns the size of all the files (matching the search criterion) recursively
+    # below this directory
     # This only requires the id of the current directory and so doesn't need to
     # protected in a transaction which simplified its use
-    def recursive_size(filename_filter = '*')
-      if @cached_recursive_size.nil? || @cached_filename_filter != filename_filter
-        @cached_recursive_size = recursive_size_uncached(filename_filter)
+    def size(filename_filter = '*')
+      if @cached_size.nil? || @cached_filename_filter != filename_filter
+        @cached_size = size_uncached(filename_filter)
         @cached_filename_filter = filename_filter
       end
-      @cached_recursive_size
+      @cached_size
     end
     
-    def recursive_size_uncached(filename_filter = '*')
+    def size_uncached(filename_filter = '*')
       Directory.sum(:size, :conditions => ["directories.lft >= parent.lft AND directories.rgt <= parent.rgt AND files.name LIKE ?", filename_filter.tr('*', '%')],
         :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN files ON files.directory_id = directories.id").to_i
     end

@@ -40,7 +40,7 @@ class BrowserController < ApplicationController
         CSV::Writer.generate(@csv_report, ',') do |csv|
           csv << ['Directory', 'Size (bytes)']
           for directory in @directories
-            csv << [directory.name, directory.recursive_size]
+            csv << [directory.name, directory.size]
           end
         end
         

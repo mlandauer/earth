@@ -42,7 +42,7 @@ class BrowserControllerTest < Test::Unit::TestCase
     assert_tag :tag => "directory",
       :attributes => {:name => "twiddle"},
       :parent => {:tag => "directory", :attributes => {:path => "/foo/bar"}},
-      :child => {:tag => "size_in_bytes", :content => directories(:foo_bar_twiddle).recursive_size.to_s}
+      :child => {:tag => "size_in_bytes", :content => directories(:foo_bar_twiddle).size.to_s}
   end
   
   def test_index
