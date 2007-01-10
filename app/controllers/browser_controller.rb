@@ -22,6 +22,12 @@ class BrowserController < ApplicationController
       @files = @directory.files
     end
     
+    # Filter out servers and directories that have no files
+    if @show_empty.nil?
+      @servers = @servers.select{|s| s.has_files?} if @servers
+      @directories = @directories.select{|s| s.has_files?} if @directories
+    end
+    
     respond_to do |wants|
       wants.html
       wants.xml {render :action => "show.rxml", :layout => false}

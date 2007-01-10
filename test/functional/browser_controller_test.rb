@@ -26,7 +26,7 @@ class BrowserControllerTest < Test::Unit::TestCase
   
   def test_show_with_server_and_path
     @request.env['HTTP_ACCEPT'] = 'application/xml'
-    get :show, {:server => Earth::Server.this_hostname, :path => "/foo/bar"}
+    get :show, {:server => Earth::Server.this_hostname, :path => "/foo/bar", :show_empty => 1}
     
     assert_response :success
     assert_template 'show.rxml'
