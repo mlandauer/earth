@@ -48,13 +48,13 @@ module Earth
     end
     
     def size_uncached
-      Directory.sum(:size, :conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
-        :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN files ON files.directory_id = directories.id").to_i
+      Earth::File.sum(:size, :conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
+        :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN directories ON files.directory_id = directories.id").to_i
     end
     
     def recursive_file_count
-      Directory.count(:conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
-        :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN files ON files.directory_id = directories.id").to_i
+      Earth::File.count(:conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
+        :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN directories ON files.directory_id = directories.id").to_i
     end
     
     def has_files?

@@ -34,13 +34,13 @@ class BrowserController < ApplicationController
     # Filter out servers and directories that have no files
     if @show_empty.nil?
       servers = servers.select{|s| s.has_files?(@filter_filename)} if servers
-      Earth::Directory.with_scope(scope) do
+      Earth::File.with_scope(scope) do
         directories = directories.select{|s| s.has_files?} if directories
       end
     end
     
     @servers_and_size = servers.map{|s| [s, s.size(@filter_filename)]} if servers
-    Earth::Directory.with_scope(scope) do
+    Earth::File.with_scope(scope) do
       @directories_and_size = directories.map{|d| [d, d.size]} if directories
     end
     

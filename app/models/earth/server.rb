@@ -22,14 +22,14 @@ module Earth
     
     def size_uncached(filename_filter = '*')
       roots = Earth::Directory.roots_for_server(self)
-      Earth::Directory.with_scope(:find => {:conditions => ["files.name LIKE ?", filename_filter.tr('*', '%')]}) do
+      Earth::File.with_scope(:find => {:conditions => ["files.name LIKE ?", filename_filter.tr('*', '%')]}) do
         roots.map{|d| d.size}.sum
       end
     end
     
     def recursive_file_count(filename_filter = '*')
       roots = Earth::Directory.roots_for_server(self)
-      Earth::Directory.with_scope(:find => {:conditions => ["files.name LIKE ?", filename_filter.tr('*', '%')]}) do
+      Earth::File.with_scope(:find => {:conditions => ["files.name LIKE ?", filename_filter.tr('*', '%')]}) do
         roots.map{|d| d.recursive_file_count}.sum
       end
     end
