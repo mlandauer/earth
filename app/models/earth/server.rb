@@ -21,11 +21,17 @@ module Earth
     end
     
     def size_uncached(filename_filter = '*')
-      Earth::Directory.roots_for_server(self).map{|d| d.size(filename_filter)}.sum
+      roots = Earth::Directory.roots_for_server(self)
+      Earth::Directory.with_scope(:find => {:conditions => ["files.name LIKE ?", filename_filter.tr('*', '%')]}) do
+        roots.map{|d| d.size}.sum
+      end
     end
     
     def recursive_file_count(filename_filter = '*')
-      Earth::Directory.roots_for_server(self).map{|d| d.recursive_file_count(filename_filter)}.sum
+      roots = Earth::Directory.roots_for_server(self)
+      Earth::Directory.with_scope(:find => {:conditions => ["files.name LIKE ?", filename_filter.tr('*', '%')]}) do
+        roots.map{|d| d.recursive_file_count}.sum
+      end
     end
     
     def has_files?(filename_filter = '*')
