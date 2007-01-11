@@ -14,33 +14,27 @@ class BrowserController < ApplicationController
       @filter_filename = "*"
     end
 
-    scope = {:find => {:conditions => ["files.name LIKE ?", @filter_filename.tr('*', '%')]}}
-    
-    # if at the root
-    if @server.nil?
-      servers = Earth::Server.find(:all)
-    # if at the root of a server
-    elsif @server && @directory.nil?
-      directories = Earth::Directory.roots_for_server(@server)
-    # if in a directory on a server
-    elsif @server && @directory
-      directories = @directory.children
-      Earth::File.with_scope(scope) do
+    Earth::File.with_scope(:find => {:conditions => ["files.name LIKE ?", @filter_filename.tr('*', '%')]}) do
+      # if at the root
+      if @server.nil?
+        servers = Earth::Server.find(:all)
+      # if at the root of a server
+      elsif @server && @directory.nil?
+        directories = Earth::Directory.roots_for_server(@server)
+      # if in a directory on a server
+      elsif @server && @directory
+        directories = @directory.children
         # Scoping appears to not work on associations so doing the find explicitly
         @files = Earth::File.find(:all, :conditions => ['directory_id = ?', @directory.id])
       end
-    end
-    
-    # Filter out servers and directories that have no files
-    if @show_empty.nil?
-      servers = servers.select{|s| s.has_files?(@filter_filename)} if servers
-      Earth::File.with_scope(scope) do
+      
+      # Filter out servers and directories that have no files
+      if @show_empty.nil?
+        servers = servers.select{|s| s.has_files?} if servers
         directories = directories.select{|s| s.has_files?} if directories
       end
-    end
-    
-    @servers_and_size = servers.map{|s| [s, s.size(@filter_filename)]} if servers
-    Earth::File.with_scope(scope) do
+      
+      @servers_and_size = servers.map{|s| [s, s.size]} if servers
       @directories_and_size = directories.map{|d| [d, d.size]} if directories
     end
     

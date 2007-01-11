@@ -43,11 +43,6 @@ module Earth
     # This only requires the id of the current directory and so doesn't need to
     # protected in a transaction which simplified its use
     def size
-      @cached_size = size_uncached if @cached_size.nil?
-      @cached_size
-    end
-    
-    def size_uncached
       Earth::File.sum(:size, :conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
         :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN directories ON files.directory_id = directories.id").to_i
     end
