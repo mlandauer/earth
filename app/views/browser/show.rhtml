@@ -16,7 +16,8 @@
 
   <div class="Right" style="margin: 1em 0.1em 0 0;">
     <% form_tag({:overwrite_params => {}}, {:method => 'get'}) do %>
-        Filter by filename: <%= text_field_tag("filter_filename", @filter_filename) %>
+        <p>Filter by filename: <%= text_field_tag "filter_filename", @filter_filename %></p>
+        <p>Filter by user id: <%= text_field_tag "filter_uid", @filter_uid %></p>
         <%= submit_tag "Update", :name => nil %>
     <% end %>
   </div>
