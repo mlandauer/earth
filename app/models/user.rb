@@ -1,4 +1,4 @@
-class Ownership
+class User
   cattr_accessor :config
   attr_accessor :uid
     
@@ -10,7 +10,7 @@ class Ownership
     @uid = uid
   end
   
-  def user_name
+  def name
     lookup uid, config["ldap_user_lookup"]
   end
   

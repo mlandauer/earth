@@ -1,7 +1,7 @@
 module Earth
   class File < ActiveRecord::Base
     belongs_to :directory
-    composed_of :ownership, :mapping => [%w(uid uid)]
+    composed_of :user, :mapping => [%w(uid uid)]
     
     Stat = Struct.new(:mtime, :size, :uid, :gid)
     class Stat

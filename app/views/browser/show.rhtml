@@ -91,7 +91,7 @@
         <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
           <td class="name File"><span><%= file.name %></span></td>
           <td class="modified"><span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span></td>
-          <td class="owner_user"><%=h file.ownership.user_name %></td>
+          <td class="owner_user"><%=h file.user.name %></td>
           <td class="size"><%= human_size_in(units, file.size) %> <%= units %></td>
           <td><%= bar file.size, max_size, :class => "filebar"%></td>
         </tr>
