@@ -7,6 +7,8 @@ class UserTest < Test::Unit::TestCase
     # Only do the following tests if ldap is configured
     if User.ldap_configured?
       assert_equal("kenji", user.name)
+    else
+      assert_equal("3054", user.name)
     end
   end
   
@@ -23,6 +25,10 @@ class UserTest < Test::Unit::TestCase
       user = User.find_by_name("kenji")
       assert_equal(3054, user.uid)
       assert_equal("kenji", user.name)
+    else
+      user = User.find_by_name("3054")
+      assert_equal(3054, user.uid)
+      assert_equal("3054", user.name)
     end
   end
 end
