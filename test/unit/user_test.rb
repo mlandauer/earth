@@ -5,7 +5,7 @@ class UserTest < Test::Unit::TestCase
   def test_name
     user = User.new(3054)
     # Only do the following tests if ldap is configured
-    if User.config["ldap_server_name"]
+    if User.ldap_configured?
       assert_equal("kenji", user.name)
     end
   end
@@ -16,5 +16,13 @@ class UserTest < Test::Unit::TestCase
     user = User.new(100)
     assert_equal("100", user.name)
     User.config["ldap_server_name"] = saved_ldap_server_name
+  end
+  
+  def test_find_by_name
+    if User.ldap_configured?
+      user = User.find_by_name("kenji")
+      assert_equal(3054, user.uid)
+      assert_equal("kenji", user.name)
+    end
   end
 end
