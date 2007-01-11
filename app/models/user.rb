@@ -25,6 +25,12 @@ class User
     return User.new(no)
   end
   
+  def User.find_all
+    nos = User.lookup_all('*', config["ldap_user_lookup"]["name_field"], config["ldap_user_lookup"]["id_field"],
+      config["ldap_user_lookup"]["base"])
+    nos.map{|n| User.new(n)}
+  end
+  
   private
   
   def User.lookup(value, lookup_field, result_field, base)
@@ -37,6 +43,21 @@ class User
       end
     else
       return value
+    end
+  end
+  
+  def User.lookup_all(value, lookup_field, result_field, base)
+    #TODO: Don't make a new connection to the server for every request
+    if User.ldap_configured?
+      results = []
+      LDAP::Conn.new(config["ldap_server_name"], config["ldap_server_port"]).bind do |conn|
+        conn.search(base, LDAP::LDAP_SCOPE_SUBTREE, "#{lookup_field}=#{value}", result_field) do |e|
+          results << e.vals(result_field)[0]
+        end
+      end
+      return results
+    else
+      return [value]
     end
   end
   

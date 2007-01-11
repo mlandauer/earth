@@ -31,4 +31,17 @@ class UserTest < Test::Unit::TestCase
       assert_equal("3054", user.name)
     end
   end
+  
+  def test_find_all
+    if User.ldap_configured?
+      users = User.find_all
+      #users.each do |user|
+      #  puts "uid = #{user.uid}, name = #{user.name}"
+      #end
+      assert_equal(252, users.size)
+    else
+      users = User.find_all
+      assert(users.empty?)
+    end
+  end
 end
