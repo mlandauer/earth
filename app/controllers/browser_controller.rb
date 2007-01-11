@@ -14,11 +14,13 @@ class BrowserController < ApplicationController
     if @filter_filename.nil? || @filter_filename == ""
       @filter_filename = "*"
     end
-    @filter_uid = params[:filter_uid]
-
-    if @filter_uid && @filter_uid != ""    
+    @filter_user = params[:filter_user]
+    
+    @users = User.find_all
+    
+    if @filter_user && @filter_user != ""    
       filter_conditions = ["files.name LIKE ? AND files.uid = ?", @filter_filename.tr('*', '%'),
-        @filter_uid]
+        User.find_by_name(@filter_user).uid]
     else
       filter_conditions = ["files.name LIKE ?", @filter_filename.tr('*', '%')]
     end

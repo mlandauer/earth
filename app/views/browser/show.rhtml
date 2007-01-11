@@ -23,8 +23,8 @@
           <td class="first-row"><%= text_field_tag "filter_filename", @filter_filename, :size => 15 %></td>
         </tr>
         <tr>
-          <td class="last-row" style="text-align: right;">by user id:</td>
-          <td class="last-row"><%= text_field_tag "filter_uid", @filter_uid, :size => 15 %></td>
+          <td class="last-row" style="text-align: right;">by user:</td>
+          <td class="last-row"><%= select_tag "filter_user", options_for_select([""] + @users.map{|u| u.name}, @filter_user) %></td>
         </tr>
       </table>
       <div id="FilterSubmit">
