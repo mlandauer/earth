@@ -14,11 +14,22 @@
     </small>
   </div>
 
-  <div class="Right" style="margin: 1em 0.1em 0 0;">
+  <div id="Filter" class="Right" style="margin: 1em 0.1em 0 0;">
     <% form_tag({:overwrite_params => {}}, {:method => 'get'}) do %>
-        <p>Filter by filename: <%= text_field_tag "filter_filename", @filter_filename %></p>
-        <p>Filter by user id: <%= text_field_tag "filter_uid", @filter_uid %></p>
-        <%= submit_tag "Update", :name => nil %>
+      <table>
+        <caption>Filter</caption>
+        <tr>
+          <td class="first-row" style="text-align: right;">by filename:</td>
+          <td class="first-row"><%= text_field_tag "filter_filename", @filter_filename, :size => 15 %></td>
+        </tr>
+        <tr>
+          <td class="last-row" style="text-align: right;">by user id:</td>
+          <td class="last-row"><%= text_field_tag "filter_uid", @filter_uid, :size => 15 %></td>
+        </tr>
+      </table>
+      <div id="FilterSubmit">
+        <%= submit_tag "Update", :name => nil, :class => "submit" %>
+      </div>
     <% end %>
   </div>
 

@@ -357,5 +357,32 @@ table.listing thead th a.desc {
   background-image: url(/images/icon_up.gif);
 }
 
-/*  For the Title (breadcrum and the filters) of the Browser */
+/*  Table Used in the Filter Section (top right hand corner) */
+
+#Filter {
+  font-size: 11px;
+}
+
+#Filter table {
+  background-color: #f1f1f1;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+#Filter table caption {
+  background-color: #cacaca;
+  font-weight: bold;
+}
+
+#Filter table td {
+  padding: 0 5px 0 5px;
+}
+
+#Filter table td.first-row {
+  padding-top: 4px;
+}
+
+#Filter table td.last-row {
+  padding-bottom: 4px;
+}
 
