@@ -31,7 +31,7 @@ class User
     #TODO: Don't make a new connection to the server for every request
     if User.ldap_configured?
       LDAP::Conn.new(config["ldap_server_name"], config["ldap_server_port"]).bind do |conn|
-        conn.search(base, LDAP::LDAP_SCOPE_SUBTREE, "#{lookup_field}=#{value}") do |e|
+        conn.search(base, LDAP::LDAP_SCOPE_SUBTREE, "#{lookup_field}=#{value}", result_field) do |e|
           return e.vals(result_field)[0]
         end
       end
