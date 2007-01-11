@@ -8,7 +8,6 @@
       <th>Modified</th>
       <th>Size</th>
       <th>User</th>
-      <th>Group</th>
     </tr>
   </thead>
   <tbody>
@@ -23,7 +22,6 @@
       <td class="modified"><span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span></td>
       <td class="size"><%=h number_to_human_size(file.size) %></td>
       <td class="owner_user"><%=h file.ownership.user_name %></td>
-      <td class="owner_group"><%=h file.ownership.group_name %></td>
     </tr>
 <% end %>
   </tbody>

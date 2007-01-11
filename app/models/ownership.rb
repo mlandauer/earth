@@ -1,22 +1,17 @@
 class Ownership
   cattr_accessor :config
-  attr_accessor :uid, :gid
+  attr_accessor :uid
     
   self.config = YAML.load(File.open(File.dirname(__FILE__) + "/../../config/earth.yml"))
 
   require "ldap" if config["ldap_server_name"]
 
-  def initialize(uid, gid)
+  def initialize(uid)
     @uid = uid
-    @gid = gid
   end
   
   def user_name
     lookup uid, config["ldap_user_lookup"]
-  end
-  
-  def group_name
-    lookup gid, config["ldap_group_lookup"]
   end
   
   private

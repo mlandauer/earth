@@ -11,7 +11,3 @@ update_time: 15.seconds
 #  base: "ou=people, dc=rsp, dc=com, dc=au"
 #  id_field: "uidNumber"
 #  name_field: "uid"
-#ldap_group_lookup:
-#  base: "ou=group, dc=rsp, dc=com, dc=au"
-#  id_field: "gidNumber"
-#  name_field: "cn"
