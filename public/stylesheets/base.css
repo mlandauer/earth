@@ -176,6 +176,7 @@ h4 {
 IE is dumb */
   width: 200px;
   padding: 2px;
+  z-index: 1;
 }
 
 .graph .bar {
@@ -386,3 +387,9 @@ table.listing thead th a.desc {
   padding-bottom: 4px;
 }
 
+/* For autocomplete box from LDAP, so that it displays "over" the
+   graph bar */
+   
+.auto_complete {
+  z-index: 2;
+}
