@@ -17,6 +17,7 @@ ActionController::Routing::Routes.draw do |map|
   # By using the requirements option, we can force :server to be filled with names including dots
   # which normally would be a seperator like '/'.
   map.connect '/browser', :controller => "browser", :action => "show"
+  map.connect '/browser/auto_complete_for_filter_user', :controller => "browser", :action => "auto_complete_for_filter_user"
   map.connect '/browser/:server', :controller => "browser", :action => "show",
     :requirements => {:server => /\w+(\.\w+)*/}
   map.connect '/browser/:server*path', :controller => "browser", :action => "show",

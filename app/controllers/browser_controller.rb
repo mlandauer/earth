@@ -66,4 +66,9 @@ class BrowserController < ApplicationController
       end
     end
   end
+  
+  def auto_complete_for_filter_user
+    @users = User.find_matching(params[:filter_user])
+    render :inline => '<%= content_tag("ul", @users.map { |user| content_tag("li", h(user.name)) })%>'
+  end
 end
