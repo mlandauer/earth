@@ -11,3 +11,4 @@ ldap_user_lookup:
   base: "ou=people, dc=rsp, dc=com, dc=au"
   id_field: "uidNumber"
   name_field: "uid"
+ldap_cache_time: 1.days

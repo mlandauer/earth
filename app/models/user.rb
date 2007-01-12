@@ -1,8 +1,10 @@
 class User
   cattr_accessor :config
-  attr_accessor :uid
+  attr_reader :uid, :name
     
   self.config = YAML.load(File.open(File.dirname(__FILE__) + "/../../config/earth.yml"))
+  
+  @@uid_to_name = ExpiringHash.new(eval(config["ldap_cache_time"]))
 
   def User.ldap_configured?
     config["ldap_server_name"]
@@ -12,11 +14,30 @@ class User
 
   def initialize(uid)
     @uid = uid
+    @name = find_name_by_uid_cached(@uid)
+  end
+ 
+   # here... look here! right below this
+  def logger
+    RAILS_DEFAULT_LOGGER
+  end
+ 
+  # Simple cache
+  def find_name_by_uid_cached(uid)
+    result = @@uid_to_name[uid]
+    if result.nil?
+      result = User.lookup(uid, config["ldap_user_lookup"]["id_field"], config["ldap_user_lookup"]["name_field"],
+        config["ldap_user_lookup"]["base"]).to_s
+      @@uid_to_name[uid] = result
+      logger.info("fetching name for user #{uid} from ldap")
+    else
+      logger.info("name for user #{uid} in cache") 
+    end
+    result
   end
   
-  def name
-    User.lookup(uid, config["ldap_user_lookup"]["id_field"], config["ldap_user_lookup"]["name_field"],
-      config["ldap_user_lookup"]["base"]).to_s
+  def User.find(uid)
+    User.new(uid)
   end
   
   def User.find_by_name(name)

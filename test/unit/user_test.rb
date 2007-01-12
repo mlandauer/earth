@@ -44,4 +44,17 @@ class UserTest < Test::Unit::TestCase
       assert(users.empty?)
     end
   end
+  
+  def test_expiring_hash
+    hash = ExpiringHash.new(2.days)
+    hash[10] = 1
+    assert_equal(1, hash[10])
+  end
+
+  def test_expiring_hash2
+    hash = ExpiringHash.new(1.seconds)
+    hash[10] = 1
+    sleep(2)
+    assert_nil(hash[10])
+  end
 end
