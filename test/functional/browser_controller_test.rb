@@ -60,14 +60,14 @@ class BrowserControllerTest < Test::Unit::TestCase
 #  end
   
   def test_routing
-    assert_routing("/browser", :controller => "browser", :action => "show")
-    assert_routing("/browser/foo.rsp.com.au", :controller => "browser", :action => "show", :server => "foo.rsp.com.au")
-    assert_routing("/browser/foo", :controller => "browser", :action => "show", :server => "foo")
-    assert_routing("/browser/foo.rsp.com.au/blah/foo/bar",
+    assert_routing("/browser/show", :controller => "browser", :action => "show")
+    assert_routing("/browser/show/foo.rsp.com.au", :controller => "browser", :action => "show", :server => "foo.rsp.com.au")
+    assert_routing("/browser/show/foo", :controller => "browser", :action => "show", :server => "foo")
+    assert_routing("/browser/show/foo.rsp.com.au/blah/foo/bar",
       :controller => "browser", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"])
-    assert_routing("/browser/foo/blah/foo/bar",
+    assert_routing("/browser/show/foo/blah/foo/bar",
       :controller => "browser", :action => "show", :server => "foo", :path => ["", "blah", "foo", "bar"])
-    assert_routing("/browser.xml/foo.rsp.com.au/blah/foo/bar",
+    assert_routing("/browser/show.xml/foo.rsp.com.au/blah/foo/bar",
       :controller => "browser", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"], :format => "xml")
   end
 end

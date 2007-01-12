@@ -26,15 +26,23 @@ class User
   end
   
   def User.find_all
-    nos = User.lookup_all('*', config["ldap_user_lookup"]["name_field"], config["ldap_user_lookup"]["id_field"],
-      config["ldap_user_lookup"]["base"])
-    nos.map{|n| User.new(n)}
+    if User.ldap_configured?
+      nos = User.lookup_all('*', config["ldap_user_lookup"]["name_field"], config["ldap_user_lookup"]["id_field"],
+       config["ldap_user_lookup"]["base"])
+      return nos.map{|n| User.new(n)}
+    else
+      return []
+    end
   end
   
   def User.find_matching(m)
-    nos = User.lookup_all("*#{m}*", config["ldap_user_lookup"]["name_field"], config["ldap_user_lookup"]["id_field"],
-      config["ldap_user_lookup"]["base"])
-    nos.map{|n| User.new(n)}
+    if User.ldap_configured?
+      nos = User.lookup_all("*#{m}*", config["ldap_user_lookup"]["name_field"], config["ldap_user_lookup"]["id_field"],
+        config["ldap_user_lookup"]["base"])
+      return nos.map{|n| User.new(n)}
+    else
+      return []
+    end
   end
   
   private
