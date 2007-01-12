@@ -26,14 +26,15 @@ class User
   def find_name_by_uid_cached(uid)
     result = @@uid_to_name[uid]
     if result.nil?
-      result = User.lookup(uid, config["ldap_user_lookup"]["id_field"], config["ldap_user_lookup"]["name_field"],
-        config["ldap_user_lookup"]["base"]).to_s
+      result = find_name_by_uid_uncached(uid)
       @@uid_to_name[uid] = result
-      logger.info("fetching name for user #{uid} from ldap")
-    else
-      logger.info("name for user #{uid} in cache") 
     end
     result
+  end
+  
+  def find_name_by_uid_uncached(uid)
+    User.lookup(uid.to_s, config["ldap_user_lookup"]["id_field"], config["ldap_user_lookup"]["name_field"],
+        config["ldap_user_lookup"]["base"]) || "#{uid}"
   end
   
   def User.find(uid)
@@ -76,6 +77,7 @@ class User
           return e.vals(result_field)[0]
         end
       end
+      return nil
     else
       return value
     end
