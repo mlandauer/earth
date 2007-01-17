@@ -1,5 +1,3 @@
-# This contains some improvements to the better nested set plugin
-require 'nested_set_improvements'
 
 class File
   class Stat
@@ -69,7 +67,9 @@ module Earth
     end
     
     def path
-      @cached_path = self_and_ancestors.map{|x| x.name}.join('/') unless @cached_path
+      # Note: need to reverse ancestors with behavior compatible to nested_set
+      # (as opposed to better_nested_set)
+      @cached_path = self_and_ancestors.reverse.map{|x| x.name}.join('/') unless @cached_path
       @cached_path
     end
     

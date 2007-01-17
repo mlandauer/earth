@@ -39,7 +39,9 @@ module ApplicationHelper
     end
     if directory
       s += ' &#187 '
-      for dir in directory.ancestors
+      # Note: need to reverse ancestors with behavior compatible to nested_set
+      # (as opposed to better_nested_set)
+      for dir in directory.ancestors.reverse
         s += link_to(dir[:name], :overwrite_params => {:path => dir.path}) + '/'
       end
       s += h(directory[:name])
