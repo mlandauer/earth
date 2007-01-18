@@ -68,7 +68,9 @@ class BrowserController < ApplicationController
         # for each directory found. If we don't do this, there'll be
         # another query for each found directory when directory.path
         # is invoked.
-        @directories_and_size.each { |entry| entry[0].set_parent_path(@directory.path) }
+        if @directory
+          @directories_and_size.each { |entry| entry[0].set_parent_path(@directory.path) }
+        end
       end
     end
     
@@ -80,7 +82,7 @@ class BrowserController < ApplicationController
         CSV::Writer.generate(@csv_report, ',') do |csv|
           csv << ['Directory', 'Size (bytes)']
           for directory, size in @directories_and_size
-            csv << [directory.name, size]
+            csv << [directory.name, size.to_i]
           end
         end
         
