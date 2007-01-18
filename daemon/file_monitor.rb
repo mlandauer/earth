@@ -17,7 +17,7 @@ class FileMonitor
     # <--
     
     this_server.directories.clear      
-    directory = this_server.directories.create(:name => File.expand_path(path))
+    directory = this_server.directories.build(:name => File.expand_path(path))
     update(directory, :only_build_directories => true)
     directory.save
     run(directory, update_time)
@@ -72,7 +72,7 @@ private
 
     added_directory_names = subdirectory_names - directory.children.map{|x| x.name}
     added_directory_names.each do |name|
-      dir = Earth::Directory.benchmark("Creating directory with name #{directory.name}", Logger::DEBUG, !log_all_sql) do
+      dir = Earth::Directory.benchmark("Creating directory with name #{directory.name}/#{name}", Logger::DEBUG, !log_all_sql) do
         attributes = { :name => name, :server_id => directory.server_id }
         if only_build_directories then
           directory.children.build(attributes)
