@@ -41,12 +41,12 @@ module Earth
     # This only requires the id of the current directory and so doesn't need to
     # protected in a transaction which simplified its use
     def size
-      Earth::File.sum(:size, :conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
+      Earth::File.sum(:size, :conditions => "directories.lft >= parent.lft AND directories.lft <= parent.rgt",
         :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN directories ON files.directory_id = directories.id").to_i
     end
     
     def recursive_file_count
-      Earth::File.count(:conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
+      Earth::File.count(:conditions => "directories.lft >= parent.lft AND directories.lft <= parent.rgt",
         :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN directories ON files.directory_id = directories.id").to_i
     end
     
