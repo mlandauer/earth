@@ -533,6 +533,7 @@ module Rsp
 
           result.each do |child|
             idMap[child[:parent_id]].children.add_to_cache(child) unless child[:parent_id].nil?
+            child.parent_assoc = idMap[child[:parent_id]]
           end
 
           idMap.each do |key, child|
