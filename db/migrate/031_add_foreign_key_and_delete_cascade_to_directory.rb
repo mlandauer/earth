@@ -5,6 +5,6 @@ class AddForeignKeyAndDeleteCascadeToDirectory < ActiveRecord::Migration
  end
 
   def self.down
-    execute "ALTER TABLE directories DROP CONSTRAINT directories_parent_id_fk FOREIGN KEY (parent_id) REFERENCES directories(id) ON DELETE CASCADE" 
+    execute "ALTER TABLE directories DROP CONSTRAINT directories_parent_id_fk" 
   end
 end
