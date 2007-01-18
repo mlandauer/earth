@@ -1,6 +1,7 @@
 # FasterNestedSet
 
 require 'active_record'
+require 'thread'
 
 #
 #  This is another nested set implementation for RoR.  Its main
@@ -197,9 +198,6 @@ module Rsp
       # Adds instance methods.
       module InstanceMethods
 
-        @@saved_node = nil
-        @@unsaved_children = []
-
         def initialize(attributes)
           if (not attributes.nil?) and (attributes.has_key?(:parent) or attributes.has_key?(parent_column)) then
             raise "Do not specify parent value on initialization; instead, use parent.children.build or parent.children.create"
@@ -334,15 +332,15 @@ module Rsp
         end
 
         def nested_set_after_save
-          if @@saved_node == self
-            @@saved_node = nil
+          if Thread.current["saved_node"] == self
+            Thread.current["saved_node"] = nil
           end
           
           @dirty = false
 
-          if @@unsaved_children then
-            unsaved_children = @@unsaved_children
-            @@unsaved_children = []
+          if Thread.current["unsaved_children"] then
+            unsaved_children = Thread.current["unsaved_children"]
+            Thread.current["unsaved_children"] = []
             unsaved_children.each do |unsaved_child| 
               unsaved_child.save
             end
@@ -367,7 +365,7 @@ module Rsp
             self.children.each do |child| 
               if child.dirty?
                 if child.new_record? or child.save_required?
-                  @@unsaved_children = [child] + (@@unsaved_children || [])
+                  Thread.current["unsaved_children"] = [child] + (Thread.current["unsaved_children"] || [])
                 else
                   child.nested_set_before_save_dirty_record
                 end
@@ -378,8 +376,8 @@ module Rsp
 
         def nested_set_before_save_new_record
           
-          if @@saved_node.nil?
-            @@saved_node = self
+          if Thread.current["saved_node"].nil?
+            Thread.current["saved_node"] = self
 
             if self.parent_assoc.nil?
               left = 1
