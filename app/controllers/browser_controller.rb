@@ -1,4 +1,5 @@
 require 'csv'
+require 'pp'
 
 class BrowserController < ApplicationController
   def index
@@ -41,14 +42,34 @@ class BrowserController < ApplicationController
         @files = Earth::File.find(:all, :conditions => ['directory_id = ?', @directory.id])
       end
       
-      # Filter out servers and directories that have no files
-      if @show_empty.nil?
-        servers = servers.select{|s| s.has_files?} if servers
-        directories = directories.select{|s| s.has_files?} if directories
+      # Filter out servers and directories that have no files, query sizes
+      if servers
+        if @show_empty.nil?
+          servers = servers.select{|s| s.has_files?} if servers
+        end
+        @servers_and_size = servers.map{|s| [s, s.size]} if servers
+      elsif directories
+        # Instead of filtering out empty directories ahead of time,
+        # which requires one additional query per directory, get
+        # directory size and file count for each directory in one go
+        # and filter out empty directories after the fact
+        @directories_and_size = directories.map do |d| 
+          size, count = d.size_and_count; 
+          if @show_empty || count > 0
+            [d, size]
+          end
+        end
+
+        # Remove any nil entries resulting from empty directories
+        @directories_and_size.delete_if { |entry| entry.nil? }
+
+        # Since we know the parent of each directory found (it is the
+        # directory we've been called for, set the known parent path
+        # for each directory found. If we don't do this, there'll be
+        # another query for each found directory when directory.path
+        # is invoked.
+        @directories_and_size.each { |entry| entry[0].set_parent_path(@directory.path) }
       end
-      
-      @servers_and_size = servers.map{|s| [s, s.size]} if servers
-      @directories_and_size = directories.map{|d| [d, d.size]} if directories
     end
     
     respond_to do |wants|
@@ -66,6 +87,8 @@ class BrowserController < ApplicationController
         @csv_report.rewind
         send_data(@csv_report.read, :type => 'text/csv; charset=iso-8859-1; header=present', :filename => 'earth_report.csv', :disposition => 'downloaded')
       end
+
+      logger.debug("end of controller")
     end
   end
   
