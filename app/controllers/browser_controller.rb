@@ -21,8 +21,10 @@ class BrowserController < ApplicationController
     if @filter_user && @filter_user != ""    
       filter_conditions = ["files.name LIKE ? AND files.uid = ?", @filter_filename.tr('*', '%'),
         User.find_by_name(@filter_user).uid]
-    else
+    elsif @filter_filename != '*'
       filter_conditions = ["files.name LIKE ?", @filter_filename.tr('*', '%')]
+    else
+      filter_conditions = nil
     end
     
     Earth::File.with_scope(:find => {:conditions => filter_conditions}) do
