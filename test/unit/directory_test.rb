@@ -28,38 +28,32 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_path_on_create
-    dir = Earth::Server.this_server.directories.create(:name => "another", :parent => directories(:foo_bar))
+    dir = directories(:foo_bar).children.create(:name => "another", :server_id => directories(:foo_bar).server_id)
     assert_equal("/foo/bar/another", dir.path)
+    assert_equal(directories(:foo_bar), dir.parent)
     dir = Earth::Server.this_server.directories.create(:name => "/a/root/directory")
     assert_equal("/a/root/directory", dir.path)
   end
-  
+
+  #commented out - tests implementation details  
   # Tests an alternative interface to "move_to_child_of"
   def test_set_parent 
     assert_equal(2, directories(:foo_bar).lft)
     assert_equal(5, directories(:foo_bar).rgt)
-    dir = Earth::Server.this_server.directories.create(:name => "another")
+    dir = Earth::Directory.new(:name => "another", :server_id => directories(:foo_bar).server_id)
     dir.parent = directories(:foo_bar)
     dir.save
     assert_equal(directories(:foo_bar).id, dir.parent_id)
     assert_equal("/foo/bar/another", dir.path)
-    assert_equal(3, dir.lft)
-    assert_equal(4, dir.rgt)
-    
+    assert_equal(5, dir.lft)
+    assert_equal(6, dir.rgt)
     directories(:foo_bar).reload
     assert_equal(2, directories(:foo_bar).lft)
     assert_equal(7, directories(:foo_bar).rgt)
   end
-  
-  def test_set_parent_on_create
-    dir = Earth::Server.this_server.directories.create(:name => "another", :parent => directories(:foo_bar))
-    assert_equal(directories(:foo_bar).id, dir.parent_id)
-    assert_equal(3, dir.lft)
-    assert_equal(4, dir.rgt)
-    
-    directories(:foo_bar).reload
-    assert_equal(2, directories(:foo_bar).lft)
-    assert_equal(7, directories(:foo_bar).rgt)    
+
+  def test_set_parent_on_create_disallowed
+    assert_raises(RuntimeError) { Earth::Directory.create(:name => "another", :parent => directories(:foo_bar)) }
   end
   
   def test_name
@@ -111,7 +105,7 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal("/foo/blah", dir.path)
     assert_equal(directories(:foo), dir.parent)
     assert_equal(1, dir.server_id)
-    assert_equal([dir, directories(:foo_bar)], directories(:foo).children)
+    assert_equal([directories(:foo_bar), dir], directories(:foo).children)
   end
 
   def test_children
@@ -122,24 +116,30 @@ class DirectoryTest < Test::Unit::TestCase
     assert_no_queries{assert_equal([foo_bar], foo.children)}
     
     foo_fiddle = foo.child_create(:name => "fiddle", :server_id => foo.server_id)
-    assert_no_queries{assert_equal([foo_fiddle, foo_bar], foo.children)}
+    assert_no_queries{assert_equal([foo_bar, foo_fiddle], foo.children)}
     # Force a reload of children and check that the values are correct too
-    assert_queries(1){assert_equal([foo_fiddle, foo_bar], foo.children(true))}
+    assert_queries(1){assert_equal([foo_bar, foo_fiddle], foo.children(true))}
     foo.child_delete(foo_bar)
     assert_no_queries{assert_equal([foo_fiddle], foo.children)}
     assert_queries(1){assert_equal([foo_fiddle], foo.children(true))}
   end
-  
-  def test_load_all_children
-    foo = directories(:foo)
-    foo_bar = directories(:foo_bar)
-    foo_bar_twiddle = directories(:foo_bar_twiddle)
 
-    assert_queries(1) {foo.load_all_children}
-    assert_no_queries{assert_equal([foo_bar], foo.children)}
-    assert_no_queries{assert_equal([foo_bar_twiddle], foo.children[0].children)}
-    assert_no_queries{assert_equal([], foo.children[0].children[0].children)}
-  end
+   def test_no_children_reload
+     foo = directories(:foo)
+     #assert_no_queries{foo.add_child_internal(Directory.new(:name => "foobar", :server_id => foo.server_id))}
+     #assert_no_queries{foo.list_children}
+   end
+
+   def test_load_all_children
+     foo = directories(:foo)
+     foo_bar = directories(:foo_bar)
+     foo_bar_twiddle = directories(:foo_bar_twiddle)
+
+     assert_queries(1) {foo.load_all_children}
+     assert_no_queries{assert_equal([foo_bar], foo.children)}
+     assert_no_queries{assert_equal([foo_bar_twiddle], foo.children[0].children)}
+     assert_no_queries{assert_equal([], foo.children[0].children[0].children)}
+   end
   
   def test_each
     a = []
@@ -154,7 +154,12 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal(6, foo.rgt)
     foo_bar = directories(:foo_bar)
     # This will update the lft and rgt values of foo in the database (but not in the loaded object)
+    assert_equal(2, foo_bar.lft)
+    assert_equal(5, foo_bar.rgt)
     foo_bar.child_create(:name => "wibble", :server_id => foo_bar.server_id)
+    foo_bar.reload
+    assert_equal(2, foo_bar.lft)
+    assert_equal(7, foo_bar.rgt)
     assert_equal(1, foo.lft)
     assert_equal(6, foo.rgt)
     foo.name = 'name'
