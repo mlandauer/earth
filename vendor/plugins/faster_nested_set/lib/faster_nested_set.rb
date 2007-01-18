@@ -109,14 +109,21 @@ module Rsp
   module Acts #:nodoc:
     module FasterNestedSet #:nodoc:
       module ChildrenExtension #:nodoc:
-              def build(attributes)
-                result = super
-                @node.child_added(result)
-                result
-              end
-              def node=(node)
-                @node = node
-              end
+        def build(attributes)
+          result = super
+          @node.child_added(result)
+          result
+        end
+        def node=(node)
+          @node = node
+        end
+        
+        def add_to_cache(child)
+          @target << child
+        end
+        def empty_cache
+          @target = []
+        end
       end
 
       def self.included(mod)
@@ -131,6 +138,7 @@ module Rsp
 
           before_save("self.nested_set_before_save; true")
           after_save("self.nested_set_after_save; true")
+          before_destroy("self.nested_set_before_destroy; true")
           after_destroy("self.nested_set_after_destroy; true")
 
           # --- Below this point taken verbose from tree.rb --- #
@@ -144,9 +152,9 @@ module Rsp
             scope_condition_method = %(
               def scope_condition
                 if #{configuration[:scope].to_s}.nil?
-                  "#{configuration[:scope].to_s} IS NULL"
+                  "#{table_name}.#{configuration[:scope].to_s} IS NULL"
                 else
-                  "#{configuration[:scope].to_s} = \#{#{configuration[:scope].to_s}}"
+                  "#{table_name}.#{configuration[:scope].to_s} = \#{#{configuration[:scope].to_s}}"
                 end
               end
             )
@@ -159,8 +167,6 @@ module Rsp
           has_many :children, :class_name => name, :foreign_key => configuration[:foreign_key], :order => configuration[:order], :dependent => :delete_all, :extend => Rsp::Acts::FasterNestedSet::ChildrenExtension
 
           class_eval <<-EOV
-            include Rsp::Acts::FasterNestedSet::SingletonMethods
-
             #{scope_condition_method}
 
             def left_col_name() "#{configuration[:left_column]}" end
@@ -168,6 +174,8 @@ module Rsp
             def right_col_name() "#{configuration[:right_column]}" end
 
             def parent_col_name() "#{configuration[:foreign_key]}" end
+
+            def parent_column() "#{configuration[:foreign_key]}" end
 
             def self.roots
               find(:all, 
@@ -186,18 +194,21 @@ module Rsp
         end
       end
 
-      module SingletonMethods
-
-      end
-
       # Adds instance methods.
       module InstanceMethods
 
         @@saved_node = nil
         @@unsaved_children = []
 
+        def initialize(attributes)
+          if (not attributes.nil?) and (attributes.has_key?(:parent) or attributes.has_key?(parent_column)) then
+            raise "Do not specify parent value on initialization; instead, use parent.children.build or parent.children.create"
+          end
+          super
+        end
+
         def parent=(_parent)
-          prev_parent = self.parent_assoc()
+          prev_parent = self.parent_assoc
           if not prev_parent.nil?
 
             prev_parent_lft = prev_parent[left_col_name]
@@ -270,19 +281,41 @@ module Rsp
           end
         end
 
+        def dirty= (val)
+          @dirty = true
+        end
+
         def add_dirty_child(child)
-          @dirty_children = [ child ] + (@dirty_children || [])
+          if true
+            found = false
+            self.children.each_index do |index|
+              if self.children[index].id == child.id then
+                self.children[index] = child
+                found = true
+              end
+            end
+            if not found
+              self.children << child
+            end
+          end
+          child.dirty = true
           if @parent_internal then
             @parent_internal.add_dirty_child(self)
+          else
+            self.dirty = true
+          end
+        end
+
+        def nested_set_before_destroy
+          @children.each do |child|
+            child.destroy
           end
         end
 
         def nested_set_after_destroy
           offset = self[right_col_name] - self[left_col_name] + 1
-          if offset > 0 then
-            self.class.update_all( "#{left_col_name} = #{left_col_name} - (CASE WHEN #{left_col_name} > #{self[right_col_name]} THEN #{offset} ELSE 0 END), #{right_col_name} = #{right_col_name} - (CASE WHEN #{right_col_name} > #{self[right_col_name]} THEN #{offset} ELSE 0 END)",  
-                                   "#{scope_condition} AND #{right_col_name} > #{self[right_col_name]}" )
-          end
+          self.class.update_all( "#{left_col_name} = #{left_col_name} - (CASE WHEN #{left_col_name} > #{self[right_col_name]} THEN #{offset} ELSE 0 END), #{right_col_name} = #{right_col_name} - (CASE WHEN #{right_col_name} > #{self[right_col_name]} THEN #{offset} ELSE 0 END)",  
+                                 "#{scope_condition} AND #{right_col_name} > #{self[right_col_name]}" )
         end
 
         def update_edge_data(left)
@@ -304,6 +337,8 @@ module Rsp
           if @@saved_node == self
             @@saved_node = nil
           end
+          
+          @dirty = false
 
           if @@unsaved_children then
             unsaved_children = @@unsaved_children
@@ -315,66 +350,51 @@ module Rsp
           
         end
 
+        def dirty?
+          @dirty
+        end
+
         def nested_set_before_save
           if @new_record or @save_required then
             self.nested_set_before_save_new_record
-          elsif @dirty_children then
+          elsif @dirty then
             self.nested_set_before_save_dirty_record
           end
         end
 
         def nested_set_before_save_dirty_record
-          if @dirty_children then
-            @dirty_children.each do |child| 
-              if child.new_record? or child.save_required?
-                @@unsaved_children = [child] + (@@unsaved_children || [])
-              else
-                child.nested_set_before_save_dirty_record
+          if @dirty and self.children.loaded then
+            self.children.each do |child| 
+              if child.dirty?
+                if child.new_record? or child.save_required?
+                  @@unsaved_children = [child] + (@@unsaved_children || [])
+                else
+                  child.nested_set_before_save_dirty_record
+                end
               end
             end
           end          
         end
 
         def nested_set_before_save_new_record
+          
           if @@saved_node.nil?
             @@saved_node = self
-
-            right_before = read_attribute(:rgt)
 
             if self.parent_assoc.nil?
               left = 1
             else
-              left = 0
-              self.parent_assoc.children.each do |sibling_or_self|
-                if sibling_or_self != self
-                  sibling_right = sibling_or_self[right_col_name]
-                  if sibling_right+1 > left
-                    left = sibling_right+1
-                  end
-                end
-              end
-              if left == 0
-                left = self.parent_assoc[left_col_name] + 1
-              end
+              left = self.parent_assoc[right_col_name] 
+              #left = self.parent_assoc[left_col_name + 1] 
             end
 
             right = self.update_edge_data(left)
 
-            if not right_before.nil? and right != right_before
-              offset = right_before - right
-            elsif not self.parent_assoc.nil?
-              right_before = self.parent_assoc[left_col_name] + 1
-              offset = 2
-            else
-              offset = 0
-            end
-
-            if offset > 0
-              self.class.update_all( "#{left_col_name} = #{left_col_name} + (CASE WHEN #{left_col_name} > #{right_before} THEN #{offset} ELSE 0 END), #{right_col_name} = #{right_col_name} + (CASE WHEN #{right_col_name} >= #{left} THEN #{offset} ELSE 0 END)",  
+            if not self.parent_assoc.nil?
+              offset = 2 
+              self.class.update_all( "#{left_col_name} = #{left_col_name} + (CASE WHEN #{left_col_name} >= #{left} THEN #{offset} ELSE 0 END), #{right_col_name} = #{right_col_name} + (CASE WHEN #{right_col_name} >= #{left} THEN #{offset} ELSE 0 END)",  
                                      "#{scope_condition} AND #{right_col_name} >= #{left}" )
-
             end
-
           end
         end
 
@@ -472,6 +492,54 @@ module Rsp
         def parent_assigned(*args)
           self.save_required = true
           parent_assoc.child_added(self)
+        end
+
+        def child_create(attributes)
+          children.create(attributes)
+        end
+
+        def child_delete(child)
+          children.delete(child)
+        end
+
+        # Override the default implementation of update to write all attributes except
+        # lft and rgt
+        def update
+          newchildren = children.count { |child| child.new_record? }
+          if not self.new_record?
+            a = attributes_with_quotes(false)
+            a.delete(left_col_name)
+            a.delete(right_col_name)
+            connection.update(
+                              "UPDATE #{self.class.table_name} " +
+                                                                  "SET #{quoted_comma_pair_list(connection, a)} " +
+                                                                  "WHERE #{self.class.primary_key} = #{id}",
+                              "#{self.class.name} Update"
+                              )
+            return true
+          else
+            super
+          end
+        end
+
+        def load_all_children
+
+          result = self.class.find(:all, :conditions => "#{scope_condition} AND (#{self.class.table_name}.#{left_col_name} >= #{self[left_col_name]}) and (#{self.class.table_name}.#{right_col_name} <= #{self[right_col_name]})", :order => self.class.table_name + "." +left_col_name)
+          idMap = Hash.new
+          result.each do |child|
+            idMap[child[:id]] = child
+          end
+
+          idMap[self.id] = self
+          self.children.empty_cache
+
+          result.each do |child|
+            idMap[child[:parent_id]].children.add_to_cache(child) unless child[:parent_id].nil?
+          end
+
+          idMap.each do |key, child|
+            child.children.loaded
+          end
         end
       end
     end
