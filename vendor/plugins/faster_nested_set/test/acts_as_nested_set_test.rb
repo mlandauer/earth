@@ -1,5 +1,5 @@
 require File.dirname(__FILE__) + '/abstract_unit'
-require File.dirname(__FILE__) + '/fixtures/mixin'
+#require File.dirname(__FILE__) + '/fixtures/mixin'
 require 'pp'
 
 class MixinNestedSetTest < Test::Unit::TestCase
@@ -8,7 +8,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
 	##########################################
 	# HIGH LEVEL TESTS
 	##########################################
-	def test_mixing_in_methods
+	def disabled_test_mixing_in_methods
 	  ns = NestedSet.new
 		assert(ns.respond_to?(:all_children)) # test a random method
 		
@@ -32,7 +32,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
 	  [:root, :roots, :check_all].each { |symbol| assert(klass.respond_to?(symbol)) }
   end
   
-	def test_string_scope
+	def disabled_test_string_scope
 	  ns = NestedSet.new
 	  assert_equal("root_id IS NULL", ns.scope_condition)
 		
@@ -44,7 +44,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
 	  check_method_mixins ns
   end
   
-  def test_symbol_scope
+  def disabled_test_symbol_scope
     ns = NestedSetWithSymbolScope.new
     ns.root_id = 1
     assert_equal("root_id = 1", ns.scope_condition)
@@ -53,12 +53,12 @@ class MixinNestedSetTest < Test::Unit::TestCase
     check_method_mixins ns
   end
   
-  def test_protected_attributes
+  def disabled_test_protected_attributes
     ns = NestedSet.new(:parent_id => 2, :lft => 3, :rgt => 2)
     [:parent_id, :lft, :rgt].each {|symbol| assert_equal(nil, ns.send(symbol))}
   end
     
-  def test_really_protected_attributes
+  def disabled_test_really_protected_attributes
     ns = NestedSet.new
     assert_raise(ActiveRecord::ActiveRecordError) {ns.parent_id = 1}
     assert_raise(ActiveRecord::ActiveRecordError) {ns.lft = 1}
@@ -68,7 +68,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
   ##########################################
 	# CLASS METHOD TESTS
 	##########################################
-  def test_class_root
+  def disabled_test_class_root
     NestedSetWithStringScope.roots.each {|r| r.destroy unless r.id == 4001}
     assert_equal(NestedSetWithStringScope.find(4001), NestedSetWithStringScope.root)
     NestedSetWithStringScope.find(4001).destroy
@@ -77,29 +77,29 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert_equal(ns, NestedSetWithStringScope.root)
   end
   
-  def test_class_root_again
+  def disabled_test_class_root_again
     NestedSetWithStringScope.roots.each {|r| r.destroy unless r.id == 101}
     assert_equal(NestedSetWithStringScope.find(101), NestedSetWithStringScope.root)
   end
   
-  def test_class_roots
+  def disabled_test_class_roots
     assert_equal(2, NestedSetWithStringScope.roots.size)
     assert_equal(10, NestedSet.roots.size) # May change if STI behavior changes
   end
   
-  def test_check_all_1
+  def disabled_test_check_all_1
     assert NestedSetWithStringScope.check_all
     NestedSetWithStringScope.update_all("lft = 3", "id = 103")
     assert_raise(ActiveRecord::ActiveRecordError) {NestedSetWithStringScope.check_all}
   end
   
-  def test_check_all_2
+  def disabled_test_check_all_2
     NestedSetWithStringScope.update_all("lft = lft + 1", "lft > 11 AND root_id = 101")
     NestedSetWithStringScope.update_all("rgt = rgt + 1", "lft > 11 AND root_id = 101")
     assert_raise(ActiveRecord::ActiveRecordError) {NestedSetWithStringScope.check_all} 
   end
   
-  def test_check_all_3
+  def disabled_test_check_all_3
     NestedSetWithStringScope.update_all("lft = lft + 2", "lft > 11 AND root_id = 101")
     NestedSetWithStringScope.update_all("rgt = rgt + 2", "lft > 11 AND root_id = 101")
     assert_raise(ActiveRecord::ActiveRecordError) {NestedSetWithStringScope.check_all} 
@@ -109,7 +109,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
 	# CALLBACK TESTS
 	##########################################
   # If we change behavior of virtual roots, this test may change
-  def test_before_create
+  def disabled_test_before_create
     ns = NestedSetWithSymbolScope.create(:root_id => 1234)
     assert_equal(1, ns.lft)
     assert_equal(2, ns.rgt)
@@ -119,7 +119,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
   end
   
   # test pruning a branch. only works if we allow the deletion of nodes with children
-  def test_destroy
+  def disabled_test_destroy
     big_tree = NestedSetWithStringScope.find(4001)
     
     # Make sure we have the right one
@@ -149,7 +149,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert_equal(14, NestedSetWithStringScope.find(4001).rgt)
   end
   
-  def test_destroy_2
+  def disabled_test_destroy_2
     assert set2(1).check_subtree
     assert set2(10).destroy    
     assert set2(1).reload.check_subtree
@@ -160,7 +160,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert NestedSetWithStringScope.check_all
   end
   
-  def test_destroy_3
+  def disabled_test_destroy_3
     assert set2(3).destroy
     assert_equal(2, set2(1).children.size)
     assert_equal(0, NestedSetWithStringScope.find(:all, :conditions => "id > 104 and id < 108").size)
@@ -171,7 +171,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert set2(1).check_subtree
   end
   
-  def test_destroy_root
+  def disabled_test_destroy_root
     NestedSetWithStringScope.find(4001).destroy
     assert_equal(0, NestedSetWithStringScope.count(:conditions => "root_id = 42"))
   end            
@@ -183,43 +183,43 @@ class MixinNestedSetTest < Test::Unit::TestCase
   
   def set2(id) NestedSetWithStringScope.find(100 + id) end # helper method
   
-  def test_root?
+  def disabled_test_root?
     assert NestedSetWithStringScope.find(4001).root?
     assert !NestedSetWithStringScope.find(4002).root?
   end
   
-  def test_child?
+  def disabled_test_child?
     assert !NestedSetWithStringScope.find(4001).child?
     assert NestedSetWithStringScope.find(4002).child?    
   end
   
   # Deprecated, delete this test when we nuke the method
-  def test_unknown?
+  def disabled_test_unknown?
     assert !NestedSetWithStringScope.find(4001).unknown?
     assert !NestedSetWithStringScope.find(4002).unknown?        
   end
   
   # Test the <=> method implicitly
-  def test_comparison
+  def disabled_test_comparison
     ar = NestedSetWithStringScope.find(:all, :conditions => "root_id = 42", :order => "lft")
     ar2 = NestedSetWithStringScope.find(:all, :conditions => "root_id = 42", :order => "rgt")
     assert_not_equal(ar, ar2)
     assert_equal(ar, ar2.sort)
   end
   
-  def test_root
+  def disabled_test_root
     assert_equal(NestedSetWithStringScope.find(4001), NestedSetWithStringScope.find(4007).root)
     assert_equal(set2(1), set2(8).root)
     assert_equal(set2(1), set2(1).root)
   end
   
-  def test_roots
+  def disabled_test_roots
     assert_equal([set2(1)], set2(8).roots)
     assert_equal([set2(1)], set2(1).roots)
     assert_equal(NestedSet.find(:all, :conditions => "id > 3000 AND id < 4000").size, set(1).roots.size)
   end
   
-  def test_parent
+  def disabled_test_parent
     ns = NestedSetWithStringScope.create(:root_id => 45)
     assert_equal(nil, ns.parent)
     assert ns.save
@@ -228,39 +228,39 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert_equal(set2(3), set2(7).parent)
   end
   
-  def test_ancestors
+  def disabled_test_ancestors
     assert_equal([], set2(1).ancestors)
     assert_equal([set2(1), set2(4), set2(9)], set2(10).ancestors)
   end
   
-  def test_self_and_ancestors
+  def disabled_test_self_and_ancestors
     assert_equal([set2(1)], set2(1).self_and_ancestors)
     assert_equal([set2(1), set2(4), set2(9), set2(10)], set2(10).self_and_ancestors)
   end
   
-  def test_siblings
+  def disabled_test_siblings
     assert_equal([], set2(1).siblings)
     assert_equal([set2(2), set2(4)], set2(3).siblings)
   end
   
-  def test_self_and_siblings
+  def disabled_test_self_and_siblings
     assert_equal([set2(1)], set2(1).self_and_siblings)
     assert_equal([set2(2), set2(3), set2(4)], set2(3).self_and_siblings)    
   end
   
-  def test_level
+  def disabled_test_level
     assert_equal(0, set2(1).level)
     assert_equal(1, set2(3).level)
     assert_equal(3, set2(10).level)
   end
   
-  def test_children_count
+  def disabled_test_children_count
     assert_equal(0, set2(10).children_count)
     assert_equal(1, set2(3).level)
     assert_equal(3, set2(10).level)    
   end
   
-  def test_full_set
+  def disabled_test_full_set
     assert_equal(NestedSetWithStringScope.find(:all, :conditions => "root_id = 101", :order => "lft"), set2(1).full_set)
     assert_equal([set2(4), set2(8), set2(9), set2(10)], set2(4).full_set)
     assert_equal([set2(2)], set2(2).full_set)
@@ -274,7 +274,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert_equal([set2(4), set2(8)], set2(4).full_set(:exclude => set2(9))) 
   end
     
-  def test_all_children
+  def disabled_test_all_children
     assert_equal(NestedSetWithStringScope.find(:all, :conditions => "root_id = 101 AND id > 101", :order => "lft"), set2(1).all_children)
     assert_equal([set2(8), set2(9), set2(10)], set2(4).all_children)
     assert_equal([set2(8), set2(9)], set2(4).all_children(:exclude => set2(10)))
@@ -283,7 +283,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert_equal([set2(2), set2(4), set2(8)], set2(1).all_children(:exclude => [set2(9), 103, 106]))
   end
   
-  def test_children
+  def disabled_test_children
     assert_equal([], set2(10).children) 
     assert_equal([], set(1).children) 
     assert_equal([set2(2), set2(3), set2(4)], set2(1).children) 
@@ -294,7 +294,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
   ##########################################
 	# INDEX-CHECKING METHOD TESTS
 	##########################################
-  def test_check_subtree
+  def disabled_test_check_subtree
     root = set2(1)
     assert root.check_subtree
     # need to use update_all to get around attr_protected
@@ -310,7 +310,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     # this method receives lots of additional testing through tests of check_full_tree and check_all
   end
   
-  def test_check_full_tree
+  def disabled_test_check_full_tree
     assert set2(1).check_full_tree
     assert NestedSetWithStringScope.find(4006).check_full_tree
     NestedSetWithStringScope.update_all("rgt = NULL", "id = 4002")
@@ -322,12 +322,12 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert_raise(ActiveRecord::ActiveRecordError) {set2(4).check_full_tree}
   end
   
-  def test_check_full_tree_orphan
+  def disabled_test_check_full_tree_orphan
     ns = NestedSetWithStringScope.create(:root_id => 101)
     assert_raise(ActiveRecord::ActiveRecordError) {set2(3).check_full_tree}
   end
   
-  def test_check_full_tree_endless_loop
+  def disabled_test_check_full_tree_endless_loop
     ns = NestedSetWithStringScope.create(:root_id => 101)
     NestedSetWithStringScope.update_all("parent_id = #{ns.id}", "id = #{ns.id}")
     assert_raise(ActiveRecord::ActiveRecordError) {set2(6).check_full_tree}
@@ -336,7 +336,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
   ##########################################
 	# INDEX-ALTERING (UPDATE) METHOD TESTS
 	##########################################
-	def test_move_to_left_of # this method undergoes additional testing elsewhere
+	def disabled_test_move_to_left_of # this method undergoes additional testing elsewhere
 	  set2(2).move_to_left_of(set2(3)) # should cause no change
 	  assert_equal(2, set2(2).lft)
 	  assert_equal(4, set2(3).lft)
@@ -348,7 +348,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
 	  assert NestedSetWithStringScope.check_all
   end
   
-  def test_move_to_right_of # this method undergoes additional testing elsewhere
+  def disabled_test_move_to_right_of # this method undergoes additional testing elsewhere
  	  set2(3).move_to_right_of(set2(2)) # should cause no change
 	  set2(4).move_to_right_of(set2(3)) # should cause no change
 	  assert_equal(11, set2(3).rgt)
@@ -361,7 +361,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
 	  assert NestedSetWithStringScope.check_all
   end
   
-  def test_adding_children
+  def disabled_test_adding_children
     assert(set(1).unknown?)
     assert(set(2).unknown?)
     set(1).add_child set(2)
@@ -428,7 +428,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert NestedSetWithStringScope.check_all
   end
 
-  def test_common_usage
+  def disabled_test_common_usage
     mixins(:set_1).add_child(mixins(:set_2))
     assert_equal(1, mixins(:set_1).direct_children.length)
 
@@ -460,7 +460,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert NestedSetWithStringScope.check_all
   end
   
-  def test_set_parent_1
+  def disabled_test_set_parent_1
     bill = NestedSetWithStringScope.new(:root_id => 101, :pos => 2)
     assert_raise(ActiveRecord::ActiveRecordError) { bill.move_to_child_of(set2(1)) }    
     assert_raise(ActiveRecord::ActiveRecordError) { set2(1).move_to_child_of(set2(1)) }    
@@ -478,7 +478,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert NestedSetWithStringScope.check_all
   end
   
-  def test_set_parent_2
+  def disabled_test_set_parent_2
     bill = NestedSetWithStringScope.new(:root_id => 101)
     assert set2(1).check_subtree
     assert bill.save
@@ -497,7 +497,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert NestedSetWithStringScope.check_all
   end
   
-  def test_set_parent_3
+  def disabled_test_set_parent_3
     bill = NestedSetWithStringScope.new(:root_id => 101)
     assert bill.save
     assert bill.move_to_child_of(set2(3))
@@ -505,7 +505,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert NestedSetWithStringScope.check_all
   end
   
-  def test_move_1
+  def disabled_test_move_1
     set2(4).move_to_child_of(set2(3))
     assert_equal(set2(3), set2(4).reload.parent)
     assert_equal(1, set2(1).reload.lft)
@@ -516,7 +516,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert NestedSetWithStringScope.check_all
   end
   
-  def test_move_2
+  def disabled_test_move_2
     initial = set2(1).full_set
     assert_raise(ActiveRecord::ActiveRecordError) { set2(3).move_to_child_of(set2(6)) } # can't set a current child as the parent-- creates a loop
     assert_raise(ActiveRecord::ActiveRecordError) { set2(3).move_to_child_of(set2(3)) }
@@ -552,7 +552,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
   ##########################################
 	# BUG-SPECIFIC TESTS
 	##########################################
-  def test_ticket_17
+  def disabled_test_ticket_17
     main = Category.new
     main.save
     sub = Category.new
@@ -571,7 +571,7 @@ class MixinNestedSetTest < Test::Unit::TestCase
     assert_equal(4, main.rgt)
   end
   
-  def test_ticket_19
+  def disabled_test_ticket_19
     root = Category.create
     first = Category.create
     second = Category.create    
@@ -585,6 +585,9 @@ class MixinNestedSetTest < Test::Unit::TestCase
     first.move_to_child_of(root) # move it back
     second.reload ## needed because second is stale
     assert_nothing_raised {first.move_to_child_of(second)} # try it the other way-- first is now on the other side of second
+  end
+
+  def test_foo
   end
   
 end
@@ -600,17 +603,17 @@ end
 ## need reload at beginning of move_to?
 ## having reload at the end of move_to could lose unsaved data
 
-## def test_scope enforcement
+## def disabled_test_scope enforcement
 # can't move a node to a parent with different scope
 
 # ## Method not written yet: WHERE lft > l AND rgt < r AND rgt - lft = 1
-# def test_terminal_children  
+# def disabled_test_terminal_children  
 # end
-# def test_terminal_children_count   
+# def disabled_test_terminal_children_count   
 # end
 # 
 # ## incompatible with current default virtual root setup
-#def test_create_new
+#def disabled_test_create_new
 #  bill = NestedSetWithStringScope.new(:root_id => 47)
 #  assert bill.save
 #  bill.reload
@@ -620,7 +623,7 @@ end
 #end
 #
 #
-#def test_renumber_all_1
+#def disabled_test_renumber_all_1
 #  NestedSetWithStringScope.update_all "lft = NULL, rgt = NULL"
 #  assert_raise(ActiveRecord::ActiveRecordError) {NestedSetWithStringScope.check_all}
 #  assert NestedSetWithStringScope.renumber_all
@@ -633,7 +636,7 @@ end
 #  assert NestedSetWithStringScope.check_all
 #end
 #
-#def test_renumber_all_2
+#def disabled_test_renumber_all_2
 #  set2(8).move_to_child_of(set2(10))
 #  NestedSetWithStringScope.find(:all).each { |t|
 #    t.lft = ''
@@ -656,7 +659,7 @@ end
 #end
 #
 #
-#def test_find_insertion_point
+#def disabled_test_find_insertion_point
 #  bill = NestedSetWithStringScope.create(:pos => 2, :root_id => 101)
 #  assert_equal 3, bill.find_insertion_point(set2(1))
 #  assert_equal 4, bill.find_insertion_point(set2(3))
@@ -672,11 +675,11 @@ end
 #end
 #
 ## need to close ticket relating to Single Table Inheritance
-#def test_sti
+#def disabled_test_sti
 #  assert false
 #end
 #
-#def test_concurrent_updates
+#def disabled_test_concurrent_updates
 #  assert false
 #  # need to make sure that more than one user can be editing a table-- don't update left/rgt values automatically
 #  # 1) remove lft/rgt from AR update statement?

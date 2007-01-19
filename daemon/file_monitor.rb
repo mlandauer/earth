@@ -7,8 +7,57 @@ class FileMonitor
   def FileMonitor.run_on_new_directory(path, update_time)
     this_server = Earth::Server.this_server
     puts "WARNING: Watching new directory. So, clearing out database"
+
+    time_before_clear = Time.new
+    # Workaround until on delete cascade is properly supported by faster_nested_set.  -->
+    # FIXME: The following line unconditionally uses PostgreSQL extensions
+    # Provide an alternative which uses a sub-select
+    # FIXME: Do this in a transaction
+    Earth::File.connection.delete("DELETE FROM #{Earth::File.table_name} USING #{Earth::Directory.table_name} WHERE #{Earth::Directory.table_name}.server_id=#{Earth::Server.this_server.id} AND #{Earth::Directory.table_name}.id = #{Earth::File.table_name}.directory_id", "Earth::Directory Delete all")
+    Earth::Directory.connection.delete("DELETE FROM #{Earth::Directory.table_name} WHERE server_id=#{Earth::Server.this_server.id}", "Earth::Directory Delete all")
+    # <--    
     this_server.directories.clear      
-    directory = this_server.directories.create(:name => File.expand_path(path))
+    time_after_clear = Time.new
+    puts "Database cleanup took #{time_after_clear - time_before_clear}s"
+
+    time_before_clear = Time.new
+
+    time_before_initial_build = Time.new
+    directory = this_server.directories.build(:name => File.expand_path(path))
+    update(directory, :only_build_directories => true)
+    time_after_initial_build = Time.new
+    puts "Building initial directory structure for #{path} took #{time_after_initial_build - time_before_initial_build}s"
+
+    time_before_initial_commit = Time.new
+    directory.save
+    time_after_initial_commit = Time.new
+
+    puts "Committing initial directory structure for #{path} to database took #{time_after_initial_commit - time_before_initial_commit}s"
+
+    time_before_initial_update = Time.new
+    update(directory)
+    time_after_initial_update = Time.new
+    puts "Initial pass at gathering all files beneath #{path} took #{time_after_initial_update - time_before_initial_update}s"
+
+    puts "Total time for scanning and storing tree: #{time_after_initial_update - time_before_initial_build}s"
+
+    time_before_vacuum = Time.new
+    Earth::File.connection.update("VACUUM FULL ANALYZE")
+    time_after_vacuum = Time.new
+    puts "Vacuuming database took #{time_after_vacuum - time_before_vacuum}s"
+
+    #time_before_reindex = Time.new
+    #Earth::File.connection.update("REINDEX DATABASE #{Earth::Server.connection.config[:database]}")
+    #time_after_reindex = Time.new
+    #puts "Reindexing database took #{time_after_reindex - time_before_reindex}s"
+
+
+    time_before_initial_update = Time.new
+    update(directory)
+    time_after_initial_update = Time.new
+
+    puts "Total time for scanning and storing tree: #{time_after_initial_update - time_before_initial_update}s"
+
     run(directory, update_time)
   end
   
@@ -34,13 +83,14 @@ private
     end
   end
   
-  def FileMonitor.update(directory)
+  def FileMonitor.update(directory, only_build_directories = false)
     directory.each do |d|
-      update_non_recursive(d)
+      update_non_recursive(d, only_build_directories)
     end
   end
 
-  def FileMonitor.update_non_recursive(directory)
+  def FileMonitor.update_non_recursive(directory, only_build_directories = false)
+
     # TODO: remove exist? call as it is an extra filesystem access
     if File.exist?(directory.path)
       new_directory_stat = File.lstat(directory.path)
@@ -60,38 +110,45 @@ private
 
     added_directory_names = subdirectory_names - directory.children.map{|x| x.name}
     added_directory_names.each do |name|
-      dir = Earth::Directory.benchmark("Creating directory with name #{directory.name}", Logger::DEBUG, !log_all_sql) do
-        directory.child_create(:name => name, :server_id => directory.server_id)
+      dir = Earth::Directory.benchmark("Creating directory with name #{directory.name}/#{name}", Logger::DEBUG, !log_all_sql) do
+        attributes = { :name => name, :server_id => directory.server_id }
+        if only_build_directories then
+          directory.children.build(attributes)
+        else
+          directory.children.create(attributes)
+        end
       end
-      update_non_recursive(dir)
+      update_non_recursive(dir, only_build_directories)
     end
 
-    # By adding and removing files on the association, the cache of the association will be kept up to date
-    added_file_names = file_names - directory.files.map{|x| x.name}
-    added_file_names.each do |name|
-      Earth::File.benchmark("Creating file with name #{name}", Logger::DEBUG, !log_all_sql) do
-        directory.files.create(:name => name, :stat => stats[name])
+    if not only_build_directories then
+      # By adding and removing files on the association, the cache of the association will be kept up to date
+      added_file_names = file_names - directory.files.map{|x| x.name}
+      added_file_names.each do |name|
+        Earth::File.benchmark("Creating file with name #{name}", Logger::DEBUG, !log_all_sql) do
+          directory.files.create(:name => name, :stat => stats[name])
+        end
       end
-    end
 
-    directory.files.each do |file|
-      # If the file still exists
-      if file_names.include?(file.name)
-        # If the file has changed
-        if file.stat != stats[file.name]
-          file.stat = stats[file.name]
-          Earth::File.benchmark("Updating file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
-            file.save
+      directory.files.each do |file|
+        # If the file still exists
+        if file_names.include?(file.name)
+          # If the file has changed
+          if file.stat != stats[file.name]
+            file.stat = stats[file.name]
+            Earth::File.benchmark("Updating file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
+              file.save
+            end
+          end
+          # If the file has been deleted
+        else
+          Earth::Directory.benchmark("Removing file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
+            directory.files.delete(file)
           end
         end
-      # If the file has been deleted
-      else
-        Earth::Directory.benchmark("Removing file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
-          directory.files.delete(file)
-        end
       end
     end
-    
+
     directory.children.each do |dir|
       # If the directory has been deleted
       if !subdirectory_names.include?(dir.name)
@@ -102,11 +159,13 @@ private
     end
     
     # Update the directory stat information at the end
-    if File.exist?(directory.path)
-      directory.stat = new_directory_stat
-      # This will not overwrite 'lft' and 'rgt' so it doesn't matter if these are out of date
-      Earth::Directory.benchmark("Updating directory with name #{directory.name}", Logger::DEBUG, !log_all_sql) do
-        directory.update
+    if not only_build_directories then
+      if File.exist?(directory.path)
+        directory.stat = new_directory_stat
+        # This will not overwrite 'lft' and 'rgt' so it doesn't matter if these are out of date
+        Earth::Directory.benchmark("Updating directory with name #{directory.name}", Logger::DEBUG, !log_all_sql) do
+          directory.update
+        end
       end
     end
   end

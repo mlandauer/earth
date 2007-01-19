@@ -28,7 +28,7 @@ module RedHillConsulting
         dump << ", #{references_table_name.inspect}, [#{references_column_names.collect{ |name| name.inspect }.join(', ')}]"
         dump << ", :on_update => :#{on_update}" if on_update
         dump << ", :on_delete => :#{on_delete}" if on_delete
-        dump << ", { :name => :#{name} } " if name
+        dump << ", :name => :#{name}" if name
         dump
       end
     end

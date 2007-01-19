@@ -18,5 +18,5 @@ end
 
 class Category < Mixin
   acts_as_nested_set
-  def self.table_name() "mixins" end
+  def self.table_name() "categories" end
 end

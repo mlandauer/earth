@@ -43,9 +43,9 @@ if development_mode
 else
   ENV["RAILS_ENV"] = "production"
 end
-require '../config/environment'
+require File.dirname(__FILE__) + '/../config/environment'
 
-config_file = "../config/earth.yml"
+config_file = File.dirname(__FILE__) + "/../config/earth.yml"
 update_time = eval(YAML.load(File.open(config_file))["update_time"])
 puts "Update time is set to #{update_time} seconds. To change edit #{config_file}"
 

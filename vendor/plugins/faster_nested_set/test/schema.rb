@@ -9,4 +9,11 @@ ActiveRecord::Schema.define :version => 0 do
     t.column :root_id,      :integer
     t.column :type,         :string
   end
+
+  create_table :categories, :force => true do |t|
+    t.column :parent_id,    :integer
+    t.column :lft,          :integer
+    t.column :rgt,          :integer    
+    t.column :name,         :string
+  end
 end

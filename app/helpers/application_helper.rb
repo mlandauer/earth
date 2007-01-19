@@ -27,7 +27,7 @@ module ApplicationHelper
     end
     xml = Builder::XmlMarkup.new
     xml.div("class" => "graph") do
-      xml.div("class" => options[:class] || "bar", "style" => "width: #{100 * value / max_value}%")
+      xml.div("class" => options[:class] || "bar", "style" => "width: #{(100 * value / max_value).to_i}%")
     end
   end
 
@@ -39,7 +39,9 @@ module ApplicationHelper
     end
     if directory
       s += ' &#187 '
-      for dir in directory.ancestors
+      # Note: need to reverse ancestors with behavior compatible to nested_set
+      # (as opposed to better_nested_set)
+      for dir in directory.ancestors.reverse
         s += link_to(dir[:name], :overwrite_params => {:path => dir.path}) + '/'
       end
       s += h(directory[:name])

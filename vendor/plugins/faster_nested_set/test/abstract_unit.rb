@@ -2,10 +2,10 @@ require 'test/unit'
 require 'rubygems'
 require_gem 'activerecord'
 require 'active_record/fixtures'
-require File.dirname(__FILE__) + '/../lib/better_nested_set'
+require File.dirname(__FILE__) + '/../lib/faster_nested_set'
 
 ActiveRecord::Base.class_eval do
-  include SymetrieCom::Acts::NestedSet
+  include Rsp::Acts::FasterNestedSet
 end
 
 config = YAML::load(IO.read(File.dirname(__FILE__) + '/database.yml'))

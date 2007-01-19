@@ -1,5 +1,3 @@
-# This contains some improvements to the better nested set plugin
-require 'nested_set_improvements'
 
 class File
   class Stat
@@ -43,13 +41,19 @@ module Earth
     # This only requires the id of the current directory and so doesn't need to
     # protected in a transaction which simplified its use
     def size
-      Earth::File.sum(:size, :conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
-        :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN directories ON files.directory_id = directories.id").to_i
+      Earth::File.sum(:size, :conditions => "directories.lft >= #{self.lft} AND directories.lft <= #{self.rgt} AND directories.server_id = #{self.server_id}",
+        :joins => "JOIN directories ON files.directory_id = directories.id").to_i
     end
     
     def recursive_file_count
-      Earth::File.count(:conditions => "directories.lft >= parent.lft AND directories.rgt <= parent.rgt",
-        :joins => "JOIN directories AS parent ON parent.id = #{id} JOIN directories ON files.directory_id = directories.id").to_i
+      Earth::File.count(:conditions => "directories.lft >= #{self.lft} AND directories.lft <= #{self.rgt} AND directories.server_id = #{self.server_id}",
+        :joins => "JOIN directories ON files.directory_id = directories.id").to_i
+    end
+
+    def size_and_count
+      sql = "SELECT SUM(files.size), COUNT(*) FROM files JOIN directories ON files.directory_id = directories.id WHERE directories.lft >= #{self.lft} AND directories.lft <= #{self.rgt} AND directories.server_id = #{self.server_id}"
+      result = Earth::File.connection.select_all sql
+      [ (result[0]["sum"] || 0).to_i, result[0]["count"].to_i ]
     end
     
     def has_files?
@@ -69,8 +73,14 @@ module Earth
     end
     
     def path
-      @cached_path = self_and_ancestors.map{|x| x.name}.join('/') unless @cached_path
+      # Note: need to reverse ancestors with behavior compatible to nested_set
+      # (as opposed to better_nested_set)
+      @cached_path = self_and_ancestors.reverse.map{|x| x.name}.join('/') unless @cached_path
       @cached_path
+    end
+
+    def set_parent_path(parent_path)
+      @cached_path = "#{parent_path}/#{name}"
     end
     
     # This assumes there are no overlapping directory trees
