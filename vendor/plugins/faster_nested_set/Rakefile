@@ -3,7 +3,15 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 desc 'Default: run unit tests.'
-task :default => :test
+task :default => [:test_mysql, :test_sqlite3, :test_postgresql]
+
+for adapter in %w(mysql postgresql sqlite3)
+  Rake::TestTask.new("test_#{adapter}") { |t|
+    t.libs << 'lib'
+    t.pattern = "test/#{adapter}.rb"
+    t.verbose = true
+  }
+end
 
 desc 'Test the fine_nested_set plugin.'
 Rake::TestTask.new(:test) do |t|
