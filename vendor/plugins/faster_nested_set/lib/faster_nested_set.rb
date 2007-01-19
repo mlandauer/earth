@@ -1,3 +1,4 @@
+
 # FasterNestedSet
 
 require 'active_record'
@@ -144,7 +145,7 @@ module Rsp
 
           # --- Below this point taken verbose from tree.rb --- #
 
-          configuration = { :foreign_key => "parent_id", :order => nil, :counter_cache => nil, :left_column => "lft", :right_column => "rgt", :scope => "1 = 1" , :text_column => nil}
+          configuration = { :foreign_key => "parent_id", :order => nil, :counter_cache => nil, :left_column => "lft", :right_column => "rgt", :scope => "1 = 1" , :text_column => nil, :level_column => nil}
           configuration.update(options) if options.is_a?(Hash)
 
           configuration[:scope] = "#{configuration[:scope]}_id".intern if configuration[:scope].is_a?(Symbol) && configuration[:scope].to_s !~ /_id$/
@@ -173,6 +174,10 @@ module Rsp
             def left_col_name() "#{configuration[:left_column]}" end
 
             def right_col_name() "#{configuration[:right_column]}" end
+
+            def level_col_name() "#{configuration[:level_column]}" end
+
+            def has_level_column?() #{not configuration[:level_column].nil?} end
 
             def parent_col_name() "#{configuration[:foreign_key]}" end
 
@@ -316,13 +321,14 @@ module Rsp
                                  "#{scope_condition} AND #{right_col_name} > #{self[right_col_name]}" )
         end
 
-        def update_edge_data(left)
+        def update_edge_data(left, level)
           self[left_col_name] = left
+          self[level_col_name] = level unless not has_level_column?
           child_left = left + 1
           child_right = child_left
           if @children
             @children.each do |child| 
-              child_right = child.update_edge_data(child_left) + 1
+              child_right = child.update_edge_data(child_left, level + 1) + 1
               child_left = child_right
             end
           end
@@ -381,12 +387,16 @@ module Rsp
 
             if self.parent_assoc.nil?
               left = 1
+              level = 1
             else
               left = self.parent_assoc[right_col_name] 
               #left = self.parent_assoc[left_col_name + 1] 
+              if has_level_column?
+                level = self.parent_assoc[level_col_name] + 1
+              end
             end
 
-            right = self.update_edge_data(left)
+            right = self.update_edge_data(left, level)
 
             if not self.parent_assoc.nil?
               offset = 2 
