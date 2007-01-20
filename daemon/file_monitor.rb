@@ -75,8 +75,9 @@ private
 
   def FileMonitor.run(directory, update_time)
     puts "Watching directory #{directory.path}"
+    
     while true do
-      puts "Updating..."
+      puts "Updating #{directory.recursive_file_count} directories..."
       update(directory)
       puts "Sleeping for #{update_time} seconds..."
       sleep(update_time)
