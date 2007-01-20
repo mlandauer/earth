@@ -94,7 +94,7 @@ module ActiveRecord
         yield table_definition
 
         if options[:force]
-          drop_table(name) rescue nil
+          drop_table(name, options) rescue nil
         end
 
         create_sql = "CREATE#{' TEMPORARY' if options[:temporary]} TABLE "
@@ -112,7 +112,7 @@ module ActiveRecord
       end
 
       # Drops a table from the database.
-      def drop_table(name)
+      def drop_table(name, options = {})
         execute "DROP TABLE #{name}"
       end
 
@@ -254,7 +254,7 @@ module ActiveRecord
 
       def type_to_sql(type, limit = nil, precision = nil, scale = nil) #:nodoc:
         native = native_database_types[type]
-        column_type_sql = native[:name]
+        column_type_sql = native.is_a?(Hash) ? native[:name] : native
         if type == :decimal # ignore limit, use precison and scale
           precision ||= native[:precision]
           scale ||= native[:scale]
@@ -265,7 +265,7 @@ module ActiveRecord
               column_type_sql << "(#{precision})"
             end
           else
-            raise ArgumentError, "Error adding decimal column: precision cannot be empty if scale if specifed" if scale
+            raise ArgumentError, "Error adding decimal column: precision cannot be empty if scale if specified" if scale
           end
           column_type_sql
         else
@@ -273,10 +273,10 @@ module ActiveRecord
           column_type_sql << "(#{limit})" if limit
           column_type_sql
         end
-      end            
-    
+      end
+
       def add_column_options!(sql, options) #:nodoc:
-        sql << " DEFAULT #{quote(options[:default], options[:column])}" unless options[:default].nil?
+        sql << " DEFAULT #{quote(options[:default], options[:column])}" if options_include_default?(options)
         sql << " NOT NULL" if options[:null] == false
       end
 
@@ -287,6 +287,17 @@ module ActiveRecord
       def distinct(columns, order_by)
         "DISTINCT #{columns}"
       end
+      
+      # ORDER BY clause for the passed order option.
+      # PostgreSQL overrides this due to its stricter standards compliance.
+      def add_order_by_for_association_limiting!(sql, options)
+        sql << "ORDER BY #{options[:order]}"
+      end
+
+      protected
+        def options_include_default?(options)
+          options.include?(:default) && !(options[:null] == false && options[:default].nil?)
+        end
     end
   end
 end

@@ -101,6 +101,10 @@ module ActiveRecord
       def supports_migrations? #:nodoc:
         true
       end
+
+      def requires_reloading?
+        true
+      end
       
       def supports_count_distinct? #:nodoc:
         false
@@ -250,10 +254,11 @@ module ActiveRecord
 
       def change_column(table_name, column_name, type, options = {}) #:nodoc:
         alter_table(table_name) do |definition|
+          include_default = options_include_default?(options)
           definition[column_name].instance_eval do
             self.type    = type
-            self.limit   = options[:limit] if options[:limit]
-            self.default = options[:default] unless options[:default].nil?
+            self.limit   = options[:limit] if options.include?(:limit)
+            self.default = options[:default] if include_default
           end
         end
       end

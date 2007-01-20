@@ -51,7 +51,7 @@ module ActiveRecord
     # Assigns a world-wide unique ID made up of:
     # < Sequence [2], ProcessID [2] , Time [4], IP Addr [4] >
     
-    class TwelveByteKey < String #:nodoc
+    class TwelveByteKey < String #:nodoc:
       @@mutex = Mutex.new
       @@sequence_number = rand(65536)
       @@key_cached_pid_component = nil
@@ -271,7 +271,7 @@ module ActiveRecord
         true
       end
 
-      def native_database_types #:nodoc
+      def native_database_types #:nodoc:
         {
           :primary_key    => "INTEGER DEFAULT UNIQUE PRIMARY KEY",
           :string         => { :name => "VARCHAR", :limit => 255 },
@@ -564,7 +564,7 @@ module ActiveRecord
         execute "SET COMMIT TRUE"
       end
 
-      def add_limit_offset!(sql, options) #:nodoc
+      def add_limit_offset!(sql, options) #:nodoc:
         if limit = options[:limit]
           offset = options[:offset] || 0
         
@@ -778,7 +778,7 @@ module ActiveRecord
       end  
 
       # Drops a table from the database.
-      def drop_table(name)
+      def drop_table(name, options = {})
         execute "DROP TABLE #{name} RESTRICT"
       rescue ActiveRecord::StatementInvalid => e
         raise e unless e.message.match(/Referenced TABLE - \w* - does not exist/)
@@ -795,12 +795,12 @@ module ActiveRecord
 
       def add_column_options!(sql, options) #:nodoc:
         default_value = quote(options[:default], options[:column])
-        if options[:default]
+        if options_include_default?(options)
           if options[:type] == :boolean
             default_value = options[:default] == 0 ? quoted_false : quoted_true
           end
+          sql << " DEFAULT #{default_value}"
         end
-        sql << " DEFAULT #{default_value}" unless options[:default].nil?
         sql << " NOT NULL" if options[:null] == false
       end
 
@@ -828,17 +828,15 @@ module ActiveRecord
         execute(change_column_sql)
         change_column_sql = %( ALTER TABLE "#{table_name}" ALTER COLUMN "#{column_name}" )
 
-        default_value = quote(options[:default], options[:column])
-        if options[:default]
+        if options_include_default?(options)
+          default_value = quote(options[:default], options[:column])
           if type == :boolean
             default_value = options[:default] == 0 ? quoted_false : quoted_true
           end
+          change_column_sql << " SET DEFAULT #{default_value}"
         end
 
-        if default_value != "NULL"
-          change_column_sql << " SET DEFAULT #{default_value}"
-          execute(change_column_sql)
-        end
+        execute(change_column_sql)
         
 #         change_column_sql = "ALTER TABLE #{table_name} CHANGE #{column_name} #{column_name} #{type_to_sql(type, options[:limit])}"
 #         add_column_options!(change_column_sql, options)

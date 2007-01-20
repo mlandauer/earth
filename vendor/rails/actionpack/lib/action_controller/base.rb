@@ -407,10 +407,13 @@ module ActionController #:nodoc:
 
       # Don't render layouts for templates with the given extensions.
       def exempt_from_layout(*extensions)
-        regexps = extensions.collect do |extension|
-          extension.is_a?(Regexp) ? extension : /\.#{Regexp.escape(extension.to_s)}$/
-        end
-        @@exempt_from_layout.merge regexps
+        @@exempt_from_layout.merge extensions.collect { |extension|
+          if extension.is_a?(Regexp)
+            extension
+          else
+            /\.#{Regexp.escape(extension.to_s)}$/
+          end
+        }
       end
     end
 
@@ -650,6 +653,20 @@ module ActionController #:nodoc:
       #
       # _Deprecation_ _notice_: This used to have the signature <tt>render_text("text", status = 200)</tt>
       #
+      # === Rendering JSON
+      #
+      # Rendering JSON sets the content type to text/x-json and optionally wraps the JSON in a callback. It is expected
+      # that the response will be eval'd for use as a data structure.
+      #
+      #   # Renders '{name: "David"}'
+      #   render :json => {:name => "David"}.to_json
+      #
+      # Sometimes the result isn't handled directly by a script (such as when the request comes from a SCRIPT tag),
+      # so the callback option is provided for these cases.
+      #
+      #   # Renders 'show({name: "David"})'
+      #   render :json => {:name => "David"}.to_json, :callback => 'show'
+      #
       # === Rendering an inline template
       #
       # Rendering of an inline template works as a cross between text and action rendering where the source for the template
@@ -734,6 +751,9 @@ module ActionController #:nodoc:
           elsif xml = options[:xml]
             render_xml(xml, options[:status])
 
+          elsif json = options[:json]
+            render_json(json, options[:callback], options[:status])
+
           elsif partial = options[:partial]
             partial = default_template_name if partial == true
             if collection = options[:collection]
@@ -814,6 +834,13 @@ module ActionController #:nodoc:
         render_text(xml, status)
       end
 
+      def render_json(json, callback = nil, status = nil) #:nodoc:
+        json = "#{callback}(#{json})" unless callback.blank?
+
+        response.content_type = Mime::JSON
+        render_text(json, status)
+      end
+
       def render_nothing(status = nil) #:nodoc:
         render_text(' ', status)
       end
@@ -891,7 +918,7 @@ module ActionController #:nodoc:
         response.redirected_to = nil
         response.redirected_to_method_params = nil
         response.headers['Status'] = DEFAULT_RENDER_STATUS_CODE
-        response.headers.delete('location')
+        response.headers.delete('Location')
       end
 
       # Erase both render and redirect results
@@ -1087,7 +1114,11 @@ module ActionController #:nodoc:
 
       def assign_default_content_type_and_charset
         response.content_type ||= Mime::HTML
-        response.charset      ||= self.class.default_charset
+        response.charset      ||= self.class.default_charset unless sending_file?
+      end
+
+      def sending_file?
+        response.headers["Content-Transfer-Encoding"] == "binary"
       end
 
       def action_methods
@@ -1162,10 +1193,9 @@ module ActionController #:nodoc:
       end
 
       def template_exempt_from_layout?(template_name = default_template_name)
-        @@exempt_from_layout.any? { |ext| template_name =~ ext } or
-          @template.pick_template_extension(template_name) == :rjs
-      rescue
-        false
+        extension = @template.pick_template_extension(template_name) rescue nil
+        name_with_extension = !template_name.include?('.') && extension ? "#{template_name}.#{extension}" : template_name
+        extension == :rjs || @@exempt_from_layout.any? { |ext| name_with_extension =~ ext }
       end
 
       def assert_existence_of_template_file(template_name)

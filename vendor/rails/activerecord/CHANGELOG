@@ -1,4 +1,44 @@
-*1.15.0 RC1* (November 22nd, 2006)
+*1.15.1* (January 17th, 2007)
+
+* Fix nodoc breaking of adapters
+
+
+*1.15.0* (January 16th, 2007)
+
+* [DOC] clear up some ambiguity with the way has_and_belongs_to_many creates the default join table name.  #7072 [jeremymcanally]
+
+* change_column accepts :default => nil. Skip column options for primary keys.  #6956, #7048 [dcmanges, Jeremy Kemper]
+
+* MySQL, PostgreSQL: change_column_default quotes the default value and doesn't lose column type information.  #3987, #6664 [Jonathan Viney, manfred, altano@bigfoot.com]
+
+* Oracle: create_table takes a :sequence_name option to override the 'tablename_seq' default.  #7000 [Michael Schoen]
+
+* MySQL: retain SSL settings on reconnect.  #6976 [randyv2]
+
+* SQLServer: handle [quoted] table names.  #6635 [rrich]
+
+* acts_as_nested_set works with single-table inheritance.  #6030 [Josh Susser]
+
+* PostgreSQL, Oracle: correctly perform eager finds with :limit and :order.  #4668, #7021 [eventualbuddha, Michael Schoen]
+
+* Fix the Oracle adapter for serialized attributes stored in CLOBs.  Closes #6825 [mschoen, tdfowler]
+
+* [DOCS] Apply more documentation for ActiveRecord Reflection.  Closes #4055 [Robby Russell]
+
+* [DOCS] Document :allow_nil option of #validate_uniqueness_of. Closes #3143 [Caio Chassot]
+
+* Bring the sybase adapter up to scratch for 1.2 release. [jsheets]
+
+* Oracle: fix connection reset failure.  #6846 [leonlleslie]
+
+* Subclass instantiation doesn't try to explicitly require the corresponding subclass.  #6840 [leei, Jeremy Kemper]
+
+* fix faulty inheritance tests and that eager loading grabs the wrong inheritance column when the class of your association is an STI subclass. Closes #6859 [protocool]
+
+* find supports :lock with :include. Check whether your database allows SELECT ... FOR UPDATE with outer joins before using.  #6764 [vitaly, Jeremy Kemper]
+
+* Support nil and Array in :conditions => { attr => value } hashes.  #6548 [Assaf, Jeremy Kemper]
+    find(:all, :conditions => { :topic_id => [1, 2, 3], :last_read => nil }
 
 * Quote ActiveSupport::Multibyte::Chars.  #6653 [Julian Tarkhanov]
 

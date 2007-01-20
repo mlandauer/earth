@@ -321,10 +321,10 @@ module ActiveRecord
         execute("ALTER TABLE #{table_name} ADD COLUMN #{column_name} #{type_to_sql(type, options[:limit])}")
 
         # Set optional default. If not null, update nulls to the new default.
-        unless default.nil?
+        if options_include_default?(options)
           change_column_default(table_name, column_name, default)
           if notnull
-            execute("UPDATE #{table_name} SET #{column_name}='#{default}' WHERE #{column_name} IS NULL")
+            execute("UPDATE #{table_name} SET #{column_name}=#{quote(default, options[:column])} WHERE #{column_name} IS NULL")
           end
         end
 
@@ -345,11 +345,14 @@ module ActiveRecord
           rename_column(table_name, "#{column_name}_ar_tmp", column_name)
           commit_db_transaction
         end
-        change_column_default(table_name, column_name, options[:default]) unless options[:default].nil?
+
+        if options_include_default?(options)
+          change_column_default(table_name, column_name, options[:default])
+        end
       end
 
       def change_column_default(table_name, column_name, default) #:nodoc:
-        execute "ALTER TABLE #{table_name} ALTER COLUMN #{quote_column_name(column_name)} SET DEFAULT '#{default}'"
+        execute "ALTER TABLE #{table_name} ALTER COLUMN #{quote_column_name(column_name)} SET DEFAULT #{quote(default)}"
       end
 
       def rename_column(table_name, column_name, new_column_name) #:nodoc:
@@ -383,16 +386,28 @@ module ActiveRecord
 
         # construct a clean list of column names from the ORDER BY clause, removing
         # any asc/desc modifiers
-        order_columns = order_by.split(',').collect! { |s| s.split.first }
+        order_columns = order_by.split(',').collect { |s| s.split.first }
         order_columns.delete_if &:blank?
-
-        # add the DISTINCT columns to the start of the ORDER BY clause
-        order_by.replace "#{columns}, #{order_by}"
+        order_columns = order_columns.zip((0...order_columns.size).to_a).map { |s,i| "#{s} AS alias_#{i}" }
 
         # return a DISTINCT ON() clause that's distinct on the columns we want but includes
         # all the required columns for the ORDER BY to work properly
         sql = "DISTINCT ON (#{columns}) #{columns}, "
         sql << order_columns * ', '
+      end
+      
+      # ORDER BY clause for the passed order option.
+      # 
+      # PostgreSQL does not allow arbitrary ordering when using DISTINCT ON, so we work around this
+      # by wrapping the sql as a sub-select and ordering in that query.
+      def add_order_by_for_association_limiting!(sql, options)
+        return sql if options[:order].blank?
+        
+        order = options[:order].split(',').collect { |s| s.strip }.reject(&:blank?)
+        order.map! { |s| 'DESC' if s =~ /\bdesc$/i }
+        order = order.zip((0...order.size).to_a).map { |s,i| "id_list.alias_#{i} #{s}" }.join(', ')
+        
+        sql.replace "SELECT * FROM (#{sql}) AS id_list ORDER BY #{order}"
       end
 
       private

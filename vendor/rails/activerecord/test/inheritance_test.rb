@@ -4,7 +4,7 @@ require 'fixtures/project'
 require 'fixtures/subscriber'
 
 class InheritanceTest < Test::Unit::TestCase
-  fixtures :companies, :projects, :subscribers
+  fixtures :companies, :projects, :subscribers, :accounts
 
   def test_a_bad_type_column
     #SQLServer need to turn Identity Insert On before manually inserting into the Identity column
@@ -134,6 +134,18 @@ class InheritanceTest < Test::Unit::TestCase
     test_complex_inheritance
     switch_to_default_inheritance_column
   end
+  
+  def test_eager_load_belongs_to_something_inherited
+    account = Account.find(1, :include => :firm)
+    assert_not_nil account.instance_variable_get("@firm"), "nil proves eager load failed"
+  end
+  
+  def test_alt_eager_loading
+    switch_to_alt_inheritance_column
+    test_eager_load_belongs_to_something_inherited
+    switch_to_default_inheritance_column
+    ActiveRecord::Base.logger.debug "cocksucker"
+  end
 
   def test_inheritance_without_mapping
     assert_kind_of SpecialSubscriber, SpecialSubscriber.find("webster132")
@@ -148,9 +160,46 @@ class InheritanceTest < Test::Unit::TestCase
         c.save
       end
       [ Company, Firm, Client].each { |klass| klass.reset_column_information }
-      def Company.inheritance_column; @inheritance_column ||= "ruby_type"; end
+      Company.set_inheritance_column('ruby_type')
     end
     def switch_to_default_inheritance_column
       [ Company, Firm, Client].each { |klass| klass.reset_column_information }
+      Company.set_inheritance_column('type')
     end
+end
+
+
+class InheritanceComputeTypeTest < Test::Unit::TestCase
+  fixtures :companies
+
+  def setup
+    Dependencies.log_activity = true
+  end
+
+  def teardown
+    Dependencies.log_activity = false
+    self.class.const_remove :FirmOnTheFly rescue nil
+    Firm.const_remove :FirmOnTheFly rescue nil
+  end
+
+  def test_instantiation_doesnt_try_to_require_corresponding_file
+    foo = Firm.find(:first).clone
+    foo.ruby_type = foo.type = 'FirmOnTheFly'
+    foo.save!
+
+    # Should fail without FirmOnTheFly in the type condition.
+    assert_raise(ActiveRecord::RecordNotFound) { Firm.find(foo.id) }
+
+    # Nest FirmOnTheFly in the test case where Dependencies won't see it.
+    self.class.const_set :FirmOnTheFly, Class.new(Firm)
+    assert_raise(ActiveRecord::SubclassNotFound) { Firm.find(foo.id) }
+
+    # Nest FirmOnTheFly in Firm where Dependencies will see it.
+    # This is analogous to nesting models in a migration.
+    Firm.const_set :FirmOnTheFly, Class.new(Firm)
+
+    # And instantiate will find the existing constant rather than trying
+    # to require firm_on_the_fly.
+    assert_nothing_raised { assert_kind_of Firm::FirmOnTheFly, Firm.find(foo.id) }
+  end
 end

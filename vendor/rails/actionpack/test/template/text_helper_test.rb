@@ -197,7 +197,7 @@ class TextHelperTest < Test::Unit::TestCase
   def test_sanitize_form
     raw = "<form action=\"/foo/bar\" method=\"post\"><input></form>"
     result = sanitize(raw)
-    assert_equal "&lt;form action='/foo/bar' method='post'><input>&lt;/form>", result
+    assert_equal %(&lt;form action="/foo/bar" method="post"><input>&lt;/form>), result
   end
 
   def test_sanitize_plaintext
@@ -209,25 +209,25 @@ class TextHelperTest < Test::Unit::TestCase
   def test_sanitize_script
     raw = "<script language=\"Javascript\">blah blah blah</script>"
     result = sanitize(raw)
-    assert_equal "&lt;script language='Javascript'>blah blah blah&lt;/script>", result
+    assert_equal %(&lt;script language="Javascript">blah blah blah&lt;/script>), result
   end
 
   def test_sanitize_js_handlers
     raw = %{onthis="do that" <a href="#" onclick="hello" name="foo" onbogus="remove me">hello</a>}
     result = sanitize(raw)
-    assert_equal %{onthis="do that" <a name='foo' href='#'>hello</a>}, result
+    assert_equal %{onthis="do that" <a name="foo" href="#">hello</a>}, result
   end
 
   def test_sanitize_javascript_href
     raw = %{href="javascript:bang" <a href="javascript:bang" name="hello">foo</a>, <span href="javascript:bang">bar</span>}
     result = sanitize(raw)
-    assert_equal %{href="javascript:bang" <a name='hello'>foo</a>, <span>bar</span>}, result
+    assert_equal %{href="javascript:bang" <a name="hello">foo</a>, <span>bar</span>}, result
   end
   
   def test_sanitize_image_src
     raw = %{src="javascript:bang" <img src="javascript:bang" width="5">foo</img>, <span src="javascript:bang">bar</span>}
     result = sanitize(raw)
-    assert_equal %{src="javascript:bang" <img width='5'>foo</img>, <span>bar</span>}, result
+    assert_equal %{src="javascript:bang" <img width="5">foo</img>, <span>bar</span>}, result
   end
   
   def test_cycle_class
@@ -320,6 +320,6 @@ class TextHelperTest < Test::Unit::TestCase
     %{This is a test.\n\n\nIt no longer contains any HTML.\n}, strip_tags(
     %{<title>This is <b>a <a href="" target="_blank">test</a></b>.</title>\n\n<!-- it has a comment -->\n\n<p>It no <b>longer <strong>contains <em>any <strike>HTML</strike></em>.</strong></b></p>\n}))
     assert_equal "This has a  here.", strip_tags("This has a <!-- comment --> here.")
-    [nil, '', '   '].each { |blank| assert_nil strip_tags(blank) }
+    [nil, '', '   '].each { |blank| assert_equal blank, strip_tags(blank) }
   end
 end

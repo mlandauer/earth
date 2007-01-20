@@ -763,7 +763,7 @@ module ActiveRecord #:nodoc:
         @columns
       end
 
-      # Returns an array of column objects for the table associated with this class.
+      # Returns a hash of column objects for the table associated with this class.
       def columns_hash
         @columns_hash ||= columns.inject({}) { |hash, column| hash[column.name] = column; hash }
       end
@@ -987,7 +987,7 @@ module ActiveRecord #:nodoc:
           options.update(:limit => 1) unless options[:include]
           find_every(options).first
         end
-           
+
         def find_every(options)
           records = scoped?(:find, :include) || options[:include] ?
             find_with_associations(options) : 
@@ -997,11 +997,11 @@ module ActiveRecord #:nodoc:
 
           records
         end
- 
+
         def find_from_ids(ids, options)
-          expects_array = ids.first.kind_of?(Array)       
+          expects_array = ids.first.kind_of?(Array)
           return ids.first if expects_array && ids.first.empty?
-        
+
           ids = ids.flatten.compact.uniq
 
           case ids.size
@@ -1054,8 +1054,6 @@ module ActiveRecord #:nodoc:
                 allocate
 
               else
-                require_association_class(subclass_name)
-
                 # Ignore type if no column is present since it was probably
                 # pulled in from a sloppy join.
                 unless columns_hash.include?(inheritance_column)
@@ -1142,7 +1140,7 @@ module ActiveRecord #:nodoc:
         # The optional scope argument is for the current :find scope.
         # The :lock option has precedence over a scoped :lock.
         def add_lock!(sql, options, scope = :auto)
-          scope = scope(:find) if :auto == :scope
+          scope = scope(:find) if :auto == scope
           options = options.reverse_merge(:lock => scope[:lock]) if scope
           connection.add_lock!(sql, options)
         end
@@ -1161,7 +1159,7 @@ module ActiveRecord #:nodoc:
           segments = []
           segments << sanitize_sql(scope[:conditions]) if scope && scope[:conditions]
           segments << sanitize_sql(conditions) unless conditions.nil?
-          segments << type_condition unless descends_from_active_record?        
+          segments << type_condition unless descends_from_active_record?
           segments.compact!
           sql << "WHERE (#{segments.join(") AND (")}) " unless segments.empty?
         end
@@ -1189,22 +1187,22 @@ module ActiveRecord #:nodoc:
         # It's even possible to use all the additional parameters to find. For example, the full interface for find_all_by_amount
         # is actually find_all_by_amount(amount, options).
         def method_missing(method_id, *arguments)
-          if match = /find_(all_by|by)_([_a-zA-Z]\w*)/.match(method_id.to_s)
+          if match = /^find_(all_by|by)_([_a-zA-Z]\w*)$/.match(method_id.to_s)
             finder, deprecated_finder = determine_finder(match), determine_deprecated_finder(match)
 
             attribute_names = extract_attribute_names_from_match(match)
             super unless all_attributes_exists?(attribute_names)
 
-            conditions = construct_conditions_from_arguments(attribute_names, arguments)
+            attributes = construct_attributes_from_arguments(attribute_names, arguments)
 
             case extra_options = arguments[attribute_names.size]
               when nil
-                options = { :conditions => conditions }
+                options = { :conditions => attributes }
                 set_readonly_option!(options)
                 ActiveSupport::Deprecation.silence { send(finder, options) }
 
               when Hash
-                finder_options = extra_options.merge(:conditions => conditions)
+                finder_options = extra_options.merge(:conditions => attributes)
                 validate_find_options(finder_options)
                 set_readonly_option!(finder_options)
 
@@ -1218,17 +1216,19 @@ module ActiveRecord #:nodoc:
 
               else
                 ActiveSupport::Deprecation.silence do
-                  send(deprecated_finder, conditions, *arguments[attribute_names.length..-1])
+                  send(deprecated_finder, sanitize_sql(attributes), *arguments[attribute_names.length..-1])
                 end
             end
-          elsif match = /find_or_(initialize|create)_by_([_a-zA-Z]\w*)/.match(method_id.to_s)
+          elsif match = /^find_or_(initialize|create)_by_([_a-zA-Z]\w*)$/.match(method_id.to_s)
             instantiator = determine_instantiator(match)
             attribute_names = extract_attribute_names_from_match(match)
             super unless all_attributes_exists?(attribute_names)
 
-            options = { :conditions => construct_conditions_from_arguments(attribute_names, arguments) }
+            attributes = construct_attributes_from_arguments(attribute_names, arguments)
+            options = { :conditions => attributes }
             set_readonly_option!(options)
-            find_initial(options) || send(instantiator, construct_attributes_from_arguments(attribute_names, arguments))
+
+            find_initial(options) || send(instantiator, attributes)
           else
             super
           end
@@ -1250,12 +1250,6 @@ module ActiveRecord #:nodoc:
           match.captures.last.split('_and_')
         end
 
-        def construct_conditions_from_arguments(attribute_names, arguments)
-          conditions = []
-          attribute_names.each_with_index { |name, idx| conditions << "#{table_name}.#{connection.quote_column_name(name)} #{attribute_condition(arguments[idx])} " }
-          [ conditions.join(" AND "), *arguments[0...attribute_names.length] ]
-        end
-        
         def construct_attributes_from_arguments(attribute_names, arguments)
           attributes = {}
           attribute_names.each_with_index { |name, idx| attributes[name] = arguments[idx] }
@@ -1278,7 +1272,7 @@ module ActiveRecord #:nodoc:
         def expand_id_conditions(id_or_conditions)
           case id_or_conditions
             when Array, Hash then id_or_conditions
-            else construct_conditions_from_arguments([primary_key], [id_or_conditions])
+            else sanitize_sql(primary_key => id_or_conditions)
           end
         end
 
@@ -1358,9 +1352,9 @@ module ActiveRecord #:nodoc:
         def compute_type(type_name)
           modularized_name = type_name_with_module(type_name)
           begin
-            instance_eval(modularized_name)
-          rescue NameError => e
-            instance_eval(type_name)
+            class_eval(modularized_name, __FILE__, __LINE__)
+          rescue NameError
+            class_eval(type_name, __FILE__, __LINE__)
           end
         end
 
@@ -1380,26 +1374,32 @@ module ActiveRecord #:nodoc:
           klass.base_class.name
         end
 
-        #Accepts an array, hash, or string of sql conditions and 
-        #deals with them accordingly
+        # Accepts an array, hash, or string of sql conditions and sanitizes
+        # them into a valid SQL fragment.
         #   ["name='%s' and group_id='%s'", "foo'bar", 4]  returns  "name='foo''bar' and group_id='4'"
         #   { :name => "foo'bar", :group_id => 4 }  returns "name='foo''bar' and group_id='4'"
         #   "name='foo''bar' and group_id='4'" returns "name='foo''bar' and group_id='4'"
         def sanitize_sql(condition)
-          return sanitize_sql_array(condition) if condition.is_a?(Array)
-          return sanitize_sql_hash(condition) if condition.is_a?(Hash)
-          condition
+          case condition
+            when Array; sanitize_sql_array(condition)
+            when Hash;  sanitize_sql_hash(condition)
+            else        condition
+          end
         end
-        
-        # Accepts a hash of conditions.  The hash has each key/value or attribute/value pair
-        # sanitized and interpolated into the sql statement.
-        #   { :name => "foo'bar", :group_id => 4 }  returns "name='foo''bar' and group_id= 4"
-        def sanitize_sql_hash(hash)
-          hash.collect { |attrib, value|
-            "#{table_name}.#{connection.quote_column_name(attrib)} = #{quote_value(value)}"
-          }.join(" AND ")
+
+        # Sanitizes a hash of attribute/value pairs into SQL conditions.
+        #   { :name => "foo'bar", :group_id => 4 }
+        #     # => "name='foo''bar' and group_id= 4"
+        #   { :status => nil, :group_id => [1,2,3] }
+        #     # => "status IS NULL and group_id IN (1,2,3)"
+        def sanitize_sql_hash(attrs)
+          conditions = attrs.map do |attr, value|
+            "#{table_name}.#{connection.quote_column_name(attr)} #{attribute_condition(value)}"
+          end.join(' AND ')
+
+          replace_bind_variables(conditions, attrs.values)
         end
-        
+
         # Accepts an array of conditions.  The array has each value
         # sanitized and interpolated into the sql statement.
         #   ["name='%s' and group_id='%s'", "foo'bar", 4]  returns  "name='foo''bar' and group_id='4'"

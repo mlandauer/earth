@@ -174,48 +174,54 @@ class RequestTest < Test::Unit::TestCase
     assert_equal "/path/of/some/uri?mapped=1", @request.request_uri
     assert_equal "/path/of/some/uri", @request.path
 
+    @request.set_REQUEST_URI nil
     @request.relative_url_root = nil
     @request.env['PATH_INFO'] = "/path/of/some/uri?mapped=1"
     @request.env['SCRIPT_NAME'] = "/path/dispatch.rb"
     assert_equal "/path/of/some/uri?mapped=1", @request.request_uri
     assert_equal "/of/some/uri", @request.path
 
+    @request.set_REQUEST_URI nil
     @request.relative_url_root = nil
     @request.env['PATH_INFO'] = "/path/of/some/uri"
     @request.env['SCRIPT_NAME'] = nil
     assert_equal "/path/of/some/uri", @request.request_uri
     assert_equal "/path/of/some/uri", @request.path
 
+    @request.set_REQUEST_URI nil
     @request.relative_url_root = nil
     @request.env['PATH_INFO'] = "/"
     assert_equal "/", @request.request_uri
     assert_equal "/", @request.path
 
+    @request.set_REQUEST_URI nil
     @request.relative_url_root = nil
     @request.env['PATH_INFO'] = "/?m=b"
     assert_equal "/?m=b", @request.request_uri
     assert_equal "/", @request.path
-    
+
+    @request.set_REQUEST_URI nil
     @request.relative_url_root = nil
     @request.env['PATH_INFO'] = "/"
     @request.env['SCRIPT_NAME'] = "/dispatch.cgi"
     assert_equal "/", @request.request_uri
-    assert_equal "/", @request.path    
+    assert_equal "/", @request.path
 
+    @request.set_REQUEST_URI nil
     @request.relative_url_root = nil
     @request.env['PATH_INFO'] = "/hieraki/"
     @request.env['SCRIPT_NAME'] = "/hieraki/dispatch.cgi"
     assert_equal "/hieraki/", @request.request_uri
-    assert_equal "/", @request.path    
-                                              
+    assert_equal "/", @request.path
+
     @request.set_REQUEST_URI '/hieraki/dispatch.cgi'
     @request.relative_url_root = '/hieraki'
-    assert_equal "/dispatch.cgi", @request.path    
+    assert_equal "/dispatch.cgi", @request.path
     @request.relative_url_root = nil
 
     @request.set_REQUEST_URI '/hieraki/dispatch.cgi'
     @request.relative_url_root = '/foo'
-    assert_equal "/hieraki/dispatch.cgi", @request.path    
+    assert_equal "/hieraki/dispatch.cgi", @request.path
     @request.relative_url_root = nil
 
     # This test ensures that Rails uses REQUEST_URI over PATH_INFO
@@ -226,7 +232,7 @@ class RequestTest < Test::Unit::TestCase
     assert_equal "/some/path", @request.request_uri
     assert_equal "/some/path", @request.path
   end
-  
+
 
   def test_host_with_port
     @request.host = "rubyonrails.org"
@@ -274,7 +280,7 @@ class RequestTest < Test::Unit::TestCase
   end
 
   def test_symbolized_request_methods
-    [:head, :get, :post, :put, :delete].each do |method|
+    [:get, :post, :put, :delete].each do |method|
       set_request_method_to method
       assert_equal method, @request.method
     end
@@ -282,7 +288,7 @@ class RequestTest < Test::Unit::TestCase
 
   def test_allow_method_hacking_on_post
     set_request_method_to :post
-    [:head, :get, :put, :delete].each do |method|
+    [:get, :put, :delete].each do |method|
       @request.instance_eval { @parameters = { :_method => method } ; @request_method = nil }
       assert_equal method, @request.method
     end
@@ -290,10 +296,17 @@ class RequestTest < Test::Unit::TestCase
 
   def test_restrict_method_hacking
     @request.instance_eval { @parameters = { :_method => 'put' } }
-    [:head, :get, :put, :delete].each do |method|
+    [:get, :put, :delete].each do |method|
       set_request_method_to method
       assert_equal method, @request.method
     end
+  end
+  
+  def test_head_masquarading_as_get
+    set_request_method_to :head
+    assert_equal :get, @request.method
+    assert @request.get?
+    assert @request.head?
   end
 
   protected

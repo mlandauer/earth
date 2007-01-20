@@ -10,6 +10,7 @@ require 'fixtures/auto_id'
 require 'fixtures/column_name'
 require 'fixtures/subscriber'
 require 'fixtures/keyboard'
+require 'fixtures/post'
 
 class Category < ActiveRecord::Base; end
 class Smarts < ActiveRecord::Base; end
@@ -28,8 +29,9 @@ class NonExistentTable < ActiveRecord::Base; end
 class TestOracleDefault < ActiveRecord::Base; end
 
 class LoosePerson < ActiveRecord::Base
-  attr_protected :credit_rating, :administrator
+  self.table_name = 'people'
   self.abstract_class = true
+  attr_protected :credit_rating, :administrator
 end
 
 class LooseDescendant < LoosePerson
@@ -37,6 +39,7 @@ class LooseDescendant < LoosePerson
 end
 
 class TightPerson < ActiveRecord::Base
+  self.table_name = 'people'
   attr_accessible :name, :address
 end
 
@@ -66,7 +69,7 @@ class BasicsTest < Test::Unit::TestCase
     assert_equal("Jason", topic.author_name)
     assert_equal(topics(:first).author_email_address, Topic.find(1).author_email_address)
   end
-  
+
   def test_integers_as_nil
     test = AutoId.create('value' => '')
     assert_nil AutoId.find(test.id).value
@@ -153,6 +156,15 @@ class BasicsTest < Test::Unit::TestCase
     reply = Reply.new
     assert_raise(ActiveRecord::RecordInvalid) { reply.save! }
   end
+
+  def test_save_null_string_attributes
+    topic = Topic.find(1)
+    topic.attributes = { "title" => "null", "author_name" => "null" }
+    topic.save!
+    topic.reload
+    assert_equal("null", topic.title)
+    assert_equal("null", topic.author_name)
+  end  
   
   def test_hashes_not_mangled
     new_topic = { :title => "New Topic" }
@@ -571,8 +583,8 @@ class BasicsTest < Test::Unit::TestCase
     end
   end
 
-  # Oracle and SQLServer do not have a TIME datatype.
-  unless current_adapter?(:SQLServerAdapter, :OracleAdapter)
+  # Oracle, SQLServer, and Sybase do not have a TIME datatype.
+  unless current_adapter?(:SQLServerAdapter, :OracleAdapter, :SybaseAdapter)
     def test_utc_as_time_zone
       Topic.default_timezone = :utc
       attributes = { "bonus_time" => "5:42:00AM" }
@@ -801,8 +813,8 @@ class BasicsTest < Test::Unit::TestCase
   end
 
   def test_attributes_on_dummy_time
-    # Oracle and SQL Server do not have a TIME datatype.
-    return true if current_adapter?(:SQLServerAdapter, :OracleAdapter)
+    # Oracle, SQL Server, and Sybase do not have a TIME datatype.
+    return true if current_adapter?(:SQLServerAdapter, :OracleAdapter, :SybaseAdapter)
 
     attributes = {
       "bonus_time" => "5:42:00AM"
@@ -1024,7 +1036,7 @@ class BasicsTest < Test::Unit::TestCase
   end
 
   def test_sql_injection_via_find
-    assert_raises(ActiveRecord::RecordNotFound) do
+    assert_raises(ActiveRecord::RecordNotFound, ActiveRecord::StatementInvalid) do
       Topic.find("123456 OR id > 0")
     end
   end
@@ -1332,13 +1344,63 @@ class BasicsTest < Test::Unit::TestCase
     end
   end
 
-  def test_base_class
+  def test_abstract_class
+    assert !ActiveRecord::Base.abstract_class?
     assert LoosePerson.abstract_class?
     assert !LooseDescendant.abstract_class?
+  end
+
+  def test_base_class
     assert_equal LoosePerson,     LoosePerson.base_class
     assert_equal LooseDescendant, LooseDescendant.base_class
     assert_equal TightPerson,     TightPerson.base_class
     assert_equal TightPerson,     TightDescendant.base_class
+
+    assert_equal Post, Post.base_class
+    assert_equal Post, SpecialPost.base_class
+    assert_equal Post, StiPost.base_class
+    assert_equal SubStiPost, SubStiPost.base_class
+  end
+
+  def test_descends_from_active_record
+    # Tries to call Object.abstract_class?
+    assert_raise(NoMethodError) do
+      ActiveRecord::Base.descends_from_active_record?
+    end
+
+    # Abstract subclass of AR::Base.
+    assert LoosePerson.descends_from_active_record?
+
+    # Concrete subclass of an abstract class.
+    assert LooseDescendant.descends_from_active_record?
+
+    # Concrete subclass of AR::Base.
+    assert TightPerson.descends_from_active_record?
+
+    # Concrete subclass of a concrete class but has no type column.
+    assert TightDescendant.descends_from_active_record?
+
+    # Concrete subclass of AR::Base.
+    assert Post.descends_from_active_record?
+
+    # Abstract subclass of a concrete class which has a type column.
+    # This is pathological, as you'll never have Sub < Abstract < Concrete.
+    assert !StiPost.descends_from_active_record?
+
+    # Concrete subclasses an abstract class which has a type column.
+    assert !SubStiPost.descends_from_active_record?
+  end
+
+  def test_find_on_abstract_base_class_doesnt_use_type_condition
+    old_class = LooseDescendant
+    Object.send :remove_const, :LooseDescendant
+
+    descendant = old_class.create!
+    assert_not_nil LoosePerson.find(descendant.id), "Should have found instance of LooseDescendant when finding abstract LoosePerson: #{descendant.inspect}"
+  ensure
+    unless Object.const_defined?(:LooseDescendant)
+      Object.const_set :LooseDescendant, old_class
+    end
   end
 
   def test_assert_queries

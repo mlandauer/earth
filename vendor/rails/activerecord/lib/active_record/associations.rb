@@ -30,7 +30,7 @@ module ActiveRecord
     end
   end
 
-  class HasManyThroughSourceAssociationMacroError < ActiveRecordError #:nodoc
+  class HasManyThroughSourceAssociationMacroError < ActiveRecordError #:nodoc:
     def initialize(reflection)
       through_reflection = reflection.through_reflection
       source_reflection  = reflection.source_reflection
@@ -745,7 +745,13 @@ module ActiveRecord
 
       # Associates two classes via an intermediate join table.  Unless the join table is explicitly specified as
       # an option, it is guessed using the lexical order of the class names. So a join between Developer and Project
-      # will give the default join table name of "developers_projects" because "D" outranks "P".
+      # will give the default join table name of "developers_projects" because "D" outranks "P".  Note that this precedence
+      # is calculated using the <tt><</tt> operator for <tt>String</tt>.  This means that if the strings are of different lengths, 
+      # and the strings are equal when compared up to the shortest length, then the longer string is considered of higher
+      # lexical precedence than the shorter one.  For example, one would expect the tables <tt>paper_boxes</tt> and <tt>papers</tt> 
+      # to generate a join table name of <tt>papers_paper_boxes</tt> because of the length of the name <tt>paper_boxes</tt>,
+      # but it in fact generates a join table name of <tt>paper_boxes_papers</tt>.  Be aware of this caveat, and use the 
+      # custom <tt>join_table</tt> option if you need to.
       #
       # Deprecated: Any additional fields added to the join table will be placed as attributes when pulling records out through
       # has_and_belongs_to_many associations. Records returned from join tables with additional attributes will be marked as
@@ -945,10 +951,6 @@ module ActiveRecord
             ids = (new_value || []).reject { |nid| nid.blank? }
             send("#{reflection.name}=", reflection.class_name.constantize.find(ids))
           end
-        end
-
-        def require_association_class(class_name)
-          require_association(Inflector.underscore(class_name)) if class_name
         end
 
         def add_multiple_associated_save_callbacks(association_name)
@@ -1172,6 +1174,7 @@ module ActiveRecord
  
           add_order!(sql, options[:order], scope)
           add_limit!(sql, options, scope) if using_limitable_reflections?(join_dependency.reflections)
+          add_lock!(sql, options, scope)
  
           return sanitize_sql(sql)
         end
@@ -1208,7 +1211,13 @@ module ActiveRecord
           end
 
           add_conditions!(sql, options[:conditions], scope)
-          sql << "ORDER BY #{options[:order]} " if options[:order]
+          if options[:order]
+            if is_distinct
+              connection.add_order_by_for_association_limiting!(sql, options)
+            else
+              sql << "ORDER BY #{options[:order]}"
+            end
+          end
           add_limit!(sql, options, scope)
           return sanitize_sql(sql)
         end
@@ -1568,7 +1577,7 @@ module ActiveRecord
               end || ''
               join << %(AND %s.%s = %s ) % [
                 aliased_table_name, 
-                reflection.active_record.connection.quote_column_name(reflection.active_record.inheritance_column), 
+                reflection.active_record.connection.quote_column_name(klass.inheritance_column), 
                 klass.quote_value(klass.name.demodulize)] unless klass.descends_from_active_record?
 
               [through_reflection, reflection].each do |ref|

@@ -85,8 +85,10 @@ module ActionView
       #   <%= error_message_on "post", "title", "Title simply ", " (or it won't work)", "inputError" %> =>
       #     <div class="inputError">Title simply can't be empty (or it won't work)</div>
       def error_message_on(object, method, prepend_text = "", append_text = "", css_class = "formError")
-        if errors = instance_variable_get("@#{object}").errors.on(method)
+        if (obj = instance_variable_get("@#{object}")) && (errors = obj.errors.on(method))
           content_tag("div", "#{prepend_text}#{errors.is_a?(Array) ? errors.first : errors}#{append_text}", :class => css_class)
+        else 
+          ''
         end
       end
 
@@ -167,6 +169,8 @@ module ActionView
             to_date_select_tag(options)
           when :datetime, :timestamp
             to_datetime_select_tag(options)
+          when :time
+            to_time_select_tag(options)
           when :boolean
             to_boolean_select_tag(options)
         end
@@ -205,6 +209,15 @@ module ActionView
             error_wrapping(to_datetime_select_tag_without_error_wrapping(options), object.errors.on(@method_name))
           else
             to_datetime_select_tag_without_error_wrapping(options)
+        end
+      end
+
+      alias_method :to_time_select_tag_without_error_wrapping, :to_time_select_tag
+      def to_time_select_tag(options = {})
+        if object.respond_to?("errors") && object.errors.respond_to?("on")
+          error_wrapping(to_time_select_tag_without_error_wrapping(options), object.errors.on(@method_name))
+        else
+          to_time_select_tag_without_error_wrapping(options)
         end
       end
 

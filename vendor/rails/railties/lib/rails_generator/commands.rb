@@ -96,7 +96,7 @@ module Rails
             $stdout.print "overwrite #{destination}? [Ynaqd] "
             case $stdin.gets
               when /d/i
-                Tempfile.open(File.basename(destination), File.dirname(destination)) do |temp|
+                Tempfile.open(File.basename(destination), File.dirname(dst)) do |temp|
                   temp.write render_file(src, file_options, &block)
                   temp.rewind
                   $stdout.puts `#{diff_cmd} #{dst} #{temp.path}`
@@ -342,8 +342,10 @@ module Rails
           sentinel = 'ActionController::Routing::Routes.draw do |map|'
 
           logger.route "map.resources #{resource_list}"
-          gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
-            "#{match}\n  map.resources #{resource_list}\n"
+          unless options[:pretend]
+            gsub_file 'config/routes.rb', /(#{Regexp.escape(sentinel)})/mi do |match|
+              "#{match}\n  map.resources #{resource_list}\n"
+            end
           end
         end
 

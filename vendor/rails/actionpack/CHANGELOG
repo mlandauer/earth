@@ -1,4 +1,80 @@
-*1.13.0 RC1* (November 22nd, 2006)
+*1.13.1* (January 18th, 2007)
+
+* Fixed content-type bug in Prototype [sam]
+
+
+*1.13.0* (January 16th, 2007)
+
+* Modernize cookie testing code, and increase coverage (Heckle++) #7101 [Kevin Clark]
+
+* Heckling ActionController::Resources::Resource revealed that set_prefixes didn't break when :name_prefix was munged. #7081 [Kevin Clark]
+
+* Update to Prototype 1.5.0. [Sam Stephenson]
+
+* Allow exempt_from_layout :rhtml.  #6742, #7026 [dcmanges, Squeegy]
+
+* Fix parsing of array[] CGI parameters so extra empty values aren't included.  #6252 [Nicholas Seckar, aiwilliams, brentrowland]
+
+* link_to_unless_current works with full URLs as well as paths.  #6891 [Jarkko Laine, manfred, idrifter]
+
+* Fix HTML::Node to output double quotes instead of single quotes.  Closes #6845 [mitreandy]
+
+* Fix no method error with error_messages_on.  Closes #6935 [nik.wakelin Koz]
+
+* Slight doc tweak to the ActionView::Helpers::PrototypeHelper#replace docs.  Closes #6922 [Steven Bristol]
+
+* Slight doc tweak to #prepend_filter.  Closes #6493 [Jeremy Voorhis]
+
+* Add more extensive documentation to the AssetTagHelper.  Closes #6452 [Bob Silva]
+
+* Clean up multiple calls to #stringify_keys in TagHelper, add better documentation and testing for TagHelper.  Closes #6394 [Bob Silva]
+
+* [DOCS] fix reference to ActionController::Macros::AutoComplete for #text_field_with_auto_complete. Closes #2578 [Jan Prill]
+
+* Make sure html_document is reset between integration test requests. [ctm]
+
+* Set session to an empty hash if :new_session => false and no session cookie or param is present. CGI::Session was raising an unrescued ArgumentError.  [Josh Susser]
+
+* Fix assert_redirected_to bug where redirecting from a nested to to a top-level controller incorrectly added the current controller's nesting.  Closes #6128.  [Rick Olson]
+
+* Ensure render :json => ... skips the layout.  #6808 [Josh Peek]
+
+* Silence log_error deprecation warnings from inspecting deprecated instance variables.  [Nate Wiger]
+
+* Only cache GET requests with a 200 OK response.  #6514, #6743 [RSL, anamba]
+
+* Correctly report which filter halted the chain.  #6699 [Martin Emde]
+
+* respond_to recognizes JSON. render :json => @person.to_json automatically sets the content type and takes a :callback option to specify a client-side function to call using the rendered JSON as an argument.  #4185 [Scott Raymond, eventualbuddha]
+    # application/json response with body 'Element.show({:name: "David"})'
+    respond_to do |format|
+      format.json { render :json => { :name => "David" }.to_json, :callback => 'Element.show' }
+    end
+
+* Makes :discard_year work without breaking multi-attribute parsing in AR.  #1260, #3800 [sean@ardismg.com, jmartin@desertflood.com, stephen@touset.org, Bob Silva]
+
+* Adds html id attribute to date helper elements.  #1050, #1382 [mortonda@dgrmm.net, David North, Bob Silva]
+
+* Add :index and @auto_index capability to model driven date/time selects.  #847, #2655 [moriq, Doug Fales, Bob Silva]
+
+* Add :order to datetime_select, select_datetime, and select_date.  #1427 [Timothee Peignier, patrick@lenz.sh, Bob Silva]
+
+* Added time_select to work with time values in models. Update scaffolding.  #2489, #2833 [Justin Palmer, Andre Caum, Bob Silva]
+
+* Added :include_seconds to select_datetime, datetime_select and time_select.  #2998 [csn, Bob Silva]
+
+* All date/datetime selects can now accept an array of month names with :use_month_names. Allows for localization.  #363 [tomasj, Bob Silva]
+
+* Adds :time_separator to select_time and :date_separator to select_datetime. Preserves BC.  #3811 [Bob Silva]
+
+* @response.redirect_url works with 201 Created responses: just return headers['Location'] rather than checking the response status.  [Jeremy Kemper]
+
+* Fixed that HEAD should return the proper Content-Length header (that is, actually use @body.size, not just 0) [DHH]
+
+* Added GET-masquarading for HEAD, so request.method will return :get even for HEADs. This will help anyone relying on case request.method to automatically work with HEAD and map.resources will also allow HEADs to all GET actions. Rails automatically throws away the response content in a reply to HEAD, so you don't even need to worry about that. If you, for whatever reason, still need to distinguish between GET and HEAD in some edge case, you can use Request#head? and even Request.headers["REQUEST_METHOD"] for get the "real" answer. Closes #6694 [DHH]
+
+
+*1.13.0 RC1* (r5619, November 22nd, 2006)
 
 * Update Routing to complain when :controller is not specified by a route. Closes #6669. [Nicholas Seckar]
 
@@ -227,7 +303,7 @@
 
 * radio_button_tag generates unique id attributes.  #3353 [Bob Silva, somekool@gmail.com]
 
-* strip_tags returns nil for a blank arg such as nil or "".  #2229 [duncan@whomwah.com]
+* strip_tags passes through blank args such as nil or "".  #2229, #6702 [duncan@whomwah.com, dharana]
 
 * Cleanup assert_tag :children counting.  #2181 [jamie@bravenet.com]
 

@@ -48,6 +48,7 @@ begin
         if connection.is_a?(ConnectionAdapters::OracleAdapter)
           self.class.columns.select { |c| c.sql_type =~ /LOB$/i }.each { |c|
             value = self[c.name]
+            value = value.to_yaml if unserializable_attribute?(c.name, c)
             next if value.nil?  || (value == '')
             lob = connection.select_one(
               "SELECT #{c.name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = #{quote_value(id)}",
@@ -65,7 +66,6 @@ begin
       class OracleColumn < Column #:nodoc:
 
         def type_cast(value)
-          return nil if value =~ /^\s*null\s*$/i
           return guess_date_or_time(value) if type == :datetime && OracleAdapter.emulate_dates
           super
         end
@@ -134,7 +134,7 @@ begin
           true
         end
 
-        def native_database_types #:nodoc
+        def native_database_types #:nodoc:
           {
             :primary_key => "NUMBER(38) NOT NULL PRIMARY KEY",
             :string      => { :name => "VARCHAR2", :limit => 255 },
@@ -171,7 +171,7 @@ begin
 
         def quote(value, column = nil) #:nodoc:
           if column && [:text, :binary].include?(column.type)
-            %Q{empty_#{ column.sql_type rescue 'blob' }()}
+            %Q{empty_#{ column.sql_type.downcase rescue 'blob' }()}
           else
             super
           end
@@ -350,7 +350,8 @@ begin
 
         def create_table(name, options = {}) #:nodoc:
           super(name, options)
-          execute "CREATE SEQUENCE #{name}_seq START WITH 10000" unless options[:id] == false
+          seq_name = options[:sequence_name] || "#{name}_seq"
+          execute "CREATE SEQUENCE #{seq_name} START WITH 10000" unless options[:id] == false
         end
 
         def rename_table(name, new_name) #:nodoc:
@@ -358,9 +359,10 @@ begin
           execute "RENAME #{name}_seq TO #{new_name}_seq" rescue nil
         end
 
-        def drop_table(name) #:nodoc:
+        def drop_table(name, options = {}) #:nodoc:
           super(name)
-          execute "DROP SEQUENCE #{name}_seq" rescue nil
+          seq_name = options[:sequence_name] || "#{name}_seq"
+          execute "DROP SEQUENCE #{seq_name}" rescue nil
         end
 
         def remove_index(table_name, options = {}) #:nodoc:
@@ -458,20 +460,27 @@ begin
         def distinct(columns, order_by)
           return "DISTINCT #{columns}" if order_by.blank?
 
-          # construct a clean list of column names from the ORDER BY clause, removing
-          # any asc/desc modifiers
-          order_columns = order_by.split(',').collect! { |s| s.split.first }
-          order_columns.delete_if &:blank?
-
-          # simplify the ORDER BY to just use positional syntax, to avoid the complexity of
-          # having to create valid column aliases for the FIRST_VALUE columns
-          order_by.replace(((offset=columns.count(',')+2) .. offset+order_by.count(',')).to_a * ", ")
-
           # construct a valid DISTINCT clause, ie. one that includes the ORDER BY columns, using
           # FIRST_VALUE such that the inclusion of these columns doesn't invalidate the DISTINCT
-          order_columns.map! { |c| "FIRST_VALUE(#{c}) OVER (PARTITION BY #{columns} ORDER BY #{c})" }
+          order_columns = order_by.split(',').map { |s| s.strip }.reject(&:blank?)
+          order_columns = order_columns.zip((0...order_columns.size).to_a).map do |c, i|
+            "FIRST_VALUE(#{c.split.first}) OVER (PARTITION BY #{columns} ORDER BY #{c}) AS alias_#{i}__"
+          end
           sql = "DISTINCT #{columns}, "
           sql << order_columns * ", "
+        end
+
+        # ORDER BY clause for the passed order option.
+        # 
+        # Uses column aliases as defined by #distinct.
+        def add_order_by_for_association_limiting!(sql, options)
+          return sql if options[:order].blank?
+
+          order = options[:order].split(',').collect { |s| s.strip }.reject(&:blank?)
+          order.map! {|s| $1 if s =~ / (.*)/}
+          order = order.zip((0...order.size).to_a).map { |s,i| "alias_#{i}__ #{s}" }.join(', ')
+
+          sql << "ORDER BY #{order}"
         end
 
         private
@@ -627,7 +636,7 @@ begin
     def reset!
       logoff rescue nil
       begin
-        @connection = @factory.new_connection @username, @password, @database, @async
+        @connection = @factory.new_connection @username, @password, @database, @async, @prefetch_rows, @cursor_sharing
         __setobj__ @connection
         @active = true
       rescue
@@ -666,13 +675,14 @@ rescue LoadError
   # OCI8 driver is unavailable.
   module ActiveRecord # :nodoc:
     class Base
+      @@oracle_error_message = "Oracle/OCI libraries could not be loaded: #{$!.to_s}"
       def self.oracle_connection(config) # :nodoc:
         # Set up a reasonable error message
-        raise LoadError, "Oracle/OCI libraries could not be loaded."
+        raise LoadError, @@oracle_error_message
       end
       def self.oci_connection(config) # :nodoc:
         # Set up a reasonable error message
-        raise LoadError, "Oracle/OCI libraries could not be loaded."
+        raise LoadError, @@oracle_error_message
       end
     end
   end

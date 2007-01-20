@@ -161,10 +161,22 @@ class FinderTest < Test::Unit::TestCase
       Company.find(:first, :conditions => { :id => 2, :dhh => true })
     }
   end
-  
+
   def test_hash_condition_find_with_escaped_characters
     Company.create("name" => "Ain't noth'n like' \#stuff")
-    assert Company.find(:first, :conditions => { :name => "Ain't noth'n like' \#stuff"})
+    assert Company.find(:first, :conditions => { :name => "Ain't noth'n like' \#stuff" })
+  end
+
+  def test_hash_condition_find_with_array
+    p1, p2 = Post.find(:all, :limit => 2, :order => 'id asc')
+    assert_equal [p1, p2], Post.find(:all, :conditions => { :id => [p1, p2] }, :order => 'id asc')
+    assert_equal [p1, p2], Post.find(:all, :conditions => { :id => [p1, p2.id] }, :order => 'id asc')
+  end
+
+  def test_hash_condition_find_with_nil
+    topic = Topic.find(:first, :conditions => { :last_read => nil } )
+    assert_not_nil topic
+    assert_nil topic.last_read
   end
 
   def test_bind_variables
@@ -280,6 +292,13 @@ class FinderTest < Test::Unit::TestCase
   
   def test_find_by_one_missing_attribute
     assert_raises(NoMethodError) { Topic.find_by_undertitle("The First Topic!") }
+  end
+  
+  def test_find_by_invalid_method_syntax
+    assert_raises(NoMethodError) { Topic.fail_to_find_by_title("The First Topic") }
+    assert_raises(NoMethodError) { Topic.find_by_title?("The First Topic") }
+    assert_raises(NoMethodError) { Topic.fail_to_find_or_create_by_title("Nonexistent Title") }
+    assert_raises(NoMethodError) { Topic.find_or_create_by_title?("Nonexistent Title") }
   end
 
   def test_find_by_two_attributes

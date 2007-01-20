@@ -1,7 +1,7 @@
 require 'active_record/connection_adapters/abstract_adapter'
 require 'set'
 
-module MysqlCompat
+module MysqlCompat #:nodoc:
   # add all_hashes method to standard mysql-c bindings or pure ruby version
   def self.define_all_hashes_method!
     raise 'Mysql not loaded' unless defined?(::Mysql)
@@ -160,7 +160,7 @@ module ActiveRecord
         true
       end
 
-      def native_database_types #:nodoc
+      def native_database_types #:nodoc:
         {
           :primary_key => "int(11) DEFAULT NULL auto_increment PRIMARY KEY",
           :string      => { :name => "varchar", :limit => 255 },
@@ -278,7 +278,7 @@ module ActiveRecord
       end
 
 
-      def add_limit_offset!(sql, options) #:nodoc
+      def add_limit_offset!(sql, options) #:nodoc:
         if limit = options[:limit]
           unless offset = options[:offset]
             sql << " LIMIT #{limit}"
@@ -360,14 +360,14 @@ module ActiveRecord
       def change_column_default(table_name, column_name, default) #:nodoc:
         current_type = select_one("SHOW COLUMNS FROM #{table_name} LIKE '#{column_name}'")["Type"]
 
-        change_column(table_name, column_name, current_type, { :default => default })
+        execute("ALTER TABLE #{table_name} CHANGE #{column_name} #{column_name} #{current_type} DEFAULT #{quote(default)}")
       end
 
       def change_column(table_name, column_name, type, options = {}) #:nodoc:
-        if options[:default].nil?
+        unless options_include_default?(options)
           options[:default] = select_one("SHOW COLUMNS FROM #{table_name} LIKE '#{column_name}'")["Default"]
         end
-        
+
         change_column_sql = "ALTER TABLE #{table_name} CHANGE #{column_name} #{column_name} #{type_to_sql(type, options[:limit], options[:precision], options[:scale])}"
         add_column_options!(change_column_sql, options)
         execute(change_column_sql)
@@ -385,6 +385,7 @@ module ActiveRecord
           if encoding
             @connection.options(Mysql::SET_CHARSET_NAME, encoding) rescue nil
           end
+          @connection.ssl_set(@config[:sslkey], @config[:sslcert], @config[:sslca], @config[:sslcapath], @config[:sslcipher]) if @config[:sslkey]
           @connection.real_connect(*@connection_options)
           execute("SET NAMES '#{encoding}'") if encoding
         end

@@ -290,6 +290,16 @@ class EagerAssociationTest < Test::Unit::TestCase
   def find_all_ordered(className, include=nil)
     className.find(:all, :order=>"#{className.table_name}.#{className.primary_key}", :include=>include)
   end
+  
+  def test_limited_eager_with_order
+    assert_equal [posts(:thinking), posts(:sti_comments)], Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title)', :limit => 2, :offset => 1)
+    assert_equal [posts(:sti_post_and_comments), posts(:sti_comments)], Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title) DESC', :limit => 2, :offset => 1)
+  end
+  
+  def test_limited_eager_with_multiple_order_columns
+    assert_equal [posts(:thinking), posts(:sti_comments)], Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title), posts.id', :limit => 2, :offset => 1)
+    assert_equal [posts(:sti_post_and_comments), posts(:sti_comments)], Post.find(:all, :include => [:author, :comments], :conditions => "authors.name = 'David'", :order => 'UPPER(posts.title) DESC, posts.id', :limit => 2, :offset => 1)
+  end
 
   def test_eager_with_multiple_associations_with_same_table_has_many_and_habtm
     # Eager includes of has many and habtm associations aren't necessarily sorted in the same way
@@ -374,7 +384,7 @@ class EagerAssociationTest < Test::Unit::TestCase
   end
   
   def test_count_with_include
-    if current_adapter?(:SQLServerAdapter)
+    if current_adapter?(:SQLServerAdapter, :SybaseAdapter)
       assert_equal 3, authors(:david).posts_with_comments.count(:conditions => "len(comments.body) > 15")
     else
       assert_equal 3, authors(:david).posts_with_comments.count(:conditions => "length(comments.body) > 15")

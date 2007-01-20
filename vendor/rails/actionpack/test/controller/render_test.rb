@@ -39,6 +39,18 @@ class TestController < ActionController::Base
     render_text "hello world"
   end
 
+  def render_json_hello_world
+    render_json({:hello => 'world'}.to_json)
+  end
+
+  def render_json_hello_world_with_callback
+    render_json({:hello => 'world'}.to_json, 'alert')
+  end
+
+  def render_symbol_json
+    render :json => {:hello => 'world'}.to_json
+  end
+
   def render_custom_code
     render_text "hello world", "404 Moved"
   end
@@ -117,6 +129,7 @@ class TestController < ActionController::Base
       case action_name
         when "layout_test":         "layouts/standard"
         when "builder_layout_test": "layouts/builder"
+        when "render_symbol_json":  "layouts/standard"  # to make sure layouts don't interfere
       end
     end
 end
@@ -162,6 +175,24 @@ class RenderTest < Test::Unit::TestCase
   def test_do_with_render_text
     get :render_text_hello_world
     assert_equal "hello world", @response.body
+  end
+
+  def test_do_with_render_json
+    get :render_json_hello_world
+    assert_equal '{hello: "world"}', @response.body
+    assert_equal 'application/json', @response.content_type
+  end
+
+  def test_do_with_render_json_with_callback
+    get :render_json_hello_world_with_callback
+    assert_equal 'alert({hello: "world"})', @response.body
+    assert_equal 'application/json', @response.content_type
+  end
+
+  def test_do_with_render_symbol_json
+    get :render_symbol_json
+    assert_equal '{hello: "world"}', @response.body
+    assert_equal 'application/json', @response.content_type
   end
 
   def test_do_with_render_custom_code

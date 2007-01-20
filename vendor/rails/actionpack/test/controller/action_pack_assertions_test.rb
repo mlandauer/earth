@@ -4,7 +4,7 @@ require File.dirname(__FILE__) + '/../abstract_unit'
 class ActionPackAssertionsController < ActionController::Base
 
   # this does absolutely nothing
-  def nothing() render_text ""; end
+  def nothing() head :ok end
 
   # a standard template
   def hello_world() render "test/hello_world"; end
@@ -27,13 +27,13 @@ class ActionPackAssertionsController < ActionController::Base
   def redirect_external() redirect_to_url "http://www.rubyonrails.org"; end
 
   # a 404
-  def response404() render_text "", "404 AWOL"; end
+  def response404() head '404 AWOL' end
 
   # a 500
-  def response500() render_text "", "500 Sorry"; end
+  def response500() head '500 Sorry' end
 
   # a fictional 599
-  def response599() render_text "", "599 Whoah!"; end
+  def response599() head '599 Whoah!' end
 
   # putting stuff in the flash
   def flash_me
@@ -139,6 +139,10 @@ module Admin
     def redirect_to_fellow_controller
       redirect_to :controller => 'user'
     end
+
+    def redirect_to_top_level_named_route
+      redirect_to top_level_url(:id => "foo")
+    end
   end
 end
 
@@ -155,8 +159,14 @@ ActionPackAssertionsController.template_root = File.dirname(__FILE__) + "/../fix
 class ActionPackAssertionsControllerTest < Test::Unit::TestCase
   # let's get this party started
   def setup
+    ActionController::Routing::Routes.reload
+    ActionController::Routing.use_controllers!(%w(action_pack_assertions admin/inner_module content admin/user))
     @controller = ActionPackAssertionsController.new
     @request, @response = ActionController::TestRequest.new, ActionController::TestResponse.new
+  end
+
+  def teardown
+    ActionController::Routing::Routes.reload
   end
 
   # -- assertion-based testing ------------------------------------------------
@@ -295,6 +305,19 @@ class ActionPackAssertionsControllerTest < Test::Unit::TestCase
     end
   end
 
+  def test_assert_redirected_to_top_level_named_route_from_nested_controller
+    with_routing do |set|
+      set.draw do |map|
+        map.top_level '/action_pack_assertions/:id', :controller => 'action_pack_assertions', :action => 'index'
+        map.connect   ':controller/:action/:id'
+      end
+      @controller = Admin::InnerModuleController.new
+      process :redirect_to_top_level_named_route
+      # passes -> assert_redirected_to "http://test.host/action_pack_assertions/foo"
+      assert_redirected_to "/action_pack_assertions/foo"
+    end
+  end
+
   # test the flash-based assertions with something is in the flash
   def test_flash_assertions_full
     process :flash_me
@@ -402,7 +425,9 @@ class ActionPackAssertionsControllerTest < Test::Unit::TestCase
 
     process :redirect_external
     assert_equal 'http://www.rubyonrails.org', @response.redirect_url
+  end
 
+  def test_no_redirect_url
     process :nothing
     assert_nil @response.redirect_url
   end

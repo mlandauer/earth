@@ -58,8 +58,8 @@ if ActiveRecord::Base.connection.supports_migrations?
       assert_nothing_raised { Person.connection.add_index("people", "last_name") }
       assert_nothing_raised { Person.connection.remove_index("people", "last_name") }
 
-      # Orcl nds shrt indx nms.
-      unless current_adapter?(:OracleAdapter)
+      # Orcl nds shrt indx nms.  Sybs 2.
+      unless current_adapter?(:OracleAdapter, :SybaseAdapter)
         assert_nothing_raised { Person.connection.add_index("people", ["last_name", "first_name"]) }
         assert_nothing_raised { Person.connection.remove_index("people", :column => ["last_name", "first_name"]) }
         assert_nothing_raised { Person.connection.add_index("people", ["last_name", "first_name"]) }
@@ -94,8 +94,10 @@ if ActiveRecord::Base.connection.supports_migrations?
     end
 
     def test_create_table_with_not_null_column
-      Person.connection.create_table :testings do |t|
-        t.column :foo, :string, :null => false
+      assert_nothing_raised do
+        Person.connection.create_table :testings do |t|
+          t.column :foo, :string, :null => false
+        end
       end
 
       assert_raises(ActiveRecord::StatementInvalid) do
@@ -189,7 +191,9 @@ if ActiveRecord::Base.connection.supports_migrations?
       end
       
       con = Person.connection     
+      Person.connection.enable_identity_insert("testings", true) if current_adapter?(:SybaseAdapter)
       Person.connection.execute "insert into testings (#{con.quote_column_name('id')}, #{con.quote_column_name('foo')}) values (1, 'hello')"
+      Person.connection.enable_identity_insert("testings", false) if current_adapter?(:SybaseAdapter)
       assert_nothing_raised {Person.connection.add_column :testings, :bar, :string, :null => false, :default => "default" }
 
       assert_raises(ActiveRecord::StatementInvalid) do
@@ -368,7 +372,9 @@ if ActiveRecord::Base.connection.supports_migrations?
 
         # Using explicit id in insert for compatibility across all databases
         con = ActiveRecord::Base.connection     
+        con.enable_identity_insert("octopi", true) if current_adapter?(:SybaseAdapter)
         assert_nothing_raised { con.execute "INSERT INTO octopi (#{con.quote_column_name('id')}, #{con.quote_column_name('url')}) VALUES (1, 'http://www.foreverflying.com/octopus-black7.jpg')" }
+        con.enable_identity_insert("octopi", false) if current_adapter?(:SybaseAdapter)
 
         assert_equal 'http://www.foreverflying.com/octopus-black7.jpg', ActiveRecord::Base.connection.select_value("SELECT url FROM octopi WHERE id=1")
 
@@ -389,7 +395,9 @@ if ActiveRecord::Base.connection.supports_migrations?
 
         # Using explicit id in insert for compatibility across all databases
         con = ActiveRecord::Base.connection     
+        con.enable_identity_insert("octopi", true) if current_adapter?(:SybaseAdapter)
         assert_nothing_raised { con.execute "INSERT INTO octopi (#{con.quote_column_name('id')}, #{con.quote_column_name('url')}) VALUES (1, 'http://www.foreverflying.com/octopus-black7.jpg')" }
+        con.enable_identity_insert("octopi", false) if current_adapter?(:SybaseAdapter)
 
         assert_equal 'http://www.foreverflying.com/octopus-black7.jpg', ActiveRecord::Base.connection.select_value("SELECT url FROM octopi WHERE id=1")
         assert ActiveRecord::Base.connection.indexes(:octopi).first.columns.include?("url")
@@ -418,15 +426,38 @@ if ActiveRecord::Base.connection.supports_migrations?
       assert new_columns.find { |c| c.name == 'approved' and c.type == :boolean and c.default == false }
       assert_nothing_raised { Topic.connection.change_column :topics, :approved, :boolean, :default => true }
     end
+    
+    def test_change_column_with_nil_default
+      Person.connection.add_column "people", "contributor", :boolean, :default => true
+      Person.reset_column_information
+      assert Person.new.contributor?
+      
+      assert_nothing_raised { Person.connection.change_column "people", "contributor", :boolean, :default => nil }
+      Person.reset_column_information
+      assert !Person.new.contributor?
+      assert_nil Person.new.contributor
+    end
 
     def test_change_column_with_new_default
-      Person.connection.add_column "people", "administrator", :boolean, :default => 1
+      Person.connection.add_column "people", "administrator", :boolean, :default => true
       Person.reset_column_information
       assert Person.new.administrator?
 
-      assert_nothing_raised { Person.connection.change_column "people", "administrator", :boolean, :default => 0 }
+      assert_nothing_raised { Person.connection.change_column "people", "administrator", :boolean, :default => false }
       Person.reset_column_information
       assert !Person.new.administrator?
+    end
+    
+    def test_change_column_default
+      Person.connection.change_column_default "people", "first_name", "Tester"
+      Person.reset_column_information
+      assert_equal "Tester", Person.new.first_name
+    end
+    
+    def test_change_column_default_to_null
+      Person.connection.change_column_default "people", "first_name", nil
+      Person.reset_column_information
+      assert_nil Person.new.first_name
     end
 
     def test_add_table
@@ -695,6 +726,43 @@ if ActiveRecord::Base.connection.supports_migrations?
 			assert_equal 2, ActiveRecord::Migrator.current_version
     end
     
-    
+    def test_create_table_with_custom_sequence_name
+      return unless current_adapter? :OracleAdapter
+
+      # table name is 29 chars, the standard sequence name will
+      # be 33 chars and fail
+      assert_raises(ActiveRecord::StatementInvalid) do
+        begin
+          Person.connection.create_table :table_with_name_thats_just_ok do |t|
+            t.column :foo, :string, :null => false
+          end
+        ensure
+          Person.connection.drop_table :table_with_name_thats_just_ok rescue nil
+        end
+      end
+
+      # should be all good w/ a custom sequence name
+      assert_nothing_raised do
+        begin
+          Person.connection.create_table :table_with_name_thats_just_ok,
+                                         :sequence_name => 'suitably_short_seq' do |t|
+            t.column :foo, :string, :null => false
+          end
+
+          Person.connection.execute("select suitably_short_seq.nextval from dual")
+
+        ensure
+          Person.connection.drop_table :table_with_name_thats_just_ok,
+                                       :sequence_name => 'suitably_short_seq' rescue nil
+        end
+      end
+
+      # confirm the custom sequence got dropped
+      assert_raises(ActiveRecord::StatementInvalid) do
+        Person.connection.execute("select suitably_short_seq.nextval from dual")
+      end
+    end
+
   end
 end
+
