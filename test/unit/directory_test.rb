@@ -194,6 +194,20 @@ class DirectoryTest < Test::Unit::TestCase
     assert(!directories(:foo_bar_twiddle).has_files?)
     assert(!directories(:bar).has_files?)
   end
+  
+  def test_not_caching_files
+    directory = directories(:foo)
+    #assert_queries(1) {p directory.files}
+    assert(!directory.files.loaded?)
+    assert_queries(1) {directory.files.to_ary}
+    assert(directory.files.loaded?)
+    assert_no_queries {directory.files.to_ary}
+    # Stops the caching of the files (until they are reloaded)
+    assert_no_queries {directory.files.reset}
+    assert(!directory.files.loaded?)
+    assert_queries(1) {directory.files.to_ary}
+  end
+  
 end
 
 class TransactionalDirectoryTest < Test::Unit::TestCase

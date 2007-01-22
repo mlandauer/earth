@@ -42,9 +42,9 @@ class FileMonitor
     
     puts "Scanning and storing tree took #{initial_build_duration + initial_commit_duration + initial_update_duration}s"
 
-    benchmark "Vacuuming database" do
-      Earth::File.connection.update("VACUUM FULL ANALYZE")
-    end
+    #benchmark "Vacuuming database" do
+    #  Earth::File.connection.update("VACUUM FULL ANALYZE")
+    #end
     
     benchmark "Scanning and storing tree" do
       update(directory)
@@ -161,6 +161,11 @@ private
         end
       end
     end
+    
+    # Removes the files in this directory from the cache (so that they don't take up memory)
+    # However, they will get reloaded automatically from the database the next time this
+    # directory changes
+    directory.files.reset
   end
 
   def FileMonitor.contents(directory)
