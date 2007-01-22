@@ -1,10 +1,10 @@
 # Add constraint to file specifying that directory_id is not null
 class CreateIndexForDirectoryServerId < ActiveRecord::Migration
   def self.up
-    execute "CREATE INDEX directories_server_id on directories (server_id)"
- end
+    add_index :directories, :server_id, :name => "directories_server_id"
+  end
 
   def self.down
-    execute "DROP INDEX directories_server_id"
+    remove_index :directories, :name => :directories_server_id
   end
 end
