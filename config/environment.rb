@@ -50,4 +50,6 @@ end
 #   inflect.uncountable %w( fish sheep )
 # end
 
+Mime::Type.register "text/csv", :csv
+
 require 'foreign_key_constraint_improvements'
