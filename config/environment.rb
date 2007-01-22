@@ -50,11 +50,6 @@ end
 #   inflect.uncountable %w( fish sheep )
 # end
 
-# Include your application configuration below
-Inflector.inflections do |inflect|
-  inflect.irregular 'info', 'info'
-end
-
 Mime::Type.register "text/csv", :csv
 
 require 'foreign_key_constraint_improvements'
