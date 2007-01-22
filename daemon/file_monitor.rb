@@ -29,7 +29,7 @@ class FileMonitor
     
     directory = this_server.directories.build(:name => File.expand_path(path))
     initial_build_duration = benchmark "Building initial directory structure for #{path}" do
-      update(directory, :only_build_directories => true)
+      update(directory, 0, :only_build_directories => true)
     end
     
     initial_commit_duration = benchmark "Committing initial directory structure for #{path} to database" do
@@ -45,10 +45,6 @@ class FileMonitor
     #benchmark "Vacuuming database" do
     #  Earth::File.connection.update("VACUUM FULL ANALYZE")
     #end
-    
-    benchmark "Scanning and storing tree" do
-      update(directory)
-    end
     
     run(directory, update_time)
   end
@@ -66,19 +62,24 @@ class FileMonitor
 private
 
   def FileMonitor.run(directory, update_time)
-    puts "Watching directory #{directory.path}"
-    
+    puts "Watching directory #{directory.path}"    
     while true do
       puts "Updating #{directory.server.directories.count} directories..."
-      update(directory)
-      puts "Sleeping for #{update_time} seconds..."
-      sleep(update_time)
+      update(directory, update_time)
     end
   end
   
-  def FileMonitor.update(directory, only_build_directories = false)
+  def FileMonitor.update(directory, update_time = 0, only_build_directories = false)
+    start = Time.new
+    # TODO: Do this in a nicer way
+    remaining_count = directory.server.directories.count
     directory.each do |d|
       update_non_recursive(d, only_build_directories)
+      remaining_time = update_time - (Time.new - start)
+      remaining_count = remaining_count - 1
+      if remaining_time > 0 && remaining_count > 0
+        sleep (remaining_time / remaining_count)
+      end
     end
   end
 
