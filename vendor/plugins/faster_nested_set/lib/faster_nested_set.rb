@@ -530,9 +530,21 @@ module Rsp
           end
         end
 
-        def load_all_children
+        def load_all_children(depth=0, options=nil)
+          
+          if depth == 0 or not has_level_column?
+            depth_condition = "1=1"
+          else
+            depth_condition = "#{self.class.table_name}.#{level_col_name} <= #{level + depth}"
+            end
+          
+          options = options || Hash.new
 
-          result = self.class.find(:all, :conditions => "#{scope_condition} AND (#{self.class.table_name}.#{left_col_name} >= #{self[left_col_name]}) and (#{self.class.table_name}.#{right_col_name} <= #{self[right_col_name]})", :order => self.class.table_name + "." +left_col_name)
+          options[:conditions] = "#{depth_condition} AND #{scope_condition} AND (#{self.class.table_name}.#{left_col_name} > #{self[left_col_name]}) and (#{self.class.table_name}.#{right_col_name} < #{self[right_col_name]})"
+          options[:order] = self.class.table_name + "." +left_col_name
+
+          result = self.class.find(:all, options)
+
           idMap = Hash.new
           result.each do |child|
             idMap[child[:id]] = child

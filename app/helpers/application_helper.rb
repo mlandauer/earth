@@ -1,5 +1,6 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+
   def human_units_of(size)
     case 
       when size < 1.kilobyte: 'Bytes'

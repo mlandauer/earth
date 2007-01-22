@@ -41,8 +41,15 @@ module Earth
     # This only requires the id of the current directory and so doesn't need to
     # protected in a transaction which simplified its use
     def size
-      Earth::File.sum(:size, :conditions => "directories.lft >= #{self.lft} AND directories.lft <= #{self.rgt} AND directories.server_id = #{self.server_id}",
-        :joins => "JOIN directories ON files.directory_id = directories.id").to_i
+      @cached_size || Earth::File.sum(:size, :conditions => "directories.lft >= #{self.lft} AND directories.lft <= #{self.rgt} AND directories.server_id = #{self.server_id}",
+                                      :joins => "JOIN directories ON files.directory_id = directories.id").to_i
+    end
+    
+    #
+    # Set the recursive size 
+    #
+    def cached_size= (cached_size)
+      @cached_size = cached_size
     end
     
     def recursive_file_count
@@ -51,9 +58,13 @@ module Earth
     end
 
     def size_and_count
-      sql = "SELECT SUM(files.size), COUNT(*) FROM files JOIN directories ON files.directory_id = directories.id WHERE directories.lft >= #{self.lft} AND directories.lft <= #{self.rgt} AND directories.server_id = #{self.server_id}"
-      result = Earth::File.connection.select_all sql
-      [ (result[0]["sum"] || 0).to_i, result[0]["count"].to_i ]
+      result = Earth::File.find(:first, 
+                                :select => "SUM(files.size) AS sum, COUNT(*) AS count",
+                                :joins => "JOIN directories ON files.directory_id = directories.id",
+                                :conditions => ("directories.lft >= #{self.lft} " \
+                                                + " AND directories.lft <= #{self.rgt} " \
+                                                + " AND directories.server_id = #{self.server_id}"))
+      [ (result["sum"] || 0).to_i, result["count"].to_i ]
     end
     
     def has_files?
@@ -79,8 +90,20 @@ module Earth
       @cached_path
     end
 
+    def path_relative_to(some_parent)
+      if some_parent.id.nil?
+        path
+      else
+        path[some_parent.path.size+1..-1]
+      end
+    end
+
     def set_parent_path(parent_path)
-      @cached_path = "#{parent_path}/#{name}"
+      if parent_path == ""
+        @cached_path = name
+      else
+        @cached_path = "#{parent_path}/#{name}"
+      end
     end
     
     # This assumes there are no overlapping directory trees
@@ -94,6 +117,7 @@ module Earth
       while !remaining.empty? && !current.nil? do
         current = current.find_by_child_name(remaining.shift)
       end
+
 
       return current
     end

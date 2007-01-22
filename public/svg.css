@@ -1,0 +1,96 @@
+svg { background: #ffffff; }
+path.text-path { visibility:hidden; }
+textPath { font-size: 2.4pt; text-align:center; line-height:112.99999952%; writing-mode:lr-tb; text-anchor: middle; color: red; text-anchor: middle; }
+
+circle.current-directory,
+.sub-directory
+{ 
+  fill-opacity: 0;
+  stroke: currentColor;  
+  stroke-width: 0.1;
+  stroke-linecap: butt;
+  stroke-linejoin: round;
+  stroke-dasharray: none; 
+  stroke-opacity: 1;
+  }
+
+circle.server
+{ 
+  fill: blue;
+  fill-opacity: 0.15;
+  stroke: black;
+  stroke-opacity: 1;
+  stroke-width: 0.2;
+}
+
+circle.current-directory 
+{ 
+  fill-opacity: 1;
+  fill: #eeeeee;
+}
+
+.directory-edge 
+{ 
+  fill-opacity: 1;
+  stroke-opacity: 0;
+}
+
+path.segment
+{ 
+  fill-opacity: 1;
+  stroke-opacity: 0;
+}
+
+.segment-divider
+{ 
+  fill-opacity: 0;
+  stroke-opacity: 1;
+  stroke: black;
+  stroke-width: 0.1;
+}
+
+.segment-link
+{ 
+  fill-opacity: 0;
+  stroke-opacity: 0;
+}
+
+text.directory-name 
+{ 
+  font-size: 2.4pt; 
+  font-weight: bold; 
+  text-anchor: middle; 
+  alignment-baseline: central; 
+  dominant-baseline: central;
+}
+
+text.directory-size 
+{ 
+  font-size: 2.4pt; 
+  text-anchor: middle; 
+  alignment-baseline: central; 
+  dominant-baseline: central;
+}
+
+.segment-text
+{ 
+  alignment-baseline: central; 
+  dominant-baseline: central;
+}
+
+text.server-name
+{ 
+  font-size: 2.4pt; 
+  font-weight: bold; 
+  text-anchor: middle; 
+  alignment-baseline: central; 
+  dominant-baseline: central;
+}
+
+text.server-size
+{ 
+  font-size: 2.4pt; 
+  text-anchor: middle; 
+  alignment-baseline: central; 
+  dominant-baseline: central;
+}

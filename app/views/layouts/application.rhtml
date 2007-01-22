@@ -6,7 +6,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<%= stylesheet_link_tag 'base' %>
 	<%=	javascript_include_tag :defaults %>
-	<title>Earth</title>
+	<title><%= if @directory then "#{@server.name}:#{@directory.path}/ - Earth"; elsif @server then "#{@server.name}: - Earth"; else "Earth"; end %></title>
 	
 </head>
 
@@ -23,10 +23,13 @@
     <div id="Tabs">
       <div id="TabsInside">
 	      <% # We probably should get these from some configuration file or dynamically %>
-        <% ["browser", "files"].each_with_index { |item, index| 
-              html_class = 'active' if controller.controller_class_name == (item.capitalize + "Controller") 
+        <% [
+           { :title => "browser", :controller => "browser", :action => "index" }, 
+        { :title => "graph", :controller => "graph", :action => "index" }, 
+        { :title => "files", :controller => "files", :action => "index"}].each_with_index { |item, index| 
+        html_class = 'active' if controller.controller_class_name == (item[:controller].capitalize + "Controller") 
               html_style = 'border-left: 1px solid #c2c2c2;' if index == 0 %>
-          <%= link_to(item, { :controller => item, :action => 'index' }, { :class => html_class, :style => html_style } ) %>
+          <%= link_to(item[:title], { :controller => item[:controller], :action => item[:action], :params => {:server => (@server ? @server.name : nil), :path => (@directory ? @directory.path : nil)} }, { :class => html_class, :style => html_style } ) %>
         <%  } %>	       
       </div>
     </div>

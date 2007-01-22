@@ -26190,3 +26190,509 @@
   [4;36;1mSQL (0.000729)[0m   [0;1mROLLBACK[0m
   [4;35;1mSQL (0.000311)[0m   [0mBEGIN[0m
   [4;36;1mSQL (0.000321)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.632089)[0m   [0;1mDROP TABLE mixins[0m
+  [4;35;1mSQL (0.310770)[0m   [0mCREATE TABLE mixins ("id" serial primary key, "parent_id" integer, "pos" integer, "created_at" timestamp, "updated_at" timestamp, "lft" integer, "rgt" integer, "root_id" integer, "type" character varying(255)) [0m
+  [4;36;1mSQL (0.067307)[0m   [0;1mDROP TABLE categories[0m
+  [4;35;1mSQL (0.044398)[0m   [0mCREATE TABLE categories ("id" serial primary key, "parent_id" integer, "lft" integer, "rgt" integer, "name" character varying(255)) [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mPGError: ERROR: relation "schema_info" already exists
+: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.181998)[0m   [0m SELECT a.attname, format_type(a.atttypid, a.atttypmod), d.adsrc, a.attnotnull
+ FROM pg_attribute a LEFT JOIN pg_attrdef d
+ ON a.attrelid = d.adrelid AND a.attnum = d.adnum
+ WHERE a.attrelid = 'schema_info'::regclass
+ AND a.attnum > 0 AND NOT a.attisdropped
+ ORDER BY a.attnum
+[0m
+  [4;36;1mSQL (0.014476)[0m   [0;1mUPDATE schema_info SET version = 0[0m
+  [4;35;1mSQL (0.000300)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.002370)[0m   [0;1m SELECT a.attname, format_type(a.atttypid, a.atttypmod), d.adsrc, a.attnotnull
+ FROM pg_attribute a LEFT JOIN pg_attrdef d
+ ON a.attrelid = d.adrelid AND a.attnum = d.adnum
+ WHERE a.attrelid = 'categories'::regclass
+ AND a.attnum > 0 AND NOT a.attisdropped
+ ORDER BY a.attnum
+[0m
+  [4;35;1mPK and serial sequence (0.005587)[0m   [0m SELECT attr.attname, name.nspname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relnamespace = name.oid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'categories'::regclass
+[0m
+  [4;36;1mCategory Create (0.001061)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 6)[0m
+  [4;35;1mSQL (0.014924)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000867)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 2, 5)[0m
+  [4;35;1mSQL (0.000653)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000862)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 3, 4)[0m
+  [4;35;1mSQL (0.000533)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001378)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 2) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001271)[0m   [0mSELECT * FROM categories WHERE (categories.id = 3) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001389)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 4) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001216)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 3) [0m
+  [4;36;1mCategory Load (0.001158)[0m   [0;1mSELECT * FROM categories WHERE (categories.parent_id = 2) [0m
+  [4;35;1mCategory Load (0.001324)[0m   [0mSELECT * FROM categories WHERE (categories.id = 3) LIMIT 1[0m
+  [4;36;1mCategory Update (0.006927)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;35;1mCategory Create (0.000838)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 3, 6)[0m
+  [4;36;1mSQL (0.000586)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001175)[0m   [0mSELECT * FROM categories WHERE (categories.id = 2) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001548)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 3) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001206)[0m   [0mSELECT * FROM categories WHERE (categories.id = 4) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001200)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 5) LIMIT 1[0m
+  [4;35;1mSQL (0.000537)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.000376)[0m   [0;1mBEGIN[0m
+  [4;35;1mCategory Create (0.000906)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 6)[0m
+  [4;36;1mSQL (0.000589)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Create (0.000866)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 6, 5)[0m
+  [4;36;1mSQL (0.000537)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Create (0.000879)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 7, 4)[0m
+  [4;36;1mSQL (0.000590)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001224)[0m   [0mSELECT * FROM categories WHERE (categories.id = 6) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001184)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 7) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001156)[0m   [0mSELECT * FROM categories WHERE (categories.id = 8) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001414)[0m   [0;1mSELECT * FROM categories WHERE (categories.parent_id = 7) [0m
+  [4;35;1mCategory Load (0.001076)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 6) [0m
+  [4;36;1mSQL (0.001441)[0m   [0;1mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 6) [0m
+  [4;35;1mCategory Update (0.001222)[0m   [0mUPDATE categories SET "name" = 'root', "parent_id" = NULL WHERE id = 6[0m
+  [4;36;1mCategory Load (0.001169)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 7) LIMIT 1[0m
+  [4;35;1mCategory Update (0.001422)[0m   [0mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;36;1mCategory Create (0.000863)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 7, 6)[0m
+  [4;35;1mSQL (0.001574)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001232)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 6) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001186)[0m   [0mSELECT * FROM categories WHERE (categories.id = 7) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001148)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 8) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001196)[0m   [0mSELECT * FROM categories WHERE (categories.id = 9) LIMIT 1[0m
+  [4;36;1mSQL (0.000554)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000361)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.001185)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 6)[0m
+  [4;35;1mSQL (0.000582)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000848)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 10, 5)[0m
+  [4;35;1mSQL (0.000606)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000920)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 11, 4)[0m
+  [4;35;1mSQL (0.000574)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001177)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 10) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001173)[0m   [0mSELECT * FROM categories WHERE (categories.id = 11) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001455)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 12) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001129)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 11) [0m
+  [4;36;1mCategory Load (0.001272)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 11) LIMIT 1[0m
+  [4;35;1mCategory Update (0.002000)[0m   [0mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;36;1mCategory Create (0.000835)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 11, 6)[0m
+  [4;35;1mSQL (0.000568)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mSQL (0.001088)[0m   [0;1mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 13) [0m
+  [4;35;1mCategory Update (0.001174)[0m   [0mUPDATE categories SET "name" = 'child1b', "parent_id" = 11 WHERE id = 13[0m
+  [4;36;1mCategory Load (0.001481)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 10) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001156)[0m   [0mSELECT * FROM categories WHERE (categories.id = 11) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001166)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 12) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001158)[0m   [0mSELECT * FROM categories WHERE (categories.id = 13) LIMIT 1[0m
+  [4;36;1mSQL (0.000552)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000387)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.000896)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 6)[0m
+  [4;35;1mSQL (0.000885)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000876)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 14, 5)[0m
+  [4;35;1mSQL (0.000604)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000884)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 15, 4)[0m
+  [4;35;1mSQL (0.000545)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.002332)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 14) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001310)[0m   [0mSELECT * FROM categories WHERE (categories.id = 15) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001181)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 16) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001412)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 15) [0m
+  [4;36;1mCategory Update (0.001536)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;35;1mCategory Create (0.001553)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 15, 6)[0m
+  [4;36;1mSQL (0.000612)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001240)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 14) [0m
+  [4;36;1mSQL (0.001375)[0m   [0;1mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 17) [0m
+  [4;35;1mCategory Update (0.001181)[0m   [0mUPDATE categories SET "name" = 'child1b', "parent_id" = 15 WHERE id = 17[0m
+  [4;36;1mCategory Load (0.001080)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 14) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001296)[0m   [0mSELECT * FROM categories WHERE (categories.id = 15) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001179)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 16) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001118)[0m   [0mSELECT * FROM categories WHERE (categories.id = 17) LIMIT 1[0m
+  [4;36;1mSQL (0.000493)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000400)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.000891)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 6)[0m
+  [4;35;1mSQL (0.000600)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000873)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 18, 5)[0m
+  [4;35;1mSQL (0.000582)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000883)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 19, 4)[0m
+  [4;35;1mSQL (0.000585)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001543)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 18) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001189)[0m   [0mSELECT * FROM categories WHERE (categories.id = 19) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001395)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 20) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001495)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 19) [0m
+  [4;36;1mCategory Update (0.001541)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;35;1mCategory Create (0.000854)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b_xx', 5, 19, 6)[0m
+  [4;36;1mSQL (0.000572)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001173)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 18) [0m
+  [4;36;1mSQL (0.001188)[0m   [0;1mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 18) [0m
+  [4;35;1mCategory Update (0.001210)[0m   [0mUPDATE categories SET "name" = 'root', "parent_id" = NULL WHERE id = 18[0m
+  [4;36;1mCategory Load (0.001144)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 18) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001211)[0m   [0mSELECT * FROM categories WHERE (categories.id = 19) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001267)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 20) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001211)[0m   [0mSELECT * FROM categories WHERE (categories.id = 21) LIMIT 1[0m
+  [4;36;1mSQL (0.000502)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000428)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.000907)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 8)[0m
+  [4;35;1mSQL (0.000639)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000884)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 22, 7)[0m
+  [4;35;1mSQL (0.000539)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.001135)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 23, 4)[0m
+  [4;35;1mSQL (0.000628)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000906)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 23, 6)[0m
+  [4;35;1mSQL (0.000858)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001213)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 22) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001171)[0m   [0mSELECT * FROM categories WHERE (categories.id = 23) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001200)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 24) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001175)[0m   [0mSELECT * FROM categories WHERE (categories.id = 25) LIMIT 1[0m
+  [4;36;1mSQL (0.000534)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000372)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.000923)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 2)[0m
+  [4;35;1mSQL (0.000623)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001243)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 26) LIMIT 1[0m
+  [4;35;1mCategory Update (0.001448)[0m   [0mUPDATE categories SET lft = lft + (CASE WHEN lft >= 2 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 2 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 2) [0m
+  [4;36;1mCategory Create (0.001169)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 26, 3)[0m
+  [4;35;1mSQL (0.000612)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001265)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 27) LIMIT 1[0m
+  [4;35;1mCategory Update (0.001462)[0m   [0mUPDATE categories SET lft = lft + (CASE WHEN lft >= 3 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 3 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 3) [0m
+  [4;36;1mCategory Create (0.002119)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 27, 4)[0m
+  [4;35;1mSQL (0.000570)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001503)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 27) LIMIT 1[0m
+  [4;35;1mCategory Update (0.001559)[0m   [0mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;36;1mCategory Create (0.000839)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 27, 6)[0m
+  [4;35;1mSQL (0.000537)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001186)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 26) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001300)[0m   [0mSELECT * FROM categories WHERE (categories.id = 27) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001128)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 28) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001518)[0m   [0mSELECT * FROM categories WHERE (categories.id = 29) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001127)[0m   [0;1mSELECT * FROM categories WHERE (categories.parent_id = 28) [0m
+  [4;35;1mCategory Delete all (0.000805)[0m   [0mDELETE FROM categories WHERE (parent_id = 28) [0m
+  [4;36;1mCategory Destroy (0.001060)[0m   [0;1m DELETE FROM categories
+ WHERE id = 28
+[0m
+  [4;35;1mCategory Update (0.002425)[0m   [0mUPDATE categories SET lft = lft - (CASE WHEN lft > 4 THEN 2 ELSE 0 END), rgt = rgt - (CASE WHEN rgt > 4 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt > 4) [0m
+  [4;36;1mCategory Load (0.001251)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 26) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001512)[0m   [0mSELECT * FROM categories WHERE (categories.id = 27) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001137)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 29) LIMIT 1[0m
+  [4;35;1mSQL (0.000498)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.000719)[0m   [0;1mBEGIN[0m
+  [4;35;1mCategory Create (0.000880)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 2)[0m
+  [4;36;1mSQL (0.000603)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001304)[0m   [0mSELECT * FROM categories WHERE (categories.id = 30) LIMIT 1[0m
+  [4;36;1mCategory Update (0.001562)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 2 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 2 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 2) [0m
+  [4;35;1mCategory Create (0.000833)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 30, 3)[0m
+  [4;36;1mSQL (0.000854)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001243)[0m   [0mSELECT * FROM categories WHERE (categories.id = 31) LIMIT 1[0m
+  [4;36;1mCategory Update (0.001763)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 3 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 3 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 3) [0m
+  [4;35;1mCategory Create (0.000840)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 31, 4)[0m
+  [4;36;1mSQL (0.000633)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001243)[0m   [0mSELECT * FROM categories WHERE (categories.id = 31) LIMIT 1[0m
+  [4;36;1mCategory Update (0.001456)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;35;1mCategory Create (0.000837)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 31, 6)[0m
+  [4;36;1mSQL (0.000913)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001240)[0m   [0mSELECT * FROM categories WHERE (categories.id = 30) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001208)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 31) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001534)[0m   [0mSELECT * FROM categories WHERE (categories.id = 32) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001181)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 33) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001623)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 32) [0m
+  [4;36;1mCategory Delete all (0.001180)[0m   [0;1mDELETE FROM categories WHERE (parent_id = 32) [0m
+  [4;35;1mCategory Destroy (0.000785)[0m   [0m DELETE FROM categories
+ WHERE id = 32
+[0m
+  [4;36;1mCategory Update (0.002005)[0m   [0;1mUPDATE categories SET lft = lft - (CASE WHEN lft > 4 THEN 2 ELSE 0 END), rgt = rgt - (CASE WHEN rgt > 4 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt > 4) [0m
+  [4;35;1mCategory Load (0.001471)[0m   [0mSELECT * FROM categories WHERE (categories.id = 30) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001183)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 31) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001218)[0m   [0mSELECT * FROM categories WHERE (categories.id = 33) LIMIT 1[0m
+  [4;36;1mSQL (0.000557)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000366)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.000931)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 10)[0m
+  [4;35;1mSQL (0.000648)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.001258)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 34, 9)[0m
+  [4;35;1mSQL (0.000684)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000880)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 35, 6)[0m
+  [4;35;1mSQL (0.000545)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000882)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child2', 4, 36, 5)[0m
+  [4;35;1mSQL (0.000606)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000880)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 7, 35, 8)[0m
+  [4;35;1mSQL (0.000592)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001205)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 34) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001431)[0m   [0mSELECT * FROM categories WHERE (categories.id = 35) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001487)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 36) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001161)[0m   [0mSELECT * FROM categories WHERE (categories.id = 37) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001479)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 38) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001166)[0m   [0mSELECT * FROM categories WHERE (categories.id = 36) LIMIT 1[0m
+  [4;36;1mCategory Load (0.002121)[0m   [0;1mSELECT * FROM categories WHERE (categories.parent_id = 38) [0m
+  [4;35;1mCategory Load (0.001388)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 37) [0m
+  [4;36;1mSQL (0.001034)[0m   [0;1mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 37) [0m
+  [4;35;1mCategory Update (0.001163)[0m   [0mUPDATE categories SET "name" = 'child2', "parent_id" = 38 WHERE id = 37[0m
+  [4;36;1mCategory Load (0.001152)[0m   [0;1mSELECT * FROM categories WHERE (categories.parent_id = 35) [0m
+  [4;35;1mCategory Load (0.001138)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 34) [0m
+  [4;36;1mCategory Update (0.016856)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 4 AND lft <= 5 THEN 2 WHEN lft >= 6 AND lft <= 7 THEN -2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 4 AND rgt <= 5 THEN 2 WHEN rgt >= 6 AND rgt <= 7 THEN -2 ELSE 0 END) WHERE (1 = 1 AND ((rgt >= 4 AND lft <= 5) OR (rgt >= 6 AND lft <= 7))) [0m
+  [4;35;1mSQL (0.001122)[0m   [0mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 34) [0m
+  [4;36;1mCategory Update (0.001246)[0m   [0;1mUPDATE categories SET "name" = 'root', "parent_id" = NULL WHERE id = 34[0m
+  [4;35;1mCategory Load (0.001156)[0m   [0mSELECT * FROM categories WHERE (categories.id = 34) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001186)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 35) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001455)[0m   [0mSELECT * FROM categories WHERE (categories.id = 36) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001806)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 38) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001148)[0m   [0mSELECT * FROM categories WHERE (categories.id = 37) LIMIT 1[0m
+  [4;36;1mSQL (0.000506)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000634)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.000356)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.432388)[0m   [0;1mDROP TABLE mixins[0m
+  [4;35;1mSQL (0.431268)[0m   [0mCREATE TABLE mixins ("id" serial primary key, "parent_id" integer, "pos" integer, "created_at" timestamp, "updated_at" timestamp, "lft" integer, "rgt" integer, "root_id" integer, "type" character varying(255)) [0m
+  [4;36;1mSQL (0.006602)[0m   [0;1mDROP TABLE categories[0m
+  [4;35;1mSQL (0.020349)[0m   [0mCREATE TABLE categories ("id" serial primary key, "parent_id" integer, "lft" integer, "rgt" integer, "name" character varying(255)) [0m
+  [4;36;1mSQL (0.000000)[0m   [0;1mPGError: ERROR: relation "schema_info" already exists
+: CREATE TABLE schema_info (version integer)[0m
+  [4;35;1mSQL (0.142500)[0m   [0m SELECT a.attname, format_type(a.atttypid, a.atttypmod), d.adsrc, a.attnotnull
+ FROM pg_attribute a LEFT JOIN pg_attrdef d
+ ON a.attrelid = d.adrelid AND a.attnum = d.adnum
+ WHERE a.attrelid = 'schema_info'::regclass
+ AND a.attnum > 0 AND NOT a.attisdropped
+ ORDER BY a.attnum
+[0m
+  [4;36;1mSQL (0.001904)[0m   [0;1mUPDATE schema_info SET version = 0[0m
+  [4;35;1mSQL (0.000298)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.002377)[0m   [0;1m SELECT a.attname, format_type(a.atttypid, a.atttypmod), d.adsrc, a.attnotnull
+ FROM pg_attribute a LEFT JOIN pg_attrdef d
+ ON a.attrelid = d.adrelid AND a.attnum = d.adnum
+ WHERE a.attrelid = 'categories'::regclass
+ AND a.attnum > 0 AND NOT a.attisdropped
+ ORDER BY a.attnum
+[0m
+  [4;35;1mPK and serial sequence (0.005513)[0m   [0m SELECT attr.attname, name.nspname, seq.relname
+ FROM pg_class seq,
+ pg_attribute attr,
+ pg_depend dep,
+ pg_namespace name,
+ pg_constraint cons
+ WHERE seq.oid = dep.objid
+ AND seq.relnamespace = name.oid
+ AND seq.relkind = 'S'
+ AND attr.attrelid = dep.refobjid
+ AND attr.attnum = dep.refobjsubid
+ AND attr.attrelid = cons.conrelid
+ AND attr.attnum = cons.conkey[1]
+ AND cons.contype = 'p'
+ AND dep.refobjid = 'categories'::regclass
+[0m
+  [4;36;1mCategory Create (0.000827)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 6)[0m
+  [4;35;1mSQL (0.010883)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.001175)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 2, 5)[0m
+  [4;35;1mSQL (0.000865)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.001552)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 3, 4)[0m
+  [4;35;1mSQL (0.000567)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001407)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 2) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001231)[0m   [0mSELECT * FROM categories WHERE (categories.id = 3) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001156)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 4) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001267)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 3) [0m
+  [4;36;1mCategory Load (0.001116)[0m   [0;1mSELECT * FROM categories WHERE (categories.parent_id = 2) [0m
+  [4;35;1mCategory Load (0.001226)[0m   [0mSELECT * FROM categories WHERE (categories.id = 3) LIMIT 1[0m
+  [4;36;1mCategory Update (0.015219)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;35;1mCategory Create (0.000845)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 3, 6)[0m
+  [4;36;1mSQL (0.000583)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001783)[0m   [0mSELECT * FROM categories WHERE (categories.id = 2) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001204)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 3) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001164)[0m   [0mSELECT * FROM categories WHERE (categories.id = 4) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001434)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 5) LIMIT 1[0m
+  [4;35;1mSQL (0.000505)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.000446)[0m   [0;1mBEGIN[0m
+  [4;35;1mCategory Create (0.000895)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 6)[0m
+  [4;36;1mSQL (0.000600)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Create (0.000866)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 6, 5)[0m
+  [4;36;1mSQL (0.000981)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Create (0.001389)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 7, 4)[0m
+  [4;36;1mSQL (0.000638)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001268)[0m   [0mSELECT * FROM categories WHERE (categories.id = 6) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001193)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 7) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001435)[0m   [0mSELECT * FROM categories WHERE (categories.id = 8) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001122)[0m   [0;1mSELECT * FROM categories WHERE (categories.parent_id = 7) [0m
+  [4;35;1mCategory Load (0.001276)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 6) [0m
+  [4;36;1mSQL (0.018145)[0m   [0;1mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 6) [0m
+  [4;35;1mCategory Update (0.001218)[0m   [0mUPDATE categories SET "name" = 'root', "parent_id" = NULL WHERE id = 6[0m
+  [4;36;1mCategory Load (0.002228)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 7) LIMIT 1[0m
+  [4;35;1mCategory Update (0.001539)[0m   [0mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;36;1mCategory Create (0.000841)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 7, 6)[0m
+  [4;35;1mSQL (0.000582)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001219)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 6) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001188)[0m   [0mSELECT * FROM categories WHERE (categories.id = 7) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001124)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 8) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001237)[0m   [0mSELECT * FROM categories WHERE (categories.id = 9) LIMIT 1[0m
+  [4;36;1mSQL (0.000501)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000369)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.000898)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 6)[0m
+  [4;35;1mSQL (0.000581)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000870)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 10, 5)[0m
+  [4;35;1mSQL (0.000922)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000876)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 11, 4)[0m
+  [4;35;1mSQL (0.000590)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001245)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 10) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001503)[0m   [0mSELECT * FROM categories WHERE (categories.id = 11) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001193)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 12) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001243)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 11) [0m
+  [4;36;1mCategory Load (0.001513)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 11) LIMIT 1[0m
+  [4;35;1mCategory Update (0.001508)[0m   [0mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;36;1mCategory Create (0.000857)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 11, 6)[0m
+  [4;35;1mSQL (0.000575)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mSQL (0.001101)[0m   [0;1mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 13) [0m
+  [4;35;1mCategory Update (0.001177)[0m   [0mUPDATE categories SET "name" = 'child1b', "parent_id" = 11 WHERE id = 13[0m
+  [4;36;1mCategory Load (0.001106)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 10) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001696)[0m   [0mSELECT * FROM categories WHERE (categories.id = 11) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001183)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 12) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001328)[0m   [0mSELECT * FROM categories WHERE (categories.id = 13) LIMIT 1[0m
+  [4;36;1mSQL (0.000509)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000372)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.000903)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 6)[0m
+  [4;35;1mSQL (0.000564)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000854)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 14, 5)[0m
+  [4;35;1mSQL (0.000923)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000892)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 15, 4)[0m
+  [4;35;1mSQL (0.000806)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001529)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 14) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001250)[0m   [0mSELECT * FROM categories WHERE (categories.id = 15) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001178)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 16) LIMIT 1[0m
+  [4;35;1mCategory Load (0.002394)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 15) [0m
+  [4;36;1mCategory Update (0.001543)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;35;1mCategory Create (0.001147)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 15, 6)[0m
+  [4;36;1mSQL (0.000610)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001369)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 14) [0m
+  [4;36;1mSQL (0.001088)[0m   [0;1mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 17) [0m
+  [4;35;1mCategory Update (0.001870)[0m   [0mUPDATE categories SET "name" = 'child1b', "parent_id" = 15 WHERE id = 17[0m
+  [4;36;1mCategory Load (0.001100)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 14) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001205)[0m   [0mSELECT * FROM categories WHERE (categories.id = 15) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001495)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 16) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001166)[0m   [0mSELECT * FROM categories WHERE (categories.id = 17) LIMIT 1[0m
+  [4;36;1mSQL (0.000495)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000370)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.000924)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 6)[0m
+  [4;35;1mSQL (0.000613)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.001142)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 18, 5)[0m
+  [4;35;1mSQL (0.000865)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000917)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 19, 4)[0m
+  [4;35;1mSQL (0.000554)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001307)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 18) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001229)[0m   [0mSELECT * FROM categories WHERE (categories.id = 19) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001547)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 20) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001185)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 19) [0m
+  [4;36;1mCategory Update (0.001519)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;35;1mCategory Create (0.000872)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b_xx', 5, 19, 6)[0m
+  [4;36;1mSQL (0.000547)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001883)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 18) [0m
+  [4;36;1mSQL (0.001118)[0m   [0;1mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 18) [0m
+  [4;35;1mCategory Update (0.001167)[0m   [0mUPDATE categories SET "name" = 'root', "parent_id" = NULL WHERE id = 18[0m
+  [4;36;1mCategory Load (0.001379)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 18) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001170)[0m   [0mSELECT * FROM categories WHERE (categories.id = 19) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001115)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 20) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001465)[0m   [0mSELECT * FROM categories WHERE (categories.id = 21) LIMIT 1[0m
+  [4;36;1mSQL (0.000494)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000355)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.000930)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 8)[0m
+  [4;35;1mSQL (0.000840)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000887)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 22, 7)[0m
+  [4;35;1mSQL (0.000538)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000881)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 23, 4)[0m
+  [4;35;1mSQL (0.000591)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000874)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 23, 6)[0m
+  [4;35;1mSQL (0.000597)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001200)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 22) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001210)[0m   [0mSELECT * FROM categories WHERE (categories.id = 23) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001156)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 24) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001163)[0m   [0mSELECT * FROM categories WHERE (categories.id = 25) LIMIT 1[0m
+  [4;36;1mSQL (0.000779)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000403)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.000916)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 2)[0m
+  [4;35;1mSQL (0.000636)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001211)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 26) LIMIT 1[0m
+  [4;35;1mCategory Update (0.001433)[0m   [0mUPDATE categories SET lft = lft + (CASE WHEN lft >= 2 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 2 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 2) [0m
+  [4;36;1mCategory Create (0.000847)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 26, 3)[0m
+  [4;35;1mSQL (0.000591)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001550)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 27) LIMIT 1[0m
+  [4;35;1mCategory Update (0.001699)[0m   [0mUPDATE categories SET lft = lft + (CASE WHEN lft >= 3 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 3 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 3) [0m
+  [4;36;1mCategory Create (0.000849)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 27, 4)[0m
+  [4;35;1mSQL (0.000536)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001269)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 27) LIMIT 1[0m
+  [4;35;1mCategory Update (0.001488)[0m   [0mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;36;1mCategory Create (0.000884)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 27, 6)[0m
+  [4;35;1mSQL (0.000551)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001230)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 26) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001232)[0m   [0mSELECT * FROM categories WHERE (categories.id = 27) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001365)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 28) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001205)[0m   [0mSELECT * FROM categories WHERE (categories.id = 29) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001115)[0m   [0;1mSELECT * FROM categories WHERE (categories.parent_id = 28) [0m
+  [4;35;1mCategory Delete all (0.000792)[0m   [0mDELETE FROM categories WHERE (parent_id = 28) [0m
+  [4;36;1mCategory Destroy (0.000758)[0m   [0;1m DELETE FROM categories
+ WHERE id = 28
+[0m
+  [4;35;1mCategory Update (0.002335)[0m   [0mUPDATE categories SET lft = lft - (CASE WHEN lft > 4 THEN 2 ELSE 0 END), rgt = rgt - (CASE WHEN rgt > 4 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt > 4) [0m
+  [4;36;1mCategory Load (0.001166)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 26) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001169)[0m   [0mSELECT * FROM categories WHERE (categories.id = 27) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001218)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 29) LIMIT 1[0m
+  [4;35;1mSQL (0.000557)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.000385)[0m   [0;1mBEGIN[0m
+  [4;35;1mCategory Create (0.000892)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 2)[0m
+  [4;36;1mSQL (0.000616)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001672)[0m   [0mSELECT * FROM categories WHERE (categories.id = 30) LIMIT 1[0m
+  [4;36;1mCategory Update (0.001477)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 2 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 2 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 2) [0m
+  [4;35;1mCategory Create (0.000850)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 30, 3)[0m
+  [4;36;1mSQL (0.000539)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.002634)[0m   [0mSELECT * FROM categories WHERE (categories.id = 31) LIMIT 1[0m
+  [4;36;1mCategory Update (0.001470)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 3 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 3 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 3) [0m
+  [4;35;1mCategory Create (0.000837)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 31, 4)[0m
+  [4;36;1mSQL (0.000546)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001487)[0m   [0mSELECT * FROM categories WHERE (categories.id = 31) LIMIT 1[0m
+  [4;36;1mCategory Update (0.001534)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 5 THEN 2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 5 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt >= 5) [0m
+  [4;35;1mCategory Create (0.000903)[0m   [0mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 5, 31, 6)[0m
+  [4;36;1mSQL (0.000617)[0m   [0;1mSELECT currval('public.categories_id_seq')[0m
+  [4;35;1mCategory Load (0.001467)[0m   [0mSELECT * FROM categories WHERE (categories.id = 30) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001343)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 31) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001178)[0m   [0mSELECT * FROM categories WHERE (categories.id = 32) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001287)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 33) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001153)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 32) [0m
+  [4;36;1mCategory Delete all (0.000826)[0m   [0;1mDELETE FROM categories WHERE (parent_id = 32) [0m
+  [4;35;1mCategory Destroy (0.000779)[0m   [0m DELETE FROM categories
+ WHERE id = 32
+[0m
+  [4;36;1mCategory Update (0.001950)[0m   [0;1mUPDATE categories SET lft = lft - (CASE WHEN lft > 4 THEN 2 ELSE 0 END), rgt = rgt - (CASE WHEN rgt > 4 THEN 2 ELSE 0 END) WHERE (1 = 1 AND rgt > 4) [0m
+  [4;35;1mCategory Load (0.001153)[0m   [0mSELECT * FROM categories WHERE (categories.id = 30) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001178)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 31) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001497)[0m   [0mSELECT * FROM categories WHERE (categories.id = 33) LIMIT 1[0m
+  [4;36;1mSQL (0.000505)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000360)[0m   [0mBEGIN[0m
+  [4;36;1mCategory Create (0.000940)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('root', 1, NULL, 10)[0m
+  [4;35;1mSQL (0.000560)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000866)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1', 2, 34, 9)[0m
+  [4;35;1mSQL (0.000590)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.001144)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1a', 3, 35, 6)[0m
+  [4;35;1mSQL (0.000555)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000885)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child2', 4, 36, 5)[0m
+  [4;35;1mSQL (0.000958)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Create (0.000931)[0m   [0;1mINSERT INTO categories ("name", "lft", "parent_id", "rgt") VALUES('child1b', 7, 35, 8)[0m
+  [4;35;1mSQL (0.000618)[0m   [0mSELECT currval('public.categories_id_seq')[0m
+  [4;36;1mCategory Load (0.001504)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 34) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001180)[0m   [0mSELECT * FROM categories WHERE (categories.id = 35) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001174)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 36) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001447)[0m   [0mSELECT * FROM categories WHERE (categories.id = 37) LIMIT 1[0m
+  [4;36;1mCategory Load (0.002198)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 38) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001749)[0m   [0mSELECT * FROM categories WHERE (categories.id = 36) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001107)[0m   [0;1mSELECT * FROM categories WHERE (categories.parent_id = 38) [0m
+  [4;35;1mCategory Load (0.001027)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 37) [0m
+  [4;36;1mSQL (0.001330)[0m   [0;1mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 37) [0m
+  [4;35;1mCategory Update (0.001206)[0m   [0mUPDATE categories SET "name" = 'child2', "parent_id" = 38 WHERE id = 37[0m
+  [4;36;1mCategory Load (0.001160)[0m   [0;1mSELECT * FROM categories WHERE (categories.parent_id = 35) [0m
+  [4;35;1mCategory Load (0.001373)[0m   [0mSELECT * FROM categories WHERE (categories.parent_id = 34) [0m
+  [4;36;1mCategory Update (0.003629)[0m   [0;1mUPDATE categories SET lft = lft + (CASE WHEN lft >= 4 AND lft <= 5 THEN 2 WHEN lft >= 6 AND lft <= 7 THEN -2 ELSE 0 END), rgt = rgt + (CASE WHEN rgt >= 4 AND rgt <= 5 THEN 2 WHEN rgt >= 6 AND rgt <= 7 THEN -2 ELSE 0 END) WHERE (1 = 1 AND ((rgt >= 4 AND lft <= 5) OR (rgt >= 6 AND lft <= 7))) [0m
+  [4;35;1mSQL (0.001338)[0m   [0mSELECT count(*) AS count_all FROM categories WHERE (categories.parent_id = 34) [0m
+  [4;36;1mCategory Update (0.001161)[0m   [0;1mUPDATE categories SET "name" = 'root', "parent_id" = NULL WHERE id = 34[0m
+  [4;35;1mCategory Load (0.001635)[0m   [0mSELECT * FROM categories WHERE (categories.id = 34) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001201)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 35) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001177)[0m   [0mSELECT * FROM categories WHERE (categories.id = 36) LIMIT 1[0m
+  [4;36;1mCategory Load (0.001184)[0m   [0;1mSELECT * FROM categories WHERE (categories.id = 38) LIMIT 1[0m
+  [4;35;1mCategory Load (0.001104)[0m   [0mSELECT * FROM categories WHERE (categories.id = 37) LIMIT 1[0m
+  [4;36;1mSQL (0.000501)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.000342)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.000322)[0m   [0;1mROLLBACK[0m
