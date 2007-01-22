@@ -69,7 +69,7 @@ private
     puts "Watching directory #{directory.path}"
     
     while true do
-      puts "Updating #{directory.recursive_file_count} directories..."
+      puts "Updating #{directory.server.directories.count} directories..."
       update(directory)
       puts "Sleeping for #{update_time} seconds..."
       sleep(update_time)
