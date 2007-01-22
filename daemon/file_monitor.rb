@@ -4,60 +4,52 @@ class FileMonitor
   # Set this to true if you want to see the individual SQL commands
   self.log_all_sql = false
   
+  def FileMonitor.benchmark(description)
+    time_before = Time.new
+    yield
+    duration = Time.new - time_before
+    puts "#{description} took #{duration}s"
+    duration
+  end
+  
   def FileMonitor.run_on_new_directory(path, update_time)
     this_server = Earth::Server.this_server
     puts "WARNING: Watching new directory. So, clearing out database"
 
-    time_before_clear = Time.new
-    # Workaround until on delete cascade is properly supported by faster_nested_set.  -->
-    # FIXME: The following line unconditionally uses PostgreSQL extensions
-    # Provide an alternative which uses a sub-select
-    # FIXME: Do this in a transaction
-    Earth::File.connection.delete("DELETE FROM #{Earth::File.table_name} USING #{Earth::Directory.table_name} WHERE #{Earth::Directory.table_name}.server_id=#{Earth::Server.this_server.id} AND #{Earth::Directory.table_name}.id = #{Earth::File.table_name}.directory_id", "Earth::Directory Delete all")
-    Earth::Directory.connection.delete("DELETE FROM #{Earth::Directory.table_name} WHERE server_id=#{Earth::Server.this_server.id}", "Earth::Directory Delete all")
-    # <--    
-    this_server.directories.clear      
-    time_after_clear = Time.new
-    puts "Database cleanup took #{time_after_clear - time_before_clear}s"
-
-    time_before_clear = Time.new
-
-    time_before_initial_build = Time.new
+    benchmark "Database cleanup" do
+      # Workaround until on delete cascade is properly supported by faster_nested_set.  -->
+      # FIXME: The following line unconditionally uses PostgreSQL extensions
+      # Provide an alternative which uses a sub-select
+      # FIXME: Do this in a transaction
+      Earth::File.connection.delete("DELETE FROM #{Earth::File.table_name} USING #{Earth::Directory.table_name} WHERE #{Earth::Directory.table_name}.server_id=#{Earth::Server.this_server.id} AND #{Earth::Directory.table_name}.id = #{Earth::File.table_name}.directory_id", "Earth::Directory Delete all")
+      Earth::Directory.connection.delete("DELETE FROM #{Earth::Directory.table_name} WHERE server_id=#{Earth::Server.this_server.id}", "Earth::Directory Delete all")
+      # <--    
+      this_server.directories.clear      
+    end
+    
     directory = this_server.directories.build(:name => File.expand_path(path))
-    update(directory, :only_build_directories => true)
-    time_after_initial_build = Time.new
-    puts "Building initial directory structure for #{path} took #{time_after_initial_build - time_before_initial_build}s"
+    initial_build_duration = benchmark "Building initial directory structure for #{path}" do
+      update(directory, :only_build_directories => true)
+    end
+    
+    initial_commit_duration = benchmark "Committing initial directory structure for #{path} to database" do
+      directory.save
+    end
+    
+    initial_update_duration = benchmark "Initial pass at gathering all files beneath #{path}" do
+      update(directory)
+    end
+    
+    puts "Scanning and storing tree took #{initial_build_duration + initial_commit_duration + initial_update_duration}s"
 
-    time_before_initial_commit = Time.new
-    directory.save
-    time_after_initial_commit = Time.new
-
-    puts "Committing initial directory structure for #{path} to database took #{time_after_initial_commit - time_before_initial_commit}s"
-
-    time_before_initial_update = Time.new
-    update(directory)
-    time_after_initial_update = Time.new
-    puts "Initial pass at gathering all files beneath #{path} took #{time_after_initial_update - time_before_initial_update}s"
-
-    puts "Total time for scanning and storing tree: #{time_after_initial_update - time_before_initial_build}s"
-
-    time_before_vacuum = Time.new
-    Earth::File.connection.update("VACUUM FULL ANALYZE")
-    time_after_vacuum = Time.new
-    puts "Vacuuming database took #{time_after_vacuum - time_before_vacuum}s"
-
-    #time_before_reindex = Time.new
-    #Earth::File.connection.update("REINDEX DATABASE #{Earth::Server.connection.config[:database]}")
-    #time_after_reindex = Time.new
-    #puts "Reindexing database took #{time_after_reindex - time_before_reindex}s"
-
-
-    time_before_initial_update = Time.new
-    update(directory)
-    time_after_initial_update = Time.new
-
-    puts "Total time for scanning and storing tree: #{time_after_initial_update - time_before_initial_update}s"
-
+    benchmark "Vacuuming database" do
+      Earth::File.connection.update("VACUUM FULL ANALYZE")
+    end
+    
+    benchmark "Scanning and storing tree" do
+      update(directory)
+    end
+    
     run(directory, update_time)
   end
   
