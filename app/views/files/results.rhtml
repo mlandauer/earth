@@ -12,7 +12,7 @@
   </thead>
   <tbody>
 <% for file in @files %>
-    <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+    <tr class="<%= cycle 'even', 'odd' %>">
       <td class="server"><%=h file.directory.server.name %></td>
       <td class="File name">
         <span title="<%= file.directory.path %>">

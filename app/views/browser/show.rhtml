@@ -50,7 +50,7 @@
       </tr>
     </thead>
     <tbody>
-    <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+    <tr class="<%= cycle 'even', 'odd' %>">
       <td class="name parent">
       <%= if @directory
             if @directory.parent_id
@@ -74,7 +74,7 @@
       <% max_size = @servers_and_size[0][1] %>
       <% units = human_units_of max_size %>
       <% for server, size in @servers_and_size %>
-        <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+        <tr class="<%= cycle 'even', 'odd' %>">
           <td class="name Server"><%= link_to server.name, :overwrite_params => {:server => server.name, :path => nil} %></td>
           <td></td>
           <td></td>
@@ -88,7 +88,7 @@
       <% max_size = @directories_and_size[0][1] %>
       <% units = human_units_of max_size %>
       <% for directory, size in @directories_and_size %>
-        <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+        <tr class="<%= cycle 'even', 'odd' %>">
           <td class="name Dir"><%= link_to directory.name, :overwrite_params => {:path => directory.path} %></td>
           <td></td>
           <td></td>
@@ -102,7 +102,7 @@
       <% max_size = @files[0].size %>
       <% units = human_units_of max_size %>
       <% @files.each do |file| %>
-        <tr class="<%= (@alt = (@alt ? false : true)) ? "odd" : "even" %>">
+        <tr class="<%= cycle 'even', 'odd' %>">
           <td class="name File"><span><%= file.name %></span></td>
           <td class="modified"><span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span></td>
           <td class="owner_user"><%=h file.user.name %></td>
