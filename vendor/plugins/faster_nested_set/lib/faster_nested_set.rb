@@ -166,7 +166,7 @@ module Rsp
 
           belongs_to :parent_assoc, :class_name => name, :foreign_key => configuration[:foreign_key], :counter_cache => configuration[:counter_cache]
 
-          has_many :children, :class_name => name, :foreign_key => configuration[:foreign_key], :order => configuration[:order], :dependent => :delete_all, :extend => Rsp::Acts::FasterNestedSet::ChildrenExtension
+          has_many :children, :class_name => name, :foreign_key => configuration[:foreign_key], :order => configuration[:order], :dependent => :destroy, :extend => Rsp::Acts::FasterNestedSet::ChildrenExtension
 
           class_eval <<-EOV
             #{scope_condition_method}
@@ -310,15 +310,24 @@ module Rsp
         end
 
         def nested_set_before_destroy
+          if Thread.current["root_deleted_node"].nil?
+            Thread.current["root_deleted_node"] = self
+          end
+
           @children.each do |child|
             child.destroy
           end
         end
 
         def nested_set_after_destroy
-          offset = self[right_col_name] - self[left_col_name] + 1
-          self.class.update_all( "#{left_col_name} = #{left_col_name} - (CASE WHEN #{left_col_name} > #{self[right_col_name]} THEN #{offset} ELSE 0 END), #{right_col_name} = #{right_col_name} - (CASE WHEN #{right_col_name} > #{self[right_col_name]} THEN #{offset} ELSE 0 END)",  
-                                 "#{scope_condition} AND #{right_col_name} > #{self[right_col_name]}" )
+
+          if Thread.current["root_deleted_node"] == self
+            Thread.current["root_deleted_node"] = nil
+
+            offset = self[right_col_name] - self[left_col_name] + 1
+            self.class.update_all( "#{left_col_name} = #{left_col_name} - (CASE WHEN #{left_col_name} > #{self[right_col_name]} THEN #{offset} ELSE 0 END), #{right_col_name} = #{right_col_name} - (CASE WHEN #{right_col_name} > #{self[right_col_name]} THEN #{offset} ELSE 0 END)",  
+                                   "#{scope_condition} AND #{right_col_name} > #{self[right_col_name]}" )
+          end
         end
 
         def update_edge_data(left, level)
