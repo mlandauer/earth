@@ -1049,10 +1049,10 @@ module ActiveRecord
               module_eval "before_destroy { |record| #{reflection.class_name}.delete_all(%(#{dependent_conditions})) }"
             when :nullify
               module_eval "before_destroy { |record| #{reflection.class_name}.update_all(%(#{reflection.primary_key_name} = NULL),  %(#{dependent_conditions})) }"
-            when nil, false
+            when :delete_cascade, nil, false
               # pass
             else
-              raise ArgumentError, 'The :dependent option expects either :destroy, :delete_all, or :nullify'
+              raise ArgumentError, 'The :dependent option expects either :destroy, :delete_all, :nullify, or :delete_cascade'
           end
         end
 

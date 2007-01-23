@@ -760,6 +760,19 @@ class HasManyAssociationsTest < Test::Unit::TestCase
     assert_equal [client_id], Client.destroyed_client_ids[companies(:first_firm).id]    
   end
   
+  def test_deleting_with_dependent_delete_cascade
+    force_signal37_to_load_all_clients_of_firm
+    client_id = companies(:first_firm).dependent_delete_cascade_clients_of_firm.first.id
+    
+    assert_equal [], Client.destroyed_client_ids[companies(:first_firm).id]
+    companies(:first_firm).dependent_delete_cascade_clients_of_firm.delete(companies(:first_firm).dependent_delete_cascade_clients_of_firm.first)
+    assert_equal 0, companies(:first_firm).dependent_delete_cascade_clients_of_firm.size
+    assert_equal 0, companies(:first_firm).dependent_delete_cascade_clients_of_firm(true).size
+    assert_raises(ActiveRecord::RecordNotFound) {Client.find(client_id)}
+    # The client object should have been deleted but not destroyed
+    assert_equal [], Client.destroyed_client_ids[companies(:first_firm).id]    
+  end
+  
   def test_deleting_before_save
     new_firm = Firm.new("name" => "A New Firm, Inc.")
     new_client = new_firm.clients_of_firm.build("name" => "Another Client")

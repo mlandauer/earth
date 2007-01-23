@@ -17,10 +17,11 @@ class Firm < Company
       "SELECT COUNT(*) FROM companies WHERE firm_id = 1 " +
       "AND (#{QUOTED_TYPE} = 'Client' OR #{QUOTED_TYPE} = 'SpecialClient' OR #{QUOTED_TYPE} = 'VerySpecialClient' )"
   has_many :clients_sorted_desc, :class_name => "Client", :order => "id DESC"
-  has_many :clients_of_firm,                       :foreign_key => "client_of", :class_name => "Client", :order => "id"
-  has_many :dependent_clients_of_firm,             :foreign_key => "client_of", :class_name => "Client", :order => "id", :dependent => :destroy
-  has_many :exclusively_dependent_clients_of_firm, :foreign_key => "client_of", :class_name => "Client", :order => "id", :dependent => :delete_all
-  has_many :dependent_nullify_clients_of_firm,     :foreign_key => "client_of", :class_name => "Client", :order => "id", :dependent => :nullify
+  has_many :clients_of_firm,                          :foreign_key => "client_of", :class_name => "Client", :order => "id"
+  has_many :dependent_clients_of_firm,                :foreign_key => "client_of", :class_name => "Client", :order => "id", :dependent => :destroy
+  has_many :exclusively_dependent_clients_of_firm,    :foreign_key => "client_of", :class_name => "Client", :order => "id", :dependent => :delete_all
+  has_many :dependent_nullify_clients_of_firm,        :foreign_key => "client_of", :class_name => "Client", :order => "id", :dependent => :nullify
+  has_many :dependent_delete_cascade_clients_of_firm, :foreign_key => "client_of", :class_name => "Client", :order => "id", :dependent => :delete_cascade
   has_many :limited_clients, :class_name => "Client", :order => "id", :limit => 1
   has_many :clients_like_ms, :conditions => "name = 'Microsoft'", :class_name => "Client", :order => "id"
   has_many :clients_with_interpolated_conditions, :class_name => "Client", :conditions => 'rating > #{rating}'

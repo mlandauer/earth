@@ -172,7 +172,7 @@ module ActiveRecord
             )
           elsif @reflection.options[:dependent] == :destroy
             records.each { |r| r.destroy }
-          elsif @reflection.options[:dependent] == :delete_all
+          elsif @reflection.options[:dependent] == :delete_all || @reflection.options[:dependent] == :delete_cascade
             @reflection.klass.delete(records.map{|r| r.id})
           end
         end
