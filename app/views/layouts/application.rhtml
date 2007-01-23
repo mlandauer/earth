@@ -39,7 +39,7 @@
   		<%= yield  %>      
     </div>
   <div id="Footer">
-    Earth Revision <%= strip_svn_variable("$LastChangedRevision$") %> (<%= strip_svn_variable("$Date$") %>)
+    Earth revision <%= strip_svn_variable("$LastChangedRevision$") %>, last modified <%= strip_svn_variable("$Date$") by <%= strip_svn_variable("$Author$") %> %>
   </div>
 
   </div>

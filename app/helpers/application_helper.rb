@@ -57,7 +57,7 @@ module ApplicationHelper
     else
       start_index += 2
     end
-    svn_variable[start_index..-2]
+    svn_variable[start_index..-3]
   end
 
 private
