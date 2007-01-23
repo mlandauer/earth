@@ -1,4 +1,17 @@
 module GraphHelper
+
+  def dump_segments(directory, level_segment_array)
+
+    logger.debug("Dumping segments for directory #{@directory.path}:")
+    level_index = 1
+    level_segment_array[1..-1].each do |level_segments|
+      logger.debug("  Level ##{level_index}:")
+      level_segments.each do |segment|
+        logger.debug("    #{segment.inspect}")
+      end
+      level_index += 1
+    end
+  end
   
   # Given a directory sub-tree, create a 2-dimensional array for
   # presentation of a radial graph. The first dimension corresponds to
@@ -23,6 +36,8 @@ module GraphHelper
     for level in (1..@level_count)
       postprocess_segments(level, level_segment_array[level])
     end
+
+    dump_segments(directory, level_segment_array)
 
     level_segment_array
   end
@@ -251,6 +266,7 @@ private
 
 
       big_files = Array.new
+      small_files = Array.new
 
       other_files_angle = 0
       other_files_count = 0
@@ -263,6 +279,7 @@ private
           other_files_angle += angle
           other_files_count += 1
           other_files_size += file.size
+          small_files << file
         end
       end
 
@@ -316,10 +333,18 @@ private
       end
 
       if other_files_angle > 0
-        other_files_segment = Segment.new(:angle => other_files_angle, 
-                                          :type => ((other_files_angle >= @minimum_angle or @remainder_mode != :empty) ? :file : :empty),
-                                          :name => "#{other_files_count} files",
-                                          :tooltip => "#{other_files_count} files in ...#{directory.path_relative_to(@directory)}/ (#{format_human(other_files_size)})")
+        if small_files.size > 1
+          other_files_segment = Segment.new(:angle => other_files_angle, 
+                                            :type => ((other_files_angle >= @minimum_angle or @remainder_mode != :empty) ? :file : :empty),
+                                            :name => "#{other_files_count} files",
+                                            :tooltip => "#{other_files_count} files in ...#{directory.path_relative_to(@directory)}/ (#{format_human(other_files_size)})")
+        else
+          child = small_files[0]
+          other_files_segment = Segment.new(:angle => other_files_angle, 
+                                            :type => ((other_files_angle >= @minimum_angle or @remainder_mode != :empty) ? :file : :empty),
+                                            :name => file.name,
+                                            :tooltip => "...#{directory.path_relative_to(@directory)}/#{file.name} (#{format_human(file.size)})")
+        end
         level_segments << other_files_segment
       end
 
