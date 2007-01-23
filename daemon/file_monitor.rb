@@ -17,13 +17,8 @@ class FileMonitor
     puts "WARNING: Watching new directory. So, clearing out database"
 
     benchmark "Database cleanup" do
-      # Workaround until on delete cascade is properly supported by faster_nested_set.  -->
-      # FIXME: The following line unconditionally uses PostgreSQL extensions
-      # Provide an alternative which uses a sub-select
       # FIXME: Do this in a transaction
-      Earth::File.connection.delete("DELETE FROM #{Earth::File.table_name} USING #{Earth::Directory.table_name} WHERE #{Earth::Directory.table_name}.server_id=#{Earth::Server.this_server.id} AND #{Earth::Directory.table_name}.id = #{Earth::File.table_name}.directory_id", "Earth::Directory Delete all")
-      Earth::Directory.connection.delete("DELETE FROM #{Earth::Directory.table_name} WHERE server_id=#{Earth::Server.this_server.id}", "Earth::Directory Delete all")
-      # <--    
+      Earth::Directory.delete_all "server_id=#{Earth::Server.this_server.id}"
       this_server.directories.clear      
     end
     

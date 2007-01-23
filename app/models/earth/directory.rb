@@ -28,7 +28,7 @@ module Earth
 
   class Directory < ActiveRecord::Base
     acts_as_nested_set :scope => :server, :level_column => "level"
-    has_many :files, :class_name => "Earth::File", :dependent => :delete_all, :order => :name, :extend => Earth::FilesExtension
+    has_many :files, :class_name => "Earth::File", :dependent => :delete_cascade, :order => :name, :extend => Earth::FilesExtension
     belongs_to :server
   
     Stat = Struct.new(:mtime)
