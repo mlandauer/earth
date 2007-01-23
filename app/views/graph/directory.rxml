@@ -82,7 +82,9 @@ xml.svg(:width => "100%",
   end
 
   xml.circle :r => @level_radii[0], :class => "current-directory"
-  xml.circle :r => @level_radii[1], :class => "sub-directory"
+  if not level_segment_array[1].empty?
+    xml.circle :r => @level_radii[1], :class => "sub-directory"
+  end
 
   for level in (2..@level_count)
     level_segment_array[level].each do |segment|
