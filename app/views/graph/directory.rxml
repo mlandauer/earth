@@ -49,11 +49,19 @@ xml.svg(:width => "100%",
     end
   end
 
+  xml.radialGradient(:id => "gradient_divider", :gradientUnits => "userSpaceOnUse",
+                     :cx => 0, :cy => 0, :r => @level_radii[@level_count] + 8) do
+    xml.stop(:offset => "0%", "stop-color".to_sym => "black")
+    xml.stop(:offset => "92%", "stop-color".to_sym => "black")
+    xml.stop(:offset => "100%", "stop-color".to_sym => "white")
+  end
+
+  prev_segment = level_segment_array[-1][-1]
   level_segment_array[-1].each do |segment|
     if segment.directory?
       xml.defs do
         xml.radialGradient(:id => "gradient_#{segment.segment_id}", :gradientUnits => "userSpaceOnUse",
-                           :cx => 0, :cy => 0, :r => "#{@level_radii[@level_count] + 8}") do
+                           :cx => 0, :cy => 0, :r => @level_radii[@level_count] + 8) do
           xml.stop(:offset => "0%", "stop-color".to_sym => "#{segment.get_color}")
           xml.stop(:offset => "92%", "stop-color".to_sym => "#{segment.get_color}")
           xml.stop(:offset => "100%", "stop-color".to_sym => "white")
@@ -62,9 +70,15 @@ xml.svg(:width => "100%",
 
       xml.path(:class => "directory-edge", 
                :style => "fill: url(#gradient_#{segment.segment_id})",
-               #:style => "fill: #{segment.get_color}; fill-opacity: 0.4",
                :d => segment.get_svg_path(true))
+
     end
+    if segment.directory? or (segment.empty? and prev_segment.directory?)
+      xml.path(:class => "directory-edge-divider", 
+               :style => "stroke: url(#gradient_divider)",
+               :d => segment.get_svg_divider_path_radius(@level_radii[@level_count], @level_radii[@level_count] + 8))
+    end
+    prev_segment = segment
   end
 
   xml.circle :r => @level_radii[0], :class => "current-directory"

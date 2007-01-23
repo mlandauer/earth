@@ -62,12 +62,25 @@ class BrowserControllerTest < Test::Unit::TestCase
   def test_routing
     assert_routing("/browser/show", :controller => "browser", :action => "show")
     assert_routing("/browser/show/foo.rsp.com.au", :controller => "browser", :action => "show", :server => "foo.rsp.com.au")
+    assert_routing("/browser/show/foo-bar.rsp.com.au", :controller => "browser", :action => "show", :server => "foo-bar.rsp.com.au")
+    assert_routing("/browser/show/foo-bar.rsp-foo.com.au", :controller => "browser", :action => "show", :server => "foo-bar.rsp-foo.com.au")
     assert_routing("/browser/show/foo", :controller => "browser", :action => "show", :server => "foo")
+    assert_routing("/browser/show/foo-bar", :controller => "browser", :action => "show", :server => "foo-bar")
     assert_routing("/browser/show/foo.rsp.com.au/blah/foo/bar",
       :controller => "browser", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"])
     assert_routing("/browser/show/foo/blah/foo/bar",
       :controller => "browser", :action => "show", :server => "foo", :path => ["", "blah", "foo", "bar"])
     assert_routing("/browser/show.xml/foo.rsp.com.au/blah/foo/bar",
       :controller => "browser", :action => "show", :server => "foo.rsp.com.au", :path => ["", "blah", "foo", "bar"], :format => "xml")
+
+    assert_routing("/graph", :controller => "graph", :action => "index")
+    assert_routing("/graph/foo.rsp.com.au", :controller => "graph", :action => "index", :server => "foo.rsp.com.au")
+    assert_routing("/graph/foo-bar.rsp.com.au", :controller => "graph", :action => "index", :server => "foo-bar.rsp.com.au")
+    assert_routing("/graph/foo-bar.rsp-foo.com.au", :controller => "graph", :action => "index", :server => "foo-bar.rsp-foo.com.au")
+
+    assert_routing("/graph/show", :controller => "graph", :action => "show")
+    assert_routing("/graph/show/foo.rsp.com.au", :controller => "graph", :action => "show", :server => "foo.rsp.com.au")
+    assert_routing("/graph/show/foo-bar.rsp.com.au", :controller => "graph", :action => "show", :server => "foo-bar.rsp.com.au")
+    assert_routing("/graph/show/foo-bar.rsp-foo.com.au", :controller => "graph", :action => "show", :server => "foo-bar.rsp-foo.com.au")
   end
 end

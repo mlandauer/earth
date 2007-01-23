@@ -14,9 +14,21 @@ class File
 end
 
 module Earth
+  #
+  # This is used as the :extend option for the has_many :files
+  # association below and allows setting the files explicitly if
+  # they've been retrieved circumventing the association
+  #
+  module FilesExtension #:nodoc:
+    def set(files)
+      @target = files
+      @loaded = true
+    end
+  end
+
   class Directory < ActiveRecord::Base
     acts_as_nested_set :scope => :server, :level_column => "level"
-    has_many :files, :class_name => "Earth::File", :dependent => :delete_all, :order => :name
+    has_many :files, :class_name => "Earth::File", :dependent => :delete_all, :order => :name, :extend => Earth::FilesExtension
     belongs_to :server
   
     Stat = Struct.new(:mtime)
@@ -91,10 +103,15 @@ module Earth
     end
 
     def path_relative_to(some_parent)
-      if some_parent.id.nil?
+      if some_parent.id.nil? or path.nil?
         path
       else
-        path[some_parent.path.size+1..-1]
+        result = path[some_parent.path.size+1..-1]
+        if not result.nil? and result.size > 0
+          "/" + result
+        else
+          ""
+        end
       end
     end
 

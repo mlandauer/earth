@@ -11,24 +11,8 @@ class BrowserController < ApplicationController
     @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
     # Filter parameters
     @show_empty = params[:show_empty]
-    @filter_filename = params[:filter_filename]
-    if @filter_filename.nil? || @filter_filename == ""
-      @filter_filename = "*"
-    end
-    @filter_user = params[:filter_user]
-    
-    @users = User.find_all
-    
-    if @filter_user && @filter_user != ""    
-      filter_conditions = ["files.name LIKE ? AND files.uid = ?", @filter_filename.tr('*', '%'),
-        User.find_by_name(@filter_user).uid]
-    elsif @filter_filename != '*'
-      filter_conditions = ["files.name LIKE ?", @filter_filename.tr('*', '%')]
-    else
-      filter_conditions = nil
-    end
-    
-    Earth::File.with_scope(:find => {:conditions => filter_conditions}) do
+
+    Earth::File.with_scope(:find => {:conditions => filter_conditions(params)}) do
       # if at the root
       if @server.nil?
         servers = Earth::Server.find(:all)

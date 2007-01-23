@@ -35,6 +35,13 @@ circle.current-directory
   stroke-opacity: 0;
 }
 
+.directory-edge-divider
+{ 
+  fill-opacity: 0;
+  stroke-opacity: 1;
+  stroke-width: 0.1;
+}
+
 path.segment
 { 
   fill-opacity: 1;

@@ -1,3 +1,5 @@
 # Any parameters here affect the Earth web application
 
 graph_depth: 5
+graph_min_angle: 5.0
+graph_remainder_mode: keep
