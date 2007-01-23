@@ -8,7 +8,7 @@ xml.declare!(:DOCTYPE, :svg,
 
 xml.instruct!("xml-stylesheet".to_sym, 
               :type => "text/css",
-              :href => "/svg.css")
+              :href => "/stylesheets/svg.css")
 
 xml.svg(:width => "100%", 
         :height => "100%", 
