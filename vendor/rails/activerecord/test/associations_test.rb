@@ -723,7 +723,43 @@ class HasManyAssociationsTest < Test::Unit::TestCase
     assert_equal 0, companies(:first_firm).clients_of_firm.size
     assert_equal 0, companies(:first_firm).clients_of_firm(true).size
   end
-
+  
+  def test_deleting_with_dependent_nullify
+    force_signal37_to_load_all_clients_of_firm
+    client_id = companies(:first_firm).dependent_nullify_clients_of_firm.first.id
+    companies(:first_firm).dependent_nullify_clients_of_firm.delete(companies(:first_firm).dependent_nullify_clients_of_firm.first)
+    assert_equal 0, companies(:first_firm).dependent_nullify_clients_of_firm.size
+    assert_equal 0, companies(:first_firm).dependent_nullify_clients_of_firm(true).size
+    # The client should still exist as it should have just been nullified
+    assert_nothing_raised {Client.find(client_id)}
+  end
+  
+  def test_deleting_with_dependent_delete_all
+    force_signal37_to_load_all_clients_of_firm
+    client_id = companies(:first_firm).exclusively_dependent_clients_of_firm.first.id
+    
+    assert_equal [], Client.destroyed_client_ids[companies(:first_firm).id]
+    companies(:first_firm).exclusively_dependent_clients_of_firm.delete(companies(:first_firm).exclusively_dependent_clients_of_firm.first)
+    assert_equal 0, companies(:first_firm).exclusively_dependent_clients_of_firm.size
+    assert_equal 0, companies(:first_firm).exclusively_dependent_clients_of_firm(true).size
+    assert_raises(ActiveRecord::RecordNotFound) {Client.find(client_id)}
+    # Test that client object was not destroyed but rather just deleted from the database
+    assert_equal [], Client.destroyed_client_ids[companies(:first_firm).id]    
+  end
+  
+  def test_deleting_with_dependent_destroy
+    force_signal37_to_load_all_clients_of_firm
+    client_id = companies(:first_firm).dependent_clients_of_firm.first.id
+    
+    assert_equal [], Client.destroyed_client_ids[companies(:first_firm).id]
+    companies(:first_firm).dependent_clients_of_firm.delete(companies(:first_firm).dependent_clients_of_firm.first)
+    assert_equal 0, companies(:first_firm).dependent_clients_of_firm.size
+    assert_equal 0, companies(:first_firm).dependent_clients_of_firm(true).size
+    assert_raises(ActiveRecord::RecordNotFound) {Client.find(client_id)}
+    # The client object should have been destroyed (rather than just deleted)
+    assert_equal [client_id], Client.destroyed_client_ids[companies(:first_firm).id]    
+  end
+  
   def test_deleting_before_save
     new_firm = Firm.new("name" => "A New Firm, Inc.")
     new_client = new_firm.clients_of_firm.build("name" => "Another Client")
@@ -806,7 +842,8 @@ class HasManyAssociationsTest < Test::Unit::TestCase
 
     assert_equal 0, firm.exclusively_dependent_clients_of_firm.size
     assert_equal 0, firm.exclusively_dependent_clients_of_firm(true).size
-    assert_equal [3], Client.destroyed_client_ids[firm.id]
+    # Nothing should have been destroyed only deleted
+    assert_equal [], Client.destroyed_client_ids[firm.id]
 
     # Should be destroyed since the association is exclusively dependent.
     assert Client.find_by_id(client_id).nil?

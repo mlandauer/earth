@@ -454,14 +454,15 @@ module ActiveRecord
       # * <tt>collection(force_reload = false)</tt> - returns an array of all the associated objects.
       #   An empty array is returned if none are found.
       # * <tt>collection<<(object, ...)</tt> - adds one or more objects to the collection by setting their foreign keys to the collection's primary key.
-      # * <tt>collection.delete(object, ...)</tt> - removes one or more objects from the collection by setting their foreign keys to NULL.  
-      #   This will also destroy the objects if they're declared as belongs_to and dependent on this model.
+      # * <tt>collection.delete(object, ...)</tt> - removes one or more objects from the collection.
+      #   If <tt>:dependent</tt> is not set or <tt>:dependent => :nullify</tt>their foreign keys will be set to NULL.  
+      #   If <tt>:dependent => :destroy</tt> the associated objects will also be destroyed.
+      #   If <tt>:dependent => :delete_all</tt> the associated objects will be deleted *without* being destroyed.
       # * <tt>collection=objects</tt> - replaces the collections content by deleting and adding objects as appropriate.
       # * <tt>collection_singular_ids</tt> - returns an array of the associated objects ids
       # * <tt>collection_singular_ids=ids</tt> - replace the collection by the objects identified by the primary keys in +ids+
-      # * <tt>collection.clear</tt> - removes every object from the collection. This destroys the associated objects if they
-      #   are <tt>:dependent</tt>, deletes them directly from the database if they are <tt>:dependent => :delete_all</tt>,
-      #   and sets their foreign keys to NULL otherwise.
+      # * <tt>collection.clear</tt> - removes every object from the collection. Equivalent to calling
+      #   delete on the collection for every object in the collection.
       # * <tt>collection.empty?</tt> - returns true if there are no associated objects.
       # * <tt>collection.size</tt> - returns the number of associated objects.
       # * <tt>collection.find</tt> - finds an associated object according to the same rules as Base.find.
