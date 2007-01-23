@@ -50,6 +50,16 @@ module ApplicationHelper
     return s
   end
 
+  def strip_svn_variable(svn_variable)
+    start_index = svn_variable.index(":")
+    if start_index.nil?
+      start_index = 1 
+    else
+      start_index += 2
+    end
+    svn_variable[start_index..-2]
+  end
+
 private
 
   def scale_for_human_size(units, size)

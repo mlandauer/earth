@@ -38,8 +38,12 @@
     <div id="ContentInside">
   		<%= yield  %>      
     </div>
+  <div id="Footer">
+    Earth Revision <%= strip_svn_variable("$LastChangedRevision$") %> (<%= strip_svn_variable("$Date$") %>)
   </div>
-</div>
 
+  </div>
+
+</div>
 </body>
 </html>

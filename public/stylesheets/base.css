@@ -393,3 +393,10 @@ table.listing thead th a.desc {
 .auto_complete {
   z-index: 2;
 }
+
+#Footer { 
+  font-size: small;
+  text-align: right;
+  color: grey;
+  margin-top: 1em;
+}
