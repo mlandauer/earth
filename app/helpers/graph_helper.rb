@@ -163,7 +163,7 @@ private
   #
   def get_level_radii
     if @level_radii.nil?
-      @level_radii = [ 25, 48 ]
+      @level_radii = [ 25, 46 ]
       while @level_radii.size <= @level_count + 1
         r1 = @level_radii[@level_radii.size - 2]
         r2 = @level_radii[@level_radii.size - 1]

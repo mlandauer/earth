@@ -79,10 +79,22 @@ text.directory-size
   dominant-baseline: central;
 }
 
-.segment-text
+.file-segment-text,
+.directory-segment-text
 { 
   alignment-baseline: central; 
   dominant-baseline: central;
+}
+
+.file-segment-text
+{ 
+  fill: white;
+}
+
+.directory-segment-text
+{ 
+  text-decoration: underline;
+  fill: black;
 }
 
 text.server-name

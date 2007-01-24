@@ -31,7 +31,7 @@ xml.svg(:width => "100%",
                  :style => "fill: #{segment.get_color}")
         xml.path(:id => "segment_#{level}_#{segment.segment_id}", :class => "text-path", :d => segment.get_svg_text_path(level))
         if segment.angle > 10
-          xml.text("xml:space".to_sym => "preserve", :class => "segment-text") do
+          xml.text("xml:space".to_sym => "preserve", :class => (segment.directory? ? "directory-segment-text" : "file-segment-text")) do
             xml.textPath(segment.name, "xlink:href".to_sym => "#segment_#{level}_#{segment.segment_id}", :startOffset => "50%")
           end
         end
@@ -52,7 +52,7 @@ xml.svg(:width => "100%",
   xml.radialGradient(:id => "gradient_divider", :gradientUnits => "userSpaceOnUse",
                      :cx => 0, :cy => 0, :r => @level_radii[@level_count] + 8) do
     xml.stop(:offset => "0%", "stop-color".to_sym => "black")
-    xml.stop(:offset => "92%", "stop-color".to_sym => "black")
+    xml.stop(:offset => "90%", "stop-color".to_sym => "black")
     xml.stop(:offset => "100%", "stop-color".to_sym => "white")
   end
 
@@ -63,7 +63,7 @@ xml.svg(:width => "100%",
         xml.radialGradient(:id => "gradient_#{segment.segment_id}", :gradientUnits => "userSpaceOnUse",
                            :cx => 0, :cy => 0, :r => @level_radii[@level_count] + 8) do
           xml.stop(:offset => "0%", "stop-color".to_sym => "#{segment.get_color}")
-          xml.stop(:offset => "92%", "stop-color".to_sym => "#{segment.get_color}")
+          xml.stop(:offset => "90%", "stop-color".to_sym => "#{segment.get_color}")
           xml.stop(:offset => "100%", "stop-color".to_sym => "white")
         end
       end
