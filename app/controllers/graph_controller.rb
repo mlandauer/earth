@@ -45,9 +45,9 @@ class GraphController < ApplicationController
     @server = Earth::Server.find_by_name(params[:server]) if params[:server]
     @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
 
-    if @server
-
-      Earth::File.with_filter(params) do
+    Earth::File.with_filter(params) do
+      
+      if @server
 
         if @directory.nil?
 
@@ -95,12 +95,12 @@ class GraphController < ApplicationController
         @directory_size_map = Hash.new
         gather_directory_sizes_pass_1(@directory, @directory.level + @level_count)
         gather_directory_sizes_pass_2(@directory, @directory.level + @level_count)
-      end
 
-      render :layout => false, :action => "directory.rxml"
-    else
-      @servers = Earth::Server.find(:all).select{|s| s.has_files?}
-      render :layout => false, :action => "servers.rxml"
+        render :layout => false, :action => "directory.rxml"
+      else
+        @servers = Earth::Server.find(:all).select{|s| s.has_files?}
+        render :layout => false, :action => "servers.rxml"
+      end
     end
   end
 
