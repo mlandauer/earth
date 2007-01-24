@@ -121,14 +121,12 @@ xml.svg(:width => "100%",
     end
   end
   
-  if not 
-      xml.a("xlink:href".to_sym => url_for(:controller => "graph",
-                                           :escape => false,
-                                           :params => {:server => (@directory.nil? or @directory.id.nil?) ? nil : @server.name,
-                                                                                                          :path => (@directory.nil? or @directory.id.nil?) ? nil : (@directory.parent ? @directory.parent.path : nil) }),
-            :target => "_parent",
-            "xlink:title".to_sym => @directory.id.nil? ? "Go to server view" : (@directory.parent ? "Go to parent directory" : "Go to server #{@server.name}")) do
-      xml.circle :r => @level_radii[0], :class => "segment-link"
-    end
+  xml.a("xlink:href".to_sym => url_for(:controller => "graph",
+                                       :escape => false,
+                                       :overwrite_params => {:server => (@directory.nil? or @directory.id.nil?) ? nil : @server.name,
+                                                                                                      :path => (@directory.nil? or @directory.id.nil?) ? nil : (@directory.parent ? @directory.parent.path : nil) }),
+        :target => "_parent",
+        "xlink:title".to_sym => @directory.id.nil? ? "Go to server view" : (@directory.parent ? "Go to parent directory" : "Go to server #{@server.name}")) do
+    xml.circle :r => @level_radii[0], :class => "segment-link"
   end
 end

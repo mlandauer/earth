@@ -37,7 +37,7 @@ module GraphHelper
       postprocess_segments(level, level_segment_array[level])
     end
 
-    dump_segments(directory, level_segment_array)
+    #dump_segments(directory, level_segment_array)
 
     level_segment_array
   end
@@ -231,6 +231,8 @@ private
   end
 
   def add_segments(level, angle_range, level_segment_array, directory, parent_size)
+
+    directory.cached_size = directory.size unless directory.nil?
     
     if (level > @level_count)
       return
@@ -253,6 +255,7 @@ private
       small_directories_size = 0
 
       directory.children.each do |child|
+        child.cached_size = child.size unless child.nil?
         child_size = child.size
         segment_angle = child_size * angle_range / parent_size
         if segment_angle >= @minimum_angle
@@ -314,8 +317,9 @@ private
                                 :name => "#{child.name}/", 
                                 :href => url_for(:controller => :graph, 
                                                  :escape => false,
-                                                 :params => {:server => @server.name, 
-                                                             :path => child.path}),
+                                                 :overwrite_params => {:server => @server.name, 
+                                                                       :action => nil,
+                                                                       :path => child.path}),
                                 :tooltip => "...#{child.path_relative_to(@directory)}/ (#{format_human(child.size)})")
         end
         level_segments << segment
@@ -330,8 +334,9 @@ private
                               :name => "#{big_directory.name}/", 
                               :href => url_for(:controller => :graph, 
                                                :escape => false,
-                                               :params => {:server => @server.name, 
-                                                           :path => big_directory.path}),
+                                               :overwrite_params => {:server => @server.name, 
+                                                                     :action => nil,
+                                                                     :path => big_directory.path}),
                               :tooltip => "...#{big_directory.path_relative_to(@directory)}/ (#{format_human(big_directory.size)})")
         level_segments << segment
         add_segments(level + 1, segment_angle, level_segment_array, big_directory, big_directory.size)

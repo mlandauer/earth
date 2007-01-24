@@ -49,6 +49,8 @@ class GraphController < ApplicationController
       
       if @server
 
+        leaf_directories = []
+
         if @directory.nil?
 
           roots = Earth::Directory.roots_for_server(@server)
@@ -60,7 +62,7 @@ class GraphController < ApplicationController
 
           @directory = Earth::Directory.new(:name => @server.name, :children => roots, :level => 0, :server => @server, :lft => 0, :rgt => max_right + 1)
 
-        elsif true
+        else
           # This is more efficient for two reasons: firstly, the
           # :include => files approach used below will use a join, which
           # means that redundant data is returned from the database
@@ -71,28 +73,44 @@ class GraphController < ApplicationController
           # requires tweaking directory's files member so that cached
           # files are returned instead of a redundant query.
           @directory.load_all_children(@level_count)
-
-          files = Earth::File.find(:all, 
-                                   :conditions => "directory_id IN (SELECT id FROM directories " +
-                                   "WHERE level<#{@directory.level + @level_count} " +
-                                   " AND server_id=#{@server.id} " +
-                                   " AND lft >= #{@directory.lft} " +
-                                   " AND rgt <= #{@directory.rgt})")
-          
-          @directory_to_file_map = Hash.new
-          files.each do |file|
-            if not @directory_to_file_map.has_key?(file.directory_id) then
-              @directory_to_file_map[file.directory_id] = Array.new
-            end
-            @directory_to_file_map[file.directory_id] << file
-          end
-
-          setup_directory(@directory)
-        else
-          @directory.load_all_children(@level_count, :include => :files)
         end
 
+        files = Earth::File.find(:all, 
+                                 :conditions => "directory_id IN (SELECT id FROM directories " +
+                                 "WHERE level<#{@directory.level + @level_count} " +
+                                 " AND server_id=#{@server.id} " +
+                                 " AND lft >= #{@directory.lft} " +
+                                 " AND rgt <= #{@directory.rgt})")
+          
+        @directory_to_file_map = Hash.new
+        files.each do |file|
+          if not @directory_to_file_map.has_key?(file.directory_id) then
+            @directory_to_file_map[file.directory_id] = Array.new
+          end
+          @directory_to_file_map[file.directory_id] << file
+        end
+
+        setup_directory(@directory)
+
+        filter = Thread.current[:with_filter]
+
         @directory_size_map = Hash.new
+
+        if filter
+          sizes = Earth::CachedSize.find(:all, 
+                                         :conditions => "directory_id IN (SELECT id FROM directories " +
+                                         "WHERE level=#{@directory.level + @level_count} " +
+                                         " AND server_id=#{@server.id} " +
+                                         " AND lft >= #{@directory.lft} " +
+                                         " AND rgt <= #{@directory.rgt}) " +
+                                         " AND filter_id=#{filter.id}"
+                                         )
+
+          sizes.each do |size|
+            @directory_size_map[size.directory_id] = size.recursive_size
+          end
+        end
+
         gather_directory_sizes_pass_1(@directory, @directory.level + @level_count)
         gather_directory_sizes_pass_2(@directory, @directory.level + @level_count)
 
@@ -108,7 +126,9 @@ private
 
   def gather_directory_sizes_pass_1(directory, leaf_level)
     if directory.level == leaf_level
-      @directory_size_map[directory.id] = directory.size
+      if not @directory_size_map.has_key?(directory.id)
+        @directory_size_map[directory.id] = directory.size
+      end
     else
       @directory_size_map[directory.id] = 0
         directory.files.each do |file|
@@ -131,8 +151,8 @@ private
         gather_directory_sizes_pass_2(child, leaf_level)
         @directory_size_map[directory.id] += @directory_size_map[child.id]
       end
-      directory.cached_size = @directory_size_map[directory.id]
     end
+    directory.cached_size = @directory_size_map[directory.id]
   end
 
 end
