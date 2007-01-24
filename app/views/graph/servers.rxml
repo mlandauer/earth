@@ -23,7 +23,7 @@ xml.svg(:width => "100%",
     server_circles.each do |server_circle|
       xml.a("xlink:href".to_sym => url_for(:controller => "graph", 
                                            :escape => false,
-                                           :params => { :server => server_circle.server.name }), :target => "_parent") do
+                                           :overwrite_params => { :server => server_circle.server.name, :action => nil }), :target => "_parent") do
         xml.circle(:cx => server_circle.x, :cy => server_circle.y, :r => server_circle.radius, :class => "server")
         
         xml.text("#{server_circle.server.name}", 
