@@ -32,6 +32,8 @@ module Earth
     has_many :cached_sizes, :class_name => "Earth::CachedSize", :dependent => :delete_cascade
     has_many :filters, :class_name => "Earth::Filter", :through => :cached_sizes
     belongs_to :server
+
+    after_save("self.observe_after_save; true")
   
     Stat = Struct.new(:mtime)
     class Stat
@@ -193,6 +195,23 @@ module Earth
 
     def find_cached_size_by_filter(filter)
       cached_sizes.find(:first, :conditions => ['filter_id = ?', filter.id])
+    end
+
+    def Directory.add_save_observer(observer)
+      @save_observers = [] unless @save_observers
+      @save_observers << observer
+    end
+
+    def Directory.remove_save_observer(observer)
+      @save_observers.delete(observer)
+    end
+
+    def observe_after_save
+      if @save_observers
+        @save_observers.each do |save_observer|
+          save_observer.directory_saved(self)
+        end
+      end
     end
   end
 end

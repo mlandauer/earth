@@ -2,10 +2,8 @@
 #
 # subdirectories for "n directories"
 # in server view, show segments for directories
-# test server views with good test data
 # mark files with hatched background (optional; more generally, more useful color coding?)
 # fading edge one level darker (?)
-# checkout inconsitency here: http://localhost:3000/graph/powerbook-2.local/Volumes/Shared/eclipse/plugins?filter_filename=*.jar&filter_user=    --- filter sometimes used, sometimes not?
 
 class GraphController < ApplicationController
 

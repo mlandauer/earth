@@ -54,12 +54,14 @@ module GraphHelper
     #  For each server, determine a (relative) circle radius and sort
     #  descending by the radius.
     #
-    servers_and_radius = @servers.map{|s| [s, Math.sqrt(s.size) ]}
+    servers_and_radius = @servers.map{|s| 
+      [s, Math.sqrt(s.size) ]
+    }
     servers_and_radius.sort! do |entry1, entry2|
-      entry1[1] - entry2[1]
+      entry2[1] - entry1[1]
     end
 
-    gap = 3
+    gap = 1
     
     #
     #
@@ -76,8 +78,8 @@ module GraphHelper
 
       if server_circles.size == 1
         x = 0
-        y = -@server_circles[0].radius - radius - gap
-        server_circles << ServerCircle.new(x, y, radius, server)
+        y = -server_circles[0].radius - radius - gap
+        server_circles << ServerCircle.new(x, y, radius, server_and_radius[0])
       else
         min_distance = -1
         server_circles.each do |circle1|
@@ -131,6 +133,13 @@ module GraphHelper
         end
       end
     end
+
+    puts "have max_radius #{max_radius}"
+
+    server_circles.each do |server_circle|
+      server_circle.scale(90 / max_radius)
+    end
+
     [ server_circles, max_radius ]
   end
 
@@ -580,6 +589,12 @@ private
       dy = y - @y
       dr = radius + @radius
       dx*dx + dy*dy < dr*dr
+    end
+
+    def scale(value)
+      @x *= value
+      @y *= value
+      @radius *= value
     end
   end
 

@@ -1,21 +1,58 @@
 class FileMonitor
   cattr_accessor :log_all_sql
+
+  class ETAPrinter
+    def initialize(number_of_items)
+      @number_of_items = number_of_items
+      @items_completed = 0
+      @longest_output = 0
+      @last_eta_update = 0
+      @min_eta_update_delta = 1.seconds
+      @start = Time.new
+    end
+
+    def increment()
+      @items_completed += 1
+      now = Time.new
+      time_per_item = (now - @start) / @items_completed
+      items_remaining = @number_of_items - @items_completed
+      if items_remaining > 0
+        if @last_eta_update.to_i + @min_eta_update_delta <= now.to_i
+          @last_eta_update = now
+          time_remaining = items_remaining * time_per_item
+          eta_string = "ETA: #{(Time.local(2007) + (time_remaining)).strftime('%H:%M:%S')}s"
+          print(eta_string + "\010" * eta_string.size)
+          $stdout.flush
+          @longest_output = [@longest_output, eta_string.size].max
+        end
+      else
+        print(" " * @longest_output + "\010" * @longest_output)
+      end
+    end
+  end
   
   # Set this to true if you want to see the individual SQL commands
   self.log_all_sql = false
   
-  def FileMonitor.benchmark(description = nil)
-    if description
+  def FileMonitor.benchmark(description = nil, show_pending = true)
+    if description and show_pending
       print "#{description} ... "
+      $stdout.flush
     end
-    $stdout.flush
     time_before = Time.new
-    yield
+    result = yield
     duration = Time.new - time_before
     if description
+      if not show_pending
+        print "#{description} "
+      end
       puts "took #{duration}s"
     end
-    duration
+    result
+  end
+
+  def FileMonitor.directory_saved(node)
+    @directory_eta_printer.increment
   end
   
   def FileMonitor.run_on_new_directory(path, update_time)
@@ -27,25 +64,32 @@ class FileMonitor
       Earth::Directory.delete_all "server_id=#{Earth::Server.this_server.id}"
       this_server.directories.clear      
     end
-    
-    directory = this_server.directories.build(:name => File.expand_path(path))
-    initial_build_duration = benchmark "Building initial directory structure for #{path}" do
-      update(directory, 0, :only_build_directories => true)
-    end
-    
-    initial_commit_duration = benchmark "Committing initial directory structure for #{path} to database" do
-      directory.save
-    end
 
-    initial_update_duration = benchmark "Initial pass at gathering all files beneath #{path}" do
-      update(directory, 0, false, true)
-    end
+    directory = benchmark "Scanning and storing tree", false do
     
-    puts "Scanning and storing tree took #{initial_build_duration + initial_commit_duration + initial_update_duration}s"
+      directory = this_server.directories.build(:name => File.expand_path(path))
+      directory_count = benchmark "Building initial directory structure for #{path}" do
+        update(directory, 0, true)
+      end
 
-    #benchmark "Vacuuming database" do
-    #  Earth::File.connection.update("VACUUM FULL ANALYZE")
-    #end
+      benchmark "Committing initial directory structure for #{path} to database" do
+        @directory_eta_printer = ETAPrinter.new(directory_count)
+        Earth::Directory.add_save_observer(self)
+        directory.save
+        Earth::Directory.remove_save_observer(self)
+        @directory_eta_printer = nil
+      end
+
+      benchmark "Initial pass at gathering all files beneath #{path}" do
+        update(directory, 0, false, true)
+      end
+
+      #benchmark "Vacuuming database" do
+      #  Earth::File.connection.update("VACUUM FULL ANALYZE")
+      #end
+
+      directory
+    end
 
     run(directory, update_time)
   end
@@ -71,16 +115,15 @@ private
   end
   
   def FileMonitor.update(directory, update_time = 0, only_build_directories = false, show_eta = false)
-    start = Time.new
     # TODO: Do this in a nicer way
-    remaining_count = directory.server.directories.count
+    total_count = 0
     filters = Earth::Filter::find(:all)
-    total_time = 0
-    longest_eta = 0
+    eta_printer = ETAPrinter.new(directory.server.directories.count)
+    remaining_count = directory.server.directories.count
+    start = Time.new
     directory.each do |d|
-      total_time += benchmark do
-        update_non_recursive(d, filters, only_build_directories)
-      end
+      total_count += update_non_recursive(d, filters, only_build_directories)
+      total_time = Time.new - start
       remaining_time = update_time - (Time.new - start)
       remaining_count = remaining_count - 1
       if remaining_time > 0 && remaining_count > 0
@@ -88,26 +131,26 @@ private
       end
 
       if show_eta
-        time_per_dir = total_time / (directory.server.directories.count - remaining_count)
-        eta_string = "ETA: #{(Time.local(2007) + (time_per_dir * remaining_count)).strftime('%H:%M:%S')}s"
-        print(eta_string + "\010" * eta_string.size)
-        longest_eta = [longest_eta, eta_string.size].max
-        $stdout.flush
+        eta_printer.increment
       end
     end
-    print(" " * longest_eta + "\010" * longest_eta)
+    total_count
   end
 
   def FileMonitor.update_non_recursive(directory, filters, only_build_directories = false)
 
-    filter_to_cached_size = directory.filter_to_cached_size(filters)
-    filters.each do |filter|
-      if not filter_to_cached_size.has_key?(filter)
-        filter_to_cached_size[filter] = directory.cached_sizes.build(:filter => filter)
+    directory_count = 1
+
+    if not only_build_directories
+      filter_to_cached_size = directory.filter_to_cached_size(filters)
+      filters.each do |filter|
+        if not filter_to_cached_size.has_key?(filter)
+          filter_to_cached_size[filter] = directory.cached_sizes.build(:filter => filter)
+        end
       end
-    end
-    filter_to_cached_size.each do |filter, cached_size|
-      cached_size.snapshot
+      filter_to_cached_size.each do |filter, cached_size|
+        cached_size.snapshot
+      end
     end
 
     # TODO: remove exist? call as it is an extra filesystem access
@@ -119,7 +162,7 @@ private
     
     # If directory hasn't changed then return
     if new_directory_stat == directory.stat
-      return
+      return 1
     end
 
     file_names, subdirectory_names, stats = [], [], Hash.new
@@ -137,7 +180,7 @@ private
           directory.children.create(attributes)
         end
       end
-      update_non_recursive(dir, filters, only_build_directories)
+      directory_count += update_non_recursive(dir, filters, only_build_directories)
     end
 
     if not only_build_directories then
@@ -257,6 +300,8 @@ private
     # However, they will get reloaded automatically from the database the next time this
     # directory changes
     directory.files.reset
+
+    directory_count
   end
   
   def FileMonitor.contents(directory)

@@ -5,7 +5,7 @@ module Earth
     has_many :directories, :dependent => :destroy, :order => :lft
   
     def Server.this_server
-      Server.find_or_create_by_name(this_hostname)
+      Server.find_or_create_by_name(ENV["EARTH_HOSTNAME"] || this_hostname)
     end
     
     def Server.this_hostname

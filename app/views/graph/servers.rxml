@@ -19,13 +19,14 @@ xml.svg(:width => "100%",
         "xmlns:xlink".to_sym => "http://www.w3.org/1999/xlink") do 
 
   server_circles, max_radius = create_server_circles
-  xml.g(:transform => "scale(#{90 / max_radius})") do
-    server_circles.each do |server_circle|
-      xml.a("xlink:href".to_sym => url_for(:controller => "graph", 
-                                           :escape => false,
-                                           :overwrite_params => { :server => server_circle.server.name, :action => nil }), :target => "_parent") do
-        xml.circle(:cx => server_circle.x, :cy => server_circle.y, :r => server_circle.radius, :class => "server")
-        
+  server_circles.each do |server_circle|
+    xml.a("xlink:title".to_sym => "#{server_circle.server.name} (#{human_size_in(human_units_of(server_circle.server.size), server_circle.server.size)} #{human_units_of(server_circle.server.size)})",
+          "xlink:href".to_sym => url_for(:controller => "graph", 
+                                         :escape => false,                                         
+                                         :overwrite_params => { :server => server_circle.server.name, :action => nil }), :target => "_parent") do
+      xml.circle(:cx => server_circle.x, :cy => server_circle.y, :r => server_circle.radius, :class => "server")
+      
+      xml.g(:transform => "scale(#{90 / max_radius})") do
         xml.text("#{server_circle.server.name}", 
                  :x => server_circle.x, 
                  :y => (server_circle.y - 3),

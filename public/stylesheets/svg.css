@@ -1,6 +1,19 @@
 svg { background: #ffffff; }
 path.text-path { visibility:hidden; }
-textPath { font-size: 2.4pt; text-align:center; line-height:112.99999952%; writing-mode:lr-tb; text-anchor: middle; color: red; text-anchor: middle; }
+
+textPath { 
+  font-size: 2.4pt; 
+  text-align: center; 
+  writing-mode: lr-tb; 
+  text-anchor: middle; 
+  alignment-baseline: central; 
+  dominant-baseline: central;
+}
+
+text { 
+  alignment-baseline: central; 
+  dominant-baseline: central;
+}
 
 circle.current-directory,
 .sub-directory
@@ -26,7 +39,7 @@ circle.server
 circle.current-directory 
 { 
   fill-opacity: 1;
-  fill: #eeeeee;
+  fill: #dddddd;
 }
 
 .directory-edge 
