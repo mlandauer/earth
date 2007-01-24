@@ -114,8 +114,10 @@ module Rsp
         def build(attributes)
           result = super
           @node.child_added(result)
+          result.parent_assoc = @node
           result
         end
+
         def node=(node)
           @node = node
         end
@@ -411,6 +413,7 @@ module Rsp
               offset = 2 
               self.class.update_all( "#{left_col_name} = #{left_col_name} + (CASE WHEN #{left_col_name} >= #{left} THEN #{offset} ELSE 0 END), #{right_col_name} = #{right_col_name} + (CASE WHEN #{right_col_name} >= #{left} THEN #{offset} ELSE 0 END)",  
                                      "#{scope_condition} AND #{right_col_name} >= #{left}" )
+              self.parent_assoc[right_col_name] += offset
             end
           end
         end
@@ -423,7 +426,6 @@ module Rsp
         def ancestors
           node, nodes = self, []
           nodes << node = node.parent until not node.has_parent?
-          nodeNames = nodes.map { |node| node.name }
           nodes
         end
 

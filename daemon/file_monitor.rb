@@ -4,11 +4,17 @@ class FileMonitor
   # Set this to true if you want to see the individual SQL commands
   self.log_all_sql = false
   
-  def FileMonitor.benchmark(description)
+  def FileMonitor.benchmark(description = nil)
+    if description
+      print "#{description} ... "
+    end
+    $stdout.flush
     time_before = Time.new
     yield
     duration = Time.new - time_before
-    puts "#{description} took #{duration}s"
+    if description
+      puts "took #{duration}s"
+    end
     duration
   end
   
@@ -30,9 +36,9 @@ class FileMonitor
     initial_commit_duration = benchmark "Committing initial directory structure for #{path} to database" do
       directory.save
     end
-    
+
     initial_update_duration = benchmark "Initial pass at gathering all files beneath #{path}" do
-      update(directory)
+      update(directory, 0, false, true)
     end
     
     puts "Scanning and storing tree took #{initial_build_duration + initial_commit_duration + initial_update_duration}s"
@@ -40,7 +46,7 @@ class FileMonitor
     #benchmark "Vacuuming database" do
     #  Earth::File.connection.update("VACUUM FULL ANALYZE")
     #end
-    
+
     run(directory, update_time)
   end
   
@@ -64,21 +70,45 @@ private
     end
   end
   
-  def FileMonitor.update(directory, update_time = 0, only_build_directories = false)
+  def FileMonitor.update(directory, update_time = 0, only_build_directories = false, show_eta = false)
     start = Time.new
     # TODO: Do this in a nicer way
     remaining_count = directory.server.directories.count
+    filters = Earth::Filter::find(:all)
+    total_time = 0
+    longest_eta = 0
     directory.each do |d|
-      update_non_recursive(d, only_build_directories)
+      total_time += benchmark do
+        update_non_recursive(d, filters, only_build_directories)
+      end
       remaining_time = update_time - (Time.new - start)
       remaining_count = remaining_count - 1
       if remaining_time > 0 && remaining_count > 0
         sleep (remaining_time / remaining_count)
       end
+
+      if show_eta
+        time_per_dir = total_time / (directory.server.directories.count - remaining_count)
+        eta_string = "ETA: #{(Time.local(2007) + (time_per_dir * remaining_count)).strftime('%H:%M:%S')}s"
+        print(eta_string + "\010" * eta_string.size)
+        longest_eta = [longest_eta, eta_string.size].max
+        $stdout.flush
+      end
     end
+    print(" " * longest_eta + "\010" * longest_eta)
   end
 
-  def FileMonitor.update_non_recursive(directory, only_build_directories = false)
+  def FileMonitor.update_non_recursive(directory, filters, only_build_directories = false)
+
+    filter_to_cached_size = directory.filter_to_cached_size(filters)
+    filters.each do |filter|
+      if not filter_to_cached_size.has_key?(filter)
+        filter_to_cached_size[filter] = directory.cached_sizes.build(:filter => filter)
+      end
+    end
+    filter_to_cached_size.each do |filter, cached_size|
+      cached_size.snapshot
+    end
 
     # TODO: remove exist? call as it is an extra filesystem access
     if File.exist?(directory.path)
@@ -107,7 +137,7 @@ private
           directory.children.create(attributes)
         end
       end
-      update_non_recursive(dir, only_build_directories)
+      update_non_recursive(dir, filters, only_build_directories)
     end
 
     if not only_build_directories then
@@ -115,7 +145,14 @@ private
       added_file_names = file_names - directory.files.map{|x| x.name}
       added_file_names.each do |name|
         Earth::File.benchmark("Creating file with name #{name}", Logger::DEBUG, !log_all_sql) do
-          directory.files.create(:name => name, :stat => stats[name])
+          file = directory.files.create(:name => name, :stat => stats[name])
+          filter_to_cached_size.each do |filter, cached_size|
+            if filter.matches(file)
+              cached_size.recursive_size += file.size
+              cached_size.recursive_blocks += file.blocks
+            end
+          end
+          file
         end
       end
 
@@ -124,7 +161,19 @@ private
         if file_names.include?(file.name)
           # If the file has changed
           if file.stat != stats[file.name]
+            filter_to_cached_size.each do |filter, cached_size|
+              if filter.matches(file)
+                cached_size.recursive_size -= file.size
+                cached_size.recursive_blocks -= file.blocks
+              end
+            end
             file.stat = stats[file.name]
+            filter_to_cached_size.each do |filter, cached_size|
+              if filter.matches(file)
+                cached_size.recursive_size += file.size
+                cached_size.recursive_blocks += file.blocks
+              end
+            end
             Earth::File.benchmark("Updating file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
               file.save
             end
@@ -132,6 +181,12 @@ private
           # If the file has been deleted
         else
           Earth::Directory.benchmark("Removing file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
+            filter_to_cached_size.each do |filter, cached_size|
+              if filter.matches(file)
+                cached_size.recursive_size -= file.size
+                cached_size.recursive_blocks -= file.blocks
+              end
+            end
             directory.files.delete(file)
           end
         end
@@ -142,18 +197,58 @@ private
       # If the directory has been deleted
       if !subdirectory_names.include?(dir.name)
         Earth::Directory.benchmark("Removing directory with name #{dir.name}", Logger::DEBUG, !log_all_sql) do
+          removed_dir_filter_to_cached_size = dir.filter_to_cached_size(filters)
+          filter_to_cached_size.each do |filter, cached_size|
+            removed_cached_size = removed_dir_filter_to_cached_size[filter]
+            if removed_cached_size
+              cached_size.recursive_size -= removed_cached_size.recursive_size
+              cached_size.recursive_blocks -= removed_cached_size.recursive_blocks
+            end
+          end
           directory.child_delete(dir)
         end
       end
     end
     
     # Update the directory stat information at the end
-    if not only_build_directories then
-      if File.exist?(directory.path)
+    if not only_build_directories
+      if File.exist?(directory.path) # FIXME - why is this checked again? can this lead to database inconsistency wrt recursive sizes?
         directory.stat = new_directory_stat
+
         # This will not overwrite 'lft' and 'rgt' so it doesn't matter if these are out of date
         Earth::Directory.benchmark("Updating directory with name #{directory.name}", Logger::DEBUG, !log_all_sql) do
           directory.update
+        end
+
+        filter_to_cached_size.each do |filter, cached_size|
+          
+          size_difference, blocks_difference = cached_size.difference
+          
+          if cached_size.new_record?
+            cached_size.create
+            ancestors_to_update = directory.ancestors
+          else
+            ancestors_to_update = directory.self_and_ancestors
+          end
+
+          if (size_difference != 0 or blocks_difference != 0) and not directory.parent.nil?
+            Earth::Directory.benchmark("Updating parent directories' size cache", Logger::DEBUG, !log_all_sql) do
+              Earth::CachedSize.update_all("recursive_size = recursive_size + #{size_difference}, recursive_blocks = recursive_blocks + #{blocks_difference}",
+                                           "filter_id=#{filter.id} and directory_id in (#{ancestors_to_update.map{|x| x.id}.join(',')})")                
+            end
+          end
+        end
+
+        directory.ancestors.each do |ancestor|
+          ancestor_filter_to_cached_size = ancestor.filter_to_cached_size(filters)
+          filter_to_cached_size.each do |filter, cached_size|
+            size_difference, blocks_difference = cached_size.difference
+            ancestor_cached_size = ancestor_filter_to_cached_size[filter]
+            if ancestor_cached_size
+              ancestor_cached_size.recursive_size += size_difference
+              ancestor_cached_size.recursive_blocks += blocks_difference
+            end
+          end
         end
       end
     end
@@ -163,7 +258,7 @@ private
     # directory changes
     directory.files.reset
   end
-
+  
   def FileMonitor.contents(directory)
     entries = Dir.entries(directory.path)
     # Ignore ".' and ".." directories
@@ -173,7 +268,7 @@ private
     # Contains the stat information for both files and directories
     stats = Hash.new
     entries.each {|x| stats[x] = File.lstat(File.join(directory.path, x))}
-  
+    
     # Seperately test for whether it's a file or a directory because it could
     # be something like a symbolic link (which we shouldn't follow)
     file_names = entries.select{|x| stats[x].file?}

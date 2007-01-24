@@ -29,6 +29,8 @@ module Earth
   class Directory < ActiveRecord::Base
     acts_as_nested_set :scope => :server, :level_column => "level"
     has_many :files, :class_name => "Earth::File", :dependent => :delete_cascade, :order => :name, :extend => Earth::FilesExtension
+    has_many :cached_sizes, :class_name => "Earth::CachedSize", :dependent => :delete_cascade
+    has_many :filters, :class_name => "Earth::Filter", :through => :cached_sizes
     belongs_to :server
   
     Stat = Struct.new(:mtime)
@@ -53,10 +55,27 @@ module Earth
     # This only requires the id of the current directory and so doesn't need to
     # protected in a transaction which simplified its use
     def size
-      @cached_size || Earth::File.sum(:size, :conditions => "directories.lft >= #{self.lft} AND directories.lft <= #{self.rgt} AND directories.server_id = #{self.server_id}",
-                                      :joins => "JOIN directories ON files.directory_id = directories.id").to_i
+      @cached_size || recursive_size_with_filter || sum_files(:size)
     end
-    
+
+    def recursive_size_with_filter
+      filter = Thread.current[:with_filter]
+      cached_size = cached_sizes.find :first, :conditions => ["filter_id = ?", filter.id] if filter
+      cached_size.recursive_size if cached_size || nil
+    end
+
+    def blocks
+      @cached_blocks || sum_files(:blocks)
+    end
+
+    def sum_files(column)
+      Earth::File.sum(column, 
+                      :conditions => ("directories.lft >= #{self.lft} " + \
+                                      " AND directories.lft <= #{self.rgt} " + \
+                                      " AND directories.server_id = #{self.server_id}"),
+                      :joins => "JOIN directories ON files.directory_id = directories.id").to_i
+    end
+
     #
     # Set the recursive size 
     #
@@ -70,8 +89,16 @@ module Earth
     end
 
     def size_and_count
+      sum_and_count_files(:size)
+    end
+
+    def blocks_and_count
+      sum_and_count_files(:blocks)
+    end
+
+    def sum_and_count_files(column)
       result = Earth::File.find(:first, 
-                                :select => "SUM(files.size) AS sum, COUNT(*) AS count",
+                                :select => "SUM(files.#{column.to_s}) AS sum, COUNT(*) AS count",
                                 :joins => "JOIN directories ON files.directory_id = directories.id",
                                 :conditions => ("directories.lft >= #{self.lft} " \
                                                 + " AND directories.lft <= #{self.rgt} " \
@@ -152,7 +179,21 @@ module Earth
       end 
       yield self 
     end
-    
+
+    def filter_to_cached_size(filters)
+      cached_sizes = self.cached_sizes
+      _filter_to_cached_size = Hash.new
+
+      cached_sizes.each do |cached_size|
+        _filter_to_cached_size[cached_size.filter] = cached_size
+      end
+
+      _filter_to_cached_size
+    end
+
+    def find_cached_size_by_filter(filter)
+      cached_sizes.find(:first, :conditions => ['filter_id = ?', filter.id])
+    end
   end
 end
 

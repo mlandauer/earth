@@ -4,8 +4,8 @@
 # in server view, show segments for directories
 # test server views with good test data
 # mark files with hatched background (optional; more generally, more useful color coding?)
-# if only 1 other file, replace with filename
 # fading edge one level darker (?)
+# checkout inconsitency here: http://localhost:3000/graph/powerbook-2.local/Volumes/Shared/eclipse/plugins?filter_filename=*.jar&filter_user=    --- filter sometimes used, sometimes not?
 
 class GraphController < ApplicationController
 
@@ -15,6 +15,7 @@ class GraphController < ApplicationController
     @level_count = @@webapp_config["graph_depth"]
     @minimum_angle = @@webapp_config["graph_min_angle"]
     @remainder_mode = @@webapp_config["graph_remainder_mode"].to_sym
+    @coloring_mode = @@webapp_config["graph_coloring_mode"].to_sym
   end
 
   def index
@@ -46,15 +47,18 @@ class GraphController < ApplicationController
 
     if @server
 
-      Earth::File.with_scope(:find => {:conditions => filter_conditions(params)}) do
+      Earth::File.with_filter(params) do
+
         if @directory.nil?
 
           roots = Earth::Directory.roots_for_server(@server)
+          max_right = 0
           roots.each do |root|
             root.load_all_children(@level_count - 1)
+            max_right = [ max_right, root.rgt ].max
           end
 
-          @directory = Earth::Directory.new(:name => @server.name, :children => roots, :level => 0)
+          @directory = Earth::Directory.new(:name => @server.name, :children => roots, :level => 0, :server => @server, :lft => 0, :rgt => max_right + 1)
 
         elsif true
           # This is more efficient for two reasons: firstly, the
@@ -87,11 +91,11 @@ class GraphController < ApplicationController
         else
           @directory.load_all_children(@level_count, :include => :files)
         end
-      end
 
-      @directory_size_map = Hash.new
-      gather_directory_sizes_pass_1(@directory, @directory.level + @level_count)
-      gather_directory_sizes_pass_2(@directory, @directory.level + @level_count)
+        @directory_size_map = Hash.new
+        gather_directory_sizes_pass_1(@directory, @directory.level + @level_count)
+        gather_directory_sizes_pass_2(@directory, @directory.level + @level_count)
+      end
 
       render :layout => false, :action => "directory.rxml"
     else

@@ -73,7 +73,8 @@ xml.svg(:width => "100%",
                :d => segment.get_svg_path(true))
 
     end
-    if segment.directory? or (segment.empty? and prev_segment.directory?)
+    if ((segment.directory? and level_segment_array[-1].size > 1) \
+        or (segment.empty? and prev_segment.directory?))
       xml.path(:class => "directory-edge-divider", 
                :style => "stroke: url(#gradient_divider)",
                :d => segment.get_svg_divider_path_radius(@level_radii[@level_count], @level_radii[@level_count] + 8))

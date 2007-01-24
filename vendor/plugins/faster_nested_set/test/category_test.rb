@@ -180,6 +180,15 @@ class CategoryTest < Test::Unit::TestCase
   end
 
 
+  def test_a
+    names = ["root", ["child1", ["child1a"], ["child1b"], ["child1c"]]]
+    categories = create_tree(names)
+    categories[0].reload
+    puts pp(categories[0])
+    assert_nested_set_order(categories)
+  end
+
+
   def test_delete_7
     names = ["root", ["child1", ["child1a"], ["child1b"]]]
     categories = create_tree(names)

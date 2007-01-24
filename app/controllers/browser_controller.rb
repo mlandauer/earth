@@ -12,7 +12,7 @@ class BrowserController < ApplicationController
     # Filter parameters
     @show_empty = params[:show_empty]
 
-    Earth::File.with_scope(:find => {:conditions => filter_conditions(params)}) do
+    Earth::File.with_filter(params) do
       # if at the root
       if @server.nil?
         servers = Earth::Server.find(:all)
