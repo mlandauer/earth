@@ -136,6 +136,10 @@ private
         end
         gather_directory_sizes_pass_1(child, leaf_level)
       end
+    else
+      if not @directory_size_map.has_key?(directory.id)
+        @directory_size_map[directory.id] = directory.size
+      end
     end
   end
 
