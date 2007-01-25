@@ -263,6 +263,19 @@ private
           directory.update
         end
 
+        directory.ancestors.each do |ancestor|
+          ancestor_filter_to_cached_size = ancestor.filter_to_cached_size(filters)
+          filter_to_cached_size.each do |filter, cached_size|
+            size_difference, blocks_difference = cached_size.difference
+            ancestor_cached_size = ancestor_filter_to_cached_size[filter]
+            if not ancestor_cached_size
+              ancestor_cached_size = ancestor.cached_sizes.build(:filter => filter)
+            end
+            ancestor_cached_size.recursive_size += size_difference
+            ancestor_cached_size.recursive_blocks += blocks_difference
+          end
+        end
+
         filter_to_cached_size.each do |filter, cached_size|
           
           size_difference, blocks_difference = cached_size.difference
@@ -278,18 +291,6 @@ private
             Earth::Directory.benchmark("Updating parent directories' size cache", Logger::DEBUG, !log_all_sql) do
               Earth::CachedSize.update_all("recursive_size = recursive_size + #{size_difference}, recursive_blocks = recursive_blocks + #{blocks_difference}",
                                            "filter_id=#{filter.id} and directory_id in (#{ancestors_to_update.map{|x| x.id}.join(',')})")                
-            end
-          end
-        end
-
-        directory.ancestors.each do |ancestor|
-          ancestor_filter_to_cached_size = ancestor.filter_to_cached_size(filters)
-          filter_to_cached_size.each do |filter, cached_size|
-            size_difference, blocks_difference = cached_size.difference
-            ancestor_cached_size = ancestor_filter_to_cached_size[filter]
-            if ancestor_cached_size
-              ancestor_cached_size.recursive_size += size_difference
-              ancestor_cached_size.recursive_blocks += blocks_difference
             end
           end
         end

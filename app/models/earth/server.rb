@@ -13,7 +13,7 @@ module Earth
     end
     
     def size
-      Earth::Directory.roots_for_server(self).map{|d| d.size}.sum
+      Earth::Directory.roots_for_server(self).map{|d| d.size}.sum      
     end
     
     def recursive_file_count

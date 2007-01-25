@@ -34,6 +34,8 @@ module Earth
     belongs_to :server
 
     after_save("self.observe_after_save; true")
+
+    @@save_observers = []
   
     Stat = Struct.new(:mtime)
     class Stat
@@ -198,17 +200,17 @@ module Earth
     end
 
     def Directory.add_save_observer(observer)
-      @save_observers = [] unless @save_observers
-      @save_observers << observer
+      @@save_observers = [] unless @@save_observers
+      @@save_observers << observer
     end
 
     def Directory.remove_save_observer(observer)
-      @save_observers.delete(observer)
+      @@save_observers.delete(observer)
     end
 
     def observe_after_save
-      if @save_observers
-        @save_observers.each do |save_observer|
+      if @@save_observers
+        @@save_observers.each do |save_observer|
           save_observer.directory_saved(self)
         end
       end
