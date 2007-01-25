@@ -53,11 +53,10 @@ module ApplicationHelper
   def strip_svn_variable(svn_variable)
     start_index = svn_variable.index(":")
     if start_index.nil?
-      start_index = 1 
+      svn_variable[1..-2]
     else
-      start_index += 2
+      svn_variable[start_index + 2..-3]
     end
-    svn_variable[start_index..-3]
   end
 
 private
@@ -70,8 +69,6 @@ private
       when units == "GB": size / 1.0.gigabyte
       when units == "TB": size / 1.0.terabyte
     end
-  rescue
-    nil
   end
   
 end

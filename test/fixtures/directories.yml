@@ -3,7 +3,7 @@ foo:
   id: 1
   name: "/foo"
   lft: 1
-  rgt: 6
+  rgt: 10
   level: 1
   server_id: 1
 foo_bar:
@@ -11,7 +11,7 @@ foo_bar:
   name: "bar"
   parent_id: 1
   lft: 2
-  rgt: 5
+  rgt: 9
   level: 2
   server_id: 1
 foo_bar_twiddle:
@@ -19,13 +19,36 @@ foo_bar_twiddle:
   name: "twiddle"
   parent_id: 2
   lft: 3
-  rgt: 4
+  rgt: 8
   level: 3
   server_id: 1
-bar:
+foo_bar_twiddle_frob:
   id: 4
+  name: "frob"
+  parent_id: 3
+  lft: 4
+  rgt: 7
+  level: 4
+  server_id: 1
+foo_bar_twiddle_frob_baz:
+  id: 5
+  name: "baz"
+  parent_id: 4
+  lft: 5
+  rgt: 6
+  level: 5
+  server_id: 1
+bar:
+  id: 6
   name: "/bar"
-  lft: 7
-  rgt: 8
+  lft: 1
+  rgt: 2
   level: 1
   server_id: 2
+fizzle:
+  id: 7
+  name: "/fizzle"
+  lft: 1
+  rgt: 2
+  level: 1
+  server_id: 3

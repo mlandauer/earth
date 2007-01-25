@@ -134,8 +134,6 @@ module GraphHelper
       end
     end
 
-    puts "have max_radius #{max_radius}"
-
     server_circles.each do |server_circle|
       server_circle.scale(90 / max_radius)
     end

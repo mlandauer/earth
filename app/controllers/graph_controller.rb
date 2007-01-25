@@ -114,7 +114,7 @@ class GraphController < ApplicationController
 
         render :layout => false, :action => "directory.rxml"
       else
-        @servers = Earth::Server.find(:all).select{|s| s.has_files?}
+        @servers = Earth::Server.find(:all) # .select{|s| s.has_files?}
         render :layout => false, :action => "servers.rxml"
       end
     end
@@ -123,11 +123,7 @@ class GraphController < ApplicationController
 private
 
   def gather_directory_sizes_pass_1(directory, leaf_level)
-    if directory.level == leaf_level
-      if not @directory_size_map.has_key?(directory.id)
-        @directory_size_map[directory.id] = directory.size
-      end
-    else
+    if directory.level < leaf_level
       @directory_size_map[directory.id] = 0
         directory.files.each do |file|
           @directory_size_map[directory.id] += file.size

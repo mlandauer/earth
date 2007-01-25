@@ -1,5 +1,13 @@
 match_all:
   id: 1
   filename: *
-  uid: nil
+
+match_zip:
+  id: 2
+  filename: *.zip
+
+match_zip_and_uid_1:
+  id: 3
+  filename: *.zip
+  uid: 1
 

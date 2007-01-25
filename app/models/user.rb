@@ -6,6 +6,10 @@ class User
   
   @@uid_to_name = ExpiringHash.new(eval(config["ldap_cache_time"]))
 
+  def User.reset_cache
+    @@uid_to_name = ExpiringHash.new(eval(config["ldap_cache_time"]))
+  end
+
   def User.ldap_configured?
     config["ldap_server_name"]
   end
@@ -15,11 +19,6 @@ class User
   def initialize(uid)
     @uid = uid
     @name = find_name_by_uid_cached(@uid)
-  end
- 
-   # here... look here! right below this
-  def logger
-    RAILS_DEFAULT_LOGGER
   end
  
   # Simple cache

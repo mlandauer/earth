@@ -8,6 +8,8 @@ class Earth::FileTest < Test::Unit::TestCase
     # Getting a File::Stat from a "random" file
     stat = File.lstat(File.dirname(__FILE__) + '/../test_helper.rb')
     files(:file1).stat = stat
+    # Make sure old equality operator still works for fake stat object
+    assert_equal(files(:file1).stat, files(:file1).stat)
     # Testing equality in the long winded way
     assert_equal(stat.mtime, files(:file1).modified)
     assert_equal(stat.size, files(:file1).size)

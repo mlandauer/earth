@@ -14,6 +14,25 @@ class BrowserControllerTest < Test::Unit::TestCase
     @response   = ActionController::TestResponse.new
   end
 
+  def test_show_root
+    get :show
+    
+    assert_response :success
+    assert_template 'show'
+
+    assert_not_nil assigns(:servers_and_size)
+  end
+
+  def test_show_server
+    get :show, :server => Earth::Server.this_hostname
+    
+    assert_response :success
+    assert_template 'show'
+
+    assert_nil(assigns(:directory))
+    assert_equal(servers(:first), assigns(:server))
+  end
+
   def test_show
     get :show, :server => Earth::Server.this_hostname, :path => "/foo"
     
@@ -22,6 +41,13 @@ class BrowserControllerTest < Test::Unit::TestCase
 
     assert_equal(directories(:foo), assigns(:directory))
     assert_equal([[directories(:foo_bar), directories(:foo_bar).size]], assigns(:directories_and_size))
+  end
+
+  def test_show_with_server_and_path_as_csv
+    @request.env['HTTP_ACCEPT'] = 'text/csv'
+    get :show, {:server => Earth::Server.this_hostname, :path => "/foo/bar", :show_empty => 1}
+    assert_response :success
+    assert_equal(directories(:foo_bar), assigns(:directory))
   end
   
   def test_show_with_server_and_path

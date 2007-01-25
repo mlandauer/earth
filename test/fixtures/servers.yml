@@ -5,4 +5,7 @@ first:
 another:
   id: 2
   name: "foo"
+yet_another:
+  id: 3
+  name: "server3"
 
