@@ -50,13 +50,10 @@ module ApplicationHelper
     return s
   end
 
-  def strip_svn_variable(svn_variable)
-    start_index = svn_variable.index(":")
-    if start_index.nil?
-      svn_variable[1..-2]
-    else
-      svn_variable[start_index + 2..-3]
-    end
+  # This depends on the application running from a checked out svn version and
+  # the command "svnversion" being available on the path
+  def earth_version
+    IO::popen('svnversion').readline
   end
 
 private

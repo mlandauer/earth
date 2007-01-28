@@ -42,7 +42,5 @@ class ApplicationHelperTest < HelperTestCase
   def test_bar
     assert(/width: 10%/.match(bar(1, 10, :class => "bar")))
     assert(/width: 100%/.match(bar(1, 0, :class => "bar")))
-    assert_equal("Date", strip_svn_variable("$Date$"))
-    assert_equal("1.1.1970", strip_svn_variable("$Date: 1.1.1970 $"))
   end
 end
