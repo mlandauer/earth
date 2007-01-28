@@ -46,78 +46,110 @@ module GraphHelper
   #  Given a list of servers, create a circle (associated with the
   #  server name and the total size of the files on that server) for
   #  each of them, with the circle area corresponding to the relative
-  #  size of the data.  Arrange the circles so that the largest one
-  #  is in the center and smaller ones get arranged around it.
+  #  size of the total data of that server.  Arrange the circles so 
+  #  that the largest one is in the center and smaller ones get arranged 
+  #  around it.
   #
   def create_server_circles()
     #
-    #  For each server, determine a (relative) circle radius and sort
-    #  descending by the radius.
+    #  For each server, determine a (relative) circle radius on an
+    #  arbitrary scale and sort descending by the radius (largest
+    #  circle first).
     #
-    servers_and_radius = @servers.map{|s| 
-      [s, Math.sqrt(s.size) ]
-    }
-    servers_and_radius.sort! do |entry1, entry2|
-      entry2[1] - entry1[1]
+    servers_and_radius = @servers.select { |server| server.size > 0 }.map do |server|
+      { :server => server, :relative_radius => Math.sqrt(server.size) }
     end
 
-    gap = 1
-    
-    #
-    #
-    #
-    max_radius = 20
-    radius_scale = servers_and_radius[0][1] / max_radius
+    servers_and_radius.sort! do |entry1, entry2|
+      entry2[:relative_radius] - entry1[:relative_radius]
+    end
 
-    server_circles = Array.new
-    server_circles << ServerCircle.new(0, 0, servers_and_radius[0][1] / radius_scale, 
-                                       servers_and_radius[0][0])
+    #
+    #  Calculate the distance, or "gap", between two adjacent circles.
+    #  Since this is going to be scaled later by a yet-unknown-value,
+    #  but needs to be known in advance, we're using heuristics to
+    #  determine a good value for it that stays approximately equal in
+    #  absolute values.
+    #  
+    #  The heuristics used here calculate the total relative area of
+    #  all circles, determines the radius of a circle with this area,
+    #  and uses a percentage of that radius.
+    #
+    total_estd_radius = Math.sqrt(servers_and_radius.inject(0) { |area, sr| area + sr[:relative_radius] * sr[:relative_radius] })
+    gap = 0.04 * total_estd_radius
+
+    # derive a minimum circle radius from the estimated radius as well
+    # so that tiny servers are still clickable
+    min_radius = 0.20 * total_estd_radius
+
+    #
+    #  The point around which circles are arranged for now (coordinate system origin)
+    #
+    screen_center = Point.new(0, 0)
+
+    #
+    #  Start by creating a circle for the largest server in the center of the screen.
+    #
+    server_circles = [ ServerCircle.new(screen_center, servers_and_radius[0][:relative_radius],
+                                        servers_and_radius[0][:server]) ]
+
+    #  For all other servers...
     servers_and_radius[1..-1].each do |server_and_radius|
 
-      radius = server_and_radius[1] / radius_scale
+      radius = [min_radius, server_and_radius[:relative_radius]].max
 
       if server_circles.size == 1
-        x = 0
-        y = -server_circles[0].radius - radius - gap
-        server_circles << ServerCircle.new(x, y, radius, server_and_radius[0])
+        # Place the circle for the second-largeset server vertically
+        # above the first one, separated by "gap"
+        center = Point.new(0, -server_circles[0].radius - radius - gap)
+        server_circles << ServerCircle.new(center, radius, server_and_radius[:server])
       else
-        min_distance = -1
-        server_circles.each do |circle1|
-          server_circles.each do |circle2|
-            if circle1 != circle2
 
-              xi, yi, xi_prime, yi_prime = circle_circle_intersection(circle1.x,
-                                                                      circle1.y,
-                                                                      circle1.radius + radius + gap,
-                                                                      circle2.x,
-                                                                      circle2.y,
-                                                                      circle2.radius + radius + gap)
+        # For all other circles, determine the best location by
+        # placing it in "corners" between all existing circles and
+        # choosing the "corner" the closest to the screen center where
+        # the circle can be placed without overlapping any of the
+        # existing circles.
 
-              if not xi.nil?
+        best_location = nil
 
-                loc1 = [ xi, yi ]
-                loc2 = [ xi_prime, yi_prime ]
+        # for each combination of existing circles
+        server_circles.each_with_index do |circle1, outer_index|
+          server_circles[outer_index+1 .. -1].each do |circle2|
 
-                [loc1, loc2].each do |loc|
+            # find the intersection between the circles enlarged by (radius+gap)
+            # which are potential locations for the new circle
+            intersections = circle_circle_intersection(circle1.center,
+                                                       circle1.radius + radius + gap,
+                                                       circle2.center,
+                                                       circle2.radius + radius + gap)
 
-                  cx = loc[0]
-                  cy = loc[1]
-                  
-                  overlaps = false
-                  server_circles.each do |circle|
-                    if circle.overlaps(cx, cy, radius)
-                      overlaps = true
-                      break
-                    end
-                  end
+            # if there are intersections
+            if intersections
 
-                  if not overlaps
-                    distance = Math.sqrt(cx*cx + cy*cy)
-                    
-                    if min_distance < 0 or distance < min_distance or ((distance-min_distance) < 0.00001 and cy < y)
-                      x = cx
-                      y = cy
-                      min_distance = distance
+              # for each of the two intersections
+              intersections.each do |intersection|
+                
+                # if the new circle doesn't overlap any existing circle
+                if not server_circles.any? { |circle| circle.overlaps(intersection, radius) }
+
+                  # if the new circle is the first match, or if it is
+                  # closer to the screen center than the previous
+                  # match, or if it is at the same distance as the
+                  # previous match (taking float imprecisions into
+                  # account) and higher up the screen, use this as the
+                  # new best match
+                  if best_location.nil?
+                    best_location = intersection
+                  else
+                    this_distance_sqr = intersection.distance_sqr(screen_center)
+                    best_distance_so_far_sqr = best_location.distance_sqr(screen_center)
+
+                    if this_distance_sqr < best_distance_so_far_sqr \
+                      or ((Math.sqrt(this_distance_sqr) - Math.sqrt(best_distance_so_far_sqr)).abs < 0.00001 \
+                          and intersection.y < best_location.y)
+
+                      best_location = intersection
                     end
                   end
                 end
@@ -126,19 +158,41 @@ module GraphHelper
           end
         end
 
-        server_circles << ServerCircle.new(x, y, radius, server_and_radius[0])
-        total_radius = Math.sqrt(x*x + y*y) + radius
-        if total_radius > max_radius
-          max_radius = total_radius
-        end
+        server_circles << ServerCircle.new(best_location, radius, server_and_radius[:server])
       end
     end
 
-    server_circles.each do |server_circle|
-      server_circle.scale(90 / max_radius)
+    maxVal = 10000000
+    minVal = -10000000
+
+    bounds = server_circles.inject({:min_x => maxVal, :min_y => maxVal, :max_x => minVal, :max_y => minVal}) \
+    do | bounds, server_circle | 
+      { \
+        :min_x => [bounds[:min_x], server_circle.center.x - server_circle.radius].min, \
+        :min_y => [bounds[:min_y], server_circle.center.y - server_circle.radius].min, \
+        :max_x => [bounds[:max_x], server_circle.center.x + server_circle.radius].max, \
+        :max_y => [bounds[:max_y], server_circle.center.y + server_circle.radius].max, \
+      }
     end
 
-    [ server_circles, max_radius ]
+    all_center = Point.new((bounds[:min_x] + bounds[:max_x]) / 2, \
+                           (bounds[:min_y] + bounds[:max_y]) / 2);
+
+    all_radius = server_circles.inject(0) \
+    do | all_radius, server_circle | 
+      [all_radius, server_circle.center.distance(all_center) + server_circle.radius].max
+    end
+
+    #max_radius = server_circles.inject(0) do | max_radius, server_circle | 
+    #  [max_radius, server_circle.center.distance(screen_center) + server_circle.radius].max
+    #end
+
+    server_circles.each do |server_circle|
+      server_circle.translate(-all_center.x, -all_center.y)
+      server_circle.scale(90 / all_radius)
+    end
+
+    server_circles
   end
 
 private
@@ -168,56 +222,82 @@ private
   # 2 * r2 * r2 - r1 * r1        =  r3 * r3                            |  sqrt        
   # r3                           =  Math.sqrt(2 * r2 * r2 - r1 * r1)
   #
+  # solving for outer levels gives:
+  # r4                           =  Math.sqrt(3 * r2 * r2 - 2 * r1 * r1)
+  # r5                           =  Math.sqrt(4 * r2 * r2 - 3 * r1 * r1)
+  # etc.
+  #
+  # solving that for r2 gives:
+  # r2                           =  Math.sqrt((outer * outer + inner * inner) / @level_count)
   def get_level_radii
+    inner = 25
+    outer = 90
+    
     if @level_radii.nil?
-      @level_radii = [ 25, 46 ]
-      while @level_radii.size <= @level_count + 1
-        r1 = @level_radii[@level_radii.size - 2]
-        r2 = @level_radii[@level_radii.size - 1]
-        @level_radii << Math.sqrt(2 * r2 * r2 - r1 * r1)
-      end
-    end
+      @level_radii = get_level_radii_uncached(inner, outer, @level_count)
+    end    
     @level_radii
   end
 
-  def GraphHelper.hue_to_rgb( v1, v2, vH )
-    vH += 1 if ( vH < 0 )
-    vH -= 1 if ( vH > 1 ) 
-    if ( ( 6 * vH ) < 1 ) 
-      return ( v1 + ( v2 - v1 ) * 6 * vH )
-    elsif ( ( 2 * vH ) < 1 ) 
-      return ( v2 )
-    elsif ( ( 3 * vH ) < 2 ) 
-      return ( v1 + ( v2 - v1 ) * ( ( 2.0 / 3 ) - vH ) * 6 )
-    else
-      return ( v1 )
+  def get_level_radii_uncached(inner, outer, count)
+    (0..count).map do |level|
+      Math.sqrt(outer.to_f * outer * level / count \
+                + inner.to_f * inner * (level.to_f * (count - 1) / count - level + 1))
     end
   end
 
+  # Convert a color from HSL (Hue, Saturation, Lightness) colorspace to RGB. The
+  # HSL colorspace is also known as HLS or HSI (Hue, Saturation, Intensity.)
+  # 
+  # The HSL colorspace should not be confused with the HSV (Hue, Saturation, Value)
+  # colorspace, also known as HSB (Hue, Saturation, Brightness).
+  #
+  # For a description and comparison to HSV see here:
+  # http://en.wikipedia.org/wiki/HSL_color_space
+  #
+  # This is used for determining the color of a graph segment as a
+  # function of its angular position and depth in the tree (if
+  # graph_coloring_mode=rainbow is configured in earth-webapp.yml) or
+  # as a function of its type and depth (if
+  # graph_coloring_mode=by_type).
+  #
   def GraphHelper.hsl_to_rgb(h, s, l) 
     if s == 0
-      r = l * 255
-      g = l * 255
-      b = l * 255
+      r = g = b = [0, [255, 255 * l].min].max.to_i
     else
       if l < 0.5
-        var_2 = l * ( 1 + s )
+        var_2 = l * (1.0 + s)
       else
-        var_2 = ( l + s ) - ( s * l )
+        var_2 = l + s - s * l
       end
-      var_1 = 2 * l - var_2
+      var_1 = 2.0 * l - var_2
 
-      r = 255 * hue_to_rgb( var_1, var_2, h + ( 1.0 / 3.0 ) )
-      g = 255 * hue_to_rgb( var_1, var_2, h )
-      b = 255 * hue_to_rgb( var_1, var_2, h - ( 1.0 / 3.0 ) )
+      components = [ \
+        [ var_1, var_2, h + 1.0 / 3.0 ], \
+        [ var_1, var_2, h ], \
+        [ var_1, var_2, h - 1.0 / 3.0 ] \
+      ].map do | v1, v2, vH |
+        vH += 1 if vH < 0
+        vH -= 1 if vH > 1
+        if vH < 1.0 / 6.0
+          v1 + (v2 - v1) * 6.0 * vH
+        elsif vH < 1.0 / 2.0
+          v2
+        elsif vH < 2.0 / 3.0
+          v1 + (v2 - v1) * (2.0 / 3.0 - vH) * 6.0
+        else
+          v1
+        end
+      end
 
-      r = [0, [255, r].min].max.to_i
-      g = [0, [255, g].min].max.to_i
-      b = [0, [255, b].min].max.to_i
+      r, g, b = components.map do |col|
+        [0, [255, 255 * col].min].max.to_i
+      end
     end
     "rgb(#{r},#{g},#{b})"
-  end  
+  end
 
+  # Simple helper class for representing a 2D Point.
   class Point
 
     attr_reader :x, :y
@@ -225,6 +305,16 @@ private
     def initialize(x, y)
       @x = x
       @y = y
+    end
+
+    def distance_sqr(other)
+      dx = other.x - @x
+      dy = other.y - @y
+      dx*dx + dy*dy
+    end
+
+    def distance(other)
+      Math.sqrt(distance_sqr(other))
     end
 
     def to_s
@@ -570,29 +660,28 @@ private
 
 
   class ServerCircle
-    attr_reader :x
-    attr_reader :y
+    attr_reader :center
     attr_reader :radius
     attr_reader :server
 
-    def initialize(x, y, radius, server)
-      @x = x
-      @y = y
+    def initialize(center, radius, server)
+      @center = center
       @radius = radius
       @server = server
     end
 
-    def overlaps(x, y, radius)
-      dx = x - @x
-      dy = y - @y
+    def overlaps(point, radius)
       dr = radius + @radius
-      dx*dx + dy*dy < dr*dr
+      center.distance_sqr(point) < dr*dr
     end
 
     def scale(value)
-      @x *= value
-      @y *= value
+      @center = Point.new(@center.x * value, @center.y * value)
       @radius *= value
+    end
+
+    def translate(dx, dy)
+      @center = Point.new(@center.x + dx, @center.y + dy)
     end
   end
 
@@ -607,8 +696,12 @@ private
   # Find the intersection of two circles.
   # Translated from this piece of C code: 
   # http://local.wasp.uwa.edu.au/~pbourke/geometry/2circle/tvoght.c
-  def circle_circle_intersection(x0, y0, r0,
-                                 x1, y1, r1)
+  def circle_circle_intersection(p0, r0,
+                                 p1, r1)
+
+    x0, y0 = p0.x, p0.y
+    x1, y1 = p1.x, p1.y
+
     # dx and dy are the vertical and horizontal distances between
     # the circle centers.
     #
@@ -616,10 +709,10 @@ private
     dy = y1 - y0
 
     # Determine the straight-line distance between the centers.
-    d = Math.sqrt((dy*dy) + (dx*dx))
+    d = Math.sqrt(dy*dy + dx*dx)
 
     # Check for solvability.
-    if (d > (r0 + r1))
+    if (d > r0 + r1)
       # no solution. circles do not intersect.
       nil
 
@@ -634,7 +727,7 @@ private
       # centers.  
 
       # Determine the distance from point 0 to point 2.
-      a = ((r0*r0) - (r1*r1) + (d*d)) / (2.0 * d)
+      a = (r0*r0 - r1*r1 + d*d) / (2.0 * d)
 
       # Determine the coordinates of point 2.
       x2 = x0 + (dx * a/d)
@@ -656,7 +749,7 @@ private
       yi = y2 + ry
       yi_prime = y2 - ry
 
-      [xi, yi, xi_prime, yi_prime]
+      [Point.new(xi, yi), Point.new(xi_prime, yi_prime)]
     end
   end
 end

@@ -6,6 +6,44 @@ class BrowserController < ApplicationController
     redirect_to :action => 'show'
   end
 
+  def flat
+    @server = Earth::Server.find_by_name(params[:server]) if params[:server]
+    @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
+
+    @page_size = 25
+    @current_page = (params[:page] || 1).to_i
+
+    joins = "JOIN directories ON files.directory_id = directories.id"
+    order = "directories.path, files.name"
+    include_attributes = [ "name", "directory_id", "modified", "size", "uid" ]
+    select = include_attributes.map {|attr| "files.#{attr} as #{attr}" }.join(", ")
+
+    if @directory
+      conditions = " directories.server_id=#{@server.id} " +
+                   " AND directories.lft >= #{@directory.lft} " +
+                   " AND directories.rgt <= #{@directory.rgt}"
+    elsif @server
+      conditions = " directories.server_id=#{@server.id} "
+    else
+      conditions = nil
+    end
+
+    Earth::File.with_filter(params) do
+      file_count = Earth::File.count(:joins => joins, 
+                                     :conditions => conditions)
+      @page_count = (file_count + @page_size - 1) / @page_size
+      
+
+      @files = Earth::File.find(:all, 
+                                :select => select,
+                                :joins => joins,
+                                :conditions => conditions,
+                                :order => order,
+                                :offset => ((@current_page - 1) * @page_size),
+                                :limit => @page_size)
+    end
+  end
+
   def show
     @server = Earth::Server.find_by_name(params[:server]) if params[:server]
     @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
@@ -32,6 +70,7 @@ class BrowserController < ApplicationController
           servers = servers.select{|s| s.has_files?} if servers
         end
         @servers_and_size = servers.map{|s| [s, s.size]} if servers
+        @any_empty = @servers_and_size.any? { |server_and_size| server_and_size[1] == 0 }
       elsif directories
         # Instead of filtering out empty directories ahead of time,
         # which requires one additional query per directory, get
@@ -44,17 +83,11 @@ class BrowserController < ApplicationController
           end
         end
 
+        @any_empty = @directories_and_size.any? { |directory_and_size| directory_and_size && directory_and_size[1] == 0 }
+        @any_empty = @files.any? { |file| file.size == 0 } if @files and not @any_empty
+
         # Remove any nil entries resulting from empty directories
         @directories_and_size.delete_if { |entry| entry.nil? }
-
-        # Since we know the parent of each directory found (it is the
-        # directory we've been called for, set the known parent path
-        # for each directory found. If we don't do this, there'll be
-        # another query for each found directory when directory.path
-        # is invoked.
-        if @directory
-          @directories_and_size.each { |entry| entry[0].set_parent_path(@directory.path) }
-        end
       end
     end
     

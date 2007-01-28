@@ -1,5 +1,6 @@
 class FileMonitor
   cattr_accessor :log_all_sql
+  cattr_accessor :console_writer
 
   class ETAPrinter
     def initialize(number_of_items)
@@ -55,7 +56,7 @@ class FileMonitor
     @directory_eta_printer.increment
   end
   
-  def FileMonitor.run_on_new_directory(path, update_time)
+  def FileMonitor.run_on_new_directory(path, update_time, only_once = false)
     this_server = Earth::Server.this_server
     puts "WARNING: Watching new directory. So, clearing out database"
 
@@ -67,7 +68,8 @@ class FileMonitor
 
     directory = benchmark "Scanning and storing tree", false do
     
-      directory = this_server.directories.build(:name => File.expand_path(path))
+      expanded_path = File.expand_path(path)
+      directory = this_server.directories.build(:name => expanded_path, :path => expanded_path)
       directory_count = benchmark "Building initial directory structure for #{path}" do
         update(directory, 0, true)
       end
@@ -91,7 +93,7 @@ class FileMonitor
       directory
     end
 
-    run(directory, update_time)
+    run(directory, update_time, only_once)
   end
   
   def FileMonitor.run_on_existing_directory(update_time)
@@ -106,11 +108,12 @@ class FileMonitor
   
 private
 
-  def FileMonitor.run(directory, update_time)
+  def FileMonitor.run(directory, update_time, only_once = false)
     puts "Watching directory #{directory.path}"    
     while true do
       puts "Updating #{directory.server.directories.count} directories..."
-      update(directory, update_time)
+      update(directory, update_time)      
+      return if only_once
     end
   end
   
@@ -173,7 +176,7 @@ private
     added_directory_names = subdirectory_names - directory.children.map{|x| x.name}
     added_directory_names.each do |name|
       dir = Earth::Directory.benchmark("Creating directory with name #{directory.name}/#{name}", Logger::DEBUG, !log_all_sql) do
-        attributes = { :name => name, :server_id => directory.server_id }
+        attributes = { :name => name, :path => "#{directory.name}/#{name}", :server_id => directory.server_id }
         if only_build_directories then
           directory.children.build(attributes)
         else
@@ -190,10 +193,7 @@ private
         Earth::File.benchmark("Creating file with name #{name}", Logger::DEBUG, !log_all_sql) do
           file = directory.files.create(:name => name, :stat => stats[name])
           filter_to_cached_size.each do |filter, cached_size|
-            if filter.matches(file)
-              cached_size.recursive_size += file.size
-              cached_size.recursive_blocks += file.blocks
-            end
+            cached_size.increment(file) if filter.matches(file)
           end
           file
         end
@@ -205,17 +205,11 @@ private
           # If the file has changed
           if file.stat != stats[file.name]
             filter_to_cached_size.each do |filter, cached_size|
-              if filter.matches(file)
-                cached_size.recursive_size -= file.size
-                cached_size.recursive_blocks -= file.blocks
-              end
+              cached_size.decrement(file) if filter.matches(file)
             end
             file.stat = stats[file.name]
             filter_to_cached_size.each do |filter, cached_size|
-              if filter.matches(file)
-                cached_size.recursive_size += file.size
-                cached_size.recursive_blocks += file.blocks
-              end
+              cached_size.increment(file) if filter.matches(file)
             end
             Earth::File.benchmark("Updating file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
               file.save
@@ -225,10 +219,7 @@ private
         else
           Earth::Directory.benchmark("Removing file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
             filter_to_cached_size.each do |filter, cached_size|
-              if filter.matches(file)
-                cached_size.recursive_size -= file.size
-                cached_size.recursive_blocks -= file.blocks
-              end
+              cached_size.decrement(file) if filter.matches(file)
             end
             directory.files.delete(file)
           end
@@ -243,10 +234,7 @@ private
           removed_dir_filter_to_cached_size = dir.filter_to_cached_size(filters)
           filter_to_cached_size.each do |filter, cached_size|
             removed_cached_size = removed_dir_filter_to_cached_size[filter]
-            if removed_cached_size
-              cached_size.recursive_size -= removed_cached_size.recursive_size
-              cached_size.recursive_blocks -= removed_cached_size.recursive_blocks
-            end
+            cached_size.decrement(removed_cached_size) if removed_cached_size
           end
           directory.child_delete(dir)
         end
@@ -271,8 +259,8 @@ private
             if not ancestor_cached_size
               ancestor_cached_size = ancestor.cached_sizes.build(:filter => filter)
             end
-            ancestor_cached_size.recursive_size += size_difference
-            ancestor_cached_size.recursive_blocks += blocks_difference
+            ancestor_cached_size.size += size_difference
+            ancestor_cached_size.blocks += blocks_difference
           end
         end
 
@@ -289,7 +277,7 @@ private
 
           if (size_difference != 0 or blocks_difference != 0) and not directory.parent.nil?
             Earth::Directory.benchmark("Updating parent directories' size cache", Logger::DEBUG, !log_all_sql) do
-              Earth::CachedSize.update_all("recursive_size = recursive_size + #{size_difference}, recursive_blocks = recursive_blocks + #{blocks_difference}",
+              Earth::CachedSize.update_all("size = size + #{size_difference}, blocks = blocks + #{blocks_difference}",
                                            "filter_id=#{filter.id} and directory_id in (#{ancestors_to_update.map{|x| x.id}.join(',')})")                
             end
           end

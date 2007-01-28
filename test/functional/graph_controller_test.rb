@@ -58,6 +58,18 @@ class GraphControllerTest < Test::Unit::TestCase
     
   end
 
+
+  def test_show_yet_another_server
+    get :show, :server => servers(:yet_another).name
+
+    assert_response :success
+    assert_template 'directory.rxml'
+
+    #assert_equal(directories(:foo), assigns(:directory))
+    #assert_equal([[directories(:foo_bar), directories(:foo_bar).size]], assigns(:directories_and_size))
+    
+  end
+
   def test_show_directory_unfiltered
     get :show, :server => Earth::Server.this_hostname, :path => "/foo"
 

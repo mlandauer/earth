@@ -4,11 +4,21 @@ module Earth
     belongs_to :filter
 
     def snapshot
-      @recursive_size_snapshot, @recursive_blocks_snapshot = recursive_size, recursive_blocks
+      @size_snapshot, @blocks_snapshot = size, blocks
     end
 
     def difference
-      [ recursive_size - @recursive_size_snapshot, recursive_blocks - @recursive_blocks_snapshot ]
+      [ size - @size_snapshot, blocks - @blocks_snapshot ]
+    end
+
+    def increment(file_or_cached_size)
+      self.size += file_or_cached_size.size
+      self.blocks += file_or_cached_size.blocks
+    end
+
+    def decrement(file_or_cached_size)
+      self.size -= file_or_cached_size.size
+      self.blocks -= file_or_cached_size.blocks
     end
   end
 end

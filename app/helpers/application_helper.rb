@@ -33,17 +33,17 @@ module ApplicationHelper
   end
 
   def breadcrumbs_with_server_and_directory(server = nil, directory = nil)
-    s = link_to_unless_current("root", :overwrite_params => {:server => nil, :path => nil})
+    s = link_to_unless_current("root", :overwrite_params => {:server => nil, :path => nil, :page => nil})
     if server
       s += ' &#187 '
-      s += link_to_unless_current(server.name, :overwrite_params => {:server => server.name, :path => nil})
+      s += link_to_unless_current(server.name, :overwrite_params => {:server => server.name, :path => nil, :page => nil})
     end
     if directory
       s += ' &#187 '
       # Note: need to reverse ancestors with behavior compatible to nested_set
       # (as opposed to better_nested_set)
       for dir in directory.ancestors.reverse
-        s += link_to(dir[:name], :overwrite_params => {:path => dir.path}) + '/'
+        s += link_to(dir[:name], :overwrite_params => {:path => dir.path, :page => nil}) + '/'
       end
       s += h(directory[:name])
     end
@@ -53,7 +53,7 @@ module ApplicationHelper
   # This depends on the application running from a checked out svn version and
   # the command "svnversion" being available on the path
   def earth_version
-    IO::popen('svnversion').readline
+    IO::popen('svnversion .').readline
   end
 
 private

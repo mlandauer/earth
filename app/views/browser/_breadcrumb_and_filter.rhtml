@@ -1,6 +1,6 @@
 <div>
   <div class="Left" style="z-index: 100">
-    <h2>
+    <h2 class="breadcrumbs">
       <%= breadcrumbs_with_server_and_directory @server, @directory %>
     </h2>
     
@@ -32,10 +32,12 @@
           <%= content_tag "div", "", :id => "filter_user_auto_complete", :class => "auto_complete" %>
           <%= auto_complete_field "filter_user", :url => {:action => "auto_complete_for_filter_user"} %></td>
         </tr>
+        <tr>
+          <td id="FilterSubmit" class="filter-submit" colspan="2">
+            <%= submit_tag "Update", :name => nil, :class => "submit" %>
+          </td>
+        </tr>
       </table>
-      <div id="FilterSubmit">
-        <%= submit_tag "Update", :name => nil, :class => "submit" %>
-      </div>
     <% end %>
   </div>
 

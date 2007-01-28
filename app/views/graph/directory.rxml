@@ -50,7 +50,7 @@ xml.svg(:width => "100%",
   end
 
   xml.radialGradient(:id => "gradient_divider", :gradientUnits => "userSpaceOnUse",
-                     :cx => 0, :cy => 0, :r => @level_radii[@level_count] + 8) do
+                     :cx => 0, :cy => 0, :r => @level_radii[@level_count] + 10) do
     xml.stop(:offset => "0%", "stop-color".to_sym => "black")
     xml.stop(:offset => "90%", "stop-color".to_sym => "black")
     xml.stop(:offset => "100%", "stop-color".to_sym => "white")
@@ -61,7 +61,7 @@ xml.svg(:width => "100%",
     if segment.directory?
       xml.defs do
         xml.radialGradient(:id => "gradient_#{segment.segment_id}", :gradientUnits => "userSpaceOnUse",
-                           :cx => 0, :cy => 0, :r => @level_radii[@level_count] + 8) do
+                           :cx => 0, :cy => 0, :r => @level_radii[@level_count] + 10) do
           xml.stop(:offset => "0%", "stop-color".to_sym => "#{segment.get_color}")
           xml.stop(:offset => "90%", "stop-color".to_sym => "#{segment.get_color}")
           xml.stop(:offset => "100%", "stop-color".to_sym => "white")

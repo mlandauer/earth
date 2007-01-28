@@ -59,13 +59,13 @@ module Earth
     # This only requires the id of the current directory and so doesn't need to
     # protected in a transaction which simplified its use
     def size
-      @cached_size || recursive_size_with_filter || sum_files(:size)
+      @cached_size || size_with_filter || sum_files(:size)
     end
 
-    def recursive_size_with_filter
+    def size_with_filter
       filter = Thread.current[:with_filter]
       cached_size = cached_sizes.find :first, :conditions => ["filter_id = ?", filter.id] if filter
-      cached_size.recursive_size if cached_size || nil
+      cached_size.size if cached_size || nil
     end
 
     def blocks
@@ -120,19 +120,6 @@ module Earth
       Directory.roots.find_all{|d| d.server_id == server.id}
     end
     
-    # Hmmm. How can I explain this? It's a really ugly hack. If parent_id isn't set and the normal
-    # way of finding the path won't work you can explicitly set it for this object. Only used by the daemon.
-    def path=(path)
-      @cached_path = path
-    end
-    
-    def path
-      # Note: need to reverse ancestors with behavior compatible to nested_set
-      # (as opposed to better_nested_set)
-      @cached_path = self_and_ancestors.reverse.map{|x| x.name}.join('/') unless @cached_path
-      @cached_path
-    end
-
     def path_relative_to(some_parent)
       if some_parent.id.nil? or path.nil?
         path
@@ -145,29 +132,10 @@ module Earth
         end
       end
     end
-
-    def set_parent_path(parent_path)
-      if parent_path == ""
-        @cached_path = name
-      else
-        @cached_path = "#{parent_path}/#{name}"
-      end
-    end
     
     # This assumes there are no overlapping directory trees
     def Directory.find_by_path(path)
-      current = roots.find {|d| path[0, d.name.length] == d.name}
-      if current.nil? || path.length == current.name.length
-        return current
-      end
-      remaining = path[current.name.length+1 .. -1].split("/")
-      
-      while !remaining.empty? && !current.nil? do
-        current = current.find_by_child_name(remaining.shift)
-      end
-
-
-      return current
+      return Directory.find(:first, :conditions => ['path = ?', path])
     end
     
     # Returns the child of this directory with the given name
@@ -214,6 +182,18 @@ module Earth
           save_observer.directory_saved(self)
         end
       end
+    end
+
+    def self_and_ancestors_up_to(other)
+      result = []
+      self_and_ancestors.each do |directory|
+        if directory != other
+          result << directory
+        else
+          return result
+        end
+      end
+      result
     end
   end
 end

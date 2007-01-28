@@ -2,73 +2,73 @@ foo__all:
   id: 1
   directory_id: 1
   filter_id: 1
-  recursive_size: 34
+  size: 34
 
 foo__zip:
   id: 2
   directory_id: 1
   filter_id: 2
-  recursive_size: 24
+  size: 24
 
 foo_bar__all:
   id: 3
   directory_id: 2
   filter_id: 1
-  recursive_size: 31
+  size: 31
 
 foo_bar__zip:
   id: 4
   directory_id: 2
   filter_id: 1
-  recursive_size: 24
+  size: 24
 
 foo_bar_twiddle__all:
   id: 5
   directory_id: 3
   filter_id: 1
-  recursive_size: 20
+  size: 20
 
 foo_bar_twiddle__zip:
   id: 6
   directory_id: 3
   filter_id: 1
-  recursive_size: 20
+  size: 20
 
 foo_bar_twiddle_frob__all:
   id: 7
   directory_id: 4
   filter_id: 1
-  recursive_size: 20
+  size: 20
 
 foo_bar_twiddle_frob__zip:
   id: 8
   directory_id: 4
   filter_id: 1
-  recursive_size: 20
+  size: 20
 
 foo_bar_twiddle_frob_baz__all:
   id: 9
   directory_id: 5
   filter_id: 1
-  recursive_size: 20
+  size: 20
 
 foo_bar_twiddle_frob_baz__zip:
   id: 10
   directory_id: 5
   filter_id: 1
-  recursive_size: 20
+  size: 20
 
 bar__all:
   id: 11
   directory_id: 6
   filter_id: 1
-  recursive_size: 0
+  size: 0
 
 bar__zip:
   id: 12
   directory_id: 6
   filter_id: 1
-  recursive_size: 0
+  size: 0
 
 
 

@@ -27,15 +27,6 @@ circle.current-directory,
   stroke-opacity: 1;
   }
 
-circle.server
-{ 
-  fill: blue;
-  fill-opacity: 0.15;
-  stroke: black;
-  stroke-opacity: 1;
-  stroke-width: 0.2;
-}
-
 circle.current-directory 
 { 
   fill-opacity: 1;
@@ -110,9 +101,18 @@ text.directory-size
   fill: black;
 }
 
+circle.server
+{ 
+  fill: grey;
+  fill-opacity: 0.27;
+  stroke: black;
+  stroke-opacity: 1;
+  stroke-width: 0.2;
+}
+
 text.server-name
 { 
-  font-size: 2.4pt; 
+  font-size: 12pt; 
   font-weight: bold; 
   text-anchor: middle; 
   alignment-baseline: central; 
@@ -121,7 +121,7 @@ text.server-name
 
 text.server-size
 { 
-  font-size: 2.4pt; 
+  font-size: 12pt; 
   text-anchor: middle; 
   alignment-baseline: central; 
   dominant-baseline: central;

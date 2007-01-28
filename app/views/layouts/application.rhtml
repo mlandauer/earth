@@ -24,10 +24,10 @@
       <div id="TabsInside">
 	      <% # We probably should get these from some configuration file or dynamically %>
         <% [
-           { :title => "browser", :controller => "browser", :action => "show" }, 
-           { :title => "graph",   :controller => "graph",   :action => "index" }, 
-           { :title => "files",   :controller => "files",   :action => "index" } ].each_with_index { |item, index| 
-        html_class = 'active' if controller.controller_class_name == (item[:controller].capitalize + "Controller") 
+           { :title => "navigation", :controller => "browser", :action => "show" }, 
+           { :title => "all files",  :controller => "browser", :action => "flat" }, 
+           { :title => "diagram",    :controller => "graph",   :action => "index" } ].each_with_index { |item, index| 
+        html_class = 'active' if controller.controller_class_name == (item[:controller].capitalize + "Controller") and params[:action] == item[:action]
               html_style = 'border-left: 1px solid #c2c2c2;' if index == 0 %>
           <%= link_to(item[:title], { :controller => item[:controller], :action => item[:action], :params => {:server => (@server ? @server.name : nil), :path => (@directory ? @directory.path : nil), :filter_user => params[:filter_user], :filter_filename => params[:filter_filename]} }, { :class => html_class, :style => html_style } ) %>
         <%  } %>
@@ -40,8 +40,6 @@
     </div>
   <div id="Footer">
     Earth revision <%= earth_version %>
-  </div>
-
   </div>
 
 </div>

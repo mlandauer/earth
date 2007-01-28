@@ -2,6 +2,7 @@
 foo:
   id: 1
   name: "/foo"
+  path: "/foo"
   lft: 1
   rgt: 10
   level: 1
@@ -9,6 +10,7 @@ foo:
 foo_bar:
   id: 2
   name: "bar"
+  path: "/foo/bar"
   parent_id: 1
   lft: 2
   rgt: 9
@@ -17,6 +19,7 @@ foo_bar:
 foo_bar_twiddle:
   id: 3
   name: "twiddle"
+  path: "/foo/bar/twiddle"
   parent_id: 2
   lft: 3
   rgt: 8
@@ -25,6 +28,7 @@ foo_bar_twiddle:
 foo_bar_twiddle_frob:
   id: 4
   name: "frob"
+  path: "/foo/bar/twiddle/frob"
   parent_id: 3
   lft: 4
   rgt: 7
@@ -33,6 +37,7 @@ foo_bar_twiddle_frob:
 foo_bar_twiddle_frob_baz:
   id: 5
   name: "baz"
+  path: "/foo/bar/twiddle/frob/baz"
   parent_id: 4
   lft: 5
   rgt: 6
@@ -41,6 +46,7 @@ foo_bar_twiddle_frob_baz:
 bar:
   id: 6
   name: "/bar"
+  path: "/bar"
   lft: 1
   rgt: 2
   level: 1
@@ -48,6 +54,7 @@ bar:
 fizzle:
   id: 7
   name: "/fizzle"
+  path: "/fizzle"
   lft: 1
   rgt: 2
   level: 1

@@ -23,6 +23,15 @@ class BrowserControllerTest < Test::Unit::TestCase
     assert_not_nil assigns(:servers_and_size)
   end
 
+  def test_show_root_flat
+    get :flat
+    
+    assert_response :success
+    assert_template 'flat'
+
+    assert_not_nil assigns(:files)
+  end
+
   def test_show_server
     get :show, :server => Earth::Server.this_hostname
     

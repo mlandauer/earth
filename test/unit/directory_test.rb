@@ -28,10 +28,10 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_path_on_create
-    dir = directories(:foo_bar).children.create(:name => "another", :server_id => directories(:foo_bar).server_id)
+    dir = directories(:foo_bar).children.create(:name => "another", :path => "/foo/bar/another", :server_id => directories(:foo_bar).server_id)
     assert_equal("/foo/bar/another", dir.path)
     assert_equal(directories(:foo_bar), dir.parent)
-    dir = Earth::Server.this_server.directories.create(:name => "/a/root/directory")
+    dir = Earth::Server.this_server.directories.create(:name => "/a/root/directory", :path => "/a/root/directory")
     assert_equal("/a/root/directory", dir.path)
   end
 
@@ -40,7 +40,7 @@ class DirectoryTest < Test::Unit::TestCase
   def test_set_parent 
     assert_equal(2, directories(:foo_bar).lft)
     assert_equal(9, directories(:foo_bar).rgt)
-    dir = Earth::Directory.new(:name => "another", :server_id => directories(:foo_bar).server_id)
+    dir = Earth::Directory.new(:name => "another", :path => "/foo/bar/another", :server_id => directories(:foo_bar).server_id)
     dir.parent = directories(:foo_bar)
     dir.save
     assert_equal(directories(:foo_bar).id, dir.parent_id)
@@ -100,7 +100,7 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_child_create
-    dir = directories(:foo).child_create(:name => "blah", :server_id => directories(:foo).server_id)
+    dir = directories(:foo).child_create(:name => "blah", :path => "/foo/blah", :server_id => directories(:foo).server_id)
     assert_equal("blah", dir.name)
     assert_equal("/foo/blah", dir.path)
     assert_equal(directories(:foo), dir.parent)
@@ -115,7 +115,7 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal([foo_bar], foo.children)
     assert_no_queries{assert_equal([foo_bar], foo.children)}
     
-    foo_fiddle = foo.child_create(:name => "fiddle", :server_id => foo.server_id)
+    foo_fiddle = foo.child_create(:name => "fiddle", :path => "/foo/fiddle", :server_id => foo.server_id)
     assert_no_queries{assert_equal([foo_bar, foo_fiddle], foo.children)}
     # Force a reload of children and check that the values are correct too
     assert_queries(1){assert_equal([foo_bar, foo_fiddle], foo.children(true))}
@@ -160,7 +160,7 @@ class DirectoryTest < Test::Unit::TestCase
     # This will update the lft and rgt values of foo in the database (but not in the loaded object)
     assert_equal(2, foo_bar.lft)
     assert_equal(9, foo_bar.rgt)
-    foo_bar.child_create(:name => "wibble", :server_id => foo_bar.server_id)
+    foo_bar.child_create(:name => "wibble", :path => "/foo/bar/wibble", :server_id => foo_bar.server_id)
     foo_bar.reload
     assert_equal(2, foo_bar.lft)
     assert_equal(11, foo_bar.rgt)
