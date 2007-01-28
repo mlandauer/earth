@@ -148,8 +148,8 @@ class DirectoryTest < Test::Unit::TestCase
   def test_each
     a = []
     directories(:foo).each {|x| a << x.path}
-    # We should move from the leaves to the root
-    assert_equal(["/foo/bar/twiddle/frob/baz", "/foo/bar/twiddle/frob", "/foo/bar/twiddle", "/foo/bar", "/foo"], a)
+    # We should move from the root to the leaves
+    assert_equal(["/foo", "/foo/bar", "/foo/bar/twiddle", "/foo/bar/twiddle/frob", "/foo/bar/twiddle/frob/baz"], a)
   end
   
   def test_update

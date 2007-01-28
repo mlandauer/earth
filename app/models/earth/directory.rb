@@ -175,13 +175,13 @@ module Earth
       Directory.find(:first, :conditions => ['parent_id = ? AND name = ?', id, n])
     end
     
-    # Iterate over each node of the tree. Move from the leaf nodes
-    # back to the root
-    def each 
+    # Iterate over each node of the tree. Move from the top to the
+    # bottom of the tree
+    def each
+      yield self       
       children.each do |child_node| 
         child_node.each { |e| yield e } 
       end 
-      yield self 
     end
 
     def filter_to_cached_size(filters)
