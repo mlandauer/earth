@@ -1,0 +1,74 @@
+<p>
+  <table id="pagelist" class="page-list">
+    <tr>
+      <!-- Show current page and page count -->
+      <th class="page-list-head">Page <%= @current_page %> of <%= @page_count %></th>
+
+      <% if @page_count > 1 %>
+
+        <!-- Link to previous page -->
+        <% if @current_page > 1 %>
+          <th class="page-link">
+            <%= link_to "<<", :overwrite_params => {:page => (@current_page - 1 == 1 ? nil : @current_page - 1) } %> 
+          </th>
+        <% else %>
+          <th class="page-link-disabled">
+            &lt;&lt;
+          </th>
+        <% end %>
+
+        <!-- Link to next page -->
+        <% if @current_page < @page_count %>
+          <th class="page-link">
+            <%= link_to ">>", :overwrite_params => {:page => @current_page + 1 } %> 
+          </th>
+        <% else %>
+          <th class="page-link-disabled">
+            &gt;&gt;          
+          </th>
+        <% end %>
+
+        <!-- Direct link to other pages -->
+        <% (1..@page_count).each do |page_number| %>
+            <% if page_number == @current_page %>
+              <td class="page-current"><%= page_number %></td>
+            <% elsif (page_number - @current_page).abs < 10 \
+                      or ((page_number - @current_page).abs < 50 and page_number % 10 == 0) \
+                      or (page_number % 100 == 0) \
+                      or page_number == 1 \
+                      or page_number == @page_count %>
+              <td class="page-link"><%= link_to page_number, :overwrite_params => {:page => (page_number == 1 ? nil : page_number) } %></td>
+            <% end %>
+          </td>
+        <% end %>
+
+      <% end %>
+    </tr>
+  </table>
+
+  <table id="browser" class="listing flat">
+    <thead>
+      <tr>
+        <th class="path">Path</th>
+        <th class="modified">Modified</th>
+        <th class="user">User</th>
+        <th class="size">Size</th>
+        <th class=""></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @files.each do |file| %>
+        <tr class="<%= cycle 'even', 'odd' %>">
+          <td class="path">
+            <% if not @server %><%= link_to file.directory.server.name, :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => nil} %>:<% end %><% file.directory.self_and_ancestors_up_to(@directory).reverse.each do |parent| %><%= link_to parent.name, :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => parent.path} %>/<% end %><%= file.name %>
+          </td>
+          <td class="modified">
+            <span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span>
+          </td>
+          <td class="owner_user"><%=h file.user.name %></td>
+          <td class="size"><%= human_size_in(human_units_of(file.size), file.size) %> <%= human_units_of(file.size) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</p>
