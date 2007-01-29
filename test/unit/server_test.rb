@@ -55,4 +55,15 @@ class ServerTest < Test::Unit::TestCase
   def test_heartbeat_interval_default_value
     assert_equal 5.minutes, Earth::Server.this_server.heartbeat_interval
   end
+  
+  def test_daemon_alive
+    server = Earth::Server.this_server
+    server.heartbeat_interval = 1.minute
+    server.heartbeat_time = 55.seconds.ago
+    assert(server.daemon_alive?)
+    server.heartbeat_time = 2.minutes.ago
+    assert(!server.daemon_alive?)
+    server.heartbeat_time = nil
+    assert(!server.daemon_alive?)
+  end
 end

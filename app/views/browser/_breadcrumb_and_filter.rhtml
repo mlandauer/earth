@@ -3,6 +3,9 @@
     <h2 class="breadcrumbs">
       <%= breadcrumbs_with_server_and_directory @server, @directory %>
     </h2>
+    <h2 class="warning">
+        <%= "Warning! The Earth daemon on #{@server.name} may not be alive" unless @server.nil? || @server.daemon_alive? %>
+    </h2>
     
     <% if can_show_empty %>
       <small>

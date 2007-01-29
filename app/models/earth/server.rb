@@ -28,5 +28,14 @@ module Earth
       self.heartbeat_time = Time.now
       save!
     end
+    
+    def daemon_alive?
+      if heartbeat_time.nil?
+        false
+      else
+        (heartbeat_time + heartbeat_interval) >= Time::now
+      end
+    end
+    
   end
 end
