@@ -1,0 +1,22 @@
+<h1>Editing server</h1>
+
+<%= error_messages_for :server %>
+
+<% form_for(:server, :url => server_path(@server), :html => { :method => :put }) do |f| %>
+  <p>
+    <b>Name</b><br />
+    <%= f.text_field :name %>
+  </p>
+
+  <p>
+    <b>Update interval</b><br />
+    <%= f.text_field :update_interval %>
+  </p>
+
+  <p>
+    <%= submit_tag "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', server_path(@server) %> |
+<%= link_to 'Back', servers_path %>

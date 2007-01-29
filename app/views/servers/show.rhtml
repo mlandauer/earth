@@ -1,0 +1,13 @@
+<p>
+  <b>Name:</b>
+  <%=h @server.name %>
+</p>
+
+<p>
+  <b>Update interval:</b>
+  <%=h @server.update_interval %>
+</p>
+
+
+<%= link_to 'Edit', edit_server_path(@server) %> |
+<%= link_to 'Back', servers_path %>
