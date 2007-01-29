@@ -21,31 +21,9 @@ class ServersController < ApplicationController
     end
   end
 
-  # GET /servers/new
-  def new
-    @server = Earth::Server.new
-  end
-
   # GET /servers/1;edit
   def edit
     @server = Earth::Server.find(params[:id])
-  end
-
-  # POST /servers
-  # POST /servers.xml
-  def create
-    @server = Earth::Server.new(params[:server])
-
-    respond_to do |format|
-      if @server.save
-        flash[:notice] = 'Server was successfully created.'
-        format.html { redirect_to server_url(@server) }
-        format.xml  { head :created, :location => server_url(@server) }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @server.errors.to_xml }
-      end
-    end
   end
 
   # PUT /servers/1
@@ -62,18 +40,6 @@ class ServersController < ApplicationController
         format.html { render :action => "edit" }
         format.xml  { render :xml => @server.errors.to_xml }
       end
-    end
-  end
-
-  # DELETE /servers/1
-  # DELETE /servers/1.xml
-  def destroy
-    @server = Earth::Server.find(params[:id])
-    @server.destroy
-
-    respond_to do |format|
-      format.html { redirect_to servers_url }
-      format.xml  { head :ok }
     end
   end
 end
