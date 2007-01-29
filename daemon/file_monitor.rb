@@ -56,7 +56,22 @@ class FileMonitor
     @directory_eta_printer.increment
   end
   
+  def FileMonitor.start_heartbeat_thread
+    ActiveRecord::Base.allow_concurrency = true
+    puts "Starting heartbeat thread..."
+    Thread.new do
+      while true do
+        # reload the server object in case of changes on the database side
+        server = Earth::Server.this_server
+        $stdout.flush
+        server.heartbeat
+        sleep(server.heartbeat_interval)
+      end
+    end
+  end
+  
   def FileMonitor.run_on_new_directory(path, update_time, only_once = false)
+    start_heartbeat_thread
     this_server = Earth::Server.this_server
     puts "WARNING: Watching new directory. So, clearing out database"
 
@@ -97,6 +112,7 @@ class FileMonitor
   end
   
   def FileMonitor.run_on_existing_directory(update_time)
+    start_heartbeat_thread
     directories = Earth::Directory.roots_for_server(Earth::Server.this_server)
     raise "Watch directory is not set for this server" if directories.empty?
     raise "Currently not properly supporting multiple watch directories" if directories.size > 1

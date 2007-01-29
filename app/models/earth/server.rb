@@ -23,5 +23,10 @@ module Earth
     def has_files?
       recursive_file_count > 0
     end
+    
+    def heartbeat
+      self.heartbeat_time = Time.now
+      save!
+    end
   end
 end

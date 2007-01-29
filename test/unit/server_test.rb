@@ -41,4 +41,18 @@ class ServerTest < Test::Unit::TestCase
     assert(!servers(:another).has_files?)
     assert(servers(:yet_another).has_files?)
   end
+  
+  def test_heartbeat_time_default_value
+    assert_nil Earth::Server.this_server.heartbeat_time
+  end
+  
+  def test_heartbeat
+    server = Earth::Server.this_server
+    server.heartbeat
+    assert(server.heartbeat_time)
+  end
+  
+  def test_heartbeat_interval_default_value
+    assert_equal 5.minutes, Earth::Server.this_server.heartbeat_interval
+  end
 end
