@@ -20,11 +20,6 @@ class ServersControllerTest < Test::Unit::TestCase
     assert assigns(:servers)
   end
 
-  def test_should_get_new
-    get :new
-    assert_response :success
-  end
-  
   def test_should_show_server
     get :show, :id => 1
     assert_response :success

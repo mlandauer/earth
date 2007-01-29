@@ -4,8 +4,31 @@
 </p>
 
 <p>
-  <b>Update interval:</b>
+  <b>Update interval (in seconds):</b>
   <%=h @server.update_interval %>
+</p>
+
+<p>
+  <b>Last update finish time:</b>
+  <%= if @server.last_update_finish_time.nil?
+        "N/A"
+      else
+        time_ago_in_words(@server.last_update_finish_time, true) + " ago"
+      end %>
+</p>
+
+<p>
+  <b>Heartbeat interval (in seconds):</b>
+  <%=h @server.heartbeat_interval %>
+</p>
+
+<p>
+  <b>Heartbeat last seen:</b>
+  <%= if @server.heartbeat_time.nil?
+        "N/A"
+      else
+        time_ago_in_words(@server.heartbeat_time, true) + " ago"
+      end %>
 </p>
 
 
