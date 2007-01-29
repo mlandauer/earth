@@ -70,7 +70,7 @@ class FileMonitor
     end
   end
   
-  def FileMonitor.run_on_new_directory(path, update_time, only_once = false)
+  def FileMonitor.run_on_new_directory(path, only_once = false)
     start_heartbeat_thread
     this_server = Earth::Server.this_server
     puts "WARNING: Watching new directory. So, clearing out database"
@@ -108,10 +108,10 @@ class FileMonitor
       directory
     end
 
-    run(directory, update_time, only_once)
+    run(directory, only_once)
   end
   
-  def FileMonitor.run_on_existing_directory(update_time)
+  def FileMonitor.run_on_existing_directory
     start_heartbeat_thread
     directories = Earth::Directory.roots_for_server(Earth::Server.this_server)
     raise "Watch directory is not set for this server" if directories.empty?
@@ -119,15 +119,18 @@ class FileMonitor
     directory = directories[0]
     puts "Collecting startup data from database..."
     directory.load_all_children
-    run(directory, update_time)
+    run(directory)
   end
   
 private
 
-  def FileMonitor.run(directory, update_time, only_once = false)
+  def FileMonitor.run(directory, only_once = false)
     puts "Watching directory #{directory.path}"    
     while true do
-      puts "Updating #{directory.server.directories.count} directories..."
+      # At the beginning of every update get the server information in case it changes on the database
+      server = Earth::Server.this_server
+      update_time = server.update_interval
+      puts "Updating #{directory.server.directories.count} directories over #{update_time}s..."
       update(directory, update_time)      
       return if only_once
     end
@@ -153,6 +156,11 @@ private
         eta_printer.increment
       end
     end
+    # Set the last_update_finish_time
+    server = Earth::Server.this_server
+    server.last_update_finish_time = Time.new
+    server.save!
+    
     total_count
   end
 
