@@ -262,8 +262,4 @@ class FileMonitorTest < Test::Unit::TestCase
     #assert_cached_sizes_match(@directory)
 
   end
-
-  def test_run_on_new_directory
-    FileMonitor.run_on_new_directory(@dir, 0, true)
-  end
 end
