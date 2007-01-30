@@ -10,7 +10,7 @@ class FileMonitorTest < Test::Unit::TestCase
 
     @relative_random_dir = 'test_data_2'
     @random_dir = File.expand_path(@relative_random_dir)
-    #FileUtils.rm_rf @random_dir
+    FileUtils.rm_rf @random_dir
     FileUtils.mkdir_p @random_dir
 
     FileUtils.rm_rf @dir
@@ -66,8 +66,10 @@ class FileMonitorTest < Test::Unit::TestCase
   end
 
   def assert_cached_sizes_match(directory)
-    assert_equal(@directory.find_cached_size_by_filter(@match_all_filter).size, @directory.size)
-    assert_equal(@directory.find_cached_size_by_filter(@match_all_filter).blocks, @directory.blocks)
+    cached_size = @directory.find_cached_size_by_filter(@match_all_filter)
+    cached_size.reload
+    assert_equal(cached_size.size, @directory.size)
+    assert_equal(cached_size.blocks, @directory.blocks)
 
     # Note: the following assertion assumes that no sparse or
     # compressed files have been created, as in that case disk usage
@@ -283,7 +285,8 @@ class FileMonitorTest < Test::Unit::TestCase
     existing_paths
   end
 
-  def disabled_test_extensive
+  def test_extensive
+    srand(12345)
     server = Earth::Server.find_or_create_by_name("random")
     random_directory = server.directories.create(:name => @random_dir, :path => @random_dir, :level => 0)
     random_directory.ensure_consistency
@@ -292,7 +295,7 @@ class FileMonitorTest < Test::Unit::TestCase
     random_directory.reload
     random_directory.ensure_consistency
 
-    1.upto(20) do
+    1.upto(30) do
       create_delete_random_dirs
       FileMonitor.update(random_directory)
       random_directory.reload
@@ -309,7 +312,7 @@ class FileMonitorTest < Test::Unit::TestCase
         delete_index = 1 + rand(existing_paths.size - 1)   
         delete_candidate = existing_paths[delete_index]
         FileUtils.rm_rf delete_candidate
-        puts "delete directory #{delete_candidate}"
+        RAILS_DEFAULT_LOGGER.debug "delete directory #{delete_candidate}"
       end
     end
 
@@ -320,13 +323,13 @@ class FileMonitorTest < Test::Unit::TestCase
       parent = existing_paths[rand(existing_paths.size)]
       dir = parent + "/" + name
       FileUtils.mkdir_p dir
-      puts "create directory #{dir}"
+      RAILS_DEFAULT_LOGGER.debug "create directory #{dir}"
       new_directory_subdirs_count = 0 + rand(2)
       (1..new_directory_subdirs_count).each do
         name = make_random_name()
         subdir = dir + "/" + name
         FileUtils.mkdir_p subdir
-        puts "create directory #{subdir}"
+        RAILS_DEFAULT_LOGGER.debug "create directory #{subdir}"
       end
     end
 

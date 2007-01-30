@@ -45,6 +45,7 @@ class DirectoryTest < Test::Unit::TestCase
     dir.save
     assert_equal(directories(:foo_bar).id, dir.parent_id)
     assert_equal("/foo/bar/another", dir.path)
+    dir.reload
     assert_equal(9, dir.lft)
     assert_equal(10, dir.rgt)
     directories(:foo_bar).reload

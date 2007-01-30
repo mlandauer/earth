@@ -315,6 +315,10 @@ module Rsp
         def nested_set_before_destroy
           if Thread.current["root_deleted_node"].nil?
             Thread.current["root_deleted_node"] = self
+
+            self.class.update_all( "#{left_col_name} = #{left_col_name} - (CASE WHEN #{left_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE id=#{self.id}) THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE id=#{self.id}) ELSE 0 END), #{right_col_name} = #{right_col_name} - (CASE WHEN #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE id=#{self.id}) THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE id=#{self.id}) ELSE 0 END)",  
+                                   "#{scope_condition} AND #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE id=#{self.id})" )
+
           end
 
           @children.each do |child|
@@ -326,10 +330,6 @@ module Rsp
 
           if Thread.current["root_deleted_node"] == self
             Thread.current["root_deleted_node"] = nil
-
-            offset = self[right_col_name] - self[left_col_name] + 1
-            self.class.update_all( "#{left_col_name} = #{left_col_name} - (CASE WHEN #{left_col_name} > #{self[right_col_name]} THEN #{offset} ELSE 0 END), #{right_col_name} = #{right_col_name} - (CASE WHEN #{right_col_name} > #{self[right_col_name]} THEN #{offset} ELSE 0 END)",  
-                                   "#{scope_condition} AND #{right_col_name} > #{self[right_col_name]}" )
           end
         end
 
@@ -352,6 +352,16 @@ module Rsp
         def nested_set_after_save
           if Thread.current["saved_node"] == self
             Thread.current["saved_node"] = nil
+
+            if not @insert_offset.nil? #true #not self.parent_assoc.nil?
+              offset = 2 
+              self.class.update_all( "#{left_col_name} = #{left_col_name} + (CASE WHEN #{left_col_name} >= #{@left_select_expression} THEN #{offset} WHEN #{left_col_name} < 0 THEN #{@insert_offset} ELSE 0 END), #{right_col_name} = #{right_col_name} + (CASE WHEN #{right_col_name} >= #{@left_select_expression} THEN #{offset} WHEN #{right_col_name} < 0 THEN #{@insert_offset} ELSE 0 END)",  
+                                     "#{scope_condition} AND (#{right_col_name} >= #{@left_select_expression} OR #{right_col_name} < 0)" )
+              if not self.parent_assoc.nil?
+                self.parent_assoc[right_col_name] += offset
+              end
+            end
+
           end
           
           @dirty = false
@@ -370,7 +380,22 @@ module Rsp
           @dirty
         end
 
+        def save
+          if Thread.current["transaction_node"].nil?
+            Thread.current["transaction_node"] = self
+            self.class.transaction {
+              super
+            }
+            Thread.current["transaction_node"] = nil
+          else
+            super
+          end
+        end
+
+
         def nested_set_before_save
+          @insert_offset = nil
+
           if @new_record or @save_required then
             self.nested_set_before_save_new_record
           elsif @dirty then
@@ -393,6 +418,7 @@ module Rsp
         end
 
         def nested_set_before_save_new_record
+          @insert_offset = nil
           
           if Thread.current["saved_node"].nil?
             Thread.current["saved_node"] = self
@@ -400,22 +426,24 @@ module Rsp
             if self.parent_assoc.nil?
               left = 1
               level = 1
+              @left_select_expression = "1"
             else
               left = self.parent_assoc[right_col_name] 
-              #left = self.parent_assoc[left_col_name + 1] 
               if has_level_column?
                 level = self.parent_assoc[level_col_name] + 1
               end
+              if not self.parent_assoc.id.nil?
+                @left_select_expression = "(SELECT #{right_col_name} FROM #{self.class.table_name} WHERE id=#{self.parent_assoc.id})"
+              else
+                @left_select_expression = "1"
+              end
             end
 
-            right = self.update_edge_data(left, level)
+            range = self.update_edge_data(0, level) + 1
 
-            if not self.parent_assoc.nil?
-              offset = 2 
-              self.class.update_all( "#{left_col_name} = #{left_col_name} + (CASE WHEN #{left_col_name} >= #{left} THEN #{offset} ELSE 0 END), #{right_col_name} = #{right_col_name} + (CASE WHEN #{right_col_name} >= #{left} THEN #{offset} ELSE 0 END)",  
-                                     "#{scope_condition} AND #{right_col_name} >= #{left}" )
-              self.parent_assoc[right_col_name] += offset
-            end
+            right = self.update_edge_data(-range, level)
+
+            @insert_offset = "(" + @left_select_expression + " + #{range})"
           end
         end
 
@@ -546,9 +574,7 @@ module Rsp
           load_all_children
           begin
             self.ensure_consistency_recursive
-            puts "tree validated"
           rescue
-            puts
             self.print_recursive
             raise
           end

@@ -74,8 +74,8 @@ module Earth
 
     def sum_files(column)
       Earth::File.sum(column, 
-                      :conditions => ("directories.lft >= #{self.lft} " + \
-                                      " AND directories.lft <= #{self.rgt} " + \
+                      :conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
+                                      " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
                                       " AND directories.server_id = #{self.server_id}"),
                       :joins => "JOIN directories ON files.directory_id = directories.id").to_i
     end
@@ -88,8 +88,10 @@ module Earth
     end
     
     def recursive_file_count
-      Earth::File.count(:conditions => "directories.lft >= #{self.lft} AND directories.lft <= #{self.rgt} AND directories.server_id = #{self.server_id}",
-        :joins => "JOIN directories ON files.directory_id = directories.id").to_i
+      Earth::File.count(:conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
+                                        " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
+                                        " AND directories.server_id = #{self.server_id}"),
+                        :joins => "JOIN directories ON files.directory_id = directories.id").to_i
     end
 
     def size_and_count
@@ -104,9 +106,9 @@ module Earth
       result = Earth::File.find(:first, 
                                 :select => "SUM(files.#{column.to_s}) AS sum, COUNT(*) AS count",
                                 :joins => "JOIN directories ON files.directory_id = directories.id",
-                                :conditions => ("directories.lft >= #{self.lft} " \
-                                                + " AND directories.lft <= #{self.rgt} " \
-                                                + " AND directories.server_id = #{self.server_id}"))
+                                :conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
+                                                " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
+                                                " AND directories.server_id = #{self.server_id}"))
       [ (result["sum"] || 0).to_i, result["count"].to_i ]
     end
     
