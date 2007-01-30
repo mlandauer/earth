@@ -10,13 +10,6 @@
 #
 # And be sure to use new-style password hashing:
 #   http://dev.mysql.com/doc/refman/5.0/en/old-client.html
-development_bart:
-  adapter: postgresql
-  database: earth_development
-  username: earth
-  password: earth
-  host: bart
-
 development:
   adapter: postgresql
   database: earth_development

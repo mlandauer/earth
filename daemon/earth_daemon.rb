@@ -12,6 +12,7 @@
 require 'optparse'
 
 development_mode = false
+only_initial_update = false
 
 opts = OptionParser.new
 opts.banner = <<END_OF_STRING
@@ -20,6 +21,7 @@ information in a database
 Usage: #{$0} [-d] [<directory path>]
 END_OF_STRING
 opts.on("-d", "--development", "Run the daemon in development mode.") { development_mode = true }
+opts.on("-i", "--initial-only", "Only scan a new directory, do not update continuously.") { only_initial_update = true }
 opts.on_tail("-h", "--help", "Show this message") do
   puts opts
   exit
@@ -48,7 +50,7 @@ require File.dirname(__FILE__) + '/../config/environment'
 config_file = File.dirname(__FILE__) + "/../config/earth.yml"
 
 if ARGV.length == 1
-  FileMonitor.run_on_new_directory(ARGV[0])
+  FileMonitor.run_on_new_directory(ARGV[0], false, only_initial_update)
 else
   FileMonitor.run_on_existing_directory
 end

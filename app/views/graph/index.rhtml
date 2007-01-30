@@ -1,5 +1,3 @@
-<%= render_partial('browser/breadcrumb_and_filter', nil, :can_show_empty => false) %>
-
 <center>
 <div style="width: 600px; align: center;">
   <embed src="<%= url_for :controller => :graph, :action => :show, :params => @svg_params %>" width="600" height="600" type="image/svg+xml"/>

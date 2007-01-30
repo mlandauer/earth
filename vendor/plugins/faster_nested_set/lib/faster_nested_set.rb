@@ -3,6 +3,7 @@
 
 require 'active_record'
 require 'thread'
+require 'pp'
 
 #
 #  This is another nested set implementation for RoR.  Its main
@@ -539,6 +540,45 @@ module Rsp
           else
             super
           end
+        end
+        
+        def ensure_consistency
+          load_all_children
+          begin
+            self.ensure_consistency_recursive
+            puts "tree validated"
+          rescue
+            puts
+            self.print_recursive
+            raise
+          end
+        end
+
+        def print_recursive(indent=0)
+          indentation = "  " * indent
+          puts "#{indentation}#{name} (id=#{id}, lft=#{self[left_col_name]}, rgt=#{self[right_col_name]}, level=#{self[level_col_name]})"
+          self.children.each { |child| child.print_recursive(indent+1) }
+        end
+
+        def ensure_consistency_recursive
+          expect_left = self[left_col_name] + 1
+          children.each do |child|
+            if child[left_col_name] != expect_left
+              raise "in node #{child.id}, left expected to be #{expect_left} but is #{child[left_col_name]}"
+            end
+            expect_right = child.ensure_consistency_recursive
+            if child[right_col_name] != expect_right
+              raise "in node #{child.id}, right expected to be #{expect_right} but is #{child[right_col_name]}"
+            end
+            if child[level_col_name] != self[level_col_name] + 1
+              raise "in node #{child.id}, level expected to be #{self[level_col_name] + 1} but is #{child[level_col_name]}"
+            end
+            expect_left = expect_right + 1
+          end
+          if self[right_col_name] != expect_left
+            raise "in node #{id}, right expected to be #{expect_left} but is #{self[right_col_name]}"
+          end
+          return self[right_col_name]
         end
 
         def load_all_children(depth=0, options=nil)

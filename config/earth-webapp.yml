@@ -1,3 +1,4 @@
+
 # Any parameters here affect the Earth web application
 
 # ----- Graph Configuration -----
@@ -6,7 +7,7 @@
 # immediate children of the current directory are shown, 2 means the
 # grandchildren of the current directory are shown as well, etc.
 # Note that the more levels are shown, the slower rendering will be.
-graph_depth: 6
+graph_depth: 5
 
 # The minimum angle for a segment to be displayed, in
 # degrees. Segments that occupy less than this angle will be merged

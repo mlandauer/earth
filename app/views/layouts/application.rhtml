@@ -1,25 +1,30 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
 	"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" version="-//W3C//DTD XHTML 1.1//EN" xml:lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xlink="http://www.w3.org/1999/xlink" version="-//W3C//DTD XHTML 1.1//EN" xml:lang="en">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<%= stylesheet_link_tag 'base' %>
-	<%=	javascript_include_tag :defaults %>
-	<title><%= if @directory then "#{@server.name}:#{@directory.path}/ - Earth"; elsif @server then "#{@server.name}: - Earth"; else "Earth"; end %></title>
-	
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <%= stylesheet_link_tag 'base' %>
+  <%= javascript_include_tag :defaults %>
+  <title><%= if @directory then "#{@server.name}:#{@directory.path}/ - Earth"; elsif @server then "#{@server.name}: - Earth"; else "Earth"; end %></title>
 </head>
 
 <body>
 
 <div id="Container">
-	<div id="Banner">
-		<!-- Holding Space for a Banner or a Logo -->
-	</div>
+  <div id="Banner">
+    <!-- Holding Space for a Banner or a Logo -->
+  </div>
+
+  <div id="BreadcrumbAndFilter">
+    <%= render_partial 'browser/breadcrumb_and_filter', nil, :can_show_empty => false %>
+  </div>
+
   <div id="Top">
     <div id="LoginInformation">
       <!-- Place Holder for when we need Login Information -->
     </div>
+
     <div id="Tabs">
       <div id="TabsInside">
 	      <% # We probably should get these from some configuration file or dynamically %>
@@ -38,6 +43,7 @@
     <div id="ContentInside">
   		<%= yield  %>      
     </div>
+  </div>
   <div id="Footer">
     Earth revision <%= earth_version %>
   </div>

@@ -10,18 +10,20 @@ class BrowserController < ApplicationController
     @server = Earth::Server.find_by_name(params[:server]) if params[:server]
     @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
 
+    @any_empty = false
+    
     @page_size = 25
     @current_page = (params[:page] || 1).to_i
 
     joins = "JOIN directories ON files.directory_id = directories.id"
-    order = "directories.path, files.name"
+    order = "files.path"
     include_attributes = [ "name", "directory_id", "modified", "size", "uid" ]
     select = include_attributes.map {|attr| "files.#{attr} as #{attr}" }.join(", ")
 
     if @directory
       conditions = " directories.server_id=#{@server.id} " +
                    " AND directories.lft >= #{@directory.lft} " +
-                   " AND directories.rgt <= #{@directory.rgt}"
+                   " AND directories.lft <= #{@directory.rgt}"
     elsif @server
       conditions = " directories.server_id=#{@server.id} "
     else

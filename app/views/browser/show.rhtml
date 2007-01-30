@@ -1,9 +1,8 @@
-<%= render_partial 'browser/breadcrumb_and_filter', nil, :can_show_empty => @any_empty %>
-
 <p>
   <table id="browser" class="listing">
     <thead>
       <tr>
+        <th class="icon"></th>
         <th class="name">Name</th>
         <th class="modified">Modified</th>
         <th class="user">User</th>
@@ -13,7 +12,20 @@
     </thead>
     <tbody>
     <tr class="<%= cycle 'even', 'odd' %>">
-      <td class="name parent">
+      <td class="icon parent">
+      <%= if @directory
+            if @directory.parent_id
+              link_to "", :overwrite_params => {:path => @directory.parent.path}
+            else
+              link_to "", :overwrite_params => {:server => @server.name, :path => nil}
+            end
+          else
+            if @server
+              link_to "", :overwrite_params => {:server => nil, :path => nil}
+            end
+          end
+      %>      </td>
+      <td class="name parent" colspan="5">
       <%= if @directory
             if @directory.parent_id
               link_to "..", :overwrite_params => {:path => @directory.parent.path}
@@ -26,10 +38,6 @@
             end
           end
       %></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
     </tr>
     <% unless @servers_and_size.nil? || @servers_and_size.empty? %>
       <% @servers_and_size.sort!{|a,b| b[1] <=> a[1]} %>
@@ -37,11 +45,10 @@
       <% units = human_units_of max_size %>
       <% for server, size in @servers_and_size %>
         <tr class="<%= cycle 'even', 'odd' %>">
-          <td class="name Server"><%= link_to server.name, :overwrite_params => {:server => server.name, :path => nil} %></td>
-          <td></td>
-          <td></td>
-          <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
-          <td><%= bar size, max_size, :class => "bar" %></td>
+          <td class="icon Server"><%= link_to "", :overwrite_params => {:server => server.name, :path => nil} %></td>
+          <td class="name Server" colspan="3"><%= link_to server.name, :overwrite_params => {:server => server.name, :path => nil} %></td>
+          <td class="size Server"><%= link_to "#{human_size_in(units, size)} #{units}", :overwrite_params => {:server => server.name, :path => nil} %></td>
+          <td class="bar Server"><%= link_to bar(size, max_size, :class => "bar"), :overwrite_params => {:server => server.name, :path => nil} %></td>
         </tr>
       <%  end
       end %>
@@ -51,11 +58,10 @@
       <% units = human_units_of max_size %>
       <% for directory, size in @directories_and_size %>
         <tr class="<%= cycle 'even', 'odd' %>">
-          <td class="name Dir"><%= link_to directory.name, :overwrite_params => {:path => directory.path} %></td>
-          <td></td>
-          <td></td>
-          <td class="size"><%=h human_size_in(units, size) %> <%= units %></td>
-          <td><%= bar size, max_size, :class => "bar"%></td>
+          <td class="icon Dir"><%= link_to "", :overwrite_params => {:path => directory.path} %></td>
+          <td class="name Dir" colspan="3"><%= link_to directory.name, :overwrite_params => {:path => directory.path} %></td>
+          <td class="size Dir"><%= link_to "#{human_size_in(units, size)} #{units}", :overwrite_params => {:path => directory.path} %></td>
+          <td class="bar Dir"><%= link_to bar(size, max_size, :class => "bar"), :overwrite_params => {:path => directory.path} %></td>
         </tr>
       <%  end
       end %>
@@ -65,11 +71,12 @@
       <% units = human_units_of max_size %>
       <% @files.each do |file| %>
         <tr class="<%= cycle 'even', 'odd' %>">
+          <td class="icon File"><span></span></td>
           <td class="name File"><span><%= file.name %></span></td>
           <td class="modified"><span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span></td>
-          <td class="owner_user"><%=h file.user.name %></td>
-          <td class="size"><%= human_size_in(units, file.size) %> <%= units %></td>
-          <td><%= bar file.size, max_size, :class => "filebar"%></td>
+          <td class="owner_user"><span><%=h file.user.name %></span></td>
+          <td class="size"><span><%= human_size_in(units, file.size) %> <%= units %></span></td>
+          <td class="bar"><%= bar file.size, max_size, :class => "filebar"%></td>
         </tr>
       <% end %>
     <% end %>

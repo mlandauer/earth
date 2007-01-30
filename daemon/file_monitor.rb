@@ -1,3 +1,5 @@
+require 'earth/server'
+
 class FileMonitor
   cattr_accessor :log_all_sql
   cattr_accessor :console_writer
@@ -70,7 +72,7 @@ class FileMonitor
     end
   end
   
-  def FileMonitor.run_on_new_directory(path, only_once = false)
+  def FileMonitor.run_on_new_directory(path, only_once = false, only_initial_update = false)
     start_heartbeat_thread
     this_server = Earth::Server.this_server
     puts "WARNING: Watching new directory. So, clearing out database"
@@ -86,7 +88,7 @@ class FileMonitor
       expanded_path = File.expand_path(path)
       directory = this_server.directories.build(:name => expanded_path, :path => expanded_path)
       directory_count = benchmark "Building initial directory structure for #{path}" do
-        update(directory, 0, true)
+        update(directory, 0, true, true, false)
       end
 
       benchmark "Committing initial directory structure for #{path} to database" do
@@ -97,8 +99,16 @@ class FileMonitor
         @directory_eta_printer = nil
       end
 
+      directory.load_all_children(0, :include => :cached_sizes)
+
       benchmark "Initial pass at gathering all files beneath #{path}" do
-        update(directory, 0, false, true)
+        update(directory, 0, false, true, true)
+      end
+
+      benchmark "Saving cache information" do
+        @cached_size_eta_printer = ETAPrinter.new(directory_count)
+        save_cached_sizes(directory)
+        @cached_size_eta_printer = nil
       end
 
       #benchmark "Vacuuming database" do
@@ -108,7 +118,20 @@ class FileMonitor
       directory
     end
 
-    run(directory, only_once)
+    run(directory, only_once) unless only_initial_update
+  end
+
+  def FileMonitor.save_cached_sizes(directory)
+
+    directory.cached_sizes.each do |cached_size|
+      cached_size.create
+    end
+    
+    @cached_size_eta_printer.increment
+    
+    directory.children.each do |child|
+      save_cached_sizes(child)
+    end
   end
   
   def FileMonitor.run_on_existing_directory
@@ -136,15 +159,22 @@ private
     end
   end
   
-  def FileMonitor.update(directory, update_time = 0, only_build_directories = false, show_eta = false)
+  def FileMonitor.update(directory, update_time = 0, 
+                         only_build_directories = false, 
+                         initial_pass = false, 
+                         show_eta = false)
     # TODO: Do this in a nicer way
     total_count = 0
     filters = Earth::Filter::find(:all)
+    id_to_filters = {}
+    filters.each do |filter|
+      id_to_filters[filter.id] = filter
+    end
     eta_printer = ETAPrinter.new(directory.server.directories.count)
     remaining_count = directory.server.directories.count
     start = Time.new
     directory.each do |d|
-      total_count += update_non_recursive(d, filters, only_build_directories)
+      total_count += update_non_recursive(d, id_to_filters, only_build_directories, initial_pass)
       total_time = Time.new - start
       remaining_time = update_time - (Time.new - start)
       remaining_count = remaining_count - 1
@@ -164,13 +194,17 @@ private
     total_count
   end
 
-  def FileMonitor.update_non_recursive(directory, filters, only_build_directories = false)
+  def FileMonitor.update_non_recursive(directory, id_to_filters, 
+                                       only_build_directories = false, initial_pass = false)
 
     directory_count = 1
+    if not only_build_directories
+      #directory.reload # FIXME
+    end
 
     if not only_build_directories
-      filter_to_cached_size = directory.filter_to_cached_size(filters)
-      filters.each do |filter|
+      filter_to_cached_size = directory.filter_to_cached_size(id_to_filters)
+      id_to_filters.each do |filter_id,filter|
         if not filter_to_cached_size.has_key?(filter)
           filter_to_cached_size[filter] = directory.cached_sizes.build(:filter => filter)
         end
@@ -199,23 +233,28 @@ private
 
     added_directory_names = subdirectory_names - directory.children.map{|x| x.name}
     added_directory_names.each do |name|
-      dir = Earth::Directory.benchmark("Creating directory with name #{directory.name}/#{name}", Logger::DEBUG, !log_all_sql) do
-        attributes = { :name => name, :path => "#{directory.name}/#{name}", :server_id => directory.server_id }
+      dir = Earth::Directory.benchmark("Creating directory #{directory.path}/#{name}", Logger::DEBUG, !log_all_sql) do
+        attributes = { :name => name, :path => "#{directory.path}/#{name}", :server_id => directory.server_id }
         if only_build_directories then
           directory.children.build(attributes)
         else
+          #directory.reload # FIXME
           directory.children.create(attributes)
         end
       end
-      directory_count += update_non_recursive(dir, filters, only_build_directories)
+      update_non_recursive(dir, id_to_filters, only_build_directories, initial_pass)
     end
 
     if not only_build_directories then
       # By adding and removing files on the association, the cache of the association will be kept up to date
-      added_file_names = file_names - directory.files.map{|x| x.name}
+      if not initial_pass
+        added_file_names = file_names - directory.files.map{|x| x.name}
+      else
+        added_file_names = file_names
+      end
       added_file_names.each do |name|
         Earth::File.benchmark("Creating file with name #{name}", Logger::DEBUG, !log_all_sql) do
-          file = directory.files.create(:name => name, :stat => stats[name])
+          file = directory.files.create(:name => name, :path => (directory.path + "/" + name), :stat => stats[name])
           filter_to_cached_size.each do |filter, cached_size|
             cached_size.increment(file) if filter.matches(file)
           end
@@ -223,29 +262,31 @@ private
         end
       end
 
-      directory.files.each do |file|
-        # If the file still exists
-        if file_names.include?(file.name)
-          # If the file has changed
-          if file.stat != stats[file.name]
-            filter_to_cached_size.each do |filter, cached_size|
-              cached_size.decrement(file) if filter.matches(file)
+      if not initial_pass
+        directory.files.each do |file|
+          # If the file still exists
+          if file_names.include?(file.name)
+            # If the file has changed
+            if file.stat != stats[file.name]
+              filter_to_cached_size.each do |filter, cached_size|
+                cached_size.decrement(file) if filter.matches(file)
+              end
+              file.stat = stats[file.name]
+              filter_to_cached_size.each do |filter, cached_size|
+                cached_size.increment(file) if filter.matches(file)
+              end
+              Earth::File.benchmark("Updating file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
+                file.save
+              end
             end
-            file.stat = stats[file.name]
-            filter_to_cached_size.each do |filter, cached_size|
-              cached_size.increment(file) if filter.matches(file)
+            # If the file has been deleted
+          else
+            Earth::Directory.benchmark("Removing file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
+              filter_to_cached_size.each do |filter, cached_size|
+                cached_size.decrement(file) if filter.matches(file)
+              end
+              directory.files.delete(file)
             end
-            Earth::File.benchmark("Updating file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
-              file.save
-            end
-          end
-          # If the file has been deleted
-        else
-          Earth::Directory.benchmark("Removing file with name #{file.name}", Logger::DEBUG, !log_all_sql) do
-            filter_to_cached_size.each do |filter, cached_size|
-              cached_size.decrement(file) if filter.matches(file)
-            end
-            directory.files.delete(file)
           end
         end
       end
@@ -255,11 +296,12 @@ private
       # If the directory has been deleted
       if !subdirectory_names.include?(dir.name)
         Earth::Directory.benchmark("Removing directory with name #{dir.name}", Logger::DEBUG, !log_all_sql) do
-          removed_dir_filter_to_cached_size = dir.filter_to_cached_size(filters)
+          removed_dir_filter_to_cached_size = dir.filter_to_cached_size(id_to_filters)
           filter_to_cached_size.each do |filter, cached_size|
             removed_cached_size = removed_dir_filter_to_cached_size[filter]
             cached_size.decrement(removed_cached_size) if removed_cached_size
           end
+          #directory.reload # FIXME
           directory.child_delete(dir)
         end
       end
@@ -276,33 +318,36 @@ private
         end
 
         directory.ancestors.each do |ancestor|
-          ancestor_filter_to_cached_size = ancestor.filter_to_cached_size(filters)
+          ancestor_filter_to_cached_size = ancestor.filter_to_cached_size(id_to_filters)
           filter_to_cached_size.each do |filter, cached_size|
-            size_difference, blocks_difference = cached_size.difference
+            size_difference, blocks_difference, count_difference = cached_size.difference
             ancestor_cached_size = ancestor_filter_to_cached_size[filter]
             if not ancestor_cached_size
               ancestor_cached_size = ancestor.cached_sizes.build(:filter => filter)
             end
             ancestor_cached_size.size += size_difference
             ancestor_cached_size.blocks += blocks_difference
+            ancestor_cached_size.count += count_difference
           end
         end
 
-        filter_to_cached_size.each do |filter, cached_size|
-          
-          size_difference, blocks_difference = cached_size.difference
-          
-          if cached_size.new_record?
-            cached_size.create
-            ancestors_to_update = directory.ancestors
-          else
-            ancestors_to_update = directory.self_and_ancestors
-          end
+        if not initial_pass
+          filter_to_cached_size.each do |filter, cached_size|
+            
+            size_difference, blocks_difference = cached_size.difference
+            
+            if cached_size.new_record?
+              cached_size.create
+              ancestors_to_update = directory.ancestors
+            else
+              ancestors_to_update = directory.self_and_ancestors
+            end
 
-          if (size_difference != 0 or blocks_difference != 0) and not directory.parent.nil?
-            Earth::Directory.benchmark("Updating parent directories' size cache", Logger::DEBUG, !log_all_sql) do
-              Earth::CachedSize.update_all("size = size + #{size_difference}, blocks = blocks + #{blocks_difference}",
-                                           "filter_id=#{filter.id} and directory_id in (#{ancestors_to_update.map{|x| x.id}.join(',')})")                
+            if (size_difference != 0 or blocks_difference != 0) and not directory.parent.nil?
+              Earth::Directory.benchmark("Updating parent directories' size cache", Logger::DEBUG, !log_all_sql) do
+                Earth::CachedSize.update_all("size = size + #{size_difference}, blocks = blocks + #{blocks_difference}",
+                                             "filter_id=#{filter.id} and directory_id in (#{ancestors_to_update.map{|x| x.id}.join(',')})")                
+              end
             end
           end
         end

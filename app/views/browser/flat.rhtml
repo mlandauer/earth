@@ -34,7 +34,10 @@
               <td class="page-current"><%= page_number %></td>
             <% elsif (page_number - @current_page).abs < 10 \
                       or ((page_number - @current_page).abs < 50 and page_number % 10 == 0) \
-                      or (page_number % 100 == 0) \
+                      or ((page_number - @current_page).abs < 500 and page_number % 100 == 0) \
+                      or ((page_number - @current_page).abs < 5000 and page_number % 1000 == 0) \
+                      or ((page_number - @current_page).abs < 50000 and page_number % 100000 == 0) \
+                      or (page_number % 100000 == 0) \
                       or page_number == 1 \
                       or page_number == @page_count %>
               <td class="page-link"><%= link_to page_number, :overwrite_params => {:page => (page_number == 1 ? nil : page_number) } %></td>
@@ -46,7 +49,7 @@
     </tr>
   </table>
 
-  <table id="browser" class="listing flat">
+  <table id="flat-browser" class="listing flat">
     <thead>
       <tr>
         <th class="path">Path</th>

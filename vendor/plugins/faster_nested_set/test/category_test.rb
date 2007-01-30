@@ -23,6 +23,28 @@ class CategoryTest < Test::Unit::TestCase
     right
   end
 
+  def test_create_tree_1
+    root      = Category.create("name" => "root")
+    child1    = root.children.create("name" => "child1")
+    child1a   = child1.children.create("name" => "child1a")
+    root.reload
+    child2    = root.children.create("name" => "child2")
+    assert_nested_set_order([root, [child1, [child1a]], [child2]])
+  end
+
+  def test_create_tree_2
+    root      = Category.create("name" => "root")
+    child1    = root.children.create("name" => "child1")
+    child1a   = child1.children.create("name" => "child1a")
+    root.reload
+    child2    = root.children.create("name" => "child2")
+    assert_nested_set_order([root, [child1, [child1a]], [child2]])
+
+    child1.reload
+    child1b   = child1.children.create("name" => "child1b")
+    assert_nested_set_order([root, [child1, [child1a], [child1b]], [child2]])
+  end
+
   def test_insert_1
     root      = Category.new("name" => "root")
     child1    = root.children.build("name" => "child1")

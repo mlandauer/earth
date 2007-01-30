@@ -9,19 +9,23 @@
 body {
   font-family: "Gill Sans", Arial, Helvetica, sans-serif;
   font-size: 12pt;
-  background-color: #f2f2f2;
+  background-color: #e0e0e0;
   padding: 0;
-  margin: 20px 20px;
+  margin-top: 5px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
 /* Structural Elements */
 
-#Container {
+#Container { 
+  /*
   width: 100%;
   height: 100%;
-  background-color: #f2f2f2;
   min-width: 750px;
+  */
 }
 
 #Banner {
@@ -31,14 +35,12 @@ body {
 #Content {
   text-align: left;
   margin-bottom: 20px;
-  float: left;
-  clear: both;
+  clear: both; 
 }
 
 #ContentInside {
   background-color: #fff;
   text-align: left;
-  width: 100%;
   padding: 5px;
   border: 1px solid #c2c2c2;
 }
@@ -167,31 +169,47 @@ h4 {
 
 /* This is needed for the CSS graphs */
 
+div.bar-outer {
+  width: 200px;
+  padding: 0px;
+  margin-left: 0.5em;
+  height: 1.5em;
+}
+
 .graph {
-  position: relative;
+  xxposition: xxrelative;
 
 
 /*
 
 IE is dumb */
   width: 200px;
-  padding: 2px;
-  z-index: 1;
+  xxpadding: 2px;
+  xxz-index: 1;
 }
 
-.graph .bar {
-  display: block;
+div.bar,
+div.filebar {
   position: relative;
-  background: #66CC33;
+  top: 20% !important;
   text-align: center;
   color: #333;
-  height: 1em;
-  line-height: 1em;
+  height: 60%;
+  font-size: 1px;
 }
 
-.graph .filebar {
-  display: block;
-  position: relative;
+div.bar {
+  background: #66CC33;
+}
+
+div.filebar {
+  background: #3181C4;
+}
+
+
+div.xxfilebar {
+  xxdisplay: xxblock;
+  xxposition: xxrelative;
   background: #3181C4;
   text-align: center;
   color: #333;
@@ -199,8 +217,9 @@ IE is dumb */
   line-height: 1em;
 }
 
-.graph .bar span {
-  position: absolute;
+.xgraph .bar span {
+  xxdisplay: xxblock;
+  xxposition: xxabsolute;
   left: 1em;
 }
 
@@ -299,12 +318,27 @@ table.listing thead th a.desc {
  * Repository browser
  */
 
-#Content table#browser {  
-  margin-top: 0.4em;
+#Content table#flat-browser, 
+#Content table#flat-browser tr, 
+#Content table#flat-browser td, 
+#Content table#flat-browser th, 
+#Content table#browser, 
+#Content table#browser tr,
+#Content table#browser td,
+#Content table#browser th
+{ 
+  margin: 0px;
+  padding: 0px;
+  font-size: 13px;
+  border: 0px;
+  border-collapse: collapse;  
+  line-height: 1.5em;
 }
 
-#Content table#browser tr td {
-  white-space: nowrap;
+#Content table#flat-browser td,
+#Content table#flat-browser th,
+#Content table#browser td {
+  white-space: nowrap;  
 }
 
 #Content table#browser td.name {
@@ -313,37 +347,60 @@ table.listing thead th a.desc {
 
 #Content table#browser td.rev {
   width: 5%;
+  background: yellow;
 }
 
 #Content table#browser td.age {
   width: 5%;
+  background: yellow;
 }
 
 #Content table#browser td.msg {
   width: 15%;
+  background: yellow;
 }
 
-#Content table#browser td.name span {
-  padding-left: 25px;
+#Content table#browser td.File.icon {
+  width: 25px;
   background-position: 4px 50%;
   background-repeat: no-repeat;
 }
 
-#Content table#browser td.name a {
-  padding-left: 25px;
-  background-position: 4px 50%;
+#Content table#browser td.icon {
+  padding: 0px;
+  margin: 0px;
+  width: 25px;
+}
+
+#Content table#browser td.icon a {
+  width: 25px;
+  background-position: 50% 50%;
   background-repeat: no-repeat;
 }
 
 #Content table#browser td.server, #Content table#browser td.modified, #Content table#browser td.size, #Content table#browser td.owner_user,
 #Content table#browser td.owner_group {
-  font-size: 11px;
   text-align: center;
 }
 
+#Content table#flat-browser th.size,
+#Content table#flat-browser td.size,
 #Content table#browser th.size,
 #Content table#browser td.size {
   text-align: right !important;
+}
+
+#Content table#browser th.size
+{ 
+  padding-left: 0.6em;
+  padding-right: 0.6em;
+}
+
+#Content table#browser td.owner_user span,
+#Content table#browser td.size span,
+#Content table#browser td.modified span { 
+  margin-left: 0.6em;
+  margin-right: 0.6em;
 }
 
 #Content table#browser th.path,
@@ -351,7 +408,6 @@ table.listing thead th a.desc {
 #Content table#browser th.name,
 #Content table#browser td.name {
   text-align: left !important;
-  font-size: small;
 }
 
 #Content table#browser td.msg {
@@ -359,20 +415,41 @@ table.listing thead th a.desc {
   color: #666;
 }
 
-#Content table#browser td.File span {
+#Content table#browser td.File.icon {
   background-image: url(/images/icon_file.png);
 }
 
-#Content table#browser td.Dir a {
+#Content table#browser td.Dir.icon a {
   background-image: url(/images/icon_folder.png);
 }
 
-#Content table#browser td.Server a {
+#Content table#browser td.Server.icon a {
   background-image: url(/images/icon_server.png);
 }
 
-#Content table#browser td.parent a {
+#Content table#browser td.parent.icon a {
   background-image: url(/images/icon_up.gif);
+}
+
+#Content table#browser td.bar { 
+  vertical-align: middle;
+}
+
+#Content table#browser td a
+{
+  display: block;
+  width: 100%;
+  height: 1.5em !important;
+  line-height: 1.5em !important;
+  margin: 0px;
+  padding: 0px;
+  vertical-align: bottom;
+}
+
+#Content table#browser td.size a
+{ 
+  text-decoration: none;
+  color: black;
 }
 
 /*  Table Used in the Filter Section (top right hand corner) */
@@ -427,7 +504,6 @@ table.listing thead th a.desc {
 
 table.page-list { 
   clear: left; 
-  margin-top: 1.8em;
 }
 
 table.page-list td,
@@ -438,6 +514,7 @@ table.page-list th {
 th.page-list-head { 
   padding-right: 1em;
   width: 8em;
+  white-space: nowrap;  
 }
 
 .page-current { 
@@ -474,4 +551,6 @@ tr.odd:hover {
 
 .breadcrumbs { 
   font-size: 90%;
+  margin-top: 0.3em;
+  padding-top: 0px;
 }

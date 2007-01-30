@@ -35,6 +35,8 @@ class GraphController < ApplicationController
 
     @server = Earth::Server.find_by_name(params[:server]) if params[:server]
     @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
+
+    @any_empty = false
   end
 
   #

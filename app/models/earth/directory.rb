@@ -152,12 +152,12 @@ module Earth
       end 
     end
 
-    def filter_to_cached_size(filters)
+    def filter_to_cached_size(id_to_filters)
       cached_sizes = self.cached_sizes
       _filter_to_cached_size = Hash.new
 
       cached_sizes.each do |cached_size|
-        _filter_to_cached_size[cached_size.filter] = cached_size
+        _filter_to_cached_size[id_to_filters[cached_size.filter_id]] = cached_size
       end
 
       _filter_to_cached_size

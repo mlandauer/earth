@@ -27,8 +27,8 @@ module ApplicationHelper
       max_value = 1
     end
     xml = Builder::XmlMarkup.new
-    xml.div("class" => "graph") do
-      xml.div("class" => options[:class] || "bar", "style" => "width: #{(100 * value / max_value).to_i}%")
+    xml.div("class" => "bar-outer") do
+      xml.div(".", "class" => options[:class] || "bar", "style" => "width: #{(100 * value / max_value).to_i}%")
     end
   end
 

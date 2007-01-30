@@ -8,6 +8,11 @@ class FileMonitorTest < Test::Unit::TestCase
     @dir1 = File.join(@dir, 'dir1')
     @file2 = File.join(@dir1, 'file1')
 
+    @relative_random_dir = 'test_data_2'
+    @random_dir = File.expand_path(@relative_random_dir)
+    #FileUtils.rm_rf @random_dir
+    FileUtils.mkdir_p @random_dir
+
     FileUtils.rm_rf @dir
     FileUtils.mkdir_p @dir1
     FileUtils.touch @file1
@@ -26,11 +31,9 @@ class FileMonitorTest < Test::Unit::TestCase
     Earth::Server.delete_all
 
     server = Earth::Server.this_server
-    @directory = server.directories.create(:name => @dir, :path => @dir
-)
+    @directory = server.directories.create(:name => @dir, :path => @dir)
 
-    @match_all_filter = Earth::Filter.create(:filename => '*', :uid => nil)
-    
+    @match_all_filter = Earth::Filter.create(:filename => '*', :uid => nil)    
   end
   
   def teardown
@@ -262,4 +265,79 @@ class FileMonitorTest < Test::Unit::TestCase
     #assert_cached_sizes_match(@directory)
 
   end
+
+  require 'find'
+  def make_random_name
+    name_length = 2 + rand(10)
+    chars = ("a".."z").to_a
+    new_name = ""
+    1.upto(name_length) { |i| new_name << chars[rand(chars.size)] }
+    new_name
+  end
+
+  def get_directories
+    existing_paths = []
+    Find.find(@random_dir) do |path|
+      existing_paths << path
+    end
+    existing_paths
+  end
+
+  def disabled_test_extensive
+    server = Earth::Server.find_or_create_by_name("random")
+    random_directory = server.directories.create(:name => @random_dir, :path => @random_dir, :level => 0)
+    random_directory.ensure_consistency
+    FileMonitor.update(random_directory)
+    random_directory.save
+    random_directory.reload
+    random_directory.ensure_consistency
+
+    1.upto(20) do
+      create_delete_random_dirs
+      FileMonitor.update(random_directory)
+      random_directory.reload
+      random_directory.ensure_consistency
+    end
+  end
+
+  def create_delete_random_dirs
+    existing_paths = get_directories    
+    delete_directory_trees_count = (rand(4) - 1).abs
+    1.upto(delete_directory_trees_count) do
+      existing_paths = get_directories
+      if existing_paths.size > 1
+        delete_index = 1 + rand(existing_paths.size - 1)   
+        delete_candidate = existing_paths[delete_index]
+        FileUtils.rm_rf delete_candidate
+        puts "delete directory #{delete_candidate}"
+      end
+    end
+
+    existing_paths = get_directories
+    new_directory_trees_count = 0 + rand(5)
+    (1..new_directory_trees_count).each do
+      name = make_random_name()
+      parent = existing_paths[rand(existing_paths.size)]
+      dir = parent + "/" + name
+      FileUtils.mkdir_p dir
+      puts "create directory #{dir}"
+      new_directory_subdirs_count = 0 + rand(2)
+      (1..new_directory_subdirs_count).each do
+        name = make_random_name()
+        subdir = dir + "/" + name
+        FileUtils.mkdir_p subdir
+        puts "create directory #{subdir}"
+      end
+    end
+
+    if false
+      existing_paths = get_directories
+      $stdout.print("\033[2J")
+      $stdout.flush
+      existing_paths.each do |path|
+        puts path
+      end
+    end
+  end
+
 end
