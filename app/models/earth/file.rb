@@ -30,17 +30,17 @@ module Earth
         filter_filename = "*"
       end
       filter_user = params[:filter_user]
-      
+
       users = User.find_all
 
       if filter_user && filter_user != ""    
-        filter_uid = User.find_by_name(@filter_user).uid
+        filter_uid = User.find_by_name(filter_user).uid
       else
         filter_uid = nil
       end
 
       if not filter_uid.nil?
-        filter_conditions = ["files.name LIKE ? AND files.uid = ?", filter_filename.tr('*', '%'), uid]
+        filter_conditions = ["files.name LIKE ? AND files.uid = ?", filter_filename.tr('*', '%'), filter_uid]
       elsif filter_filename != '*'
         filter_conditions = ["files.name LIKE ?", filter_filename.tr('*', '%')]
       else
