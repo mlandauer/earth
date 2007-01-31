@@ -1,5 +1,3 @@
-require 'earth/server'
-
 class FileMonitor
   cattr_accessor :log_all_sql
   cattr_accessor :console_writer
@@ -73,8 +71,8 @@ class FileMonitor
   end
   
   def FileMonitor.run_on_new_directory(path, only_once = false, only_initial_update = false)
-    start_heartbeat_thread
     this_server = Earth::Server.this_server
+    start_heartbeat_thread
     puts "WARNING: Watching new directory. So, clearing out database"
 
     benchmark "Database cleanup" do
