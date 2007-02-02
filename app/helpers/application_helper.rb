@@ -1,6 +1,14 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  def self_and_ancestors_up_to(directory, parent_dir)
+    if not parent_dir.nil? and directory.id != parent_dir.id
+      directory.self_and_ancestors_up_to(parent_dir)
+    else
+      []
+    end
+  end
+
   def human_units_of(size)
     case 
       when size < 1.kilobyte: 'Bytes'

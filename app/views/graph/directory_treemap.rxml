@@ -1,0 +1,31 @@
+response.headers['Content-Type'] = 'image/svg+xml'
+
+xml.instruct!
+
+xml.declare!(:DOCTYPE, :svg, 
+             :PUBLIC, "-//W3C//DTD SVG 1.1//EN", 
+             "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd")
+
+xml.instruct!("xml-stylesheet".to_sym, 
+              :type => "text/css",
+              :href => "/stylesheets/svg.css")
+
+xml.svg(:width => "100%", 
+        :height => "100%", 
+        :version => "1.1", 
+        :viewBox => "0,0,100,100", 
+        :preserveAspectRatio => "xMidYMid meet",
+        :xmlns => "http://www.w3.org/2000/svg", 
+        "xmlns:xlink".to_sym => "http://www.w3.org/1999/xlink") do 
+
+  xml.desc "SVG Graph for #{@server.name}:#{@directory.path}"
+  xml.title "#{@server.name}:#{@directory.path} - Earth"
+
+  create_treemap(@directory).each do |sub_rect|
+    xml.rect(:x => sub_rect.x + 0.3, 
+             :y => sub_rect.y + 0.3, 
+             :width => sub_rect.width - 0.6, 
+             :height => sub_rect.height - 0.6,
+             :style => "stroke-width: 0.2; stroke: black; fill: white;")
+  end
+end

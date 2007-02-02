@@ -752,5 +752,158 @@ private
       [Point.new(xi, yi), Point.new(xi_prime, yi_prime)]
     end
   end
+
+  class SubRect
+
+    attr_reader :x
+    attr_reader :y
+    attr_reader :width
+    attr_reader :height
+
+    def initialize(x, y, width, height)
+      @x = x
+      @y = y
+      @width = width
+      @height = height
+    end
+
+    def to_s
+      "rect(#{@x} #{@y} #{@width} #{@height})"
+    end
+  end
+
+  class Rectangle
+
+    attr_reader :sub_rectangles    
+
+    def initialize(width, height)
+      @width = width
+      @height = height
+
+      @offset_x = 0
+      @offset_y = 0
+      
+      @sub_rectangles = []
+    end
+
+    def area
+      @width * @height
+    end
+
+    def width()
+      remaining_width = @width - @offset_x
+      remaining_height = @height - @offset_y
+      [ remaining_width, remaining_height ].min
+    end
+
+    def layoutrow(row, factor)
+
+      remaining_width = @width - @offset_x
+      remaining_height = @height - @offset_y
+
+      sum = row.map { |node| node.size*factor }.sum
+
+      if remaining_width > remaining_height
+        # layout horizontally
+        width = sum / remaining_height
+
+        left = @offset_x
+        top = @offset_y
+
+        row.each do |r|
+          height = r.size*factor/width
+          @sub_rectangles << SubRect.new(left, top, width, height)
+          top += height
+        end
+
+        @offset_x += width
+      else
+        height = sum / remaining_width
+
+        left = @offset_x
+        top = @offset_y
+
+        row.each do |r|
+          width = r.size*factor/height
+          @sub_rectangles << SubRect.new(left, top, width, height)
+          left += width
+        end
+
+        @offset_y += height
+      end
+
+      #puts "layoutrow #{row.inspect}, offset_x now #{@offset_x}, offset_y now #{@offset_y}"
+    end
+
+    def worst(row, w, factor)
+      s = row.map { |node| node.size * factor }.sum
+      #row.collect do |r|
+      #  [ (w*w*r)/(s*s), (s*s)/(w*w*r) ].max
+      #end
+      #puts "row.max=#{row.max}"
+      #row.max || 0
+      result = [(w*w*row[0].size*factor)/(s*s), (s*s)/(w*w*row[-1].size*factor)].max unless row.empty?
+      #puts "row.max=#{result}"
+      result
+    end
+    
+    def squarify(children, row, w, factor) 
+      while true
+        if not children.empty?
+          c = children[0]
+          if row.empty? or worst(row, w, factor) >= worst(row + [c], w, factor) then 
+            #squarify(children[1..-1], row + [c], w, factor) 
+            children = children[1..-1]
+            row = row + [c]
+          else 
+            layoutrow(row, factor); 
+            squarify(children, [], width(), factor); 
+            break
+          end
+        else
+          layoutrow(row, factor); 
+          break
+        end
+      end
+    end 
+  end
+
+  class TreemapDirectory
+    def initialize(directory)
+      @directory = directory
+    end
+
+    def size
+      @directory.size
+    end
+  end
+
+  class TreemapFile
+    def initialize(file)
+      @file = file
+    end
+
+    def size
+      @file.size
+    end
+  end
+
+  def create_treemap(directory)
+
+    children = directory.children.map { |child| TreemapDirectory.new(child) } + 
+               directory.files.map { |child| TreemapFile.new(child) }
+    children.sort! do |entry1, entry2|
+      entry2.size - entry1.size
+    end
+
+    total_size = children.map { |child| child.size }.sum
+
+    rect = Rectangle.new(100.0, 100.0)
+    rect.squarify(children, [], rect.width(), rect.area / total_size)
+
+    puts rect.sub_rectangles.inspect
+
+    rect.sub_rectangles
+  end
 end
 

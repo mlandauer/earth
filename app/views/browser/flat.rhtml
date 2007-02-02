@@ -63,7 +63,7 @@
       <% @files.each do |file| %>
         <tr class="<%= cycle 'even', 'odd' %>">
           <td class="path">
-            <% if not @server %><%= link_to file.directory.server.name, :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => nil} %>:<% end %><% file.directory.self_and_ancestors_up_to(@directory).reverse.each do |parent| %><%= link_to parent.name, :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => parent.path} %>/<% end %><%= file.name %>
+             <% if not @server %><%= link_to file.directory.server.name, :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => nil} %>:<% end %><% self_and_ancestors_up_to(file.directory, @directory).reverse.each do |parent| %><%= link_to parent.name, :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => parent.path} %>/<% end %><%= file.name %>
           </td>
           <td class="modified">
             <span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span>
