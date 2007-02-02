@@ -113,7 +113,7 @@ private
     
       directory = this_server.directories.build(:name => path, :path => path)
       directory_count = benchmark "Building initial directory structure for #{path}" do
-        update(directory, 0, true, false, false)
+        update(directory.server, 0, true, false, false)
       end
 
       benchmark "Committing initial directory structure for #{path} to database" do
@@ -128,7 +128,7 @@ private
       directory.load_all_children(0, :include => :cached_sizes)
 
       benchmark "Initial pass at gathering all files beneath #{path}" do
-        update(directory, 0, false, true, true)
+        update(directory.server, 0, false, true, true)
       end
 
       benchmark "Saving cache information" do
@@ -164,11 +164,11 @@ private
       server = Earth::Server.this_server
       update_time = server.update_interval
       puts "Updating #{directory.server.directories.count} directories over #{update_time}s..."
-      update(directory, update_time)      
+      update(directory.server, update_time)      
     end
   end
   
-  def FileMonitor.update(directory, update_time = 0, 
+  def FileMonitor.update(server, update_time = 0, 
                          only_build_directories = false, 
                          initial_pass = false, 
                          show_eta = false)
@@ -179,19 +179,22 @@ private
     filters.each do |filter|
       id_to_filters[filter.id] = filter
     end
-    eta_printer = ETAPrinter.new(directory.server.directories.count)
-    remaining_count = directory.server.directories.count
+    eta_printer = ETAPrinter.new(server.directories.count)
+    remaining_count = server.directories.count
     start = Time.new
-    directory.each do |d|
-      total_count += update_non_recursive(d, id_to_filters, only_build_directories, initial_pass)
-      remaining_time = update_time - (Time.new - start)
-      remaining_count = remaining_count - 1
-      if remaining_time > 0 && remaining_count > 0
-        sleep (remaining_time / remaining_count)
-      end
-
-      if show_eta
-        eta_printer.increment
+    
+    Earth::Directory.roots_for_server(server).each do |directory|
+      directory.each do |d|
+        total_count += update_non_recursive(d, id_to_filters, only_build_directories, initial_pass)
+        remaining_time = update_time - (Time.new - start)
+        remaining_count = remaining_count - 1
+        if remaining_time > 0 && remaining_count > 0
+          sleep (remaining_time / remaining_count)
+        end
+  
+        if show_eta
+          eta_printer.increment
+        end
       end
     end
     # Set the last_update_finish_time

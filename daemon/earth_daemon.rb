@@ -59,7 +59,6 @@ require File.dirname(__FILE__) + '/../config/environment'
 
 if clear
   FileMonitor.database_cleanup
-  exit
+else
+  FileMonitor.start(ARGV[0], only_initial_update)
 end
-
-FileMonitor.start(ARGV[0], only_initial_update)
