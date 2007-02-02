@@ -30,8 +30,8 @@ class FileMonitorTest < Test::Unit::TestCase
     Earth::Directory.delete_all
     Earth::Server.delete_all
 
-    @server = Earth::Server.this_server
-    @directory = @server.directories.create(:name => @dir, :path => @dir)
+    server = Earth::Server.this_server
+    @directory = server.directories.create(:name => @dir, :path => @dir)
 
     @match_all_filter = Earth::Filter.create(:filename => '*', :uid => nil)    
   end
@@ -85,22 +85,22 @@ class FileMonitorTest < Test::Unit::TestCase
   # Check that files starting with "." are not ignored
   def test_dot_files
     FileUtils.touch 'test_data/.an_invisible_file'
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_cached_sizes_match(@directory)
     assert_equal(".an_invisible_file", Earth::File.find_by_name('.an_invisible_file').name)
   end
   
   def test_added
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
     assert_files([@file2, @file1], Earth::File.find(:all, :order => :id))
   end
 
   def test_removed
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     FileUtils.rm_rf 'test_data/dir1'
     FileUtils.rm 'test_data/file1'
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_cached_sizes_match(@directory)
     
     assert_directories([@dir], Earth::Directory.find(:all, :order => :id))
@@ -112,9 +112,9 @@ class FileMonitorTest < Test::Unit::TestCase
     
     FileUtils.mkdir dir2
     FileUtils.touch File.join(dir2, 'file')
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     FileUtils.rm_rf @dir1
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_cached_sizes_match(@directory)
     
     assert_directories([@dir], Earth::Directory.find(:all, :order => :id))
@@ -122,13 +122,13 @@ class FileMonitorTest < Test::Unit::TestCase
   end
   
   def test_changed
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     FileUtils.touch @file2
     # For the previous change to be noticed we need to create a new file as well
     # This is only strictly true for the PosixFileMonitor
     file3 = File.join(@dir1, 'file2')
     FileUtils.touch file3
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_cached_sizes_match(@directory)
     
     assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
@@ -136,10 +136,10 @@ class FileMonitorTest < Test::Unit::TestCase
   end
   
   def test_added_in_subdirectory
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     file3 = File.join(@dir1, 'file2')
     FileUtils.touch file3
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_cached_sizes_match(@directory)
     
     assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
@@ -152,7 +152,7 @@ class FileMonitorTest < Test::Unit::TestCase
     # Remove all permission from directory
     mode = File.stat(@dir1).mode
     File.chmod(0000, @dir1)
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_cached_sizes_match(@directory)
     
     assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
@@ -166,7 +166,7 @@ class FileMonitorTest < Test::Unit::TestCase
     # Make a directory readable but not executable
     mode = File.stat(@dir1).mode
     File.chmod(0444, @dir1)
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_cached_sizes_match(@directory)
     
     assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
@@ -177,9 +177,9 @@ class FileMonitorTest < Test::Unit::TestCase
   end
   
   def test_removed_watched_directory
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     FileUtils.rm_rf @dir
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_cached_sizes_match(@directory)
     
     directories = Earth::Directory.find(:all, :order => :id)
@@ -192,12 +192,12 @@ class FileMonitorTest < Test::Unit::TestCase
   end
   
   def test_directory_added
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_cached_sizes_match(@directory)
 
     subdir = File.join(@dir, "subdir")
     FileUtils.mkdir subdir
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_directory(subdir, Earth::Directory.find_by_name("subdir"))
     assert(@directory == Earth::Directory.find_by_name("subdir").parent)
   end
@@ -209,7 +209,7 @@ class FileMonitorTest < Test::Unit::TestCase
   def test_directory_cached_sizes_match
     # This performs various changes on a subdirectory and makes sure that
     # cached sizes are updated properly
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_cached_sizes_match(@directory)
     assert(@directory.find_cached_size_by_filter(@match_all_filter).size == 0)
 
@@ -218,7 +218,7 @@ class FileMonitorTest < Test::Unit::TestCase
     FileUtils.mkdir subdir
     File.utime(@past, @past, subdir)
 
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_directory(subdir, Earth::Directory.find_by_name("subdir"))
     assert_equal(@directory, Earth::Directory.find_by_name("subdir").parent)
     assert_equal(Earth::Directory.find_by_name(@dir), Earth::Directory.find_by_name("subdir").parent)
@@ -231,7 +231,7 @@ class FileMonitorTest < Test::Unit::TestCase
     file1_size = 3254
     file1 = File.join(subdir, "sub-file1")
     create_random_file(file1, file1_size)
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     assert_file(file1, Earth::File.find_by_name('sub-file1'))
     assert_equal(Earth::Directory.find_by_name("subdir"), Earth::File.find_by_name('sub-file1').directory)
     assert_equal(file1_size, Earth::File.find_by_name('sub-file1').size)
@@ -255,7 +255,7 @@ class FileMonitorTest < Test::Unit::TestCase
     file3 = File.join(subdir, "sub-file3")
     file3_size = 2131
     create_random_file(file3, file3_size)
-    FileMonitor.update(@server)
+    FileMonitor.update(@directory)
     new_cached_size = @directory.find_cached_size_by_filter(@match_all_filter).size
     assert_equal(file2_size + file3_size, new_cached_size - prev_cached_size)
     assert_cached_sizes_match(@directory)
@@ -290,14 +290,14 @@ class FileMonitorTest < Test::Unit::TestCase
     server = Earth::Server.find_or_create_by_name("random")
     random_directory = server.directories.create(:name => @random_dir, :path => @random_dir, :level => 0)
     random_directory.ensure_consistency
-    FileMonitor.update(server)
+    FileMonitor.update(random_directory)
     random_directory.save
     random_directory.reload
     random_directory.ensure_consistency
 
     1.upto(30) do
       create_delete_random_dirs
-      FileMonitor.update(server)
+      FileMonitor.update(random_directory)
       random_directory.reload
       random_directory.ensure_consistency
     end

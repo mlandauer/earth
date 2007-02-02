@@ -46,19 +46,15 @@ class FileMonitor
       raise "Currently not properly supporting multiple watch directories"
     end
     
-    start_heartbeat_thread
-    
     # If the database has been cleared
     if directory.nil?
-      directory = initial_update_on_new_directory(File.expand_path(path))
+      FileMonitor.run_on_new_directory(File.expand_path(path), only_initial_update)  
     # If we're watching the same directory as before
     elsif File.expand_path(path) == directory.path
-      puts "Collecting startup data from database..."
-      directory.load_all_children
+      FileMonitor.run_on_existing_directory
     else
       raise "Clear out the database (with --clear) before running on a new directory"
     end
-    run(directory) unless only_initial_update
   end
   
   def FileMonitor.directory_saved(node)
@@ -106,14 +102,15 @@ private
     end
   end
   
-  def FileMonitor.initial_update_on_new_directory(path)
+  def FileMonitor.run_on_new_directory(path, only_initial_update = false)
     this_server = Earth::Server.this_server
+    start_heartbeat_thread
 
-    benchmark "Scanning and storing tree", false do
+    directory = benchmark "Scanning and storing tree", false do
     
       directory = this_server.directories.build(:name => path, :path => path)
       directory_count = benchmark "Building initial directory structure for #{path}" do
-        update(directory.server, 0, true, false, false)
+        update(directory, 0, true, false, false)
       end
 
       benchmark "Committing initial directory structure for #{path} to database" do
@@ -128,7 +125,7 @@ private
       directory.load_all_children(0, :include => :cached_sizes)
 
       benchmark "Initial pass at gathering all files beneath #{path}" do
-        update(directory.server, 0, false, true, true)
+        update(directory, 0, false, true, true)
       end
 
       benchmark "Saving cache information" do
@@ -143,8 +140,10 @@ private
 
       directory
     end
+
+    run(directory) unless only_initial_update
   end
-  
+
   def FileMonitor.save_cached_sizes(directory)
 
     directory.cached_sizes.each do |cached_size|
@@ -158,17 +157,28 @@ private
     end
   end
   
+  def FileMonitor.run_on_existing_directory
+    start_heartbeat_thread
+    directories = Earth::Directory.roots_for_server(Earth::Server.this_server)
+    raise "Watch directory is not set for this server" if directories.empty?
+    raise "Currently not properly supporting multiple watch directories" if directories.size > 1
+    directory = directories[0]
+    puts "Collecting startup data from database..."
+    directory.load_all_children
+    run(directory)
+  end
+  
   def FileMonitor.run(directory)
     while true do
       # At the beginning of every update get the server information in case it changes on the database
       server = Earth::Server.this_server
       update_time = server.update_interval
       puts "Updating #{directory.server.directories.count} directories over #{update_time}s..."
-      update(directory.server, update_time)      
+      update(directory, update_time)      
     end
   end
   
-  def FileMonitor.update(server, update_time = 0, 
+  def FileMonitor.update(directory, update_time = 0, 
                          only_build_directories = false, 
                          initial_pass = false, 
                          show_eta = false)
@@ -179,22 +189,19 @@ private
     filters.each do |filter|
       id_to_filters[filter.id] = filter
     end
-    eta_printer = ETAPrinter.new(server.directories.count)
-    remaining_count = server.directories.count
+    eta_printer = ETAPrinter.new(directory.server.directories.count)
+    remaining_count = directory.server.directories.count
     start = Time.new
-    
-    Earth::Directory.roots_for_server(server).each do |directory|
-      directory.each do |d|
-        total_count += update_non_recursive(d, id_to_filters, only_build_directories, initial_pass)
-        remaining_time = update_time - (Time.new - start)
-        remaining_count = remaining_count - 1
-        if remaining_time > 0 && remaining_count > 0
-          sleep (remaining_time / remaining_count)
-        end
-  
-        if show_eta
-          eta_printer.increment
-        end
+    directory.each do |d|
+      total_count += update_non_recursive(d, id_to_filters, only_build_directories, initial_pass)
+      remaining_time = update_time - (Time.new - start)
+      remaining_count = remaining_count - 1
+      if remaining_time > 0 && remaining_count > 0
+        sleep (remaining_time / remaining_count)
+      end
+
+      if show_eta
+        eta_printer.increment
       end
     end
     # Set the last_update_finish_time
