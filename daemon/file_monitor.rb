@@ -70,21 +70,21 @@ class FileMonitor
     end
   end
   
+  # Remove all directories on this server from the database
+  def FileMonitor.database_cleanup
+    this_server = Earth::Server.this_server
+    benchmark "Clearing old data for this server out of the database" do
+      Earth::Directory.delete_all "server_id=#{this_server.id}"
+    end  
+  end
+  
   def FileMonitor.run_on_new_directory(path, only_once = false, only_initial_update = false)
     this_server = Earth::Server.this_server
     start_heartbeat_thread
-    puts "WARNING: Watching new directory. So, clearing out database"
-
-    benchmark "Database cleanup" do
-      # FIXME: Do this in a transaction
-      Earth::Directory.delete_all "server_id=#{Earth::Server.this_server.id}"
-      this_server.directories.clear      
-    end
 
     directory = benchmark "Scanning and storing tree", false do
     
-      expanded_path = File.expand_path(path)
-      directory = this_server.directories.build(:name => expanded_path, :path => expanded_path)
+      directory = this_server.directories.build(:name => path, :path => path)
       directory_count = benchmark "Building initial directory structure for #{path}" do
         update(directory, 0, true, false, false)
       end
@@ -147,7 +147,6 @@ class FileMonitor
 private
 
   def FileMonitor.run(directory, only_once = false)
-    puts "Watching directory #{directory.path}"    
     while true do
       # At the beginning of every update get the server information in case it changes on the database
       server = Earth::Server.this_server
@@ -174,7 +173,6 @@ private
     start = Time.new
     directory.each do |d|
       total_count += update_non_recursive(d, id_to_filters, only_build_directories, initial_pass)
-      total_time = Time.new - start
       remaining_time = update_time - (Time.new - start)
       remaining_count = remaining_count - 1
       if remaining_time > 0 && remaining_count > 0
