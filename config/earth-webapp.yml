@@ -1,5 +1,15 @@
-
 # Any parameters here affect the Earth web application
+
+# Configuration for doing user and group name lookup from uid and gid
+# By default (with ldap_server_name below commented out) ldap lookup is disabled
+# To enable LDAP, uncomment it. 
+#ldap_server_name: 'ldap.syd.rsp.com.au'
+ldap_server_port: 389
+ldap_user_lookup:
+  base: "ou=people, dc=rsp, dc=com, dc=au"
+  id_field: "uidNumber"
+  name_field: "uid"
+ldap_cache_time: 1.days
 
 # ----- Graph Configuration -----
 

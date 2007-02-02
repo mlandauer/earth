@@ -47,8 +47,6 @@ else
 end
 require File.dirname(__FILE__) + '/../config/environment'
 
-config_file = File.dirname(__FILE__) + "/../config/earth.yml"
-
 if ARGV.length == 1
   FileMonitor.run_on_new_directory(ARGV[0], false, only_initial_update)
 else

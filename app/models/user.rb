@@ -2,7 +2,7 @@ class User
   cattr_accessor :config
   attr_reader :uid, :name
     
-  self.config = YAML.load(File.open(File.dirname(__FILE__) + "/../../config/earth.yml"))
+  self.config = YAML.load(File.open(File.dirname(__FILE__) + "/../../config/earth-webapp.yml"))
   
   @@uid_to_name = ExpiringHash.new(eval(config["ldap_cache_time"]))
 
