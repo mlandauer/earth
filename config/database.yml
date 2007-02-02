@@ -2,6 +2,7 @@
 #
 # Install the native PostgreSQL driver:
 #   gem install postgres
+
 development:
   adapter: postgresql
   database: earth_development
