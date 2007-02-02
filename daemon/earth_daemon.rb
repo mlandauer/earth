@@ -57,27 +57,9 @@ else
 end
 require File.dirname(__FILE__) + '/../config/environment'
 
-# Find the current directory that it's watching
-directories = Earth::Directory.roots_for_server(Earth::Server.this_server)
-if directories.empty?
-  directory = nil
-elsif directories.size == 1
-  directory = directories[0]
-else
-  raise "Currently not properly supporting multiple watch directories"
-end
-
 if clear
   FileMonitor.database_cleanup
   exit
 end
 
-# If we're watching the same directory as before
-if directory.nil?
-  FileMonitor.run_on_new_directory(File.expand_path(ARGV[0]), false, only_initial_update)  
-elsif File.expand_path(ARGV[0]) == directory.path
-  FileMonitor.run_on_existing_directory
-else
-  puts "Use --clear to clear out database before running on a new directory"
-  exit 1
-end
+FileMonitor.start(ARGV[0], only_initial_update)

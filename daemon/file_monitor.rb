@@ -35,6 +35,42 @@ class FileMonitor
   # Set this to true if you want to see the individual SQL commands
   self.log_all_sql = false
   
+  def FileMonitor.start(path, only_initial_update = false)
+    # Find the current directory that it's watching
+    directories = Earth::Directory.roots_for_server(Earth::Server.this_server)
+    if directories.empty?
+      directory = nil
+    elsif directories.size == 1
+      directory = directories[0]
+    else
+      raise "Currently not properly supporting multiple watch directories"
+    end
+    
+    # If the database has been cleared
+    if directory.nil?
+      FileMonitor.run_on_new_directory(File.expand_path(path), only_initial_update)  
+    # If we're watching the same directory as before
+    elsif File.expand_path(path) == directory.path
+      FileMonitor.run_on_existing_directory
+    else
+      raise "Clear out the database (with --clear) before running on a new directory"
+    end
+  end
+  
+  def FileMonitor.directory_saved(node)
+    @directory_eta_printer.increment
+  end
+  
+  # Remove all directories on this server from the database
+  def FileMonitor.database_cleanup
+    this_server = Earth::Server.this_server
+    benchmark "Clearing old data for this server out of the database" do
+      Earth::Directory.delete_all "server_id=#{this_server.id}"
+    end  
+  end
+  
+private
+
   def FileMonitor.benchmark(description = nil, show_pending = true)
     if description and show_pending
       print "#{description} ... "
@@ -52,10 +88,6 @@ class FileMonitor
     result
   end
 
-  def FileMonitor.directory_saved(node)
-    @directory_eta_printer.increment
-  end
-  
   def FileMonitor.start_heartbeat_thread
     ActiveRecord::Base.allow_concurrency = true
     puts "Starting heartbeat thread..."
@@ -70,15 +102,7 @@ class FileMonitor
     end
   end
   
-  # Remove all directories on this server from the database
-  def FileMonitor.database_cleanup
-    this_server = Earth::Server.this_server
-    benchmark "Clearing old data for this server out of the database" do
-      Earth::Directory.delete_all "server_id=#{this_server.id}"
-    end  
-  end
-  
-  def FileMonitor.run_on_new_directory(path, only_once = false, only_initial_update = false)
+  def FileMonitor.run_on_new_directory(path, only_initial_update = false)
     this_server = Earth::Server.this_server
     start_heartbeat_thread
 
@@ -117,7 +141,7 @@ class FileMonitor
       directory
     end
 
-    run(directory, only_once) unless only_initial_update
+    run(directory) unless only_initial_update
   end
 
   def FileMonitor.save_cached_sizes(directory)
@@ -144,16 +168,13 @@ class FileMonitor
     run(directory)
   end
   
-private
-
-  def FileMonitor.run(directory, only_once = false)
+  def FileMonitor.run(directory)
     while true do
       # At the beginning of every update get the server information in case it changes on the database
       server = Earth::Server.this_server
       update_time = server.update_interval
       puts "Updating #{directory.server.directories.count} directories over #{update_time}s..."
       update(directory, update_time)      
-      return if only_once
     end
   end
   
