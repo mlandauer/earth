@@ -46,15 +46,21 @@ class FileMonitor
       raise "Currently not properly supporting multiple watch directories"
     end
     
+    start_heartbeat_thread
+    
     # If the database has been cleared
     if directory.nil?
-      FileMonitor.run_on_new_directory(File.expand_path(path), only_initial_update)  
+      directory = FileMonitor.initial_pass_on_new_directory(File.expand_path(path))  
     # If we're watching the same directory as before
     elsif File.expand_path(path) == directory.path
-      FileMonitor.run_on_existing_directory
+      benchmark "Collecting startup data from database" do
+        directory.load_all_children
+      end
     else
       raise "Clear out the database (with --clear) before running on a new directory"
     end
+    
+    run(directory) unless only_initial_update
   end
   
   def FileMonitor.directory_saved(node)
@@ -102,11 +108,10 @@ private
     end
   end
   
-  def FileMonitor.run_on_new_directory(path, only_initial_update = false)
+  def FileMonitor.initial_pass_on_new_directory(path)
     this_server = Earth::Server.this_server
-    start_heartbeat_thread
 
-    directory = benchmark "Scanning and storing tree", false do
+    benchmark "Scanning and storing tree", false do
     
       directory = this_server.directories.build(:name => path, :path => path)
       directory_count = benchmark "Building initial directory structure for #{path}" do
@@ -140,8 +145,6 @@ private
 
       directory
     end
-
-    run(directory) unless only_initial_update
   end
 
   def FileMonitor.save_cached_sizes(directory)
@@ -155,17 +158,6 @@ private
     directory.children.each do |child|
       save_cached_sizes(child)
     end
-  end
-  
-  def FileMonitor.run_on_existing_directory
-    start_heartbeat_thread
-    directories = Earth::Directory.roots_for_server(Earth::Server.this_server)
-    raise "Watch directory is not set for this server" if directories.empty?
-    raise "Currently not properly supporting multiple watch directories" if directories.size > 1
-    directory = directories[0]
-    puts "Collecting startup data from database..."
-    directory.load_all_children
-    run(directory)
   end
   
   def FileMonitor.run(directory)
