@@ -40,6 +40,7 @@ class FileMonitorTest < Test::Unit::TestCase
     # Tidy up
     File.chmod(0777, @dir1) if File.exist?(@dir1)
     FileUtils.rm_rf 'test_data'
+    FileUtils.rm_rf 'test_data_2'
   end
   
   # Compare directory object with a directory on the filesystem
