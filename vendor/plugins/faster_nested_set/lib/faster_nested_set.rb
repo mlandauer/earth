@@ -197,6 +197,10 @@ module Rsp
                    :conditions => "#{configuration[:foreign_key]} IS NULL", 
                    :order => #{configuration[:order].nil? ? "nil" : %Q{"#{configuration[:order]}"}})
             end
+
+            def children_count
+              children_count_internal
+            end
           EOV
 
           include Rsp::Acts::FasterNestedSet::InstanceMethods
@@ -476,11 +480,6 @@ module Rsp
 
         # --- Below this point taken verbose from nested_set.rb --- #
 
-        # Returns the number of nested children of this object.
-        def children_count
-          return (self[right_col_name] - self[left_col_name] - 1)/2
-        end
-                                                               
         # Returns a set of itself and all of its nested children
         def full_set
           self.class.base_class.find(:all, :conditions => "#{scope_condition} AND (#{left_col_name} BETWEEN #{self[left_col_name]} and #{self[right_col_name]})" )
@@ -553,8 +552,8 @@ module Rsp
         # Override the default implementation of update to write all attributes except
         # lft and rgt
         def update
-          newchildren = children.count { |child| child.new_record? }
           if not self.new_record?
+            return false if callback(:before_update) == false
             a = attributes_with_quotes(false)
             a.delete(left_col_name)
             a.delete(right_col_name)
@@ -564,6 +563,7 @@ module Rsp
                                                                   "WHERE #{self.class.primary_key} = #{id}",
                               "#{self.class.name} Update"
                               )
+            callback(:after_update)
             return true
           else
             super
@@ -638,6 +638,15 @@ module Rsp
           idMap.each do |key, child|
             child.children.loaded
           end
+        end
+
+        private
+        # Returns the number of nested children of this object.
+        def children_count_internal(force_reload = false)
+          left_and_right = self.class.find(:first, 
+                                           :select => "#{self[left_col_name]} AS left, #{self[right_col_name]} AS right",
+                                           :conditions => "id = #{self.id}")
+          (left_and_right["right"].to_i - left_and_right["left"].to_i - 1) / 2
         end
       end
     end

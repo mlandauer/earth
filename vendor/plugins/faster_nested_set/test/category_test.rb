@@ -27,9 +27,18 @@ class CategoryTest < Test::Unit::TestCase
     root      = Category.create("name" => "root")
     child1    = root.children.create("name" => "child1")
     child1a   = child1.children.create("name" => "child1a")
-    root.reload
     child2    = root.children.create("name" => "child2")
     assert_nested_set_order([root, [child1, [child1a]], [child2]])
+
+    root.reload
+
+    assert_equal(1, root.lft)
+    assert_equal(8, root.rgt)
+    assert_equal(3, root.children_count)
+
+    assert_equal(1, child1.children_count)
+    assert_equal(0, child1a.children_count)
+    assert_equal(0, child2.children_count)
   end
 
   def test_create_tree_2
@@ -206,7 +215,6 @@ class CategoryTest < Test::Unit::TestCase
     names = ["root", ["child1", ["child1a"], ["child1b"], ["child1c"]]]
     categories = create_tree(names)
     categories[0].reload
-    puts pp(categories[0])
     assert_nested_set_order(categories)
   end
 
