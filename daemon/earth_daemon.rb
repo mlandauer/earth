@@ -17,9 +17,9 @@ clear = false
 
 opts = OptionParser.new
 opts.banner = <<END_OF_STRING
-Monitor a local directory recursively for changes and keep up-to-date
+Monitor directories recursively for changes and keep up-to-date
 information in a database
-Usage: #{$0} [-d][-i] <directory path> || -c
+Usage: #{$0} [-d][-i] <directory path> [<directory path>..] || -c
 END_OF_STRING
 opts.on("-d", "--development", "Run the daemon in development mode.") { development_mode = true }
 opts.on("-i", "--initial-only", "Only scan a new directory, do not update continuously.") { only_initial_update = true }
@@ -62,4 +62,4 @@ if clear
   exit
 end
 
-FileMonitor.start(ARGV[0], only_initial_update)
+FileMonitor.start(ARGV, only_initial_update)

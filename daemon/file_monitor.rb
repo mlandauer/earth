@@ -35,32 +35,38 @@ class FileMonitor
   # Set this to true if you want to see the individual SQL commands
   self.log_all_sql = false
   
-  def FileMonitor.start(path, only_initial_update = false)
+  def FileMonitor.start(paths, only_initial_update = false)
+    raise "Currently not supporting multiple watch directories" if paths.size > 1
+    # Turn the paths into an absolute path
+    paths = paths.map{|p| File.expand_path(p)}
+    
     # Find the current directory that it's watching
     directories = Earth::Directory.roots_for_server(Earth::Server.this_server)
-    if directories.empty?
-      directory = nil
-    elsif directories.size == 1
-      directory = directories[0]
-    else
-      raise "Currently not properly supporting multiple watch directories"
-    end
+    previous_paths = directories.map{|d| d.path}
+    raise "Currently not properly supporting multiple watch directories" if directories.size > 1
     
     start_heartbeat_thread
     
-    # If the database has been cleared
-    if directory.nil?
-      directory = FileMonitor.initial_pass_on_new_directory(File.expand_path(path))  
-    # If we're watching the same directory as before
-    elsif File.expand_path(path) == directory.path
-      benchmark "Collecting startup data from database" do
-        directory.load_all_children
-      end
-    else
-      raise "Clear out the database (with --clear) before running on a new directory"
+    paths_to_start_watching = paths - previous_paths
+    paths_to_stop_watching = previous_paths - paths
+    paths_to_continue_watching = paths & previous_paths
+    
+    if !paths_to_stop_watching.empty?
+      raise "To stop watching #{paths_to_stop_watching} clear out the database (with --clear)"
     end
     
-    run(directory) unless only_initial_update
+    directories.each do |directory|
+      benchmark "Collecting startup data for directory #{directory.path} from database" do
+        directory.load_all_children
+      end
+    end
+    paths_to_start_watching.each do |path|
+      benchmark "Doing initial pass on new path #{path}" do
+        directories << FileMonitor.initial_pass_on_new_directory(path)
+      end
+    end
+    
+    run(directories) unless only_initial_update
   end
   
   def FileMonitor.directory_saved(node)
@@ -115,7 +121,7 @@ private
     
       directory = this_server.directories.build(:name => path, :path => path)
       directory_count = benchmark "Building initial directory structure for #{path}" do
-        update(directory, 0, true, false, false)
+        update([directory], 0, true, false, false)
       end
 
       benchmark "Committing initial directory structure for #{path} to database" do
@@ -130,7 +136,7 @@ private
       directory.load_all_children(0, :include => :cached_sizes)
 
       benchmark "Initial pass at gathering all files beneath #{path}" do
-        update(directory, 0, false, true, true)
+        update([directory], 0, false, true, true)
       end
 
       benchmark "Saving cache information" do
@@ -160,20 +166,23 @@ private
     end
   end
   
-  def FileMonitor.run(directory)
+  def FileMonitor.run(directories)
     while true do
       # At the beginning of every update get the server information in case it changes on the database
       server = Earth::Server.this_server
       update_time = server.update_interval
-      puts "Updating #{directory.server.directories.count} directories over #{update_time}s..."
-      update(directory, update_time)      
+      directory_count = directories.map{|d| d.children_count}.sum
+      puts "Updating #{directory_count} directories over #{update_time}s..."
+      update(directories, update_time)      
     end
   end
   
-  def FileMonitor.update(directory, update_time = 0, 
+  def FileMonitor.update(directories, update_time = 0, 
                          only_build_directories = false, 
                          initial_pass = false, 
                          show_eta = false)
+    raise "Only one update directory support currently" if directories.size > 1
+    directory = directories[0]
     # TODO: Do this in a nicer way
     total_count = 0
     filters = Earth::Filter::find(:all)
