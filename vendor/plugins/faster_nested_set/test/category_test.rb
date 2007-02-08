@@ -120,6 +120,7 @@ class CategoryTest < Test::Unit::TestCase
     root      = Category.new("name" => "root")
     child1    = root.children.build("name" => "child1")
     child1a   = child1.children.build("name" => "child1a")
+    assert_equal(2, root.children_count)
     root.save
 
     assert_nested_set_order([root, [child1, [child1a]]])

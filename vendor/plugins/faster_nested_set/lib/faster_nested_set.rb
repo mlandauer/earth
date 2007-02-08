@@ -643,10 +643,14 @@ module Rsp
         private
         # Returns the number of nested children of this object.
         def children_count_internal(force_reload = false)
-          left_and_right = self.class.find(:first, 
-                                           :select => "#{self[left_col_name]} AS left, #{self[right_col_name]} AS right",
-                                           :conditions => "id = #{self.id}")
-          (left_and_right["right"].to_i - left_and_right["left"].to_i - 1) / 2
+          if self.new_record?
+            self.children.inject(0) { |sum, child| sum + 1 + child.children_count }
+          else
+            left_and_right = self.class.find(:first, 
+                                             :select => "#{self[left_col_name]} AS left, #{self[right_col_name]} AS right",
+                                             :conditions => "id = #{self.id}")
+            (left_and_right["right"].to_i - left_and_right["left"].to_i - 1) / 2
+          end
         end
       end
     end
