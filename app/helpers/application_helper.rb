@@ -61,7 +61,7 @@ module ApplicationHelper
   # This depends on the application running from a checked out svn version and
   # the command "svnversion" being available on the path
   def earth_version
-    IO::popen("/opt/local/bin/svnversion #{RAILS_ROOT}") { |f| f.readline }
+    IO::popen("svnversion #{RAILS_ROOT}") { |f| f.readline }
   end
 
 private
