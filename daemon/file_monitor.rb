@@ -35,21 +35,19 @@ class FileMonitor
   # Set this to true if you want to see the individual SQL commands
   self.log_all_sql = false
   
+  # TODO: Check that paths are not overlapping
   def FileMonitor.start(paths, only_initial_update = false)
-    raise "Currently not supporting multiple watch directories" if paths.size > 1
     # Turn the paths into an absolute path
     paths = paths.map{|p| File.expand_path(p)}
     
     # Find the current directory that it's watching
     directories = Earth::Directory.roots_for_server(Earth::Server.this_server)
     previous_paths = directories.map{|d| d.path}
-    raise "Currently not properly supporting multiple watch directories" if directories.size > 1
     
     start_heartbeat_thread
     
     paths_to_start_watching = paths - previous_paths
     paths_to_stop_watching = previous_paths - paths
-    paths_to_continue_watching = paths & previous_paths
     
     if !paths_to_stop_watching.empty?
       raise "To stop watching #{paths_to_stop_watching} clear out the database (with --clear)"
@@ -195,7 +193,8 @@ private
       # At the beginning of every update get the server information in case it changes on the database
       server = Earth::Server.this_server
       update_time = server.update_interval
-      directory_count = directories.map{|d| d.children_count}.sum
+      # Hmmm.. children_count doesn't include itself in the count
+      directory_count = directories.map{|d| d.children_count + 1}.sum
       puts "Updating #{directory_count} directories over #{update_time}s..."
       update(directories, update_time)      
     end
@@ -205,23 +204,24 @@ private
                          only_build_directories = false, 
                          initial_pass = false, 
                          show_eta = false)
-    raise "Only one update directory support currently" if directories.size > 1
-    directory = directories[0]
     # TODO: Do this in a nicer way
     total_count = 0
-    eta_printer = ETAPrinter.new(directory.server.directories.count)
-    remaining_count = directory.server.directories.count
+    remaining_count = directories.map{|d| d.children_count + 1}.sum
+    eta_printer = ETAPrinter.new(remaining_count)
     start = Time.new
-    directory.each do |d|
-      total_count += update_non_recursive(d, only_build_directories, initial_pass)
-      remaining_time = update_time - (Time.new - start)
-      remaining_count = remaining_count - 1
-      if remaining_time > 0 && remaining_count > 0
-        sleep (remaining_time / remaining_count)
-      end
-
-      if show_eta
-        eta_printer.increment
+    directories.each do |directory|
+      directory.each do |d|
+        total_count += update_non_recursive(d, only_build_directories, initial_pass)
+        remaining_time = update_time - (Time.new - start)
+        remaining_count = remaining_count - 1
+        if remaining_time > 0 && remaining_count > 0
+          sleep_time = remaining_time / remaining_count
+          sleep (sleep_time)
+        end
+  
+        if show_eta
+          eta_printer.increment
+        end
       end
     end
     # Set the last_update_finish_time

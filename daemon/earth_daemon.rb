@@ -43,7 +43,7 @@ if clear
     exit 1
   end
 else
-  if ARGV.length != 1
+  if ARGV.length < 1
     puts opts
     exit 1
   end
