@@ -35,8 +35,14 @@ module Earth
 
     after_save("self.observe_after_save; true")
 
+    before_update("self.update_cache_before_update; true")
+    after_update("self.update_cache_after_update; true")
+    #after_save("self.update_cache_after_save; true")
+    after_create("self.update_cache_after_create; true")
+
     @@save_observers = []
-  
+    @@cache_disabled = false
+
     Stat = Struct.new(:mtime)
     class Stat
       def ==(stat)
@@ -197,6 +203,72 @@ module Earth
       end
       result
     end
+
+    def update_cache_before_update
+      @remembered_cached_sizes = cached_sizes.find(:all)
+    end
+
+    def update_cache_after_update
+      @remembered_cached_sizes.each do |cached_size|
+        filter = cached_size.filter
+        size, blocks, count = 0, 0, 0
+        self.children.each do |child|
+          child_cached_size = child.find_cached_size_by_filter(filter)
+          if child_cached_size
+            size += child_cached_size.size
+            blocks += child_cached_size.blocks
+            count += child_cached_size.count
+          end
+        end
+
+        self.files.each do |file|
+          if filter.matches(file) then
+            size += file.size
+            blocks += file.blocks
+            count += 1
+          end
+        end
+
+        diff_size = size - cached_size.size
+        diff_blocks = blocks - cached_size.blocks
+        diff_count = count - cached_size.count
+
+        if diff_size != 0 or diff_blocks != 0 or diff_count != 0
+          Earth::CachedSize.update_all("size = size + #{diff_size}, blocks = blocks + #{diff_blocks}, count = count + #{diff_count}",
+                                       "filter_id=#{filter.id} and directory_id in (#{self.self_and_ancestors.map{|x| x.id}.join(',')})")
+        end
+      end
+
+      @remembered_cached_sizes = nil
+    end
+
+    def update_cache_after_save
+    end
+
+    def update_cache_after_create
+      if not @@cache_disabled
+        create_caches
+      end
+    end
+    
+    def update_caches
+      update_cache_before_update
+      update_cache_after_update
+    end
+
+    def create_caches
+      existing_filters = self.cached_sizes.find(:all).map { |cached_size| cached_size.filter }
+      Earth::Filter::find(:all).each do |filter|
+        if not existing_filters.include?(filter) then
+          self.cached_sizes.create(:directory => self, :filter => filter)
+        end
+      end
+    end
+
+    def Directory.cache_enabled=(cache_enabled)
+      @@cache_disabled = !cache_enabled
+    end
   end
+
 end
 

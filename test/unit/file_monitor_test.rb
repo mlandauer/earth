@@ -67,6 +67,8 @@ class FileMonitorTest < Test::Unit::TestCase
   end
 
   def assert_cached_sizes_match(directory)
+    @directory.create_caches
+    @directory.update_caches
     cached_size = @directory.find_cached_size_by_filter(@match_all_filter)
     cached_size.reload
     assert_equal(cached_size.size, @directory.size)
