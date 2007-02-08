@@ -320,8 +320,8 @@ module Rsp
           if Thread.current["root_deleted_node"].nil?
             Thread.current["root_deleted_node"] = self
 
-            self.class.update_all( "#{left_col_name} = #{left_col_name} - (CASE WHEN #{left_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE id=#{self.id}) THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE id=#{self.id}) ELSE 0 END), #{right_col_name} = #{right_col_name} - (CASE WHEN #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE id=#{self.id}) THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE id=#{self.id}) ELSE 0 END)",  
-                                   "#{scope_condition} AND #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE id=#{self.id})" )
+            self.class.update_all( "#{left_col_name} = #{left_col_name} - (CASE WHEN #{left_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.id}) THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.id}) ELSE 0 END), #{right_col_name} = #{right_col_name} - (CASE WHEN #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.id}) THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.id}) ELSE 0 END)",  
+                                   "#{scope_condition} AND #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.id})" )
 
           end
 
@@ -357,12 +357,13 @@ module Rsp
           if Thread.current["saved_node"] == self
             Thread.current["saved_node"] = nil
 
-            if not @insert_offset.nil? #true #not self.parent_assoc.nil?
-              offset = 2 
-              self.class.update_all( "#{left_col_name} = #{left_col_name} + (CASE WHEN #{left_col_name} >= #{@left_select_expression} THEN #{offset} WHEN #{left_col_name} < 0 THEN #{@insert_offset} ELSE 0 END), #{right_col_name} = #{right_col_name} + (CASE WHEN #{right_col_name} >= #{@left_select_expression} THEN #{offset} WHEN #{right_col_name} < 0 THEN #{@insert_offset} ELSE 0 END)",  
-                                     "#{scope_condition} AND (#{right_col_name} >= #{@left_select_expression} OR #{right_col_name} < 0)" )
+            if not @insert_range.nil?
+              insert_offset = "((" + @left_select_expression + ") + #{@insert_range})"
+
+              self.class.update_all( "#{left_col_name} = #{left_col_name} + (CASE WHEN #{left_col_name} >= (#{@left_select_expression}) THEN 2 WHEN #{left_col_name} < 0 THEN #{insert_offset} ELSE 0 END), #{right_col_name} = #{right_col_name} + (CASE WHEN #{right_col_name} >= (#{@left_select_expression}) THEN 2 WHEN #{right_col_name} < 0 THEN #{insert_offset} ELSE 0 END)",  
+                                     "#{scope_condition} AND (#{right_col_name} >= (#{@left_select_expression}) OR #{right_col_name} < 0)" )
               if not self.parent_assoc.nil?
-                self.parent_assoc[right_col_name] += offset
+                self.parent_assoc[right_col_name] += 2
               end
             end
 
@@ -398,7 +399,7 @@ module Rsp
 
 
         def nested_set_before_save
-          @insert_offset = nil
+          @insert_range = nil
 
           if @new_record or @save_required then
             self.nested_set_before_save_new_record
@@ -422,7 +423,7 @@ module Rsp
         end
 
         def nested_set_before_save_new_record
-          @insert_offset = nil
+          @insert_range = nil
           
           if Thread.current["saved_node"].nil?
             Thread.current["saved_node"] = self
@@ -430,24 +431,18 @@ module Rsp
             if self.parent_assoc.nil?
               left = 1
               level = 1
-              @left_select_expression = "1"
+              @left_select_expression = "SELECT CASE WHEN MAX(#{right_col_name}) IS NOT NULL THEN MAX(#{right_col_name})+1 ELSE 1 END FROM #{self.class.table_name} WHERE #{scope_condition} AND #{parent_col_name} IS NULL AND #{right_col_name}>0"
             else
               left = self.parent_assoc[right_col_name] 
               if has_level_column?
                 level = self.parent_assoc[level_col_name] + 1
               end
-              if not self.parent_assoc.id.nil?
-                @left_select_expression = "(SELECT #{right_col_name} FROM #{self.class.table_name} WHERE id=#{self.parent_assoc.id})"
-              else
-                @left_select_expression = "1"
-              end
+              @left_select_expression = "SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.parent_assoc.id}"
             end
 
-            range = self.update_edge_data(0, level) + 1
+            @insert_range = self.update_edge_data(0, level) + 1
 
-            right = self.update_edge_data(-range, level)
-
-            @insert_offset = "(" + @left_select_expression + " + #{range})"
+            self.update_edge_data(-@insert_range, level)
           end
         end
 
@@ -557,10 +552,9 @@ module Rsp
             a = attributes_with_quotes(false)
             a.delete(left_col_name)
             a.delete(right_col_name)
-            connection.update(
-                              "UPDATE #{self.class.table_name} " +
-                                                                  "SET #{quoted_comma_pair_list(connection, a)} " +
-                                                                  "WHERE #{self.class.primary_key} = #{id}",
+            connection.update("UPDATE #{self.class.table_name} " + \
+                              "SET #{quoted_comma_pair_list(connection, a)} " + \
+                              "WHERE #{self.class.primary_key} = #{id}",
                               "#{self.class.name} Update"
                               )
             callback(:after_update)
@@ -648,7 +642,7 @@ module Rsp
           else
             left_and_right = self.class.find(:first, 
                                              :select => "#{self[left_col_name]} AS left, #{self[right_col_name]} AS right",
-                                             :conditions => "id = #{self.id}")
+                                             :conditions => "#{self.class.primary_key} = #{self.id}")
             (left_and_right["right"].to_i - left_and_right["left"].to_i - 1) / 2
           end
         end

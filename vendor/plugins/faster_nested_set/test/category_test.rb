@@ -5,10 +5,13 @@ require 'pp'
 class CategoryTest < Test::Unit::TestCase
   fixtures :categories
 
-  def assert_nested_set_order(node, left=1)
+  def assert_nested_set_order(node, left=nil)
     parent = node[0]
     node = node[1, node.length]
     parent.reload
+    if left.nil?
+      left = parent.lft
+    end
     assert_equal(left, parent.lft, "left of node #{parent.name} assumed to be #{left} but is #{parent.lft}")
     child_left = left + 1
     child_right = child_left
@@ -114,6 +117,18 @@ class CategoryTest < Test::Unit::TestCase
     child1b.save()
 
     assert_nested_set_order([root, [child1, [child1a], [child1b]]])
+  end
+
+  def test_multi_tree
+    root1      = Category.create("name" => "root1")
+    child1     = root1.children.create("name" => "child1")
+    root2      = Category.create("name" => "root2")
+    child2     = root2.children.create("name" => "child2")
+    assert_nested_set_order([root1, [child1]])
+    assert_nested_set_order([root2, [child2]])
+    root1.reload
+    root2.reload
+    assert(root2.lft == root1.rgt + 1)
   end
 
   def test_insert_3b
