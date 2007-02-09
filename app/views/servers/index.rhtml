@@ -1,8 +1,8 @@
 <h1>All Servers</h1>
 
-<table>
+<table id="servers">
   <tr>
-    <th class="name" colspan="2">Host</th>
+    <th class="name">Host</th>
     <th class="status">Status</th>
     <th class="size">Size</th>
     <th class="version">Daemon Version</th>
@@ -13,7 +13,9 @@
   
 <% for server in @servers %>
 
-  <% if server.daemon_alive? %>
+  <% if server.daemon_alive? and not server.cache_complete? %>
+    <tr class="incomplete">
+  <% elsif server.daemon_alive? %>
     <tr class="up">
   <% elsif server.daemon_version.nil? %>
     <tr class="down">
@@ -21,9 +23,10 @@
     <tr class="unknown">
   <% end %>
 
-    <td class="icon"></td>
     <td class="name"><%=h server.name %></td>
-    <% if server.daemon_alive? %>
+    <% if server.daemon_alive? and not server.cache_complete? %>
+      <td class="status incomplete">Incomplete</td>
+    <% elsif server.daemon_alive? %>
       <td class="status up">Up</td>
     <% elsif server.daemon_version.nil? %>
       <td class="status down">Down</td>
@@ -39,8 +42,8 @@
       else
         time_ago_in_words(server.heartbeat_time, true) + " ago"
       end %></td>
-    <td class="action"><%= link_to 'Show', server_path(server) %></td>
-    <td class="action"><%= link_to 'Edit', edit_server_path(server) %></td>
+    <td class="action"><%= link_to 'Show', :action => :show, :params => {:server => server.name } %></td>
+    <td class="action"><%= link_to 'Edit', :action => :edit, :params => {:server => server.name } %></td>
   </tr>
 <% end %>
 </table>

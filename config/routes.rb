@@ -3,8 +3,6 @@ hostname_regex = /\w[\w-]*(\.\w[\w-]*)*/
 ActionController::Routing::Routes.draw do |map|
   map.resources :servers
 
-  map.resources :servers
-
   # The priority is based upon order of creation: first created -> highest priority.
   
   # Sample of regular route:
@@ -53,6 +51,11 @@ ActionController::Routing::Routes.draw do |map|
   map.connect '/graph/:server', :controller => "graph", :action => "index",
     :requirements => {:server => hostname_regex}
   map.connect '/graph/:server*path', :controller => "graph", :action => "index",
+    :requirements => {:server => hostname_regex}
+
+  map.connect '/servers/show/:server', :controller => "servers", :action => "show",
+    :requirements => {:server => hostname_regex}
+  map.connect '/servers/edit/:server', :controller => "servers", :action => "edit",
     :requirements => {:server => hostname_regex}
 
   # Allow downloading Web Service WSDL as a file with an extension

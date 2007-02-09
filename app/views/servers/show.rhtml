@@ -1,36 +1,99 @@
-<p>
-  <b>Name:</b>
-  <%=h @server.name %>
-</p>
+<h1><%= h @server.name %></h1>
 
-<p>
-  <b>Update interval (in seconds):</b>
-  <%=h @server.update_interval %>
-</p>
+<table id="server-detail">
+<tr>
+  <th>Host</th>
+  <td><%=h @server.name %></td>
+</tr>
 
-<p>
-  <b>Last update finish time:</b>
-  <%= if @server.last_update_finish_time.nil?
+<tr>
+  <th>Daemon Status</th>
+    <% if @server.daemon_alive? %>
+      <td class="status up">Up</td>
+    <% elsif @server.daemon_version.nil? %>
+      <td class="status down">Down</td>
+    <% else %>
+      <td class="status unknown">Crashed?</td>
+    <% end %>
+</tr>
+
+<tr>
+  <th>Daemon Version</th>
+  <td><%=h @server.daemon_version || "Not running" %></td>
+</tr>
+
+<tr>
+  <th>Update interval</th>
+  <td><%=h @server.update_interval %> seconds</td>
+</tr>
+
+<tr>
+  <th>Last update finish time</th>
+  <td><%= if @server.last_update_finish_time.nil?
         "N/A"
       else
         time_ago_in_words(@server.last_update_finish_time, true) + " ago"
-      end %>
-</p>
+      end %></td>
+</tr>
 
-<p>
-  <b>Heartbeat interval (in seconds):</b>
-  <%=h @server.heartbeat_interval %>
-</p>
+<tr>
+  <th>Heartbeat interval</th>
+  <td><%=h @server.heartbeat_interval %> seconds</td>
+</tr>
 
-<p>
-  <b>Heartbeat last seen:</b>
-  <%= if @server.heartbeat_time.nil?
+<tr>
+  <th>Heartbeat last seen</th>
+  <td><%= if @server.heartbeat_time.nil?
         "N/A"
       else
         time_ago_in_words(@server.heartbeat_time, true) + " ago"
-      end %>
-</p>
+      end %></td>
+</tr>
 
+<tr>
+  <th>Initial indexing complete?</th>
+  <td><%= h @server.cache_complete? ? "Yes" : "No" %></td>
+</tr>
 
+<tr>
+  <th>Total size</th>
+  <td><%= h ApplicationHelper.human_size(@server.size) %></td>
+</tr>
+
+<tr>
+  <th>Total directories</th>
+  <td><%= h number_with_delimiter(@server.directories.count) %></td>
+</tr>
+<tr>
+  <th>Total files</th>
+  <td><%= h number_with_delimiter(@server.recursive_file_count) %></td>
+</tr>
+
+</table>
+
+<h2>Root directories on <%= h @server.name %></h2>
+<table id="server-roots">
+ <tr> 
+  <th class="path" colspan="2">Path</th>
+  <th class="size">Size</th>
+  <th class="directory-count">Total Directories</th>
+  <th class="file-count">Total Files</th>
+  <th class="indexed">Indexed</th>
+ </tr>
+ <% for root in Earth::Directory::roots_for_server(@server) %>
+  <tr>
+   <td class="icon directory"></td>
+   <td class="path"><%= h root.name %></td>
+   <td class="size"><%= h ApplicationHelper.human_size(root.size) %></td>
+   <td class="directory-count"><%= h number_with_delimiter(root.recursive_directory_count) %></td>
+   <td class="file-count"><%= h number_with_delimiter(root.recursive_file_count) %></td>
+   <td class="indexed"><%= h root.cache_complete? ? "Yes" : "Pending" %></td>
+  </tr>
+ <% end %>
+</table>
+
+<div id="links">
 <%= link_to 'Edit', edit_server_path(@server) %> |
 <%= link_to 'Back', servers_path %>
+</div>
+

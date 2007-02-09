@@ -13,7 +13,7 @@ class ServersController < ApplicationController
   # GET /servers/1
   # GET /servers/1.xml
   def show
-    @server = Earth::Server.find(params[:id])
+    @server = Earth::Server.find_by_name(params[:server])
 
     respond_to do |format|
       format.html # show.rhtml
@@ -23,7 +23,7 @@ class ServersController < ApplicationController
 
   # GET /servers/1;edit
   def edit
-    @server = Earth::Server.find(params[:id])
+    @server = Earth::Server.find_by_name(params[:server])
   end
 
   # PUT /servers/1

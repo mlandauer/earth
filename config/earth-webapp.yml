@@ -11,6 +11,13 @@ ldap_user_lookup:
   name_field: "uid"
 ldap_cache_time: 1.days
 
+#
+# A daemon is considered dead if he didn't emit a heartbeat for this period of time 
+# after he was expected to.  This period should account for any latency that might
+# be caused by database load etc. 
+#
+heartbeat_grace_period: 10.seconds
+
 # ----- Graph Configuration -----
 
 # Number of sub-directory levels shown in the graph. 1 means only the

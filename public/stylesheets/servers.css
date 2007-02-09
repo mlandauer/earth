@@ -2,6 +2,7 @@ body { background-color: #fff; color: #333; }
 
 body {
   background-color: #e0e0e0;
+  margin: 2em;
 }
 
 body, p, ol, ul, td {
@@ -89,6 +90,7 @@ td, th {
   padding-bottom: 0.2em;
   padding-left: 0.4em;
   padding-right: 0.4em;
+  white-space: nowrap;
 }
 
 td.name, th.name { 
@@ -104,9 +106,19 @@ td.icon {
   width: 16px;
   background-position: 4px 50%;
   background-repeat: no-repeat;
-  background-image: url(/images/icon_server.png);
   border-right: 0px;
   padding-right: 0px;
+}
+
+td.name { 
+  background-image: url(/images/icon_server.png);
+  background-position: 4px 50%;
+  background-repeat: no-repeat;
+  padding-left: 24px;
+}
+
+td.icon.directory { 
+  background-image: url(/images/icon_folder.png);
 }
 
 th.icon { 
@@ -127,6 +139,10 @@ tr.up {
   background: #a0ffa0;
 }
 
+tr.incomplete { 
+  background: #eeeeee;
+}
+
 tr.down { 
   background: #ffa0a0;
 }
@@ -137,4 +153,98 @@ tr.unknown {
 
 td.action {
   background: white;
+}
+
+table#server-detail th, 
+table#server-detail td 
+ { 
+  text-align: left;
+}
+
+table#servers th.size, 
+table#servers td.size
+{ 
+  text-align: right;
+}
+
+table#servers th.version, 
+table#servers td.version
+{ 
+  text-align: center;
+}
+
+table#server-roots th.path, 
+table#server-roots td.path 
+ { 
+  text-align: left;
+  border-left: 0px;
+}
+
+table#server-roots th.size, 
+table#server-roots td.size, 
+table#server-roots th.file-count, 
+table#server-roots td.file-count, 
+table#server-roots th.directory-count, 
+table#server-roots td.directory-count
+ { 
+  text-align: right;
+}
+
+table#server-detail td.status.up {
+  color: #008000;
+}
+
+table#server-detail td.status.down {
+  color: #800000;
+  background-color: #ffc0c0;
+  font-weight: bold;
+}
+
+table#server-detail td.status.unknown {
+  color: #808000;
+  background-color: #ffffc0;
+  font-weight: bold;
+}
+
+div#links { margin-top: 1em; }
+
+div#footer { 
+  font-size: small;
+  color: grey;
+  margin-top: 1em; 
+}
+
+div#footer a,
+div#footer a:hover {
+  color: grey;
+  background-color: inherit;
+}
+
+table#servers { 
+  width: 100%;
+}
+table#servers td.icon { 
+  width: 22px !important;
+  min-width: 22px !important;
+}
+table#servers td.name { 
+  width: 40%;
+}
+table#servers td.status { 
+  width: 10%;
+}
+table#servers td.size { 
+  width: 10%;
+}
+table#servers td.version { 
+  width: 10%;
+}
+table#servers td.interval { 
+  width: 10%;
+}
+table#servers td.last-heartbeat { 
+  width: 20%;
+}
+table#servers td.action { 
+  width: 0%;
 }
