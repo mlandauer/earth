@@ -7,7 +7,7 @@ module Earth
   
     cattr_accessor :config
     cattr_accessor :heartbeat_grace_period
-    self.config = YAML.load(File.open(File.dirname(__FILE__) + "/../../../config/earth-webapp.yml"))
+    self.config = YAML.load(::File.open(::File.dirname(__FILE__) + "/../../../config/earth-webapp.yml"))
     self.heartbeat_grace_period = eval(self.config["heartbeat_grace_period"])
 
     def Server.this_server
