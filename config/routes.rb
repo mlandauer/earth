@@ -57,6 +57,8 @@ ActionController::Routing::Routes.draw do |map|
     :requirements => {:server => hostname_regex}
   map.connect '/servers/edit/:server', :controller => "servers", :action => "edit",
     :requirements => {:server => hostname_regex}
+  map.connect '/servers/update/:server', :controller => "servers", :action => "update",
+    :requirements => {:server => hostname_regex}
 
   # Allow downloading Web Service WSDL as a file with an extension
   # instead of a file named 'wsdl'

@@ -58,6 +58,7 @@ class ServerTest < Test::Unit::TestCase
   
   def test_daemon_alive
     server = Earth::Server.this_server
+    server.daemon_version = "dummy"
     server.heartbeat_interval = 1.minute
     server.heartbeat_time = 55.seconds.ago
     assert(server.daemon_alive?)

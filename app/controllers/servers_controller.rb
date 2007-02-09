@@ -34,7 +34,7 @@ class ServersController < ApplicationController
     respond_to do |format|
       if @server.update_attributes(params[:server])
         flash[:notice] = 'Server was successfully updated.'
-        format.html { redirect_to server_url(@server) }
+        format.html { redirect_to :action => "show", :params => { :server => @server.name } }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

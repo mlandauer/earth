@@ -21,17 +21,17 @@ class ServersControllerTest < Test::Unit::TestCase
   end
 
   def test_should_show_server
-    get :show, :id => 1
+    get :show, :server => Earth::Server.this_hostname
     assert_response :success
   end
 
   def test_should_get_edit
-    get :edit, :id => 1
+    get :edit, :server => Earth::Server.this_hostname
     assert_response :success
   end
   
   def test_should_update_server
     put :update, :id => 1, :server => { }
-    assert_redirected_to server_path(assigns(:server))
+    assert_redirected_to :controller => "servers", :action => "show", :params => { :server => Earth::Server.this_hostname }
   end
 end

@@ -5,14 +5,6 @@
 
 development:
   adapter: postgresql
-  database: earth_production
-  username: earth
-  password: earth
-  host: localhost
-  encoding: utf8
-
-development_LOCAL:
-  adapter: postgresql
   database: earth_development
   username: earth
   password: earth
