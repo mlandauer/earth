@@ -8,7 +8,7 @@ development:
   database: earth_production
   username: earth
   password: earth
-  host: bertha
+  host: localhost
   encoding: utf8
 
 development_LOCAL:
