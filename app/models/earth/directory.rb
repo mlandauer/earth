@@ -37,8 +37,8 @@ module Earth
 
     before_update("self.update_cache_before_update; true")
     after_update("self.update_cache_after_update; true")
-    #after_save("self.update_cache_after_save; true")
     after_create("self.update_cache_after_create; true")
+    #before_destroy("self.update_cache_before_destroy; true")
 
     @@save_observers = []
     @@cache_disabled = false
@@ -242,8 +242,13 @@ module Earth
       @remembered_cached_sizes = nil
     end
 
-    def update_cache_after_save
-    end
+    #def update_cache_before_destroy
+    #  self.cached_sizes.each do |cached_size|
+    #    filter = cached_size.filter
+    #    Earth::CachedSize.update_all("size = size - #{cached_size.size}, blocks = blocks - #{cached_size.blocks}, count = count - #{cached_size.count}",
+    #                                 "filter_id=#{filter.id} and directory_id in (#{self.ancestors.map{|x| x.id}.join(',')})")
+    #  end
+    #end
 
     def update_cache_after_create
       if not @@cache_disabled

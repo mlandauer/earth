@@ -100,7 +100,7 @@ xml.svg(:width => "100%",
            :y => -3,
            :class => "directory-name")  
 
-  xml.text("#{human_size_in(human_units_of(@directory.size), @directory.size)} #{human_units_of(@directory.size)}",
+  xml.text("#{ApplicationHelper::human_size_in(ApplicationHelper::human_units_of(@directory.size), @directory.size)} #{ApplicationHelper::human_units_of(@directory.size)}",
            :y => 3,
            :class => "directory-size")  
 

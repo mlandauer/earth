@@ -322,9 +322,9 @@ private
     end
   end
 
-  def format_human(size)
-    units = human_units_of(size)
-    "#{human_size_in(units, size)} #{units}"
+  def GraphHelper::format_human(size)
+    units = ApplicationHelper::human_units_of(size)
+    "#{ApplicationHelper::human_size_in(units, size)} #{units}"
   end
 
   def add_segments(level, angle_range, level_segment_array, directory, parent_size)
@@ -406,7 +406,7 @@ private
           segment = Segment.new(:angle => small_directories_angle, 
                                 :type => ((small_directories_angle >= @minimum_angle or @remainder_mode != :empty) ? :directory : :empty),
                                 :name => "#{small_directories.size} directories", 
-                                :tooltip => "#{small_directories.size} directories in ...#{directory.path_relative_to(@directory)}/ (#{format_human(small_directories_size)})")
+                                :tooltip => "#{small_directories.size} directories in ...#{directory.path_relative_to(@directory)}/ (#{GraphHelper::format_human(small_directories_size)})")
         else
           child = small_directories[0]
           segment = Segment.new(:angle => small_directories_angle, 
@@ -417,7 +417,7 @@ private
                                                  :overwrite_params => {:server => @server.name, 
                                                                        :action => nil,
                                                                        :path => child.path}),
-                                :tooltip => "...#{child.path_relative_to(@directory)}/ (#{format_human(child.size)})")
+                                :tooltip => "...#{child.path_relative_to(@directory)}/ (#{GraphHelper::format_human(child.size)})")
         end
         level_segments << segment
         
@@ -434,7 +434,7 @@ private
                                                :overwrite_params => {:server => @server.name, 
                                                                      :action => nil,
                                                                      :path => big_directory.path}),
-                              :tooltip => "...#{big_directory.path_relative_to(@directory)}/ (#{format_human(big_directory.size)})")
+                              :tooltip => "...#{big_directory.path_relative_to(@directory)}/ (#{GraphHelper::format_human(big_directory.size)})")
         level_segments << segment
         add_segments(level + 1, segment_angle, level_segment_array, big_directory, big_directory.size)
       end
@@ -444,13 +444,13 @@ private
           small_files_segment = Segment.new(:angle => small_files_angle, 
                                             :type => ((small_files_angle >= @minimum_angle or @remainder_mode != :empty) ? :file : :empty),
                                             :name => "#{small_files.size} files",
-                                            :tooltip => "#{small_files.size} files in ...#{directory.path_relative_to(@directory)}/ (#{format_human(small_files_size)})")
+                                            :tooltip => "#{small_files.size} files in ...#{directory.path_relative_to(@directory)}/ (#{GraphHelper::format_human(small_files_size)})")
         else
           file = small_files[0]
           small_files_segment = Segment.new(:angle => small_files_angle, 
                                             :type => ((small_files_angle >= @minimum_angle or @remainder_mode != :empty) ? :file : :empty),
                                             :name => file.name,
-                                            :tooltip => "...#{directory.path_relative_to(@directory)}/#{file.name} (#{format_human(file.size)})")
+                                            :tooltip => "...#{directory.path_relative_to(@directory)}/#{file.name} (#{GraphHelper::format_human(file.size)})")
         end
         level_segments << small_files_segment
       end
@@ -464,7 +464,7 @@ private
         file_segment = Segment.new(:angle => angle, 
                                    :type => :file,
                                    :name => file.name,
-                                   :tooltip => "...#{directory.path_relative_to(@directory)}/#{file.name} (#{format_human(file.size)})")
+                                   :tooltip => "...#{directory.path_relative_to(@directory)}/#{file.name} (#{GraphHelper::format_human(file.size)})")
         level_segments << file_segment
         files_total_angle += angle
       end
@@ -755,20 +755,61 @@ private
 
   class SubRect
 
+    @@id = 0
+
+    attr_reader :id
     attr_reader :x
     attr_reader :y
     attr_reader :width
     attr_reader :height
+    attr_reader :node
+    attr_reader :title
 
-    def initialize(x, y, width, height)
+    def initialize(x, y, width, height, node, title=nil)
+      @id = @@id
+      @@id += 1
       @x = x
       @y = y
       @width = width
       @height = height
+      @node = node
+      @title = title
     end
 
     def to_s
-      "rect(#{@x} #{@y} #{@width} #{@height})"
+      "rect(#{@x} #{@y} #{@width} #{@height} #{title})"
+    end
+
+    def area
+      @width * @height
+    end
+
+    def shrink(amount)
+
+      @x += amount
+      @y += amount
+      @width -= amount * 2
+      @height -= amount * 2
+    end
+
+    def title
+      if not @node.nil?
+        @node.title
+      elsif not @title.nil?
+        @title
+      else
+        "UNKNOWN"
+      end
+    end
+
+    def tooltip
+      if not @node.nil?
+        @node.tooltip
+      elsif not @title.nil?
+        @title
+      else
+        "UNKNOWN"
+      end
     end
   end
 
@@ -776,7 +817,9 @@ private
 
     attr_reader :sub_rectangles    
 
-    def initialize(width, height)
+    def initialize(x, y, width, height)
+      @x = x
+      @y = y
       @width = width
       @height = height
 
@@ -796,6 +839,12 @@ private
       [ remaining_width, remaining_height ].min
     end
 
+    def add_remaining(title)
+      @sub_rectangles << SubRect.new(@x + @offset_x, @y + @offset_y, @width - @offset_x, @height - @offset_y, nil, title)
+      @offset_x = @width
+      @offset_y = @height
+    end
+
     def layoutrow(row, factor)
 
       remaining_width = @width - @offset_x
@@ -812,7 +861,7 @@ private
 
         row.each do |r|
           height = r.size*factor/width
-          @sub_rectangles << SubRect.new(left, top, width, height)
+          @sub_rectangles << SubRect.new(@x + left, @y + top, width, height, r)
           top += height
         end
 
@@ -825,7 +874,7 @@ private
 
         row.each do |r|
           width = r.size*factor/height
-          @sub_rectangles << SubRect.new(left, top, width, height)
+          @sub_rectangles << SubRect.new(@x + left, @y + top, width, height, r)
           left += width
         end
 
@@ -850,15 +899,20 @@ private
     def squarify(children, row, w, factor) 
       while true
         if not children.empty?
-          c = children[0]
-          if row.empty? or worst(row, w, factor) >= worst(row + [c], w, factor) then 
-            #squarify(children[1..-1], row + [c], w, factor) 
-            children = children[1..-1]
-            row = row + [c]
-          else 
-            layoutrow(row, factor); 
-            squarify(children, [], width(), factor); 
+          if children[0].size*factor < 0
+            add_remaining("#{children.size} files")
             break
+          else
+            c = children[0]
+            if row.empty? or worst(row, w, factor) >= worst(row + [c], w, factor) then 
+              #squarify(children[1..-1], row + [c], w, factor) 
+              children = children[1..-1]
+              row = row + [c]
+            else 
+              layoutrow(row, factor); 
+              squarify(children, [], width(), factor); 
+              break
+            end
           end
         else
           layoutrow(row, factor); 
@@ -869,41 +923,100 @@ private
   end
 
   class TreemapDirectory
-    def initialize(directory)
+
+    def initialize(root, directory)
+      @root = root
       @directory = directory
+    end
+    
+    def children
+      if @children.nil?
+        @children = @directory.children.map { |child| TreemapDirectory.new(@root, child) } + 
+                    @directory.files.map { |child| TreemapFile.new(self, child) }
+        @children.sort! do |entry1, entry2|
+          entry2.size - entry1.size
+        end
+      end
+      @children
+    end
+
+    def directory
+      @directory
     end
 
     def size
       @directory.size
     end
+
+    def title
+      @directory.name
+    end
+
+    def relative_path
+      @directory.path_relative_to(@root)
+    end
+
+    def tooltip
+      "...#{relative_path} (#{GraphHelper::format_human(@directory.size)})"
+    end
   end
 
   class TreemapFile
-    def initialize(file)
+    def initialize(parent, file)
+      @parent = parent
       @file = file
+    end
+
+    def directory
+      nil
     end
 
     def size
       @file.size
     end
+
+    def title
+      @file.name
+    end
+
+    def tooltip
+      "...#{@parent.relative_path}/#{@file.name} (#{GraphHelper::format_human(@file.size)})"
+    end
+
+    def children
+      nil
+    end
+  end
+
+  def create_treemap_recursive(node, rect, level, sub_rectangle_array, max_levels)
+
+    total_size = node.children.map { |child| child.size }.sum
+    rect.squarify(node.children, [], rect.width(), rect.area / total_size)
+
+    rect.sub_rectangles.each { |sub_rect| sub_rect.shrink(0.4) }
+
+    sub_rectangle_array[level] += rect.sub_rectangles
+
+    if level < max_levels - 1
+      for sub_rect in rect.sub_rectangles
+        create_treemap_recursive(sub_rect.node, Rectangle.new(sub_rect.x + 0.2, sub_rect.y + 0.2, sub_rect.width - 0.4, sub_rect.height - 0.4), level + 1, sub_rectangle_array, max_levels) unless sub_rect.node.nil? or sub_rect.node.children.nil?
+      end
+    end
   end
 
   def create_treemap(directory)
 
-    children = directory.children.map { |child| TreemapDirectory.new(child) } + 
-               directory.files.map { |child| TreemapFile.new(child) }
-    children.sort! do |entry1, entry2|
-      entry2.size - entry1.size
-    end
+    topNode = TreemapDirectory.new(@directory, directory)
 
-    total_size = children.map { |child| child.size }.sum
+    rect = Rectangle.new(0.0, 0.0, 600.0, 600.0)
 
-    rect = Rectangle.new(100.0, 100.0)
-    rect.squarify(children, [], rect.width(), rect.area / total_size)
+    max_levels = 3
+    sub_rectangle_array = []
+    1.upto(max_levels) { sub_rectangle_array << [] }
 
-    puts rect.sub_rectangles.inspect
+    create_treemap_recursive(topNode, rect, 0, sub_rectangle_array, max_levels)
 
-    rect.sub_rectangles
+    sub_rectangle_array
   end
 end
 

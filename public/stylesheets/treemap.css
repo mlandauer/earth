@@ -1,0 +1,36 @@
+
+.treemap-rect-0 { 
+  stroke-width: 0.2; stroke: black; fill: #dddddd;
+}
+
+.treemap-rect-1 { 
+  stroke-width: 0.1; stroke: #666666; fill: #eeeeee;
+}
+
+.treemap-rect-2 { 
+  stroke-width: 0.05; stroke: #888888; fill: white;
+}
+
+text { 
+  font-weight: bold;
+  alignment-baseline: central; 
+  dominant-baseline: central;
+}
+
+text.treemap-text-0 { 
+  text-anchor: middle; 
+  fill-opacity: 1;
+  font-size: 27px;
+}
+
+text.treemap-text-1 { 
+  text-anchor: middle; 
+  fill-opacity: 1;
+  font-size: 21px;
+}
+
+text.treemap-text-2 { 
+  text-anchor: middle; 
+  fill-opacity: 1;
+  font-size: 15px;
+}

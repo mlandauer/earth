@@ -8,12 +8,12 @@ xml.declare!(:DOCTYPE, :svg,
 
 xml.instruct!("xml-stylesheet".to_sym, 
               :type => "text/css",
-              :href => "/stylesheets/svg.css")
+              :href => "/stylesheets/treemap.css")
 
 xml.svg(:width => "100%", 
         :height => "100%", 
         :version => "1.1", 
-        :viewBox => "0,0,100,100", 
+        :viewBox => "0,0,600,600", 
         :preserveAspectRatio => "xMidYMid meet",
         :xmlns => "http://www.w3.org/2000/svg", 
         "xmlns:xlink".to_sym => "http://www.w3.org/1999/xlink") do 
@@ -21,11 +21,75 @@ xml.svg(:width => "100%",
   xml.desc "SVG Graph for #{@server.name}:#{@directory.path}"
   xml.title "#{@server.name}:#{@directory.path} - Earth"
 
-  create_treemap(@directory).each do |sub_rect|
-    xml.rect(:x => sub_rect.x + 0.3, 
-             :y => sub_rect.y + 0.3, 
-             :width => sub_rect.width - 0.6, 
-             :height => sub_rect.height - 0.6,
-             :style => "stroke-width: 0.2; stroke: black; fill: white;")
+  treemap = create_treemap(@directory)
+
+  treemap.each_with_index do |sub_rect_list, level|
+    sub_rect_list.each do |sub_rect|
+      xml.rect(:x => sub_rect.x, 
+               :y => sub_rect.y, 
+               :width => sub_rect.width, 
+               :height => sub_rect.height,
+               "xlink:title".to_sym => sub_rect.tooltip,
+               :class => "treemap-rect-#{level}")
+    end
   end
+
+  xml.defs do
+    treemap.each_with_index do |sub_rect_list, level|
+      sub_rect_list.each do |sub_rect|
+        xml.clipPath(:id => "clipPath_#{sub_rect.id}") do
+          #xml.path(:d => "M#{sub_rect.x} #{sub_rect.y} h#{sub_rect.width} " +
+          #         "v#{sub_rect.height} h#{-sub_rect.width} v#{-sub_rect.height} z")
+          xml.rect(:x => sub_rect.x, 
+                   :y => sub_rect.y, 
+                   :width => sub_rect.width, 
+                   :height => sub_rect.height)
+        end
+      end
+    end
+  end
+
+  treemap.reverse.each_with_index do |sub_rect_list, level|
+    level = treemap.size - 1 - level
+     xml.g(:style => "opacity: #{0.15 + (level * 0.2)}") do
+      sub_rect_list.each do |sub_rect|
+
+        if sub_rect.area > 70*36
+
+          font_size = Math.sqrt(sub_rect.width*sub_rect.height)*0.8/Math.sqrt(sub_rect.title.size)
+
+          lineSpacing = font_size
+          v_offset = lineSpacing / 5
+          xml.path(:id=>"rectPath_#{sub_rect.id}", :style => "stroke: none; fill: none", 
+                   :d => "M#{sub_rect.x} #{sub_rect.y+sub_rect.height/2 + v_offset - lineSpacing} h#{sub_rect.width}" +
+                   "M#{sub_rect.x} #{sub_rect.y+sub_rect.height/2 + v_offset} h#{sub_rect.width} " +
+                   "M#{sub_rect.x} #{sub_rect.y+sub_rect.height/2 + v_offset + lineSpacing} h#{sub_rect.width}")
+          
+          xml.text(:id=>"text_#{sub_rect.id}", :class => "treemap-text-#{level}", "clip-path".to_sym => "url(#clipPath_#{sub_rect.id})", :style => "font-size: #{font_size}px", "xlink:title".to_sym => sub_rect.tooltip) do
+            xml.textPath(sub_rect.title, "xlink:href".to_sym => "#rectPath_#{sub_rect.id}", :startOffset => "50%")
+          end
+        end
+      end
+    end
+  end
+
+  treemap[0].each do |sub_rect|
+    if not (sub_rect.node.nil? or sub_rect.node.directory.nil?)
+      xml.a("xlink:href".to_sym => url_for(:controller => "graph",
+                                           
+                                           :escape => false,
+                                           :overwrite_params => {:server => @server.name,
+                                                                 :path => sub_rect.node.directory.path,
+                                                                 :action => nil}),
+            :target => "_parent",
+            "xlink:title".to_sym => sub_rect.tooltip) do
+        xml.rect(:x => sub_rect.x,
+                 :y => sub_rect.y,
+                 :width => sub_rect.width,
+                 :height => sub_rect.height,
+                 :style => "fill-opacity: 0; stroke-opacity: 0;")
+      end
+    end
+  end
+
 end

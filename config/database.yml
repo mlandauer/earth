@@ -9,6 +9,7 @@ development:
   username: earth
   password: earth
   host: localhost
+  encoding: utf8
 
 # Warning: The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.
@@ -19,6 +20,7 @@ test:
   username: earth
   password: earth
   host: localhost
+  encoding: utf8
 
 production:
   adapter: postgresql
@@ -26,3 +28,4 @@ production:
   username: earth
   password: earth
   host: localhost
+  encoding: utf8

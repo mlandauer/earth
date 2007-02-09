@@ -9,7 +9,7 @@ module ApplicationHelper
     end
   end
 
-  def human_units_of(size)
+  def ApplicationHelper::human_units_of(size)
     case 
       when size < 1.kilobyte: 'Bytes'
       when size < 1.megabyte: 'KB'
@@ -19,7 +19,7 @@ module ApplicationHelper
     end
   end
   
-  def human_size_in(units, size)
+  def ApplicationHelper::human_size_in(units, size)
     scaled = scale_for_human_size(units, size)
     text = ('%.1f' % scaled).sub('.0', '')
     if text == '0' && scaled > 0
@@ -60,13 +60,13 @@ module ApplicationHelper
 
   # This depends on the application running from a checked out svn version and
   # the command "svnversion" being available on the path
-  def earth_version
+  def ApplicationHelper::earth_version
     IO::popen("svnversion #{RAILS_ROOT}") { |f| f.readline }
   end
 
 private
 
-  def scale_for_human_size(units, size)
+  def ApplicationHelper::scale_for_human_size(units, size)
     case
       when units == 'Bytes': size
       when units == "KB": size / 1.0.kilobyte

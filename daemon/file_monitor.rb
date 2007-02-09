@@ -37,11 +37,18 @@ class FileMonitor
   
   # TODO: Check that paths are not overlapping
   def FileMonitor.start(paths, only_initial_update = false)
+
+    server = Earth::Server.this_server
+    server.daemon_version = ApplicationHelper.earth_version
+    server.save!
+
+    at_exit { server.daemon_version = nil; server.save! }
+
     # Turn the paths into an absolute path
     paths = paths.map{|p| File.expand_path(p)}
     
     # Find the current directory that it's watching
-    directories = Earth::Directory.roots_for_server(Earth::Server.this_server)
+    directories = Earth::Directory.roots_for_server(server)
     previous_paths = directories.map{|d| d.path}
     
     start_heartbeat_thread
@@ -248,14 +255,16 @@ private
     if new_directory_stat == directory.stat
 
       if directory.cached_sizes.count != Earth::Filter::count
-        directory.create_caches
-        directory.update_caches
+        Earth::Directory::transaction do
+          directory.create_caches
+          directory.update_caches
+        end
       end
 
       return 1
     end
 
-    #Earth::Directory::transaction do
+    Earth::Directory::transaction do
 
       file_names, subdirectory_names, stats = [], [], Hash.new
       if new_directory_stat && new_directory_stat.readable? && new_directory_stat.executable?
@@ -332,7 +341,7 @@ private
 
         end
       end
-    #end
+    end
     
     # Removes the files in this directory from the cache (so that they don't take up memory)
     # However, they will get reloaded automatically from the database the next time this

@@ -117,7 +117,11 @@ class GraphController < ApplicationController
         gather_directory_sizes_pass_1(@directory, @directory.level + @level_count)
         gather_directory_sizes_pass_2(@directory, @directory.level + @level_count)
 
-        render :layout => false, :action => "directory.rxml"
+        if params[:mode] == "treemap"
+          render :layout => false, :action => "directory_treemap.rxml"
+        else
+          render :layout => false, :action => "directory.rxml"
+        end
       else
         @servers = Earth::Server.find(:all)
         render :layout => false, :action => "servers.rxml"
