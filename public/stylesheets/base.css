@@ -494,6 +494,14 @@ table.listing thead th a.desc {
   z-index: 2;
 }
 
+#HomepageLink { 
+  float: left;  
+}
+
+#HomepageLink a { 
+  color: grey;
+}                  
+
 #Footer { 
   font-size: small;
   text-align: right;

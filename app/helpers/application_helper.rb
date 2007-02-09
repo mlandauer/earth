@@ -18,6 +18,11 @@ module ApplicationHelper
       else                    'TB'
     end
   end
+
+  def ApplicationHelper::human_size(size)
+    units = human_units_of(size)
+    "#{human_size_in(units, size)} #{units}"
+  end
   
   def ApplicationHelper::human_size_in(units, size)
     scaled = scale_for_human_size(units, size)

@@ -42,7 +42,7 @@ class FileMonitor
     server.daemon_version = ApplicationHelper.earth_version
     server.save!
 
-    at_exit { server.daemon_version = nil; server.save! }
+    at_exit { server = Earth::Server.this_server; server.daemon_version = nil; server.save! }
 
     # Turn the paths into an absolute path
     paths = paths.map{|p| File.expand_path(p)}

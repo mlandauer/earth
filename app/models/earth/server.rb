@@ -30,7 +30,7 @@ module Earth
     end
     
     def daemon_alive?
-      if heartbeat_time.nil?
+      if heartbeat_time.nil? or daemon_version.nil?
         false
       else
         (heartbeat_time + heartbeat_interval) >= Time::now

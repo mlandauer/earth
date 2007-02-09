@@ -1,17 +1,46 @@
-<h1>Listing servers</h1>
+<h1>All Servers</h1>
 
 <table>
   <tr>
-    <th>Name</th>
-    <th>Update interval</th>
+    <th class="name" colspan="2">Host</th>
+    <th class="status">Status</th>
+    <th class="size">Size</th>
+    <th class="version">Daemon Version</th>
+    <th class="interval">Update Interval</th>
+    <th class="last-heartbeat">Last Heartbeat</th>
+    <th class="action" colspan="2">Actions</th>
   </tr>
   
 <% for server in @servers %>
-  <tr>
-    <td><%=h server.name %></td>
-    <td><%=h server.update_interval %></td>
-    <td><%= link_to 'Show', server_path(server) %></td>
-    <td><%= link_to 'Edit', edit_server_path(server) %></td>
+
+  <% if server.daemon_alive? %>
+    <tr class="up">
+  <% elsif server.daemon_version.nil? %>
+    <tr class="down">
+  <% else %>
+    <tr class="unknown">
+  <% end %>
+
+    <td class="icon"></td>
+    <td class="name"><%=h server.name %></td>
+    <% if server.daemon_alive? %>
+      <td class="status up">Up</td>
+    <% elsif server.daemon_version.nil? %>
+      <td class="status down">Down</td>
+    <% else %>
+      <td class="status unknown">Crashed?</td>
+    <% end %>
+    </td>
+    <td class="size"><%=h ApplicationHelper.human_size(server.size) %></td>
+    <td class="version"><%=h server.daemon_version || "Not running" %></td>
+    <td class="interval"><%=h server.update_interval %> sec</td>
+    <td class="last-heartbeat"><%= if server.heartbeat_time.nil?
+        "N/A"
+      else
+        time_ago_in_words(server.heartbeat_time, true) + " ago"
+      end %></td>
+    <td class="action"><%= link_to 'Show', server_path(server) %></td>
+    <td class="action"><%= link_to 'Edit', edit_server_path(server) %></td>
   </tr>
 <% end %>
 </table>

@@ -1,0 +1,140 @@
+body { background-color: #fff; color: #333; }
+
+body {
+  background-color: #e0e0e0;
+}
+
+body, p, ol, ul, td {
+  font-family: "Gill Sans", Arial, Helvetica, sans-serif;
+  font-size: 10pt;
+}
+
+pre {
+  background-color: #eee;
+  padding: 10px;
+  font-size: 11px;
+}
+
+a { color: #000; }
+a:visited { color: #666; }
+a:hover { color: #fff; background-color:#000; }
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
+
+div.uploadStatus {
+  margin: 5px;
+}
+
+div.progressBar {
+  margin: 5px;
+}
+
+div.progressBar div.border {
+  background-color: #fff;
+  border: 1px solid grey;
+  width: 100%;
+}
+
+div.progressBar div.background {
+  background-color: #333;
+  height: 18px;
+  width: 0%;
+}
+
+table, tr, td, th {
+  border: 1px solid black;
+  border-collapse: collapse; 
+}
+
+table {  
+  background: white;
+}
+
+td, th {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  padding-left: 0.4em;
+  padding-right: 0.4em;
+}
+
+td.name, th.name { 
+  text-align: left;
+  border-left: 0px;
+}
+
+td.status, th.status { 
+  text-align: center;
+}
+
+td.icon { 
+  width: 16px;
+  background-position: 4px 50%;
+  background-repeat: no-repeat;
+  background-image: url(/images/icon_server.png);
+  border-right: 0px;
+  padding-right: 0px;
+}
+
+th.icon { 
+  border-right: 0px;
+  padding-right: 0px;
+}          
+
+td.interval, th.interval,
+td.last-heartbeat, th.last-heartbeat { 
+  text-align: right;
+}
+
+td.last-heartbeat, th.last-heartbeat { 
+  width: 15em;
+}
+
+tr.up { 
+  background: #a0ffa0;
+}
+
+tr.down { 
+  background: #ffa0a0;
+}
+
+tr.unknown { 
+  background: #ffa0ff;
+}
+
+td.action {
+  background: white;
+}
