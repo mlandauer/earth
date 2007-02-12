@@ -7,15 +7,13 @@
         <%= "Warning! The Earth daemon has stopped running on #{@server.name}" unless @server.nil? || @server.daemon_alive? %>
     </h2>
     
-    <% if @any_empty %>
-      <small>
-      <% if params[:show_empty] %>
-        (<%= link_to "Hide empty directories and servers", :overwrite_params => {:show_empty => nil} %>)
-      <% else %>
-        (<%= link_to "Show empty directories and servers", :overwrite_params => {:show_empty => 1} %>)
-      <% end %>
-      </small>
-    <% end %>
+  <small>
+  <% if params[:show_empty] %>
+    (<%= link_to_if @any_empty, "Hide empty directories and servers", :overwrite_params => {:show_empty => nil} %>)
+  <% else %>
+    (<%= link_to_if @any_empty, "Show empty directories and servers", :overwrite_params => {:show_empty => 1} %>)
+  <% end %>
+  </small>
 
     
   </div>
