@@ -99,12 +99,13 @@ module Earth
       @cached_size = cached_size
     end
     
-    def count_files_recursive
+    def recursive_file_count
       Earth::File.count(:conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
                                         " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
                                         " AND directories.server_id = #{self.server_id}"), \
                         :joins => "JOIN directories ON files.directory_id = directories.id").to_i
     end
+
 
     def recursive_directory_count
       Earth::Directory::count(:conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
@@ -125,21 +126,9 @@ module Earth
       return recursive_cache_count == recursive_directory_count
     end
 
-    def recursive_file_count
-      cache_data(:count) || count_files_recursive
-    end
-
     def size_and_count
-      cache_data(:size, :count) || sum_and_count_files(:size)
-    end
-
-    def blocks_and_count
-      cache_data(:blocks, :count) || sum_and_count_files(:blocks)
-    end
-
-    def sum_and_count_files(column)
       result = Earth::File.find(:first, 
-                                :select => "SUM(files.#{column.to_s}) AS sum, COUNT(*) AS count",
+                                :select => "SUM(files.size) AS sum, COUNT(*) AS count",
                                 :joins => "JOIN directories ON files.directory_id = directories.id",
                                 :conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
                                                 " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
@@ -147,6 +136,18 @@ module Earth
       [ (result["sum"] || 0).to_i, result["count"].to_i ]
     end
     
+    # Add caching to recursive_file_count and size_and_count
+    def recursive_file_count_with_caching
+      cache_data(:count) || recursive_file_count_without_caching
+    end
+    
+    def size_and_count_with_caching
+      cache_data(:size, :count) || size_and_count_without_caching
+    end
+    
+    alias_method_chain :recursive_file_count, :caching
+    alias_method_chain :size_and_count, :caching
+
     def has_files?
       recursive_file_count > 0
     end
