@@ -18,6 +18,18 @@ module Earth
       Socket.gethostbyname(Socket.gethostname)[0]
     end
     
+    # Equivalent to [size, recursive_file_count] (but faster)
+    def size_and_count
+      size_sum = 0
+      count_sum = 0
+      Earth::Directory.roots_for_server(self).each do |d|
+        size, count = d.size_and_count
+        size_sum += size
+        count_sum += count
+      end
+      [size_sum, count_sum]
+    end
+    
     def size
       Earth::Directory.roots_for_server(self).map{|d| d.size}.sum      
     end

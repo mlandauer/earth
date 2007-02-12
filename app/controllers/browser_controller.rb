@@ -68,25 +68,30 @@ class BrowserController < ApplicationController
       
       # Filter out servers and directories that have no files, query sizes
       if servers
-        if @show_empty.nil?
-          servers = servers.select{|s| s.has_files?} if servers
+        @any_empty = false
+        @servers_and_size = servers.map do |s|
+          size, count = s.size_and_count
+          @any_empty = true if count == 0
+          if @show_empty || count > 0
+            [s, size]
+          end
         end
-        @servers_and_size = servers.map{|s| [s, s.size]} if servers
-        @any_empty = @servers_and_size.any? { |server_and_size| server_and_size[1] == 0 }
+        # Remove any nil entries resulting from empty servers
+        @servers_and_size.delete_if { |entry| entry.nil? }
       elsif directories
         # Instead of filtering out empty directories ahead of time,
         # which requires one additional query per directory, get
         # directory size and file count for each directory in one go
         # and filter out empty directories after the fact
+        any_empty_directories = false
         @directories_and_size = directories.map do |d| 
-          size, count = d.size_and_count; 
+          size, count = d.size_and_count;
+          any_empty_directories = true if count == 0
           if @show_empty || count > 0
             [d, size]
           end
         end
-
-        @any_empty = @directories_and_size.any? { |directory_and_size| directory_and_size && directory_and_size[1] == 0 }
-        @any_empty = @files.any? { |file| file.size == 0 } if @files and not @any_empty
+        @any_empty = any_empty_directories || (@files.any? { |file| file.size == 0 } if @files)
 
         # Remove any nil entries resulting from empty directories
         @directories_and_size.delete_if { |entry| entry.nil? }
