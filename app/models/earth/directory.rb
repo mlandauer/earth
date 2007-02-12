@@ -60,14 +60,26 @@ module Earth
       Stat.new(modified) unless modified.nil?
     end
     
+    def sum_files(column)
+      Earth::File.sum(column, 
+                      :conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
+                                      " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
+                                      " AND directories.server_id = #{self.server_id}"),
+                      :joins => "JOIN directories ON files.directory_id = directories.id").to_i
+    end
+
     # Returns the size of all the files (matching the search criterion) recursively
     # below this directory
     # This only requires the id of the current directory and so doesn't need to
     # protected in a transaction which simplified its use
     def size
-      @cached_size || cache_data(:size) || sum_files(:size)
+      sum_files(:size)
     end
-
+    
+    def blocks
+      sum_files(:blocks)
+    end
+        
     def cache_data(*columns)
       filter = Thread.current[:with_filter]
       cached_size = cached_sizes.find :first, :conditions => ["filter_id = ?", filter.id] if filter
@@ -78,18 +90,6 @@ module Earth
           cached_size[columns[0]]
         end
       end
-    end
-
-    def blocks
-      @cached_blocks || cache_data(:blocks) || sum_files(:blocks)
-    end
-
-    def sum_files(column)
-      Earth::File.sum(column, 
-                      :conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                      " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                      " AND directories.server_id = #{self.server_id}"),
-                      :joins => "JOIN directories ON files.directory_id = directories.id").to_i
     end
 
     #
@@ -136,7 +136,7 @@ module Earth
       [ (result["sum"] || 0).to_i, result["count"].to_i ]
     end
     
-    # Add caching to recursive_file_count and size_and_count
+    # Add caching to recursive_file_count, size_and_count, size and blocks
     def recursive_file_count_with_caching
       cache_data(:count) || recursive_file_count_without_caching
     end
@@ -144,9 +144,19 @@ module Earth
     def size_and_count_with_caching
       cache_data(:size, :count) || size_and_count_without_caching
     end
-    
+
+    def size_with_caching
+      @cached_size || cache_data(:size) || size_without_caching
+    end
+        
+    def blocks_with_caching
+      cache_data(:blocks) || blocks_without_caching
+    end
+
     alias_method_chain :recursive_file_count, :caching
     alias_method_chain :size_and_count, :caching
+    alias_method_chain :size, :caching
+    alias_method_chain :blocks, :caching
 
     def has_files?
       recursive_file_count > 0
