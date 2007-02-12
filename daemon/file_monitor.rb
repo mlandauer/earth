@@ -84,6 +84,8 @@ class FileMonitor
     benchmark "Clearing old data for this server out of the database" do
       Earth::Directory.delete_all "server_id=#{this_server.id}"
     end  
+    this_server.last_update_finish_time = nil
+    this_server.save!
   end
   
 private
@@ -158,6 +160,9 @@ private
       #  Earth::File.connection.update("VACUUM FULL ANALYZE")
       #end
 
+      this_server.last_update_finish_time = Time.new
+      this_server.save!
+
       directory
     end
   end
@@ -231,10 +236,15 @@ private
         end
       end
     end
-    # Set the last_update_finish_time
-    server = Earth::Server.this_server
-    server.last_update_finish_time = Time.new
-    server.save!
+    stop = Time.new
+    puts "Update cycle took #{stop - start}s"
+
+    if not only_build_directories and not initial_pass
+      # Set the last_update_finish_time
+      server = Earth::Server.this_server
+      server.last_update_finish_time = Time.new
+      server.save!
+    end
     
     total_count
   end
