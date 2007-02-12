@@ -65,17 +65,23 @@ module Earth
     # This only requires the id of the current directory and so doesn't need to
     # protected in a transaction which simplified its use
     def size
-      @cached_size || size_with_filter || sum_files(:size)
+      @cached_size || cache_data(:size) || sum_files(:size)
     end
 
-    def size_with_filter
+    def cache_data(*columns)
       filter = Thread.current[:with_filter]
       cached_size = cached_sizes.find :first, :conditions => ["filter_id = ?", filter.id] if filter
-      cached_size.size if cached_size || nil
+      if cached_size
+        if columns.size > 1
+          columns.map { |column| cached_size[column] }
+        else
+          cached_size[columns[0]]
+        end
+      end
     end
 
     def blocks
-      @cached_blocks || sum_files(:blocks)
+      @cached_blocks || cache_data(:blocks) || sum_files(:blocks)
     end
 
     def sum_files(column)
@@ -93,7 +99,7 @@ module Earth
       @cached_size = cached_size
     end
     
-    def recursive_file_count
+    def count_files_recursive
       Earth::File.count(:conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
                                         " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
                                         " AND directories.server_id = #{self.server_id}"), \
@@ -119,12 +125,16 @@ module Earth
       return recursive_cache_count == recursive_directory_count
     end
 
+    def recursive_file_count
+      cache_data(:count) || count_files_recursive
+    end
+
     def size_and_count
-      sum_and_count_files(:size)
+      cache_data(:size, :count) || sum_and_count_files(:size)
     end
 
     def blocks_and_count
-      sum_and_count_files(:blocks)
+      cache_data(:blocks, :count) || sum_and_count_files(:blocks)
     end
 
     def sum_and_count_files(column)
