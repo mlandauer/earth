@@ -195,8 +195,8 @@ class DaemonTest
   def test_iteration
     mutation_count = MIN_MUTATIONS_PER_ITERATION + rand(MAX_MUTATIONS_PER_ITERATION - MIN_MUTATIONS_PER_ITERATION)
     puts ("-" * 72)
-    puts "Iteration ##{@iteration_count}"
     @iteration_count += 1
+    puts "Iteration ##{@iteration_count}"
     puts "Doing #{mutation_count} mutations"
     1.upto(mutation_count) { mutate_tree }
     puts "Waiting for daemon to update directory"
@@ -228,14 +228,19 @@ class DaemonTest
     compare_fs_directory_recursive(root, @root_directory)
 
     verify_cache_integrity_recursive(root)
+
+    puts "total size is #{root.size_and_count_with_caching} (#{root.size_and_count_without_caching}) bytes"
   end
 
   def assert(message)
     raise "Assertion failed: #{message}" unless yield
   end
 
-  def verify_cache_integrity_recursive(root)
-    assert("Size and count for node ##{root.id} (#{root.path}) match") { root.size_and_count_with_caching == root.size_and_count_without_caching }
+  def verify_cache_integrity_recursive(directory)
+    assert("Size and count for node ##{directory.id} (#{directory.path}) match") { directory.size_and_count_with_caching == directory.size_and_count_without_caching }
+    directory.children.each do |child|
+      verify_cache_integrity_recursive(child)
+    end
   end
 
   def compare_fs_directory_recursive(db_directory, fs_directory)
@@ -259,14 +264,16 @@ class DaemonTest
     db_directory_names.sort!
     db_file_names.sort!
 
-    puts "directories from database:"
-    pp(db_directory_names)
-    puts "directories from file system:"
-    pp(fs_directory_names)
-    puts "files from database:"
-    pp(db_file_names)
-    puts "files from file system:"
-    pp(fs_file_names)
+    if false then
+      puts "directories from database:"
+      pp(db_directory_names)
+      puts "directories from file system:"
+      pp(fs_directory_names)
+      puts "files from database:"
+      pp(db_file_names)
+      puts "files from file system:"
+      pp(fs_file_names)
+    end
 
     assert("Subdirectories in #{fs_directory} match database contents") { db_directory_names == fs_directory_names }
     assert("Files in #{fs_directory} match database contents") { db_file_names == fs_file_names }
@@ -298,8 +305,8 @@ class DaemonTest
       action = actions[action_index]
       if self.send(action)
         break
-      else
-        puts "(Couldn't do #{action}, trying a different operation)"
+      #else
+        #puts "(Couldn't do #{action}, trying a different operation)"
       end
     end
   end

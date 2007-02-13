@@ -221,6 +221,7 @@ private
     remaining_count = directories.map{|d| d.children_count + 1}.sum
     eta_printer = ETAPrinter.new(remaining_count)
     start = Time.new
+    logger.debug("starting update cycle, remaining count is #{remaining_count}")
     directories.each do |directory|
       directory.each do |d|
         total_count += update_non_recursive(d, only_build_directories, initial_pass)
@@ -249,8 +250,14 @@ private
     total_count
   end
 
+  def FileMonitor.logger
+    RAILS_DEFAULT_LOGGER
+  end
+
   def FileMonitor.update_non_recursive(directory, 
                                        only_build_directories = false, initial_pass = false)
+
+    logger.debug("update_non_recursive for directory #{directory.path}")
 
     directory_count = 1
 
@@ -310,7 +317,9 @@ private
         end
 
         if not initial_pass
-          directory.files.each do |file|
+          directory_files = directory.files.to_ary.clone
+          
+          directory_files.each do |file|
             # If the file still exists
             if file_names.include?(file.name)
               # If the file has changed
@@ -329,8 +338,10 @@ private
           end
         end
       end
+      
+      directory_children = directory.children.to_ary.clone
 
-      directory.children.each do |dir|
+      directory_children.each do |dir|
         # If the directory has been deleted
         if !subdirectory_names.include?(dir.name)
           Earth::Directory.benchmark("Removing directory with name #{dir.name}", Logger::DEBUG, !log_all_sql) do
