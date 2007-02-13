@@ -6,10 +6,29 @@ require 'fileutils'
 require 'pp'
 
 class DaemonTest
+
+  # Range for size of created/resized files
+  MIN_FILE_SIZE = 0
+  MAX_FILE_SIZE = 30
+
+  # Range for number of initially created directories
+  MIN_INITIAL_DIRECTORIES = 1
+  MAX_INITIAL_DIRECTORIES = 10
+
+  # Range for number of initially created files
+  MIN_INITIAL_FILES = 10
+  MAX_INITIAL_FILES = 20
+
+  # Range for number of mutations per iteration
+  MIN_MUTATIONS_PER_ITERATION = 1
+  MAX_MUTATIONS_PER_ITERATION = 10
+
   def initialize(root_directory, number_of_iterations)
     @root_directory = File.expand_path(root_directory)
     @number_of_iterations = number_of_iterations
     @iteration_count = 0
+    @dont_touch_again_files = []
+    @daemon_executable = File.join(File.dirname(__FILE__), "earth_daemon.rb")
   end
 
   def make_random_name
@@ -33,7 +52,7 @@ class DaemonTest
   def find_random_file
     all_files = []
     Find.find(@root_directory) do |path|  
-      all_files << path if not FileTest.directory? path
+      all_files << path if (not FileTest.directory? path) and (not @dont_touch_again_files.include?(path))
     end
     all_files[rand(all_files.size)]
   end
@@ -91,14 +110,19 @@ class DaemonTest
     end
   end
 
+  def make_random_file_size
+    MIN_FILE_SIZE + rand(MAX_FILE_SIZE - MIN_FILE_SIZE)
+  end
+
   def create_file
     file_to_create = File.join(self.find_random_directory, make_random_name)    
     if not FileTest.exist? file_to_create
-      file_size = rand(20)
+      file_size = make_random_file_size
       puts "Creating file #{file_to_create} with size #{file_size}"
       File.open(file_to_create, File::CREAT|File::TRUNC|File::WRONLY) do |file|
         file.print("x" * file_size)
       end
+      @dont_touch_again_files << file_to_create
       true
     end
   end
@@ -112,6 +136,24 @@ class DaemonTest
     end
   end
 
+  def resize_file
+    file_to_resize = self.find_random_file
+    if file_to_resize
+      @dont_touch_again_files << file_to_resize
+      new_size = make_random_file_size
+      puts "Resizing file #{file_to_resize} to #{new_size} bytes"
+      sleep 1.1
+      #old_mtime = File.mtime(File.dirname(file_to_resize))
+      File.open(file_to_resize, File::CREAT|File::TRUNC|File::WRONLY) do |file|
+        file.print("x" * new_size)
+      end
+      sleep 1.1
+      FileUtils.touch(File.dirname(file_to_resize))
+      puts "Touched file #{file_to_resize}" # - directory.mtime new #{File.mtime(File.dirname(file_to_resize))}, old #{old_mtime}"
+      true
+    end
+  end
+
   def move_file
     file_to_move = self.find_random_file
     directory_to_move_to = self.find_random_directory
@@ -119,25 +161,31 @@ class DaemonTest
       file_to_move_to = File.join(directory_to_move_to, File.basename(file_to_move))
       puts "Moving file #{file_to_move} to #{file_to_move_to}"
       File.rename(file_to_move, file_to_move_to)
+      @dont_touch_again_files << file_to_move
+      @dont_touch_again_files << file_to_move_to
       true
     end
   end
 
-  MIN_INITIAL_DIRECTORIES = 1
-  MAX_INITIAL_DIRECTORIES = 10
+  def restart_daemon
+    puts "Restarting daemon"
+    Process.kill("SIGINT", $child_pid)
+    $child_pid = fork_daemon
+    true
+  end
 
-  MIN_INITIAL_FILES = 5
-  MAX_INITIAL_FILES = 50
-
-  MIN_MUTATIONS_PER_ITERATION = 1
-  MAX_MUTATIONS_PER_ITERATION = 10
+  def fork_daemon
+    fork do
+      puts "Launching daemon in background, my pid is #{Process.pid}"
+      exec("#{@daemon_executable} -d \"#{@root_directory}\"")
+    end
+  end
 
   def main_loop
 
     # Clear out database
     puts "Clearing out database..."
-    daemon_executable = File.join(File.dirname(__FILE__), "earth_daemon.rb")
-    system("#{daemon_executable} -d -c")
+    system("#{@daemon_executable} -d -c")
 
     # Clear out working directory
     puts "Clearing out working directory..."
@@ -157,12 +205,9 @@ class DaemonTest
     1.upto(initial_file_count) { create_file }
 
     # Launch daemon in the background
-    child_pid = fork do
-      puts "Launching daemon in background, my pid is #{Process.pid}"
-      exec("#{daemon_executable} -d \"#{@root_directory}\"")
-    end
+    $child_pid = fork_daemon
 
-    at_exit { Process.kill("SIGINT", child_pid) }
+    at_exit { Process.kill("SIGINT", $child_pid) }
 
     # Wait for daemon to index the initial directory structure
 
@@ -193,6 +238,7 @@ class DaemonTest
   end
 
   def test_iteration
+    @dont_touch_again_files = []
     mutation_count = MIN_MUTATIONS_PER_ITERATION + rand(MAX_MUTATIONS_PER_ITERATION - MIN_MUTATIONS_PER_ITERATION)
     puts ("-" * 72)
     @iteration_count += 1
@@ -201,10 +247,13 @@ class DaemonTest
     1.upto(mutation_count) { mutate_tree }
     puts "Waiting for daemon to update directory"
 
-    1.upto(2) do
+    1.upto(3) do
       last_time_updated = Earth::Server.this_server.last_update_finish_time
       begin
-        sleep 2.seconds
+        sleep 0.5
+        #if rand(100) < 2
+        #  restart_daemon
+        #end
       end until last_time_updated != Earth::Server.this_server.last_update_finish_time
     end
     puts "Verifying data integrity"
@@ -227,9 +276,14 @@ class DaemonTest
     # Recursively validate the directory information
     compare_fs_directory_recursive(root, @root_directory)
 
-    verify_cache_integrity_recursive(root)
+    Earth::File.with_filter({}) do
 
-    puts "total size is #{root.size_and_count_with_caching} (#{root.size_and_count_without_caching}) bytes"
+      verify_cache_integrity_recursive(root)
+
+      puts "total size/count is [#{root.cache_data(:size)},#{root.cache_data(:count)}] (#{root.size_and_count_without_caching.inspect})"
+    end
+
+    root.ensure_consistency
   end
 
   def assert(message)
@@ -281,7 +335,7 @@ class DaemonTest
     db_directory.files.each do |db_file|
       fs_file = File.join(fs_directory, db_file.name)
       fs_file_stat = File.lstat(fs_file)
-      assert("Byte size of #{fs_file} matches database contents") { fs_file_stat.size == db_file.size }
+      assert("Byte size of #{fs_file} matches database contents (#{fs_file_stat.size} == #{db_file.size})") { fs_file_stat.size == db_file.size }
       assert("Block size of #{fs_file} matches database contents") { fs_file_stat.blocks == db_file.blocks }
     end
     
@@ -292,17 +346,29 @@ class DaemonTest
   end
 
   def mutate_tree
-    actions = [:create_directory, 
-               :delete_directory, 
-               :move_directory, 
-               :create_file, 
-               :delete_file, 
-               :move_file 
+    weighted_actions = [[15, :create_directory], 
+                        [10, :delete_directory], 
+                        [15, :move_directory], 
+                        [15, :create_file], 
+                        [10, :delete_file], 
+                        [ 5, :resize_file], 
+                        [10, :move_file]
     ]
 
+    total_action_weight = weighted_actions.map { |weight_and_action| weight_and_action[0] }.sum
+
     while true
-      action_index = rand(actions.size)
-      action = actions[action_index]
+      random = rand(total_action_weight)
+      action = weighted_actions.inject(nil) do |chosen_action, weight_and_action|
+        if chosen_action
+          chosen_action
+        elsif random < weight_and_action[0]
+          weight_and_action[1]
+        else
+          random -= weight_and_action[0]
+          nil
+        end
+      end
       if self.send(action)
         break
       #else
