@@ -123,6 +123,41 @@ class FileMonitorTest < Test::Unit::TestCase
     assert_directories([@dir], Earth::Directory.find(:all, :order => :id))
     assert_files([@file1], Earth::File.find(:all, :order => :id))
   end
+
+  def test_remove_multiple_files
+    file1a = File.join(@dir, 'file1a')
+    file1b = File.join(@dir, 'file1b')
+    FileUtils.touch file1a
+    FileUtils.touch file1b
+    FileMonitor.update([@directory])
+    sleep 1.5
+    File.delete(file1a)
+    File.delete(file1b)
+    FileMonitor.update([@directory])
+
+    assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
+    assert_files([@file2, @file1], Earth::File.find(:all, :order => :id))
+  end
+
+  def test_remove_multiple_directories
+    dir2a = File.join(@dir, 'dir2a')    
+    FileUtils.mkdir dir2a
+    FileUtils.touch File.join(dir2a, 'file')
+
+    dir2b = File.join(@dir, 'dir2b')    
+    FileUtils.mkdir dir2b
+    FileUtils.touch File.join(dir2b, 'file')
+
+    FileMonitor.update([@directory])
+    sleep 1.5
+    FileUtils.rm_rf dir2a
+    FileUtils.rm_rf dir2b
+    FileMonitor.update([@directory])
+    assert_cached_sizes_match(@directory)
+    
+    assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
+    assert_files([@file2, @file1], Earth::File.find(:all, :order => :id))
+  end
   
   def test_changed
     FileMonitor.update([@directory])
