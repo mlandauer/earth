@@ -36,7 +36,7 @@ class FileMonitor
   self.log_all_sql = false
   
   # TODO: Check that paths are not overlapping
-  def FileMonitor.start(paths, only_initial_update = false)
+  def FileMonitor.start(paths, only_initial_update = false, force_update_time = nil)
 
     server = Earth::Server.this_server
     server.daemon_version = ApplicationHelper.earth_version
@@ -71,7 +71,7 @@ class FileMonitor
       end
     end
     
-    run(directories) unless only_initial_update
+    run(directories, force_update_time) unless only_initial_update
   end
   
   def FileMonitor.directory_saved(node)
@@ -200,11 +200,11 @@ private
     cache_map
   end
   
-  def FileMonitor.run(directories)
+  def FileMonitor.run(directories, force_update_time=nil)
     while true do
       # At the beginning of every update get the server information in case it changes on the database
       server = Earth::Server.this_server
-      update_time = server.update_interval
+      update_time = force_update_time || server.update_interval
       # Hmmm.. children_count doesn't include itself in the count
       directory_count = directories.map{|d| d.children_count + 1}.sum
       puts "Updating #{directory_count} directories over #{update_time}s..."
