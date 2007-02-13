@@ -177,7 +177,7 @@ class DaemonTest
   def fork_daemon
     fork do
       puts "Launching daemon in background, my pid is #{Process.pid}"
-      exec("#{@daemon_executable} -d \"#{@root_directory}\"")
+      exec("#{@daemon_executable} -t -u 2 \"#{@root_directory}\"")
     end
   end
 
@@ -185,7 +185,14 @@ class DaemonTest
 
     # Clear out database
     puts "Clearing out database..."
-    system("#{@daemon_executable} -d -c")
+    system("#{@daemon_executable} -t -c")
+
+    # Set up a trap to make sure we exit when any child spawned is terminating
+    trap("CLD") do
+      pid = Process.wait
+      puts "Child pid #{pid}: terminated"
+      exit
+    end
 
     # Clear out working directory
     puts "Clearing out working directory..."
@@ -378,7 +385,6 @@ class DaemonTest
   end
 end
 
-development_mode = false
 seed = nil
 iterations = nil
 
@@ -388,7 +394,6 @@ Make changes in a directory and monitor the database to see that it is updated p
 Usage: #{$0} [-d] <directory path>
 END_OF_STRING
 
-opts.on("-d", "--development", "Run the daemon test in development mode.") { development_mode = true }
 opts.on("-s", "--seed NUMBER", "Use SEED to initialize the random number generator instead of the current time") do |_seed|
   seed = _seed.to_i
 end
@@ -414,11 +419,7 @@ if ARGV.length != 1
 end
 
 # Set environment to run in
-if development_mode
-  ENV["RAILS_ENV"] = "development"
-else
-  ENV["RAILS_ENV"] = "production"
-end
+ENV["RAILS_ENV"] = "test"
 require File.join(File.dirname(__FILE__), "..", "config", "environment")
 
 parent_directory = ARGV[0]
