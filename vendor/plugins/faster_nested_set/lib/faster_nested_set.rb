@@ -641,7 +641,7 @@ module Rsp
             self.children.inject(0) { |sum, child| sum + 1 + child.children_count }
           else
             left_and_right = self.class.find(:first, 
-                                             :select => "#{self[left_col_name]} AS left, #{self[right_col_name]} AS right",
+                                             :select => "#{left_col_name} AS left, #{right_col_name} AS right",
                                              :conditions => "#{self.class.primary_key} = #{self.id}")
             (left_and_right["right"].to_i - left_and_right["left"].to_i - 1) / 2
           end
