@@ -5,6 +5,8 @@ require 'find'
 require 'fileutils'
 require 'pp'
 
+$ignore_child_death = false
+
 class DaemonTest
 
   # Range for size of created/resized files
@@ -23,7 +25,8 @@ class DaemonTest
   MIN_MUTATIONS_PER_ITERATION = 1
   MAX_MUTATIONS_PER_ITERATION = 10
 
-  def initialize(root_directory, number_of_iterations)
+  def initialize(root_directory, number_of_iterations, bloodshed_percentage)
+    @bloodshed_percentage = bloodshed_percentage
     @root_directory = File.expand_path(root_directory)
     @number_of_iterations = number_of_iterations
     @iteration_count = 0
@@ -169,14 +172,17 @@ class DaemonTest
 
   def restart_daemon
     puts "Restarting daemon"
+    $ignore_child_death = true
     Process.kill("SIGINT", $child_pid)
+    pid = Process.wait
+    $ignore_child_death = false
     $child_pid = fork_daemon
     true
   end
 
   def fork_daemon
     fork do
-      puts "Launching daemon in background, my pid is #{Process.pid}"
+      puts "Launching daemon in background"
       exec("#{@daemon_executable} -t -u 2 \"#{@root_directory}\"")
     end
   end
@@ -189,9 +195,11 @@ class DaemonTest
 
     # Set up a trap to make sure we exit when any child spawned is terminating
     trap("CLD") do
-      pid = Process.wait
-      puts "Child pid #{pid}: terminated"
-      exit
+      if not $ignore_child_death
+        pid = Process.wait
+        puts "Child pid #{pid}: terminated"
+        exit
+      end
     end
 
     # Clear out working directory
@@ -258,9 +266,9 @@ class DaemonTest
       last_time_updated = Earth::Server.this_server.last_update_finish_time
       begin
         sleep 0.5
-        #if rand(100) < 2
-        #  restart_daemon
-        #end
+        if (rand(1000) / 10.0) < @bloodshed_percentage
+          restart_daemon
+        end
       end until last_time_updated != Earth::Server.this_server.last_update_finish_time
     end
     puts "Verifying data integrity"
@@ -387,11 +395,13 @@ end
 
 seed = nil
 iterations = nil
+bloodshed_percentage = 0
 
 opts = OptionParser.new
 opts.banner = <<END_OF_STRING
 Make changes in a directory and monitor the database to see that it is updated properly.
-Usage: #{$0} [-d] <directory path>
+!!!!WARNING: The given directory WILL BE rm -Rf'ed!!!!
+Usage: #{$0} [-s SEED] [-i ITERATIONS] [-b BLOODSHED] <directory path>
 END_OF_STRING
 
 opts.on("-s", "--seed NUMBER", "Use SEED to initialize the random number generator instead of the current time") do |_seed|
@@ -399,6 +409,10 @@ opts.on("-s", "--seed NUMBER", "Use SEED to initialize the random number generat
 end
 opts.on("-i", "--iterations NUMBER", "Only loop for the given number of iterations instead of indefinitely") do |_iterations|
   iterations = _iterations.to_i
+end
+
+opts.on("-b", "--bloodshed PERCENTAGE", "When waiting for the daemon to update, roll dice twice per second and restart daemon process with PERCENTAGE probability. Default is 0 (never restart daemon). Note that restarting the daemon can lead to results being not reproducable due to timing issues") do |_bloodshed_percentage|
+  bloodshed_percentage = _bloodshed_percentage.to_f
 end
 
 opts.on_tail("-h", "--help", "Show this message") do
@@ -437,7 +451,7 @@ puts "Using seed #{seed}"
 
 srand(seed)
 
-test = DaemonTest.new(parent_directory, iterations)
+test = DaemonTest.new(parent_directory, iterations, bloodshed_percentage)
 begin
   test.main_loop
 ensure
