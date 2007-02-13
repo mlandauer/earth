@@ -30,5 +30,10 @@ module Earth
         self.count -= 1
       end
     end
+
+    def update
+      # do not update; updating of cached_size is done with a bulk
+      # update from directory's after_update callback.
+    end
   end
 end

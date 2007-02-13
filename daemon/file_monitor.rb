@@ -257,9 +257,6 @@ private
   def FileMonitor.update_non_recursive(directory, 
                                        only_build_directories = false, initial_pass = false)
 
-    # Make sure the directory is not carrying around stale cache size information
-    directory.cached_sizes.reset
-
     logger.debug("update_non_recursive for directory #{directory.path}")
 
     directory_count = 1
