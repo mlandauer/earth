@@ -221,16 +221,16 @@ private
     remaining_count = directories.map{|d| d.children_count + 1}.sum
     eta_printer = ETAPrinter.new(remaining_count)
     start = Time.new
-    logger.debug("starting update cycle, remaining count is #{remaining_count}")
+    logger.debug("starting update cycle, directories.size is #{directories.size} remaining count is #{remaining_count}")
     directories.each do |directory|
       directory.each do |d|
         total_count += update_non_recursive(d, only_build_directories, initial_pass)
         remaining_time = update_time - (Time.new - start)
-        remaining_count = remaining_count - 1
         if remaining_time > 0 && remaining_count > 0
-          sleep_time = remaining_time / remaining_count
+          sleep_time = remaining_time.to_f / remaining_count
           sleep (sleep_time)
         end
+        remaining_count -= 1
   
         if show_eta
           eta_printer.increment
@@ -238,7 +238,7 @@ private
       end
     end
     stop = Time.new
-    puts "Update cycle took #{stop - start}s"
+    logger.debug("Update cycle took #{stop - start}s, remaining_count is #{remaining_count}")
 
     if not only_build_directories and not initial_pass
       # Set the last_update_finish_time
@@ -281,6 +281,8 @@ private
       return 1
     end
 
+    logger.debug("directory has been updated: #{directory.path}")
+
     Earth::Directory::transaction do
 
       file_names, subdirectory_names, stats = [], [], Hash.new
@@ -322,6 +324,7 @@ private
           directory_files.each do |file|
             # If the file still exists
             if file_names.include?(file.name)
+              logger.debug("checking for update on file #{file.name}")
               # If the file has changed
               if file.stat != stats[file.name]
                 file.stat = stats[file.name]
@@ -380,12 +383,20 @@ private
     
     # Contains the stat information for both files and directories
     stats = Hash.new
-    entries.each {|x| stats[x] = File.lstat(File.join(directory.path, x))}
+    entries.each do |file| 
+      begin
+        stats[file] = File.lstat(File.join(directory.path, file))
+      rescue Errno::ENOENT
+        # It's possible that the file was deleted after the call to
+        # Dir.entries and prior to the invocation of
+        # File.lstat. Therefore, ignore this exception.
+      end
+    end
     
     # Seperately test for whether it's a file or a directory because it could
     # be something like a symbolic link (which we shouldn't follow)
-    file_names = entries.select{|x| stats[x].file?}
-    subdirectory_names = entries.select{|x| stats[x].directory?}
+    file_names = entries.select{|x| stats.keys.include?(x) and stats[x].file?}
+    subdirectory_names = entries.select{|x| stats.keys.include?(x) and stats[x].directory?}
     
     return file_names, subdirectory_names, stats
   end
