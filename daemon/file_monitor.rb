@@ -287,7 +287,13 @@ private
 
       file_names, subdirectory_names, stats = [], [], Hash.new
       if new_directory_stat && new_directory_stat.readable? && new_directory_stat.executable?
-        file_names, subdirectory_names, stats = contents(directory)
+        begin
+          file_names, subdirectory_names, stats = contents(directory)
+        rescue Errno::ENOENT
+          # It's possible that the directory was deleted before
+          # Dir.entries could be called. Therefore, ignore this
+          # exception and treat it like an unreadable directory
+        end
       end
 
       if not initial_pass
