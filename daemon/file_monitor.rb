@@ -269,7 +269,8 @@ private
     end
     
     # If directory hasn't changed then return
-    if new_directory_stat == directory.stat
+    if new_directory_stat == directory.stat or \
+      (not new_directory_stat.nil? and new_directory_stat.mtime >= 1.seconds.ago)
 
       if directory.cached_sizes.count != Earth::Filter::count
         Earth::Directory::transaction do
