@@ -278,7 +278,7 @@ class DaemonTest
     if not use_options[:replay]
       puts "Waiting for daemon to update directory"
 
-      1.upto(3) do
+      1.upto(4) do
         last_time_updated = Earth::Server.this_server.last_update_finish_time
         begin
           sleep 0.5
