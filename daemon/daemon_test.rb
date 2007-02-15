@@ -15,7 +15,7 @@ class DaemonTest
 
   # Range for number of initially created directories
   MIN_INITIAL_DIRECTORIES = 1
-  MAX_INITIAL_DIRECTORIES = 10
+  MAX_INITIAL_DIRECTORIES = 20
 
   # Range for number of initially created files
   MIN_INITIAL_FILES = 10
@@ -23,12 +23,13 @@ class DaemonTest
 
   # Range for number of mutations per iteration
   MIN_MUTATIONS_PER_ITERATION = 1
-  MAX_MUTATIONS_PER_ITERATION = 10
+  MAX_MUTATIONS_PER_ITERATION = 12
 
-  def initialize(root_directory, number_of_iterations, bloodshed_percentage)
+  def initialize(root_directory, number_of_iterations, number_of_replay_iterations, bloodshed_percentage)
     @bloodshed_percentage = bloodshed_percentage
     @root_directory = File.expand_path(root_directory)
     @number_of_iterations = number_of_iterations
+    @number_of_replay_iterations = number_of_replay_iterations
     @iteration_count = 0
     @dont_touch_again_files = []
     @daemon_executable = File.join(File.dirname(__FILE__), "earth_daemon.rb")
@@ -60,7 +61,7 @@ class DaemonTest
     all_files[rand(all_files.size)]
   end
 
-  def create_directory
+  def create_directory(is_replay=false)
     directory_to_create = File.join(self.find_random_directory, make_random_name)
     if not FileTest.exist? directory_to_create
       puts "Creating directory #{directory_to_create}"
@@ -91,7 +92,7 @@ class DaemonTest
     end
   end
 
-  def delete_directory
+  def delete_directory(is_replay)
     directory_to_delete = self.find_random_directory(:include_root => false)
     if directory_to_delete and directory_to_delete != @root_directory and is_in_root_dir(directory_to_delete)
       puts "Deleting directory #{directory_to_delete}"
@@ -100,7 +101,7 @@ class DaemonTest
     end
   end
 
-  def move_directory
+  def move_directory(is_replay)
     directory_to_move = self.find_random_directory(:include_root => false)
     directory_to_move_to = self.find_random_directory
     if directory_to_move and directory_to_move_to and \
@@ -117,7 +118,7 @@ class DaemonTest
     MIN_FILE_SIZE + rand(MAX_FILE_SIZE - MIN_FILE_SIZE)
   end
 
-  def create_file
+  def create_file(is_replay=false)
     file_to_create = File.join(self.find_random_directory, make_random_name)    
     if not FileTest.exist? file_to_create
       file_size = make_random_file_size
@@ -130,7 +131,7 @@ class DaemonTest
     end
   end
 
-  def delete_file
+  def delete_file(is_replay)
     file_to_delete = self.find_random_file
     if file_to_delete
       puts "Deleting file #{file_to_delete}"
@@ -139,25 +140,25 @@ class DaemonTest
     end
   end
 
-  def resize_file
+  def resize_file(is_replay)
     file_to_resize = self.find_random_file
     if file_to_resize
       @dont_touch_again_files << file_to_resize
       new_size = make_random_file_size
       puts "Resizing file #{file_to_resize} to #{new_size} bytes"
-      sleep 1.1
+      sleep 1.1 unless is_replay
       #old_mtime = File.mtime(File.dirname(file_to_resize))
       File.open(file_to_resize, File::CREAT|File::TRUNC|File::WRONLY) do |file|
         file.print("x" * new_size)
       end
-      sleep 1.1
+      sleep 1.1 unless is_replay
       FileUtils.touch(File.dirname(file_to_resize))
       puts "Touched file #{file_to_resize}" # - directory.mtime new #{File.mtime(File.dirname(file_to_resize))}, old #{old_mtime}"
       true
     end
   end
 
-  def move_file
+  def move_file(is_replay)
     file_to_move = self.find_random_file
     directory_to_move_to = self.find_random_directory
     if file_to_move and directory_to_move_to and directory_to_move_to != File.dirname(file_to_move)
@@ -172,10 +173,12 @@ class DaemonTest
 
   def restart_daemon
     puts "Restarting daemon"
-    $ignore_child_death = true
+    #$ignore_child_death = true
+    sig_handler = trap("CLD", "IGNORE")
     Process.kill("SIGINT", $child_pid)
     pid = Process.wait
-    $ignore_child_death = false
+    #$ignore_child_death = false
+    trap("CLD", sig_handler)
     $child_pid = fork_daemon
     true
   end
@@ -195,11 +198,11 @@ class DaemonTest
 
     # Set up a trap to make sure we exit when any child spawned is terminating
     trap("CLD") do
-      if not $ignore_child_death
+      #if not $ignore_child_death
         pid = Process.wait
         puts "Child pid #{pid}: terminated"
         exit
-      end
+      #end
     end
 
     # Clear out working directory
@@ -219,6 +222,11 @@ class DaemonTest
     initial_file_count = MIN_INITIAL_FILES + rand(MAX_INITIAL_FILES - MIN_INITIAL_FILES)
     1.upto(initial_file_count) { create_file }
 
+    # do initial "replay" iterations
+    1.upto(@number_of_replay_iterations) do
+      test_iteration(:replay => true)
+    end
+    
     # Launch daemon in the background
     $child_pid = fork_daemon
 
@@ -252,29 +260,40 @@ class DaemonTest
     end
   end
 
-  def test_iteration
+  def test_iteration(options = nil)
+    use_options = { :replay => false }
+    use_options.update(options) if options
     @dont_touch_again_files = []
     mutation_count = MIN_MUTATIONS_PER_ITERATION + rand(MAX_MUTATIONS_PER_ITERATION - MIN_MUTATIONS_PER_ITERATION)
     puts ("-" * 72)
     @iteration_count += 1
-    puts "Iteration ##{@iteration_count}"
-    puts "Doing #{mutation_count} mutations"
-    1.upto(mutation_count) { mutate_tree }
-    puts "Waiting for daemon to update directory"
-
-    1.upto(3) do
-      last_time_updated = Earth::Server.this_server.last_update_finish_time
-      begin
-        sleep 0.5
-        if (rand(1000) / 10.0) < @bloodshed_percentage
-          restart_daemon
-        end
-      end until last_time_updated != Earth::Server.this_server.last_update_finish_time
+    if not use_options[:replay]
+      puts "Iteration ##{@iteration_count}"
+    else
+      puts "Replay Iteration ##{@iteration_count}"
     end
-    puts "Verifying data integrity"
-    verify_data
-    puts "Integrity verified"
-    sleep 2.seconds
+    puts "Doing #{mutation_count} mutations"
+    1.upto(mutation_count) { mutate_tree(use_options) }
+
+    if not use_options[:replay]
+      puts "Waiting for daemon to update directory"
+
+      1.upto(3) do
+        last_time_updated = Earth::Server.this_server.last_update_finish_time
+        begin
+          sleep 0.5
+          if @bloodshed_percentage > 0
+            if (rand(1000) / 10.0) < @bloodshed_percentage
+              restart_daemon
+            end
+          end
+        end until last_time_updated != Earth::Server.this_server.last_update_finish_time
+      end
+      puts "Verifying data integrity"
+      verify_data
+      puts "Integrity verified"
+      sleep 2.seconds
+    end
   end
 
   def verify_data
@@ -360,8 +379,8 @@ class DaemonTest
 
   end
 
-  def mutate_tree
-    weighted_actions = [[15, :create_directory], 
+  def mutate_tree(options)
+    weighted_actions = [[25, :create_directory], 
                         [10, :delete_directory], 
                         [15, :move_directory], 
                         [15, :create_file], 
@@ -384,7 +403,7 @@ class DaemonTest
           nil
         end
       end
-      if self.send(action)
+      if self.send(action, options[:replay])
         break
       #else
         #puts "(Couldn't do #{action}, trying a different operation)"
@@ -395,12 +414,13 @@ end
 
 seed = nil
 iterations = nil
+replay_iterations = 0
 bloodshed_percentage = 0
 
 opts = OptionParser.new
 opts.banner = <<END_OF_STRING
 Make changes in a directory and monitor the database to see that it is updated properly.
-!!!!WARNING: The given directory WILL BE rm -Rf'ed!!!!
+!!!!WARNING: The given directory WILL BE rm -Rfed!!!!
 Usage: #{$0} [-s SEED] [-i ITERATIONS] [-b BLOODSHED] <directory path>
 END_OF_STRING
 
@@ -409,6 +429,9 @@ opts.on("-s", "--seed NUMBER", "Use SEED to initialize the random number generat
 end
 opts.on("-i", "--iterations NUMBER", "Only loop for the given number of iterations instead of indefinitely") do |_iterations|
   iterations = _iterations.to_i
+end
+opts.on("-r", "--replay-iterations NUMBER", "Perform the given number of \"replay\" iterations before starting the daemon") do |_replay_iterations|
+  replay_iterations = _replay_iterations.to_i
 end
 
 opts.on("-b", "--bloodshed PERCENTAGE", "When waiting for the daemon to update, roll dice twice per second and restart daemon process with PERCENTAGE probability. Default is 0 (never restart daemon). Note that restarting the daemon can lead to results being not reproducable due to timing issues") do |_bloodshed_percentage|
@@ -451,7 +474,7 @@ puts "Using seed #{seed}"
 
 srand(seed)
 
-test = DaemonTest.new(parent_directory, iterations, bloodshed_percentage)
+test = DaemonTest.new(parent_directory, iterations, replay_iterations, bloodshed_percentage)
 begin
   test.main_loop
 ensure

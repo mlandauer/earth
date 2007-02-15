@@ -55,6 +55,27 @@ For instance:
 
 ... uses "12345" as the seed for the RNG.
 
+Usually, before having the daemon do the initial indexing, daemon_test
+will only create a bunch of directories or files. You can make it
+perform a given number of iterations before doing the indexing by
+using the "-r" option. This is useful if you want to reproduce a
+problem that cropped up at a high iteration count. For instance, if
+you found a problem in iteration 5000, it would take quite long to run
+the test again for 5000 iterations. Instead, use for instance:
+
+     daemon_test -r 4999 -s 12345 /path/to/workspace
+
+... to replay the first 4999 mutations quickly and only then start and
+wait for the daemon database updates. This obviously makes only sense
+if you specify the same seed that's been used before (see below) and
+you're not using anything that would lead to unreproducible results,
+such as the bloodshed option.
+
+Note that if you use both -r and -i, the initial replay iterations are
+subtracted from the total iterations. So for instance, if you specify
+"-r 100 -i 150" daemon_test will perform 100 replay iterations and then
+50 normal iterations.
+
 Finally, you can test what happens when the daemon is interrupted
 while in the middle of doing an update by specifying the --bloodshed
 option (or the -b shorthand.) When daemon_test is waiting for the
@@ -68,4 +89,9 @@ For instance:
 
     daemon_test -b 1.5 /path/to/workspace
 
-... means that every 0.5 seconds, there is a 1.5% probability that the daemon is killed and restarted.
+... means that every 0.5 seconds, there is a 1.5% probability that the
+daemon is killed and restarted.
+
+Note that due to timing issues, using the bloodshed option will most
+likely lead to unreproducible results even if you specify the same
+seed.
