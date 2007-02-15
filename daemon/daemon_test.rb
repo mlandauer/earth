@@ -186,7 +186,7 @@ class DaemonTest
   def fork_daemon
     fork do
       puts "Launching daemon in background"
-      exec("#{@daemon_executable} -t -u 2 \"#{@root_directory}\"")
+      exec("#{@daemon_executable} -t -u 1 \"#{@root_directory}\"")
     end
   end
 
