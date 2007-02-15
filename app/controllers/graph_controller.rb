@@ -63,7 +63,13 @@ class GraphController < ApplicationController
             max_right = [ max_right, root.rgt ].max
           end
 
-          @directory = Earth::Directory.new(:name => @server.name, :children => roots, :level => 0, :server => @server, :lft => 0, :rgt => max_right + 1)
+          @directory = Earth::Directory.new(:name => @server.name, 
+                                            :children => roots, 
+                                            :level => 0, 
+                                            :server => @server, 
+                                            :lft => 0, 
+                                            :rgt => max_right + 1
+                                            )
 
         else
           # This is more efficient for two reasons: firstly, the
@@ -79,11 +85,16 @@ class GraphController < ApplicationController
         end
 
         files = Earth::File.find(:all, 
-                                 :conditions => "directory_id IN (SELECT id FROM directories " +
-                                 "WHERE level<#{@directory.level + @level_count} " +
-                                 " AND server_id=#{@server.id} " +
-                                 " AND lft >= #{@directory.lft} " +
-                                 " AND rgt <= #{@directory.rgt})")
+                                 :conditions => [ 
+                                   "directory_id IN (SELECT id FROM directories " + \
+                                   "WHERE level < ? " + \
+                                   " AND server_id = ? " + \
+                                   " AND lft >= ? " + \
+                                   " AND rgt <= ?)",
+                                   @directory.level + @level_count,
+                                   @server.id,
+                                   @directory.lft,
+                                   @directory.rgt ])
           
         @directory_to_file_map = Hash.new
         files.each do |file|
@@ -101,13 +112,18 @@ class GraphController < ApplicationController
 
         if filter
           cached_sizes = Earth::CachedSize.find(:all, 
-                                                :conditions => "directory_id IN (SELECT id FROM directories " +
-                                                "WHERE level=#{@directory.level + @level_count} " +
-                                                " AND server_id=#{@server.id} " +
-                                                " AND lft >= #{@directory.lft} " +
-                                                " AND rgt <= #{@directory.rgt}) " +
-                                                " AND filter_id=#{filter.id}"
-                                                )
+                                                :conditions => [ 
+                                                  "directory_id IN (SELECT id FROM directories " + \
+                                                  "WHERE level = ? " + \
+                                                  " AND server_id = ? " + \
+                                                  " AND lft >= ? " + \
+                                                  " AND rgt <= ?) " + \
+                                                  " AND filter_id = ?", 
+                                                  @directory.level + @level_count,
+                                                  @server.id,
+                                                  @directory.lft,
+                                                  @directory.rgt,
+                                                  filter.id ])
 
           cached_sizes.each do |cached_size|
             @directory_size_map[cached_size.directory_id] = cached_size.size

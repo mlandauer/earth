@@ -21,11 +21,19 @@ class BrowserController < ApplicationController
     select = include_attributes.map {|attr| "files.#{attr} as #{attr}" }.join(", ")
 
     if @directory
-      conditions = " directories.server_id=#{@server.id} " +
-                   " AND directories.lft >= #{@directory.lft} " +
-                   " AND directories.lft <= #{@directory.rgt}"
+      conditions = [ 
+        "directories.server_id = ? " + \
+        " AND directories.lft >= ? " + \
+        " AND directories.lft <= ?", 
+        @server.id, 
+        @directory.lft, 
+        @directory.rgt 
+      ]
     elsif @server
-      conditions = " directories.server_id=#{@server.id} "
+      conditions = [ 
+        "directories.server_id = ?", 
+        @server.id 
+      ]
     else
       conditions = nil
     end

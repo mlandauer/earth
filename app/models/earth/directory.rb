@@ -61,9 +61,14 @@ module Earth
     
     def sum_files(column)
       Earth::File.sum(column, 
-                      :conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                      " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                      " AND directories.server_id = #{self.server_id}"),
+                      :conditions => [ 
+                        "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=?) " + \
+                        " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=?) " + \
+                        " AND directories.server_id = ?",
+                        self.id,
+                        self.id,
+                        self.server_id
+                      ],
                       :joins => "JOIN directories ON files.directory_id = directories.id").to_i
     end
 
@@ -99,27 +104,41 @@ module Earth
     end
     
     def recursive_file_count
-      Earth::File.count(:conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                        " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                        " AND directories.server_id = #{self.server_id}"), \
+      Earth::File.count(:conditions => [ 
+                          "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
+                          " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
+                          " AND directories.server_id = ?",
+                          self.id,
+                          self.id,
+                          self.server_id,
+                          ],
                         :joins => "JOIN directories ON files.directory_id = directories.id").to_i
     end
 
 
     def recursive_directory_count
-      Earth::Directory::count(:conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                              " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                              " AND directories.server_id = #{self.server_id}"))
+      Earth::Directory::count(:conditions => [
+                                "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
+                                " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
+                                " AND directories.server_id = ?",
+                                self.id,
+                                self.id,
+                                self.server_id ])
     end
 
     def cache_complete?
       first_filter = Earth::Filter::find(:first)
 
       recursive_cache_count = \
-      Earth::CachedSize.count(:conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                              " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                              " AND directories.server_id = #{self.server_id}" + \
-                                              " AND filter_id=#{first_filter.id}"), \
+      Earth::CachedSize.count(:conditions => [
+                                "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
+                                " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
+                                " AND directories.server_id = ?" + \
+                                " AND filter_id = ?", \
+                                self.id,
+                                self.id,
+                                self.server_id,
+                                first_filter.id],
                               :joins => "JOIN directories ON cached_sizes.directory_id = directories.id").to_i
 
       return recursive_cache_count == recursive_directory_count
@@ -129,9 +148,14 @@ module Earth
       result = Earth::File.find(:first, 
                                 :select => "SUM(files.size) AS sum, COUNT(*) AS count",
                                 :joins => "JOIN directories ON files.directory_id = directories.id",
-                                :conditions => ("directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                                " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=#{self.id}) " + \
-                                                " AND directories.server_id = #{self.server_id}"))
+                                :conditions => [ 
+                                  "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
+                                  " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
+                                  " AND directories.server_id = ?",
+                                  self.id,
+                                  self.id,
+                                  self.server_id,
+                                ])
       [ (result["sum"] || 0).to_i, result["count"].to_i ]
     end
     
@@ -273,8 +297,14 @@ module Earth
         diff_count = count - cached_size.count
 
         if diff_size != 0 or diff_blocks != 0 or diff_count != 0
-          Earth::CachedSize.update_all("size = size + #{diff_size}, blocks = blocks + #{diff_blocks}, count = count + #{diff_count}",
-                                       "filter_id=#{filter.id} and directory_id in (#{self.self_and_ancestors.map{|x| x.id}.join(',')})")
+          Earth::CachedSize.update_all([
+                                         "size = size + ?, blocks = blocks + ?, count = count + ?",
+                                         diff_size, diff_blocks, diff_count 
+                                       ],
+                                       [
+                                         "filter_id = ? and directory_id in (?)",
+                                         filter.id, self.self_and_ancestors.map{|x| x.id}
+                                       ])
         end
       end
 

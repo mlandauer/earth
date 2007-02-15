@@ -148,7 +148,16 @@ module Rsp
 
           # --- Below this point taken verbose from tree.rb --- #
 
-          configuration = { :foreign_key => "parent_id", :order => nil, :counter_cache => nil, :left_column => "lft", :right_column => "rgt", :scope => "1 = 1" , :text_column => nil, :level_column => nil}
+          configuration = {
+            :foreign_key => "parent_id", 
+            :order => nil, 
+            :counter_cache => nil, 
+            :left_column => "lft", 
+            :right_column => "rgt", 
+            :scope => "1 = 1" , 
+            :text_column => nil, 
+            :level_column => nil
+          }
           configuration.update(options) if options.is_a?(Hash)
 
           configuration[:scope] = "#{configuration[:scope]}_id".intern if configuration[:scope].is_a?(Symbol) && configuration[:scope].to_s !~ /_id$/
@@ -249,8 +258,45 @@ module Rsp
               interior_subtree_offset = (self[right_col_name] - self[left_col_name] + 1)
             end
 
-            self.class.update_all( "#{left_col_name} = #{left_col_name} + (CASE WHEN #{left_col_name} >= #{moved_subtree_left_inclusive} AND #{left_col_name} <= #{moved_subtree_right_inclusive} THEN #{moved_subtree_offset} WHEN #{left_col_name} >= #{interior_subtree_left_inclusive} AND #{left_col_name} <= #{interior_subtree_right_inclusive} THEN #{interior_subtree_offset} ELSE 0 END), #{right_col_name} = #{right_col_name} + (CASE WHEN #{right_col_name} >= #{moved_subtree_left_inclusive} AND #{right_col_name} <= #{moved_subtree_right_inclusive} THEN #{moved_subtree_offset} WHEN #{right_col_name} >= #{interior_subtree_left_inclusive} AND #{right_col_name} <= #{interior_subtree_right_inclusive} THEN #{interior_subtree_offset} ELSE 0 END)",  
-                                   "#{scope_condition} AND ((#{right_col_name} >= #{moved_subtree_left_inclusive} AND #{left_col_name} <= #{moved_subtree_right_inclusive}) OR (#{right_col_name} >= #{interior_subtree_left_inclusive} AND #{left_col_name} <= #{interior_subtree_right_inclusive}))" )
+            self.class.update_all( [
+                                     "#{left_col_name} = #{left_col_name} + (CASE " + \
+                                     "   WHEN #{left_col_name} >= ? AND #{left_col_name} <= ? THEN ? " + \
+                                     "   WHEN #{left_col_name} >= ? AND #{left_col_name} <= ? THEN ? " + \
+                                     "   ELSE 0 " + \
+                                     "END), " + \
+                                     "#{right_col_name} = #{right_col_name} + (CASE " + \
+                                     "   WHEN #{right_col_name} >= ? AND #{right_col_name} <= ? THEN ? " + \
+                                     "   WHEN #{right_col_name} >= ? AND #{right_col_name} <= ? THEN ? " + \
+                                     "   ELSE 0 " + \
+                                     "END)",
+                                     moved_subtree_left_inclusive,
+                                     moved_subtree_right_inclusive,
+                                     moved_subtree_offset,
+
+                                     interior_subtree_left_inclusive,
+                                     interior_subtree_right_inclusive,
+                                     interior_subtree_offset,
+
+                                     moved_subtree_left_inclusive,
+                                     moved_subtree_right_inclusive,
+                                     moved_subtree_offset,
+
+                                     interior_subtree_left_inclusive,
+                                     interior_subtree_right_inclusive,
+                                     interior_subtree_offset
+                                   ],  
+                                   [
+                                     "#{scope_condition} AND " + \
+                                     "(" + \
+                                     "     (#{right_col_name} >= ? AND #{left_col_name} <= ?)" + \
+                                     "  OR (#{right_col_name} >= ? AND #{left_col_name} <= ?)" + \
+                                     ")",
+                                     moved_subtree_left_inclusive,
+                                     moved_subtree_right_inclusive,
+
+                                     interior_subtree_left_inclusive,
+                                     interior_subtree_right_inclusive
+                                   ])
 
           else
             self.parent_assoc = _parent
@@ -320,8 +366,26 @@ module Rsp
           if Thread.current["root_deleted_node"].nil?
             Thread.current["root_deleted_node"] = self
 
-            self.class.update_all( "#{left_col_name} = #{left_col_name} - (CASE WHEN #{left_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.id}) THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.id}) ELSE 0 END), #{right_col_name} = #{right_col_name} - (CASE WHEN #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.id}) THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.id}) ELSE 0 END)",  
-                                   "#{scope_condition} AND #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.id})" )
+            self.class.update_all([
+                                    "#{left_col_name} = #{left_col_name} - (CASE " + \
+                                    "   WHEN #{left_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?) " + \
+                                    "   THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?) " + \
+                                    "   ELSE 0 " + \
+                                    "END), " + \
+                                    "#{right_col_name} = #{right_col_name} - (CASE " + \
+                                    "   WHEN #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key}=?) " + \
+                                    "   THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE #{self.class.primary_key}=?) " + \
+                                    "   ELSE 0 " + \
+                                    "END)",  
+                                    self.id,
+                                    self.id,
+                                    self.id,
+                                    self.id
+                                  ],
+                                  [
+                                    "#{scope_condition} AND #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?)",
+                                    self.id
+                                  ])
 
           end
 
@@ -431,13 +495,13 @@ module Rsp
             if self.parent_assoc.nil?
               left = 1
               level = 1
-              @left_select_expression = "SELECT CASE WHEN MAX(#{right_col_name}) IS NOT NULL THEN MAX(#{right_col_name})+1 ELSE 1 END FROM #{self.class.table_name} WHERE #{scope_condition} AND #{parent_col_name} IS NULL AND #{right_col_name}>0"
+              @left_select_expression = "SELECT CASE WHEN MAX(#{right_col_name}) IS NOT NULL THEN MAX(#{right_col_name}) + 1 ELSE 1 END FROM #{self.class.table_name} WHERE #{scope_condition} AND #{parent_col_name} IS NULL AND #{right_col_name} > 0"
             else
               left = self.parent_assoc[right_col_name] 
               if has_level_column?
                 level = self.parent_assoc[level_col_name] + 1
               end
-              @left_select_expression = "SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key}=#{self.parent_assoc.id}"
+              @left_select_expression = "SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = #{self.parent_assoc.id}"
             end
 
             @insert_range = self.update_edge_data(0, level) + 1
@@ -477,17 +541,25 @@ module Rsp
 
         # Returns a set of itself and all of its nested children
         def full_set
-          self.class.base_class.find(:all, :conditions => "#{scope_condition} AND (#{left_col_name} BETWEEN #{self[left_col_name]} and #{self[right_col_name]})" )
+          self.class.base_class.find(:all, :conditions => [
+                                       "#{scope_condition} AND (#{left_col_name} BETWEEN (SELECT #{left_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?) AND (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?))",
+                                       self.id,
+                                       self.id
+                                     ])
         end
                   
         # Returns a set of all of its children and nested children
         def all_children
-          self.class.base_class.find(:all, :conditions => "#{scope_condition} AND (#{left_col_name} > #{self[left_col_name]}) and (#{right_col_name} < #{self[right_col_name]})" )
+          self.class.base_class.find(:all, :conditions => [
+                                       "#{scope_condition} AND (#{left_col_name} > (SELECT #{left_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?)) AND (#{right_col_name} < (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?))",
+                                       self.id,
+                                       self.id
+                                     ])
         end
                                   
         # Returns a set of only this entry's immediate children
         def direct_children
-          self.class.base_class.find(:all, :conditions => "#{scope_condition} and #{parent_column} = #{self.id}")
+          self.class.base_class.find(:all, :conditions => [ "#{scope_condition} and #{parent_column} = ?", self.id ])
         end
 
         # Returns true is this is a root node.  
@@ -611,7 +683,12 @@ module Rsp
           
           options = options || Hash.new
 
-          options[:conditions] = "#{depth_condition} AND #{scope_condition} AND (#{self.class.table_name}.#{left_col_name} > #{self[left_col_name]}) and (#{self.class.table_name}.#{right_col_name} < #{self[right_col_name]})"
+          options[:conditions] = [ 
+            "#{depth_condition} AND #{scope_condition} AND (#{self.class.table_name}.#{left_col_name} > (SELECT #{left_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?)) AND (#{self.class.table_name}.#{right_col_name} < (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?))" ] + [
+            self.id,
+            self.id
+          ]
+
           options[:order] = self.class.table_name + "." +left_col_name
 
           result = self.class.find(:all, options)
@@ -642,7 +719,7 @@ module Rsp
           else
             left_and_right = self.class.find(:first, 
                                              :select => "#{left_col_name} AS left, #{right_col_name} AS right",
-                                             :conditions => "#{self.class.primary_key} = #{self.id}")
+                                             :conditions => [ "#{self.class.primary_key} = ?", self.id ])
             (left_and_right["right"].to_i - left_and_right["left"].to_i - 1) / 2
           end
         end
