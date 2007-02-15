@@ -354,6 +354,7 @@ private
       directory_children.each do |dir|
         # If the directory has been deleted
         if !subdirectory_names.include?(dir.name)
+          
           Earth::Directory.benchmark("Removing directory with name #{dir.name}", Logger::DEBUG, !log_all_sql) do
             directory.child_delete(dir)
           end

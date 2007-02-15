@@ -143,8 +143,6 @@ module Rsp
 
           before_save("self.nested_set_before_save; true")
           after_save("self.nested_set_after_save; true")
-          before_destroy("self.nested_set_before_destroy; true")
-          after_destroy("self.nested_set_after_destroy; true")
 
           # --- Below this point taken verbose from tree.rb --- #
 
@@ -362,42 +360,62 @@ module Rsp
           end
         end
 
-        def nested_set_before_destroy
+        def destroy
           if Thread.current["root_deleted_node"].nil?
-            Thread.current["root_deleted_node"] = self
+            begin
+              Thread.current["root_deleted_node"] = self
 
-            self.class.update_all([
-                                    "#{left_col_name} = #{left_col_name} - (CASE " + \
-                                    "   WHEN #{left_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?) " + \
-                                    "   THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?) " + \
-                                    "   ELSE 0 " + \
-                                    "END), " + \
-                                    "#{right_col_name} = #{right_col_name} - (CASE " + \
-                                    "   WHEN #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key}=?) " + \
-                                    "   THEN (SELECT #{right_col_name}-#{left_col_name}+1 FROM #{self.class.table_name} WHERE #{self.class.primary_key}=?) " + \
-                                    "   ELSE 0 " + \
-                                    "END)",  
-                                    self.id,
-                                    self.id,
-                                    self.id,
-                                    self.id
-                                  ],
-                                  [
-                                    "#{scope_condition} AND #{right_col_name} > (SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = ?)",
-                                    self.id
-                                  ])
+              return false if callback(:before_destroy) == false
 
-          end
+              if not self.new_record? 
+                self.class.transaction do
 
-          @children.each do |child|
-            child.destroy
-          end
-        end
+                  result = self.class.find(:first, :select => [ left_col_name, right_col_name ].join(", "), :conditions => [ "#{self.class.primary_key} = ?", self.id ])
+                  left = result[left_col_name]
+                  right = result[right_col_name]
 
-        def nested_set_after_destroy
+                  self.class.delete_all([
+                                          "#{scope_condition} AND #{left_col_name} BETWEEN ? AND ?",
+                                          left,
+                                          right 
+                                        ])
 
-          if Thread.current["root_deleted_node"] == self
-            Thread.current["root_deleted_node"] = nil
+                  self.class.update_all([
+                                          "#{left_col_name} = #{left_col_name} - (CASE " + \
+                                          "   WHEN #{left_col_name} > ? " + \
+                                          "   THEN ? " + \
+                                          "   ELSE 0 " + \
+                                          "END), " + \
+                                          "#{right_col_name} = #{right_col_name} - (CASE " + \
+                                          "   WHEN #{right_col_name} > ? " + \
+                                          "   THEN ? " + \
+                                          "   ELSE 0 " + \
+                                          "END)",  
+                                          right,
+                                          right-left+1,
+                                          right,
+                                          right-left+1
+                                        ],
+                                        [
+                                          "#{scope_condition} AND #{right_col_name} > ?",
+                                          right
+                                        ])
+
+                  @children.each do |child|
+                    child.destroy
+                  end
+                end
+              end
+              callback(:after_destroy)
+            ensure                
+              Thread.current["root_deleted_node"] = nil
+            end
+          else
+            return false if callback(:before_destroy) == false
+            @children.each do |child|
+              child.destroy
+            end
+            callback(:after_destroy)
           end
         end
 

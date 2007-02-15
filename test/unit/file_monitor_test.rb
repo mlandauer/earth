@@ -1,3 +1,4 @@
+require 'test_unit_improvements'
 
 class FileMonitorTest < Test::Unit::TestCase
   def setup
@@ -153,6 +154,7 @@ class FileMonitorTest < Test::Unit::TestCase
     FileUtils.mkdir dir2b
     FileUtils.touch File.join(dir2b, 'file')
 
+    sleep 1.01
     FileMonitor.update([@directory])
     sleep 1.5
     FileUtils.rm_rf dir2a
@@ -163,6 +165,26 @@ class FileMonitorTest < Test::Unit::TestCase
     
     assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
     assert_files([@file2, @file1], Earth::File.find(:all, :order => :id))
+  end
+
+  def test_remove_nested_directories_performance
+    dir_a = File.join(@dir, 'dir_a')    
+    FileUtils.mkdir dir_a
+    dir_a_b = File.join(dir_a, 'dir_a_b')
+    FileUtils.mkdir dir_a_b
+    dir_a_b_c = File.join(dir_a_b, 'dir_a_b_c')
+    FileUtils.mkdir dir_a_b_c
+
+    sleep 1.01
+    FileMonitor.update([@directory])
+
+    assert_directories([@dir, @dir1, dir_a, dir_a_b, dir_a_b_c], Earth::Directory.find(:all, :order => :id))
+
+    FileUtils.rm_rf dir_a
+
+    sleep 1.01
+
+    assert_deletes(1) { FileMonitor.update([@directory]) }
   end
   
   def test_changed

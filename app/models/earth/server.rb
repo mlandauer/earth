@@ -3,7 +3,7 @@ require 'socket'
 module Earth
 
   class Server < ActiveRecord::Base
-    has_many :directories, :dependent => :destroy, :order => :lft
+    has_many :directories, :dependent => :delete_cascade, :order => :lft
   
     cattr_accessor :config
     cattr_accessor :heartbeat_grace_period
