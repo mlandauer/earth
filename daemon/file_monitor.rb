@@ -261,10 +261,10 @@ private
 
     directory_count = 1
 
-    # TODO: remove exist? call as it is an extra filesystem access
-    if File.exist?(directory.path)
+    begin
       new_directory_stat = File.lstat(directory.path)
-    else
+    rescue Errno::ENOENT
+      # Handle case when the directory no longer exists
       new_directory_stat = nil
     end
     
