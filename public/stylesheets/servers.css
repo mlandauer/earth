@@ -148,7 +148,7 @@ tr.down {
 }
 
 tr.unknown { 
-  background: #ffa0ff;
+  background: #ffc070;
 }
 
 td.action {
@@ -201,8 +201,8 @@ table#server-detail td.status.down {
 }
 
 table#server-detail td.status.unknown {
-  color: #808000;
-  background-color: #ffffc0;
+  color: #604030;
+  background-color: #ffc070;
   font-weight: bold;
 }
 

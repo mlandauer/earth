@@ -2,28 +2,34 @@ class ServersController < ApplicationController
   # GET /servers
   # GET /servers.xml
   def index
-    @servers = Earth::Server.find(:all)
+    Earth::File::with_filter do
+      @servers = Earth::Server.find(:all)
 
-    respond_to do |format|
-      format.html # index.rhtml
-      format.xml  { render :xml => @servers.to_xml }
+      respond_to do |format|
+        format.html # index.rhtml
+        format.xml  { render :xml => @servers.to_xml }
+      end
     end
   end
 
   # GET /servers/1
   # GET /servers/1.xml
   def show
-    @server = Earth::Server.find_by_name(params[:server])
+    Earth::File::with_filter do
+      @server = Earth::Server.find_by_name(params[:server])
 
-    respond_to do |format|
-      format.html # show.rhtml
-      format.xml  { render :xml => @server.to_xml }
+      respond_to do |format|
+        format.html # show.rhtml
+        format.xml  { render :xml => @server.to_xml }
+      end
     end
   end
 
   # GET /servers/1;edit
   def edit
-    @server = Earth::Server.find_by_name(params[:server])
+    Earth::File::with_filter do
+      @server = Earth::Server.find_by_name(params[:server])
+    end
   end
 
   # PUT /servers/1

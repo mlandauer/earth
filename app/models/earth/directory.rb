@@ -117,13 +117,7 @@ module Earth
 
 
     def recursive_directory_count
-      Earth::Directory::count(:conditions => [
-                                "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
-                                " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
-                                " AND directories.server_id = ?",
-                                self.id,
-                                self.id,
-                                self.server_id ])
+      return 1 + children_count
     end
 
     def cache_complete?

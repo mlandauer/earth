@@ -24,7 +24,7 @@ module Earth
       Stat.new(modified, size, blocks, uid, gid)
     end
 
-    def File.with_filter(params) 
+    def File.with_filter(params = {}) 
       filter_filename = params[:filter_filename]
       if filter_filename.nil? || filter_filename == ""
         filter_filename = "*"
