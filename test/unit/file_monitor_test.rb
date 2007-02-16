@@ -170,15 +170,28 @@ class FileMonitorTest < Test::Unit::TestCase
   def test_remove_nested_directories_performance
     dir_a = File.join(@dir, 'dir_a')    
     FileUtils.mkdir dir_a
+    dir_a_a = File.join(dir_a, 'dir_a_a')
+    FileUtils.mkdir dir_a_a
+    dir_a_a_a = File.join(dir_a_a, 'dir_a_a_a')
+    FileUtils.mkdir dir_a_a_a
     dir_a_b = File.join(dir_a, 'dir_a_b')
     FileUtils.mkdir dir_a_b
+    dir_a_b_a = File.join(dir_a_b, 'dir_a_b_a')
+    FileUtils.mkdir dir_a_b_a
+    dir_a_b_b = File.join(dir_a_b, 'dir_a_b_b')
+    FileUtils.mkdir dir_a_b_b
     dir_a_b_c = File.join(dir_a_b, 'dir_a_b_c')
     FileUtils.mkdir dir_a_b_c
+    dir_a_b_d = File.join(dir_a_b, 'dir_a_b_d')
+    FileUtils.mkdir dir_a_b_d
 
     sleep 1.01
     FileMonitor.update([@directory])
 
-    assert_directories([@dir, @dir1, dir_a, dir_a_b, dir_a_b_c], Earth::Directory.find(:all, :order => :id))
+    assert_directories([@dir, @dir1, 
+                        dir_a, 
+                        dir_a_a, dir_a_a_a, 
+                        dir_a_b, dir_a_b_a, dir_a_b_b, dir_a_b_c, dir_a_b_d], Earth::Directory.find(:all, :order => :id))
 
     FileUtils.rm_rf dir_a
 
