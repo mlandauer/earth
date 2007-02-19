@@ -47,8 +47,7 @@ module ActiveRecord
         calculate(:sum, *args, &block)
       end
 
-      # Remove +records+ from this association. What it does with the associated record
-      # is set by :dependent
+      # Remove +records+ from this association.  Does not destroy +records+.
       def delete(*records)
         records = flatten_deeper(records)
         records.each { |record| raise_on_type_mismatch(record) }
@@ -67,7 +66,14 @@ module ActiveRecord
 
       # Removes all records from this association.  Returns +self+ so method calls may be chained.
       def clear
-        delete_all
+        return self if length.zero? # forces load_target if hasn't happened already
+
+        if @reflection.options[:dependent] && @reflection.options[:dependent] == :delete_all
+          destroy_all
+        else          
+          delete_all
+        end
+
         self
       end
       
