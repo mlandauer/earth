@@ -62,7 +62,7 @@ class FileMonitor
     
     directories.each do |directory|
       benchmark "Collecting startup data for directory #{directory.path} from database" do
-        directory.load_all_children
+        directory.load_all_children(0, { :include => [ :cached_sizes ] })
       end
     end
     paths_to_start_watching.each do |path|
@@ -126,8 +126,8 @@ private
     Thread.new do
       while true do
         # reload the server object in case of changes on the database side
+        # TODO: There is a small chance that the server object will get stale here
         server = Earth::Server.this_server
-        $stdout.flush
         server.heartbeat
         sleep(server.heartbeat_interval)
       end
@@ -233,11 +233,12 @@ private
     total_count = 0
     remaining_count = directories.map{|d| d.children_count + 1}.sum
     eta_printer = ETAPrinter.new(remaining_count) if options[:show_eta]
+    filter_count = Earth::Filter::count
     start = Time.new
     logger.debug("starting update cycle, directories.size is #{directories.size} remaining count is #{remaining_count}")
     directories.each do |directory|
       directory.each do |d|
-        total_count += update_non_recursive(d, options)
+        total_count += update_non_recursive(d, filter_count, options)
         remaining_time = update_time - (Time.new - start)
         if remaining_time > 0 && remaining_count > 0
           sleep_time = remaining_time.to_f / remaining_count
@@ -265,7 +266,7 @@ private
     RAILS_DEFAULT_LOGGER
   end
 
-  def FileMonitor.update_non_recursive(directory, options)
+  def FileMonitor.update_non_recursive(directory, filter_count, options)
 
     logger.debug("update_non_recursive for directory #{directory.path}")
 
@@ -282,7 +283,7 @@ private
     if new_directory_stat == directory.stat or \
       (not new_directory_stat.nil? and new_directory_stat.mtime >= 1.seconds.ago)
 
-      if directory.cached_sizes.count != Earth::Filter::count
+      if directory.cached_sizes.size != filter_count
         Earth::Directory::transaction do
           directory.create_caches
           directory.update_caches
@@ -315,7 +316,7 @@ private
             if options[:only_build_directories] then
               attributes = { :name => name, :path => "#{directory.path}/#{name}", :server_id => directory.server_id }
               dir = directory.children.build(attributes)
-              update_non_recursive(dir, options)
+              update_non_recursive(dir, filter_count, options)
             else
               FileMonitor.silent_benchmark { initial_pass_on_new_directory(name, directory) }
             end
