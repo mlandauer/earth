@@ -147,6 +147,53 @@ class CategoryTest < Test::Unit::TestCase
     assert_nested_set_order([root, [child1, [child1a], [child1b]]])
   end
 
+  def test_build_in_existing_tree
+    root      = Category.create("name" => "root")
+    child1    = root.children.create("name" => "child1")
+    child2    = root.children.create("name" => "child2")
+    child1a   = child1.children.create("name" => "child1a")
+    child1b   = child1.children.create("name" => "child1b")
+    child2a   = child2.children.create("name" => "child2a")
+    child2b   = child2.children.create("name" => "child2b")
+    child3    = root.children.build("name" => "child3")
+    child3a   = child3.children.build("name" => "child3a")
+    child3b   = child3.children.build("name" => "child3b")
+
+    child3.save
+
+    assert_equal([child1, child2, child3], root.children)
+    assert_equal([child1a, child1b], child1.children)
+    assert_equal([child2a, child2b], child2.children)
+    assert_equal([child3a, child3b], child3.children)
+
+    assert_nested_set_order([root, [child1, [child1a], [child1b]], [child2, [child2a], [child2b]], [child3, [child3a], [child3b]]])
+  end
+
+  def test_build_in_existing_tree_2
+    root      = Category.new("name" => "root")
+    child1    = root.children.build("name" => "child1")
+    child2    = root.children.build("name" => "child2")
+    child1a   = child1.children.build("name" => "child1a")
+    child1b   = child1.children.build("name" => "child1b")
+    child2a   = child2.children.build("name" => "child2a")
+    child2b   = child2.children.build("name" => "child2b")
+
+    root.save
+
+    child3    = root.children.build("name" => "child3")
+    child3a   = child3.children.build("name" => "child3a")
+    child3b   = child3.children.build("name" => "child3b")
+
+    child3.save
+
+    assert_equal([child1, child2, child3], root.children)
+    assert_equal([child1a, child1b], child1.children)
+    assert_equal([child2a, child2b], child2.children)
+    assert_equal([child3a, child3b], child3.children)
+
+    assert_nested_set_order([root, [child1, [child1a], [child1b]], [child2, [child2a], [child2b]], [child3, [child3a], [child3b]]])
+  end
+
   def make_tree(node, parent, &block)
     category = yield(parent, node[0])
     #[ category ] + node[1..node.length].reverse.map { |child| make_tree(child, category, &block) }.reverse

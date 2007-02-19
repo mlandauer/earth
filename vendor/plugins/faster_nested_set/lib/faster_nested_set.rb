@@ -442,7 +442,7 @@ module Rsp
             if not @insert_range.nil?
               insert_offset = "((" + @left_select_expression + ") + #{@insert_range})"
 
-              self.class.update_all( "#{left_col_name} = #{left_col_name} + (CASE WHEN #{left_col_name} >= (#{@left_select_expression}) THEN 2 WHEN #{left_col_name} < 0 THEN #{insert_offset} ELSE 0 END), #{right_col_name} = #{right_col_name} + (CASE WHEN #{right_col_name} >= (#{@left_select_expression}) THEN 2 WHEN #{right_col_name} < 0 THEN #{insert_offset} ELSE 0 END)",  
+              self.class.update_all( "#{left_col_name} = #{left_col_name} + (CASE WHEN #{left_col_name} >= (#{@left_select_expression}) THEN #{@insert_range} WHEN #{left_col_name} < 0 THEN #{insert_offset} ELSE 0 END), #{right_col_name} = #{right_col_name} + (CASE WHEN #{right_col_name} >= (#{@left_select_expression}) THEN #{@insert_range} WHEN #{right_col_name} < 0 THEN #{insert_offset} ELSE 0 END)",  
                                      "#{scope_condition} AND (#{right_col_name} >= (#{@left_select_expression}) OR #{right_col_name} < 0)" )
               if not self.parent_assoc.nil?
                 self.parent_assoc[right_col_name] += 2
@@ -518,6 +518,8 @@ module Rsp
               left = self.parent_assoc[right_col_name] 
               if has_level_column?
                 level = self.parent_assoc[level_col_name] + 1
+              else
+                level = 0
               end
               @left_select_expression = "SELECT #{right_col_name} FROM #{self.class.table_name} WHERE #{self.class.primary_key} = #{self.parent_assoc.id}"
             end
