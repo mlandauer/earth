@@ -384,6 +384,7 @@ class FileMonitorTest < Test::Unit::TestCase
 
     1.upto(30) do
       create_delete_random_dirs
+      random_directory = Earth::Directory::find(random_directory.id)
       FileMonitor.update([random_directory])
       random_directory.reload
       random_directory.ensure_consistency
