@@ -41,8 +41,13 @@ class User
   end
   
   def User.find_by_name(name)
-    no = User.lookup(name, config["ldap_user_lookup"]["name_field"], config["ldap_user_lookup"]["id_field"],
-      config["ldap_user_lookup"]["base"]).to_i
+    # If name is just a number treat it as the uid
+    if name.to_i.to_s == name
+      no = name.to_i
+    else
+      no = User.lookup(name, config["ldap_user_lookup"]["name_field"], config["ldap_user_lookup"]["id_field"],
+        config["ldap_user_lookup"]["base"]).to_i
+    end
     return User.new(no)
   end
   

@@ -23,7 +23,13 @@ class UserLdapTest < Test::Unit::TestCase
     assert_equal(3054, user.uid)
     assert_equal("kenji", user.name)
   end
-
+  
+  def test_find_by_name_with_number
+    user = User.find_by_name("3054")
+    assert_equal(3054, user.uid)
+    assert_equal("kenji", user.name)
+  end
+  
   def test_find_by_name_nonexistant
     user = User.find_by_name("unknown")
     assert_equal(0, user.uid)
