@@ -121,17 +121,21 @@ private
     end
   end
   
-  def FileMonitor.initial_pass_on_new_directory(path)
+  def FileMonitor.initial_pass_on_new_directory(name, parent = nil)
     this_server = Earth::Server.this_server
 
     benchmark "Scanning and storing tree", false do
     
-      directory = this_server.directories.build(:name => path, :path => path)
-      directory_count = benchmark "Building initial directory structure for #{path}" do
-        update([directory], 0, true, false, false)
+      if parent
+        directory = parent.children.build(:name => name, :path => "#{parent.path}/#{name}", :server_id => this_server.id)
+      else
+        directory = this_server.directories.build(:name => name, :path => name)
+      end
+      directory_count = benchmark "Building initial directory structure for #{name}" do
+        update([directory], 0, :only_build_directories => true, :initial_pass => false, :show_eta => false)
       end
 
-      benchmark "Committing initial directory structure for #{path} to database" do
+      benchmark "Committing initial directory structure for #{name} to database" do
         @directory_eta_printer = ETAPrinter.new(directory_count)
         Earth::Directory.add_save_observer(self)
         Earth::Directory.cache_enabled = false
@@ -144,8 +148,8 @@ private
       directory.reload
       directory.load_all_children
 
-      benchmark "Initial pass at gathering all files beneath #{path}" do
-        update([directory], 0, false, true, true)
+      benchmark "Initial pass at gathering all files beneath #{name}" do
+        update([directory], 0, :only_build_directories => false, :initial_pass => true, :show_eta => true)
       end
 
       benchmark "Creating cache information" do
@@ -212,10 +216,9 @@ private
     end
   end
   
-  def FileMonitor.update(directories, update_time = 0, 
-                         only_build_directories = false, 
-                         initial_pass = false, 
-                         show_eta = false)
+  def FileMonitor.update(directories, update_time = 0, *args)
+    options = { :only_build_directories => false, :initial_pass => false, :show_eta => false }
+    options.update(args.first) if args.first
     # TODO: Do this in a nicer way
     total_count = 0
     remaining_count = directories.map{|d| d.children_count + 1}.sum
@@ -224,7 +227,7 @@ private
     logger.debug("starting update cycle, directories.size is #{directories.size} remaining count is #{remaining_count}")
     directories.each do |directory|
       directory.each do |d|
-        total_count += update_non_recursive(d, only_build_directories, initial_pass)
+        total_count += update_non_recursive(d, options)
         remaining_time = update_time - (Time.new - start)
         if remaining_time > 0 && remaining_count > 0
           sleep_time = remaining_time.to_f / remaining_count
@@ -232,7 +235,7 @@ private
         end
         remaining_count -= 1
   
-        if show_eta
+        if options[:show_eta]
           eta_printer.increment
         end
       end
@@ -240,7 +243,7 @@ private
     stop = Time.new
     logger.debug("Update cycle took #{stop - start}s, remaining_count is #{remaining_count}")
 
-    if not only_build_directories and not initial_pass
+    if not options[:only_build_directories] and not options[:initial_pass]
       # Set the last_update_finish_time
       server = Earth::Server.this_server
       server.last_update_finish_time = Time.new
@@ -254,8 +257,7 @@ private
     RAILS_DEFAULT_LOGGER
   end
 
-  def FileMonitor.update_non_recursive(directory, 
-                                       only_build_directories = false, initial_pass = false)
+  def FileMonitor.update_non_recursive(directory, options)
 
     logger.debug("update_non_recursive for directory #{directory.path}")
 
@@ -297,24 +299,27 @@ private
         end
       end
 
-      if not initial_pass
+      if not options[:initial_pass]
         added_directory_names = subdirectory_names - directory.children.map{|x| x.name}
         added_directory_names.each do |name|
-          dir = Earth::Directory.benchmark("Creating directory #{directory.path}/#{name}", Logger::DEBUG, !log_all_sql) do
-            attributes = { :name => name, :path => "#{directory.path}/#{name}", :server_id => directory.server_id }
-            if only_build_directories then
-              directory.children.build(attributes)
+          Earth::Directory.benchmark("Creating directory #{directory.path}/#{name}", Logger::DEBUG, !log_all_sql) do
+            if options[:only_build_directories] then
+              attributes = { :name => name, :path => "#{directory.path}/#{name}", :server_id => directory.server_id }
+              dir = directory.children.build(attributes)
+              update_non_recursive(dir, options)
             else
-              directory.children.create(attributes)
+              attributes = { :name => name, :path => "#{directory.path}/#{name}", :server_id => directory.server_id }
+              dir = directory.children.create(attributes)
+              update_non_recursive(dir, options)
+              #initial_pass_on_new_directory(name, directory)
             end
           end
-          update_non_recursive(dir, only_build_directories, initial_pass)
         end
       end
 
-      if not only_build_directories then
+      if not options[:only_build_directories] then
         # By adding and removing files on the association, the cache of the association will be kept up to date
-        if not initial_pass
+        if not options[:initial_pass]
           added_file_names = file_names - directory.files.map{|x| x.name}
         else
           added_file_names = file_names
@@ -325,7 +330,7 @@ private
           end
         end
 
-        if not initial_pass
+        if not options[:initial_pass]
           directory_files = directory.files.to_ary.clone
           
           directory_files.each do |file|
@@ -362,7 +367,7 @@ private
       end
       
       # Update the directory stat information at the end
-      if not only_build_directories
+      if not options[:only_build_directories]
         if File.exist?(directory.path) # FIXME - why is this checked again? can this lead to database inconsistency wrt recursive sizes?
           directory.stat = new_directory_stat
 
