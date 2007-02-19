@@ -466,6 +466,9 @@ if not FileTest.directory?(parent_directory)
   exit 5
 end
 
+work_directory = File.join(parent_directory, "daemon_test")
+FileUtils.mkdir_p(work_directory)
+
 if seed.nil?
   seed = Time.new.to_i
 end
@@ -474,7 +477,7 @@ puts "Using seed #{seed}"
 
 srand(seed)
 
-test = DaemonTest.new(parent_directory, iterations, replay_iterations, bloodshed_percentage)
+test = DaemonTest.new(work_directory, iterations, replay_iterations, bloodshed_percentage)
 begin
   test.main_loop
 ensure

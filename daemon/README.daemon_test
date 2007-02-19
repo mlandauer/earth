@@ -1,21 +1,17 @@
 This is a quick run-down on how to give the daemon a beating with the
 daemon_test utility.
 
-Firstly, setup a test directory somewhere. That directory is the
-workspace for the daemon_test - the test will create, delete and move
-around files and directories in this directory. IMPORTANT: this
-directory is going to be rm -Rf'ed every time you start the test so
-make sure there's nothing important in it ;)
+Firstly, setup a test directory somewhere. daemon_test will create a
+subdirectory within that directory which serves as the workspace for
+the daemon_test - the test will create, delete and move around files
+and directories in this directory.
+
+That subdirectory will be emptied before daemon_test starts, so you
+don't want to copy anything important in there.
 
 Now you can run daemon_test like this:
 
     daemon_test /path/to/workspace
-
-Again, /path/to/workspace will be completely emptied!! So you don't
-want to do a "daemon_test ~" !!!
-
-(I'm a bit paranoid so I run it with "sudo -u nobody" on my
-laptop... you might want to do the same.)
 
 daemon_test runs on the test database, so don't run it at the same
 time as the unit tests.
