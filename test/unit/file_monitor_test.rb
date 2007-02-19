@@ -85,11 +85,17 @@ class FileMonitorTest < Test::Unit::TestCase
     # this might fail!!
     #assert(@directory.size <= @directory.blocks * 512)
   end
+
+  # backdate the given file by 1 minute
+  def backdate(directory, seconds=60)
+    @past = File.mtime(directory) - seconds
+    File.utime(@past, @past, directory)
+  end
   
   # Check that files starting with "." are not ignored
   def test_dot_files
     FileUtils.touch 'test_data/.an_invisible_file'
-    sleep 1.01
+    backdate(@dir)
     FileMonitor.update([@directory])
     assert_cached_sizes_match(@directory)
     assert_equal(".an_invisible_file", Earth::File.find_by_name('.an_invisible_file').name)
@@ -102,10 +108,11 @@ class FileMonitorTest < Test::Unit::TestCase
   end
 
   def test_removed
+    backdate(@dir)
     FileMonitor.update([@directory])
     FileUtils.rm_rf 'test_data/dir1'
     FileUtils.rm 'test_data/file1'
-    sleep 1.01
+    backdate(@dir)
     FileMonitor.update([@directory])
     assert_cached_sizes_match(@directory)
     
@@ -118,10 +125,10 @@ class FileMonitorTest < Test::Unit::TestCase
     
     FileUtils.mkdir dir2
     FileUtils.touch File.join(dir2, 'file')
-    sleep 1.01
+    backdate(@dir)
     FileMonitor.update([@directory])
     FileUtils.rm_rf @dir1
-    sleep 1.01
+    backdate(@dir, 58)
     FileMonitor.update([@directory])
     assert_cached_sizes_match(@directory)
     
@@ -134,11 +141,11 @@ class FileMonitorTest < Test::Unit::TestCase
     file1b = File.join(@dir, 'file1b')
     FileUtils.touch file1a
     FileUtils.touch file1b
+    backdate(@dir)
     FileMonitor.update([@directory])
-    sleep 1.5
     File.delete(file1a)
     File.delete(file1b)
-    sleep 1.01
+    backdate(@dir, 58)
     FileMonitor.update([@directory])
 
     assert_directories([@dir, @dir1], Earth::Directory.find(:all, :order => :id))
@@ -154,12 +161,11 @@ class FileMonitorTest < Test::Unit::TestCase
     FileUtils.mkdir dir2b
     FileUtils.touch File.join(dir2b, 'file')
 
-    sleep 1.01
+    backdate(@dir)
     FileMonitor.update([@directory])
-    sleep 1.5
     FileUtils.rm_rf dir2a
     FileUtils.rm_rf dir2b
-    sleep 1.01
+    backdate(@dir, 58)
     FileMonitor.update([@directory])
     assert_cached_sizes_match(@directory)
     
@@ -185,29 +191,32 @@ class FileMonitorTest < Test::Unit::TestCase
     dir_a_b_d = File.join(dir_a_b, 'dir_a_b_d')
     FileUtils.mkdir dir_a_b_d
 
-    sleep 1.01
+    directories = [@dir, @dir1, 
+                   dir_a, 
+                   dir_a_a, dir_a_a_a, 
+                   dir_a_b, dir_a_b_a, dir_a_b_b, dir_a_b_c, dir_a_b_d]
+
+    directories.each { |dir| backdate(dir) }
     FileMonitor.update([@directory])
 
-    assert_directories([@dir, @dir1, 
-                        dir_a, 
-                        dir_a_a, dir_a_a_a, 
-                        dir_a_b, dir_a_b_a, dir_a_b_b, dir_a_b_c, dir_a_b_d], Earth::Directory.find(:all, :order => :id))
+    assert_directories(directories, Earth::Directory.find(:all, :order => :id))
 
     FileUtils.rm_rf dir_a
-
-    sleep 1.01
-
+    backdate(@dir, 58)
     assert_deletes(1) { FileMonitor.update([@directory]) }
   end
   
   def test_changed
+    backdate(@dir)
+    backdate(@dir1)
     FileMonitor.update([@directory])
     FileUtils.touch @file2
     # For the previous change to be noticed we need to create a new file as well
     # This is only strictly true for the PosixFileMonitor
     file3 = File.join(@dir1, 'file2')
     FileUtils.touch file3
-    sleep 1.01
+    backdate(@dir, 58)
+    backdate(@dir1, 58)
     FileMonitor.update([@directory])
     assert_cached_sizes_match(@directory)
     
@@ -216,10 +225,13 @@ class FileMonitorTest < Test::Unit::TestCase
   end
   
   def test_added_in_subdirectory
+    backdate(@dir)
+    backdate(@dir1)
     FileMonitor.update([@directory])
     file3 = File.join(@dir1, 'file2')
     FileUtils.touch file3
-    sleep 1.01
+    backdate(@dir, 58)
+    backdate(@dir1, 58)
     FileMonitor.update([@directory])
     assert_cached_sizes_match(@directory)
     
@@ -273,13 +285,14 @@ class FileMonitorTest < Test::Unit::TestCase
   end
   
   def test_directory_added
-    sleep 1.01
+    backdate(@dir)
     FileMonitor.update([@directory])
     assert_cached_sizes_match(@directory)
 
     subdir = File.join(@dir, "subdir")
     FileUtils.mkdir subdir
-    sleep 1.01
+    backdate(@dir, 58)
+    backdate(subdir, 58)
     FileMonitor.update([@directory])
     assert_directory(subdir, Earth::Directory.find_by_name("subdir"))
     assert(@directory == Earth::Directory.find_by_name("subdir").parent)
@@ -292,7 +305,8 @@ class FileMonitorTest < Test::Unit::TestCase
   def test_directory_cached_sizes_match
     # This performs various changes on a subdirectory and makes sure that
     # cached sizes are updated properly
-    sleep 1.01
+    backdate(@dir)
+    backdate(@dir1)
     FileMonitor.update([@directory])
     assert_cached_sizes_match(@directory)
     assert(@directory.find_cached_size_by_filter(@match_all_filter).size == 0)
@@ -300,9 +314,10 @@ class FileMonitorTest < Test::Unit::TestCase
     # Create a subdirectory and check that it's been created
     subdir = File.join(@dir, "subdir")
     FileUtils.mkdir subdir
-    File.utime(@past, @past, subdir)
 
-    sleep 1.01
+    backdate(@dir, 58)
+    backdate(@dir1, 58)
+    backdate(subdir, 58)
     FileMonitor.update([@directory])
     assert_directory(subdir, Earth::Directory.find_by_name("subdir"))
     assert_equal(@directory, Earth::Directory.find_by_name("subdir").parent)
@@ -316,7 +331,9 @@ class FileMonitorTest < Test::Unit::TestCase
     file1_size = 3254
     file1 = File.join(subdir, "sub-file1")
     create_random_file(file1, file1_size)
-    sleep 1.01
+    backdate(@dir, 56)
+    backdate(@dir1, 56)
+    backdate(subdir, 56)
     FileMonitor.update([@directory])
     assert_file(file1, Earth::File.find_by_name('sub-file1'))
     assert_equal(Earth::Directory.find_by_name("subdir"), Earth::File.find_by_name('sub-file1').directory)
@@ -331,8 +348,6 @@ class FileMonitorTest < Test::Unit::TestCase
     assert_equal(file1_size, @directory.find_cached_size_by_filter(@match_all_filter).size)
     assert_equal(@directory.find_cached_size_by_filter(@match_all_filter).size, file1_size)
 
-    sleep 1 # FIXME
-
     # Create two files in the subdirectory and check that sizes still match
     prev_cached_size = @directory.find_cached_size_by_filter(@match_all_filter).size
     file2 = File.join(subdir, "sub-file2")
@@ -341,7 +356,9 @@ class FileMonitorTest < Test::Unit::TestCase
     file3 = File.join(subdir, "sub-file3")
     file3_size = 2131
     create_random_file(file3, file3_size)
-    sleep 1.01
+    backdate(@dir, 54)
+    backdate(@dir1, 54)
+    backdate(subdir, 54)
     FileMonitor.update([@directory])
     new_cached_size = @directory.find_cached_size_by_filter(@match_all_filter).size
     assert_equal(file2_size + file3_size, new_cached_size - prev_cached_size)
