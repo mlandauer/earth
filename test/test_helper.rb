@@ -25,10 +25,11 @@ class Test::Unit::TestCase
   # then set this back to true.
   self.use_instantiated_fixtures  = false
 
-  # Add more helper methods to be used by all tests here...
-  def assert_queries(num = 1)
+  def do_stuff_with_query_counting
     ActiveRecord::Base.connection.class.class_eval do
       self.query_count = 0
+      self.delete_count = 0
+      self.query_count_log = ""
       alias_method_chain :execute, :query_counting
     end
     yield
@@ -36,26 +37,17 @@ class Test::Unit::TestCase
     ActiveRecord::Base.connection.class.class_eval do
       alias_method :execute, :execute_without_query_counting
     end
-    assert_equal num, ActiveRecord::Base.connection.query_count, "#{ActiveRecord::Base.connection.query_count} instead of #{num} queries were executed."
+  end
+  
+  # Add more helper methods to be used by all tests here...
+  def assert_queries(num = 1, &block)
+    do_stuff_with_query_counting(&block)
+    assert_equal num, ActiveRecord::Base.connection.query_count, "#{ActiveRecord::Base.connection.query_count} instead of #{num} queries were executed:\n#{ActiveRecord::Base.connection.query_count_log}"
   end
 
-  def assert_deletes(num = 1)
-    ActiveRecord::Base.connection.class.class_eval do
-      self.delete_count = 0
-      self.delete_log = []
-      alias_method_chain :execute, :delete_counting
-    end
-    yield
-  ensure
-    ActiveRecord::Base.connection.class.class_eval do
-      alias_method :execute, :execute_without_delete_counting
-    end
-    error_info = ""
-    ActiveRecord::Base.connection.delete_log.each do |log_entry|
-      error_info += log_entry[0] + "\n"
-      error_info += log_entry[1].join("\n    ") + "\n\n"
-    end
-    assert_equal num, ActiveRecord::Base.connection.delete_count, "#{ActiveRecord::Base.connection.delete_count} instead of #{num} deletes were executed:\n#{error_info}"
+  def assert_deletes(num = 1, &block)
+    do_stuff_with_query_counting(&block)
+    assert_equal num, ActiveRecord::Base.connection.delete_count, "#{ActiveRecord::Base.connection.delete_count} instead of #{num} deletes were executed:\n#{ActiveRecord::Base.connection.query_count_log}"
   end
 
   def assert_no_queries(&block)
@@ -71,21 +63,18 @@ end
 ActiveRecord::Base.connection.class.class_eval do
   cattr_accessor :query_count
   cattr_accessor :delete_count
-  cattr_accessor :delete_log
+  cattr_accessor :query_count_log
 
   # Array of regexes of queries that are not counted against query_count
   @@ignore_list = [/^SELECT currval/, /^SELECT CAST/, /^SELECT @@IDENTITY/]
 
   def execute_with_query_counting(sql, name = nil, &block)
-    self.query_count += 1 unless @@ignore_list.any? { |r| sql =~ r }
-    execute_without_query_counting(sql, name, &block)
-  end
-  
-  def execute_with_delete_counting(sql, name = nil)
-    if /\s*DELETE\s+/i =~ sql
-      self.delete_count += 1 
-      self.delete_log << [ sql, caller[2..-1] ]
+    unless @@ignore_list.any? { |r| sql =~ r }
+      self.query_count += 1
+      self.delete_count += 1 if /\s*DELETE\s+/i =~ sql
+      self.query_count_log += sql + "\n"
+      self.query_count_log += caller[2..-1].join("\n    ") + "\n\n"
     end
-    execute_without_delete_counting(sql, name)
+    execute_without_query_counting(sql, name, &block)
   end
 end
