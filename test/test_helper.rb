@@ -79,6 +79,7 @@ ActiveRecord::Base.connection.class.class_eval do
     self.query_count += 1 unless @@ignore_list.any? { |r| sql =~ r }
     execute_without_query_counting(sql, name, &block)
   end
+end
 
 ActiveRecord::Base.connection.class.class_eval do
   cattr_accessor :delete_count
@@ -93,4 +94,3 @@ ActiveRecord::Base.connection.class.class_eval do
   end
 end
 
-end
