@@ -201,7 +201,7 @@ class FileMonitorTest < Test::Unit::TestCase
 
     FileUtils.rm_rf dir_a
     backdate(@dir, 58)
-    assert_deletes(1) { FileMonitor.update([@directory]) }
+    assert_number_of_sql_deletes(1) { FileMonitor.update([@directory]) }
   end
   
   def test_changed

@@ -40,24 +40,15 @@ class Test::Unit::TestCase
   end
   
   # Add more helper methods to be used by all tests here...
-  def assert_queries(num = 1, &block)
+  def assert_number_of_sql_queries(num = 1, &block)
     do_stuff_with_query_counting(&block)
     assert_equal num, ActiveRecord::Base.connection.query_count, "#{ActiveRecord::Base.connection.query_count} instead of #{num} queries were executed:\n#{ActiveRecord::Base.connection.query_count_log}"
   end
 
-  def assert_deletes(num = 1, &block)
+  def assert_number_of_sql_deletes(num = 1, &block)
     do_stuff_with_query_counting(&block)
     assert_equal num, ActiveRecord::Base.connection.delete_count, "#{ActiveRecord::Base.connection.delete_count} instead of #{num} deletes were executed:\n#{ActiveRecord::Base.connection.query_count_log}"
   end
-
-  def assert_no_queries(&block)
-    assert_queries(0, &block)
-  end
-  
-  def assert_no_deletes(&block)
-    assert_deletes(0, &block)
-  end
-
 end
 
 ActiveRecord::Base.connection.class.class_eval do

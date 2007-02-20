@@ -92,12 +92,12 @@ class DirectoryTest < Test::Unit::TestCase
     foo = directories(:foo)
     
     assert_equal([file1, file2], foo.files)
-    assert_no_queries {assert_equal([file1, file2], foo.files)}
+    assert_number_of_sql_queries(0) {assert_equal([file1, file2], foo.files)}
     # Test that creating on an association like this means that the cached association gets updated too
     file3 = foo.files.create(:name => "c", :size => 3)
-    assert_no_queries {assert_equal([file1, file2, file3], foo.files)}
+    assert_number_of_sql_queries(0) {assert_equal([file1, file2, file3], foo.files)}
     foo.files.delete(file2)
-    assert_no_queries {assert_equal([file1, file3], foo.files)}
+    assert_number_of_sql_queries(0) {assert_equal([file1, file3], foo.files)}
   end
   
   def test_child_create
@@ -114,15 +114,15 @@ class DirectoryTest < Test::Unit::TestCase
     foo_bar = directories(:foo_bar)
     
     assert_equal([foo_bar], foo.children)
-    assert_no_queries{assert_equal([foo_bar], foo.children)}
+    assert_number_of_sql_queries(0) {assert_equal([foo_bar], foo.children)}
     
     foo_fiddle = foo.child_create(:name => "fiddle", :path => "/foo/fiddle", :server_id => foo.server_id)
-    assert_no_queries{assert_equal([foo_bar, foo_fiddle], foo.children)}
+    assert_number_of_sql_queries(0) {assert_equal([foo_bar, foo_fiddle], foo.children)}
     # Force a reload of children and check that the values are correct too
-    assert_queries(1){assert_equal([foo_bar, foo_fiddle], foo.children(true))}
+    assert_number_of_sql_queries(1) {assert_equal([foo_bar, foo_fiddle], foo.children(true))}
     foo.child_delete(foo_bar)
-    assert_no_queries{assert_equal([foo_fiddle], foo.children)}
-    assert_queries(1){assert_equal([foo_fiddle], foo.children(true))}
+    assert_number_of_sql_queries(0) {assert_equal([foo_fiddle], foo.children)}
+    assert_number_of_sql_queries(1) {assert_equal([foo_fiddle], foo.children(true))}
   end
 
    def test_no_children_reload
@@ -138,12 +138,12 @@ class DirectoryTest < Test::Unit::TestCase
      foo_bar_twiddle_frob = directories(:foo_bar_twiddle_frob)
      foo_bar_twiddle_frob_baz = directories(:foo_bar_twiddle_frob_baz)
 
-     assert_queries(1) {foo.load_all_children}
-     assert_no_queries{assert_equal([foo_bar], foo.children)}
-     assert_no_queries{assert_equal([foo_bar_twiddle], foo.children[0].children)}
-     assert_no_queries{assert_equal([foo_bar_twiddle_frob], foo.children[0].children[0].children)}
-     assert_no_queries{assert_equal([foo_bar_twiddle_frob_baz], foo.children[0].children[0].children[0].children)}
-     assert_no_queries{assert_equal([], foo.children[0].children[0].children[0].children[0].children)}
+     assert_number_of_sql_queries(1) {foo.load_all_children}
+     assert_number_of_sql_queries(0) {assert_equal([foo_bar], foo.children)}
+     assert_number_of_sql_queries(0) {assert_equal([foo_bar_twiddle], foo.children[0].children)}
+     assert_number_of_sql_queries(0) {assert_equal([foo_bar_twiddle_frob], foo.children[0].children[0].children)}
+     assert_number_of_sql_queries(0) {assert_equal([foo_bar_twiddle_frob_baz], foo.children[0].children[0].children[0].children)}
+     assert_number_of_sql_queries(0) {assert_equal([], foo.children[0].children[0].children[0].children[0].children)}
    end
   
   def test_each
@@ -210,13 +210,13 @@ class DirectoryTest < Test::Unit::TestCase
     directory = directories(:foo)
     #assert_queries(1) {p directory.files}
     assert(!directory.files.loaded?)
-    assert_queries(1) {directory.files.to_ary}
+    assert_number_of_sql_queries(1) {directory.files.to_ary}
     assert(directory.files.loaded?)
-    assert_no_queries {directory.files.to_ary}
+    assert_number_of_sql_queries(0) {directory.files.to_ary}
     # Stops the caching of the files (until they are reloaded)
-    assert_no_queries {directory.files.reset}
+    assert_number_of_sql_queries(0) {directory.files.reset}
     assert(!directory.files.loaded?)
-    assert_queries(1) {directory.files.to_ary}
+    assert_number_of_sql_queries(1) {directory.files.to_ary}
   end
   
 end
