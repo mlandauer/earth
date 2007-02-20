@@ -1,5 +1,3 @@
-require 'test_unit_improvements'
-
 class FileMonitorTest < Test::Unit::TestCase
   def setup
     # Put some test files in the directory test_data
