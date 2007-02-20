@@ -29,7 +29,7 @@ class Test::Unit::TestCase
   def assert_queries(num = 1)
     ActiveRecord::Base.connection.class.class_eval do
       self.query_count = 0
-      alias_method :execute, :execute_with_query_counting
+      alias_method_chain :execute, :query_counting
     end
     yield
   ensure
@@ -43,7 +43,7 @@ class Test::Unit::TestCase
     ActiveRecord::Base.connection.class.class_eval do
       self.delete_count = 0
       self.delete_log = []
-      alias_method :execute, :execute_with_delete_counting
+      alias_method_chain :execute, :delete_counting
     end
     yield
   ensure
@@ -70,21 +70,17 @@ end
 
 ActiveRecord::Base.connection.class.class_eval do
   cattr_accessor :query_count
+  cattr_accessor :delete_count
+  cattr_accessor :delete_log
 
   # Array of regexes of queries that are not counted against query_count
   @@ignore_list = [/^SELECT currval/, /^SELECT CAST/, /^SELECT @@IDENTITY/]
 
-  alias_method :execute_without_query_counting, :execute
   def execute_with_query_counting(sql, name = nil, &block)
     self.query_count += 1 unless @@ignore_list.any? { |r| sql =~ r }
     execute_without_query_counting(sql, name, &block)
   end
-end
-
-ActiveRecord::Base.connection.class.class_eval do
-  cattr_accessor :delete_count
-  cattr_accessor :delete_log
-  alias_method :execute_without_delete_counting, :execute
+  
   def execute_with_delete_counting(sql, name = nil)
     if /\s*DELETE\s+/i =~ sql
       self.delete_count += 1 
@@ -93,4 +89,3 @@ ActiveRecord::Base.connection.class.class_eval do
     execute_without_delete_counting(sql, name)
   end
 end
-
