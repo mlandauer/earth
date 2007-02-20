@@ -128,7 +128,9 @@ private
         # reload the server object in case of changes on the database side
         # TODO: There is a small chance that the server object will get stale here
         server = Earth::Server.this_server
+        logger.debug("Heartbeat time:   About to update at time #{Time.now}")
         server.heartbeat
+        logger.debug("Heartbeat time: Finished updating at time #{Time.now}")
         sleep(server.heartbeat_interval)
       end
     end
