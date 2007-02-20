@@ -10,6 +10,7 @@ development:
   password: earth
   host: localhost
   encoding: utf8
+  allow_concurrency: true
 
 # Warning: The database defined as 'test' will be erased and
 # re-generated from your development database when you run 'rake'.
@@ -21,6 +22,7 @@ test:
   password: earth
   host: localhost
   encoding: utf8
+  allow_concurrency: true
 
 production:
   adapter: postgresql
@@ -29,3 +31,5 @@ production:
   password: earth
   host: localhost
   encoding: utf8
+  allow_concurrency: true
+  
