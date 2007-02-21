@@ -29,7 +29,17 @@ body {
 }
 
 #Banner {
-  
+  float: left;
+  background-image: url(/images/earth_logo_small.png);
+  height: 73px;
+  width: 180px;
+  background-repeat: no-repeat;
+  clear: both;
+  background-position: -10px -11px;
+ /*
+  padding-right: 10px;
+  background-position: 100% 50%;
+*/
 }
 
 #Content {

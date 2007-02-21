@@ -2,7 +2,10 @@ body { background-color: #fff; color: #333; }
 
 body {
   background-color: #e0e0e0;
-  margin: 2em;
+  margin-top: 5px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
 }
 
 body, p, ol, ul, td {
@@ -24,6 +27,19 @@ a:hover { color: #fff; background-color:#000; }
   padding: 2px;
   background-color: red;
   display: table;
+}
+
+#Banner {
+  background-image: url(/images/earth_logo_small.png);
+  height: 73px;
+  width: 180px;
+  background-repeat: no-repeat;
+  clear: both;
+  background-position: -10px -11px;
+ /*
+  padding-right: 10px;
+  background-position: 100% 50%;
+*/
 }
 
 #errorExplanation {
