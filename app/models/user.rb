@@ -76,6 +76,10 @@ class User
   def User.lookup(value, lookup_field, result_field, base)
     #TODO: Don't make a new connection to the server for every request
     if User.ldap_configured?
+      # The following option is not necessary for every installation but
+      # we use LDAPv3 internally and our server barks if we bind with a legacy
+      # protocol. Sorry :(
+      LDAP::Conn.set_option( LDAP::LDAP_OPT_PROTOCOL_VERSION, 3 )
       LDAP::Conn.new(config["ldap_server_name"], config["ldap_server_port"]).bind do |conn|
         conn.search(base, LDAP::LDAP_SCOPE_SUBTREE, "#{lookup_field}=#{value}", result_field) do |e|
           return e.vals(result_field)[0]
@@ -91,6 +95,10 @@ class User
     #TODO: Don't make a new connection to the server for every request
     if User.ldap_configured?
       results = []
+      # The following option is not necessary for every installation but
+      # we use LDAPv3 internally and our server barks if we bind with a legacy
+      # protocol. Sorry :(
+      LDAP::Conn.set_option( LDAP::LDAP_OPT_PROTOCOL_VERSION, 3 )
       LDAP::Conn.new(config["ldap_server_name"], config["ldap_server_port"]).bind do |conn|
         conn.search(base, LDAP::LDAP_SCOPE_SUBTREE, "#{lookup_field}=#{value}", result_field) do |e|
           results << e.vals(result_field)[0]
