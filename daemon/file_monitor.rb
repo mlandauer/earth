@@ -63,6 +63,7 @@ class FileMonitor
     directories.each do |directory|
       benchmark "Collecting startup data for directory #{directory.path} from database" do
         directory.load_all_children(0, { :include => [ :cached_sizes ] })
+        directory.cached_sizes.reload
       end
     end
     paths_to_start_watching.each do |path|
@@ -179,6 +180,9 @@ private
       #  Earth::File.connection.update("VACUUM FULL ANALYZE")
       #end
 
+      directory.load_all_children(0, { :include => [ :cached_sizes ] })
+      directory.cached_sizes.reload
+
       directory
     end
   end
@@ -289,6 +293,7 @@ private
         Earth::Directory::transaction do
           directory.create_caches
           directory.update_caches
+          directory.cached_sizes.reload
         end
       end
 
