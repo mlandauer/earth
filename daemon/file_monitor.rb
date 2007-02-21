@@ -188,35 +188,42 @@ private
   end
 
   def FileMonitor.create_cache(directory, filters)
-    cache_map = {}
-    filters.each do |filter|
-      cache_map[filter] = directory.cached_sizes.new(:directory => directory,
-                                                     :filter => filter)
-    end
-
-    directory.children.each do |child|
-      child_cache_map = create_cache(child, filters)
+    if not directory.cached_sizes.loaded? or directory.cached_sizes.size < filters.size
+      cache_map = {}
       filters.each do |filter|
-        cache_map[filter].increment(child_cache_map[filter])
+        cache_map[filter] = directory.cached_sizes.new(:directory => directory,
+                                                       :filter => filter)
       end
-    end
 
-    directory.files.each do |file|
-      filters.each do |filter|
-        if filter.matches(file) then
-          cache_map[filter].size += file.size
-          cache_map[filter].blocks += file.blocks
-          cache_map[filter].count += 1
+      directory.children.each do |child|
+        child_cache_map = create_cache(child, filters)
+        filters.each do |filter|
+          cache_map[filter].increment(child_cache_map[filter])
         end
       end
-    end
-    directory.files.reset
 
-    cache_map.each do |filter, cached_size|
-      cached_size.create
-    end
-    @cached_size_eta_printer.increment if @cached_size_eta_printer
+      directory.files.each do |file|
+        filters.each do |filter|
+          if filter.matches(file) then
+            cache_map[filter].size += file.size
+            cache_map[filter].blocks += file.blocks
+            cache_map[filter].count += 1
+          end
+        end
+      end
+      directory.files.reset
 
+      cache_map.each do |filter, cached_size|
+        cached_size.create
+      end
+      @cached_size_eta_printer.increment if @cached_size_eta_printer
+
+    else
+      cache_map = {}
+      directory.cached_sizes.each do |cached_size|
+        cache_map[cached_size.filter] = cached_size
+      end
+    end
     cache_map
   end
   
@@ -289,7 +296,7 @@ private
     if new_directory_stat == directory.stat or \
       (not new_directory_stat.nil? and new_directory_stat.mtime >= 1.seconds.ago)
 
-      if directory.cached_sizes.size != filter_count
+      if directory.cached_sizes.size != filter_count and not directory.new_record?
         Earth::Directory::transaction do
           directory.create_caches
           directory.update_caches
