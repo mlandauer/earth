@@ -323,6 +323,7 @@ module Earth
           self.cached_sizes.create(:directory => self, :filter => filter)
         end
       end
+      self.cached_sizes.reload
     end
 
     def Directory.cache_enabled=(cache_enabled)
