@@ -62,3 +62,10 @@ class Logger
     "#{timestamp.strftime("%b %d %H:%M:%S")}.#{sprintf("%06d", timestamp.usec)} [#{severity}] - #{msg}\n"
   end
 end
+
+# Following idea taken from http://programmingishard.com/code/482
+if ENV['RAILS_ENV'] != "production" 
+  railsrc = "#{ENV['HOME']}/.railsrc" 
+  load(railsrc) if FileTest.exist?(railsrc)
+end
+
