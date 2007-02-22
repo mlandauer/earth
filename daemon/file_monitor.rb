@@ -331,18 +331,16 @@ private
 
       logger.debug("update_non_recursive for directory #{directory.path} -> changed, subdirectories are #{subdirectory_names.inspect}")
 
-      if not options[:initial_pass]
-        added_directory_names = subdirectory_names - directory.children.map{|x| x.name}
-        added_directory_names.each do |name|
+      added_directory_names = subdirectory_names - directory.children.map{|x| x.name}
+      added_directory_names.each do |name|
 
-          Earth::Directory.benchmark("Creating directory #{directory.path}/#{name}", Logger::DEBUG, !log_all_sql) do
-            if options[:only_build_directories] then
-              attributes = { :name => name, :path => "#{directory.path}/#{name}", :server_id => directory.server_id }
-              dir = directory.children.build(attributes)
-              update_non_recursive(dir, filter_count, options)
-            else
-              FileMonitor.silent_benchmark { initial_pass_on_new_directory(name, directory) }
-            end
+        Earth::Directory.benchmark("Creating directory #{directory.path}/#{name}", Logger::DEBUG, !log_all_sql) do
+          if options[:only_build_directories] then
+            attributes = { :name => name, :path => "#{directory.path}/#{name}", :server_id => directory.server_id }
+            dir = directory.children.build(attributes)
+            update_non_recursive(dir, filter_count, options)
+          else
+            FileMonitor.silent_benchmark { initial_pass_on_new_directory(name, directory) }
           end
         end
       end
