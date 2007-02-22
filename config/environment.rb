@@ -53,3 +53,12 @@ end
 Mime::Type.register "text/csv", :csv
 
 require 'foreign_key_constraint_improvements'
+
+require 'logger'
+class Logger  
+  alias format_message old_format_message
+ 
+  def format_message(severity, timestamp, progname, msg)
+    "#{timestamp.strftime("%b %d %H:%M:%S")}.#{sprintf("%06d", timestamp.usec)} [#{severity}] - #{msg}\n"
+  end
+end

@@ -25,6 +25,10 @@ class DaemonTest
   MIN_MUTATIONS_PER_ITERATION = 1
   MAX_MUTATIONS_PER_ITERATION = 12
 
+  def logger
+    RAILS_DEFAULT_LOGGER
+  end
+
   def initialize(root_directory, number_of_iterations, number_of_replay_iterations, bloodshed_percentage)
     @bloodshed_percentage = bloodshed_percentage
     @root_directory = File.expand_path(root_directory)
@@ -65,6 +69,7 @@ class DaemonTest
     directory_to_create = File.join(self.find_random_directory, make_random_name)
     if not FileTest.exist? directory_to_create
       puts "Creating directory #{directory_to_create}"
+      logger.debug "[daemon_test] Creating directory #{directory_to_create}"
       Dir.mkdir(directory_to_create)
       true
     end
@@ -96,6 +101,7 @@ class DaemonTest
     directory_to_delete = self.find_random_directory(:include_root => false)
     if directory_to_delete and directory_to_delete != @root_directory and is_in_root_dir(directory_to_delete)
       puts "Deleting directory #{directory_to_delete}"
+      logger.debug "[daemon_test] Deleting directory #{directory_to_delete}"
       FileUtils.rm_rf(directory_to_delete)
       true
     end
@@ -108,6 +114,7 @@ class DaemonTest
       directory_to_move_to != directory_to_move and \
       (not is_sub_directory(directory_to_move, directory_to_move_to)) and \
       (not is_sub_directory(directory_to_move_to, directory_to_move)) then
+      logger.debug "[daemon_test] Moving directory #{directory_to_move} to #{directory_to_move_to}"
       puts "Moving directory #{directory_to_move} to #{directory_to_move_to}"
       FileUtils.mv(directory_to_move, File.join(directory_to_move_to, File.basename(directory_to_move)))
       true
@@ -122,6 +129,7 @@ class DaemonTest
     file_to_create = File.join(self.find_random_directory, make_random_name)    
     if not FileTest.exist? file_to_create
       file_size = make_random_file_size
+      logger.debug "[daemon_test] Creating file #{file_to_create} with size #{file_size}"
       puts "Creating file #{file_to_create} with size #{file_size}"
       File.open(file_to_create, File::CREAT|File::TRUNC|File::WRONLY) do |file|
         file.print("x" * file_size)
@@ -134,6 +142,7 @@ class DaemonTest
   def delete_file(is_replay)
     file_to_delete = self.find_random_file
     if file_to_delete
+      logger.debug "[daemon_test] Deleting file #{file_to_delete}"
       puts "Deleting file #{file_to_delete}"
       File.delete(file_to_delete)
       true
@@ -145,6 +154,7 @@ class DaemonTest
     if file_to_resize
       @dont_touch_again_files << file_to_resize
       new_size = make_random_file_size
+      logger.debug "[daemon_test] Resizing file #{file_to_resize} to #{new_size} bytes"
       puts "Resizing file #{file_to_resize} to #{new_size} bytes"
       sleep 1.1 unless is_replay
       #old_mtime = File.mtime(File.dirname(file_to_resize))
@@ -154,6 +164,7 @@ class DaemonTest
       sleep 1.1 unless is_replay
       FileUtils.touch(File.dirname(file_to_resize))
       puts "Touched file #{file_to_resize}" # - directory.mtime new #{File.mtime(File.dirname(file_to_resize))}, old #{old_mtime}"
+      logger.debug "[daemon_test] Touched dir #{File.dirname(file_to_resize)}" # - directory.mtime new #{File.mtime(File.dirname(file_to_resize))}, old #{old_mtime}"
       true
     end
   end
@@ -163,6 +174,7 @@ class DaemonTest
     directory_to_move_to = self.find_random_directory
     if file_to_move and directory_to_move_to and directory_to_move_to != File.dirname(file_to_move)
       file_to_move_to = File.join(directory_to_move_to, File.basename(file_to_move))
+      logger.debug "[daemon_test] Moving file #{file_to_move} to #{file_to_move_to}"
       puts "Moving file #{file_to_move} to #{file_to_move_to}"
       File.rename(file_to_move, file_to_move_to)
       @dont_touch_again_files << file_to_move
@@ -363,7 +375,7 @@ class DaemonTest
       pp(fs_file_names)
     end
 
-    assert("Subdirectories in #{fs_directory} match database contents") { db_directory_names == fs_directory_names }
+    assert("Subdirectories in #{fs_directory} match database contents (#{db_directory_names.inspect}<db> == #{fs_directory_names.inspect}<fs>)") { db_directory_names == fs_directory_names }
     assert("Files in #{fs_directory} match database contents") { db_file_names == fs_file_names }
     
     db_directory.files.each do |db_file|

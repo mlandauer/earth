@@ -281,8 +281,6 @@ private
 
   def FileMonitor.update_non_recursive(directory, filter_count, options)
 
-    logger.debug("update_non_recursive for directory #{directory.path}")
-
     directory_count = 1
 
     begin
@@ -290,11 +288,21 @@ private
     rescue Errno::ENOENT
       # Handle case when the directory no longer exists
       new_directory_stat = nil
+
+      logger.debug("update_non_recursive for directory #{directory.path} -> removed")
     end
     
     # If directory hasn't changed then return
     if new_directory_stat == directory.stat or \
       (not new_directory_stat.nil? and new_directory_stat.mtime >= 1.seconds.ago)
+
+      if new_directory_stat.nil?
+        logger.debug("update_non_recursive for directory #{directory.path} -> just removed")
+      elsif new_directory_stat == directory.stat
+        logger.debug("update_non_recursive for directory #{directory.path} -> not changed")
+      else
+        logger.debug("update_non_recursive for directory #{directory.path} -> changed less than 1 second ago (#{new_directory_stat.mtime})")
+      end
 
       if directory.cached_sizes.size != filter_count and not directory.new_record?
         Earth::Directory::transaction do
@@ -307,7 +315,6 @@ private
       return 1
     end
 
-    logger.debug("directory has been updated: #{directory.path}")
 
     Earth::Directory::transaction do
 
@@ -321,6 +328,8 @@ private
           # exception and treat it like an unreadable directory
         end
       end
+
+      logger.debug("update_non_recursive for directory #{directory.path} -> changed, subdirectories are #{subdirectory_names.inspect}")
 
       if not options[:initial_pass]
         added_directory_names = subdirectory_names - directory.children.map{|x| x.name}
