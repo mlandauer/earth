@@ -852,48 +852,43 @@ private
 
       sum = row.map { |node| node.size*factor }.sum
 
-      if remaining_width > remaining_height
-        # layout horizontally
-        width = sum / remaining_height
+      if remaining_height > 0 and remaining_width > 0 and sum > 0 then
 
-        left = @offset_x
-        top = @offset_y
+        if remaining_width > remaining_height
+          # layout horizontally
+          width = sum / remaining_height
 
-        row.each do |r|
-          height = r.size*factor/width
-          @sub_rectangles << SubRect.new(@x + left, @y + top, width, height, r)
-          top += height
+          left = @offset_x
+          top = @offset_y
+
+          row.each do |r|
+            height = r.size*factor/width
+            @sub_rectangles << SubRect.new(@x + left, @y + top, width, height, r)
+            top += height
+          end
+
+          @offset_x += width
+        else
+          height = sum / remaining_width
+
+          left = @offset_x
+          top = @offset_y
+
+          row.each do |r|
+            width = r.size*factor/height
+            @sub_rectangles << SubRect.new(@x + left, @y + top, width, height, r)
+            left += width
+          end
+
+          @offset_y += height
         end
 
-        @offset_x += width
-      else
-        height = sum / remaining_width
-
-        left = @offset_x
-        top = @offset_y
-
-        row.each do |r|
-          width = r.size*factor/height
-          @sub_rectangles << SubRect.new(@x + left, @y + top, width, height, r)
-          left += width
-        end
-
-        @offset_y += height
       end
-
-      #puts "layoutrow #{row.inspect}, offset_x now #{@offset_x}, offset_y now #{@offset_y}"
     end
 
     def worst(row, w, factor)
       s = row.map { |node| node.size * factor }.sum
-      #row.collect do |r|
-      #  [ (w*w*r)/(s*s), (s*s)/(w*w*r) ].max
-      #end
-      #puts "row.max=#{row.max}"
-      #row.max || 0
-      result = [(w*w*row[0].size*factor)/(s*s), (s*s)/(w*w*row[-1].size*factor)].max unless row.empty?
-      #puts "row.max=#{result}"
-      result
+      [(w*w*row[0].size*factor)/(s*s), (s*s)/(w*w*row[-1].size*factor)].max unless row.empty?
     end
     
     def squarify(children, row, w, factor) 
@@ -905,7 +900,6 @@ private
           else
             c = children[0]
             if row.empty? or worst(row, w, factor) >= worst(row + [c], w, factor) then 
-              #squarify(children[1..-1], row + [c], w, factor) 
               children = children[1..-1]
               row = row + [c]
             else 
@@ -991,15 +985,17 @@ private
   def create_treemap_recursive(node, rect, level, sub_rectangle_array, max_levels)
 
     total_size = node.children.map { |child| child.size }.sum
-    rect.squarify(node.children, [], rect.width(), rect.area / total_size)
+    if total_size > 0
+      rect.squarify(node.children, [], rect.width(), rect.area / total_size)
 
-    rect.sub_rectangles.each { |sub_rect| sub_rect.shrink(0.4) }
+      rect.sub_rectangles.each { |sub_rect| sub_rect.shrink(0.4) }
+      
+      sub_rectangle_array[level] += rect.sub_rectangles
 
-    sub_rectangle_array[level] += rect.sub_rectangles
-
-    if level < max_levels - 1
-      for sub_rect in rect.sub_rectangles
-        create_treemap_recursive(sub_rect.node, Rectangle.new(sub_rect.x + 0.2, sub_rect.y + 0.2, sub_rect.width - 0.4, sub_rect.height - 0.4), level + 1, sub_rectangle_array, max_levels) unless sub_rect.node.nil? or sub_rect.node.children.nil?
+      if level < max_levels - 1
+        for sub_rect in rect.sub_rectangles
+          create_treemap_recursive(sub_rect.node, Rectangle.new(sub_rect.x + 0.2, sub_rect.y + 0.2, sub_rect.width - 0.4, sub_rect.height - 0.4), level + 1, sub_rectangle_array, max_levels) unless sub_rect.node.nil? or sub_rect.node.children.nil?
+        end
       end
     end
   end
