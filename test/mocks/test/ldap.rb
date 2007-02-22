@@ -1,5 +1,7 @@
 module LDAP
   LDAP_SCOPE_SUBTREE = 1
+  LDAP_OPT_PROTOCOL_VERSION = 3
+
   class Result
     def initialize(record)
       @record = record
@@ -17,6 +19,10 @@ module LDAP
     ]
 
     def initialize(name, port)
+    end
+
+    def Conn.set_option(option, value)
+      # ignore
     end
 
     def bind
