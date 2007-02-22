@@ -276,7 +276,11 @@ class DaemonTest
     use_options = { :replay => false }
     use_options.update(options) if options
     @dont_touch_again_files = []
+    
+    # Determine a random number of mutations to perform in this iteration
     mutation_count = MIN_MUTATIONS_PER_ITERATION + rand(MAX_MUTATIONS_PER_ITERATION - MIN_MUTATIONS_PER_ITERATION)
+
+    # Output header for this iteration
     puts ("-" * 72)
     @iteration_count += 1
     if not use_options[:replay]
@@ -285,12 +289,26 @@ class DaemonTest
       puts "Replay Iteration ##{@iteration_count}"
     end
     puts "Doing #{mutation_count} mutations"
+
+    # Perform the mutations on the file system
     1.upto(mutation_count) { mutate_tree(use_options) }
 
     if not use_options[:replay]
       puts "Waiting for daemon to update directory"
+      
+      # Wait one second so that the changes to the file system become
+      # "old enough" to get picked up by the file monitor.
+      sleep(1)
 
-      1.upto(4) do
+      # We're looping through this twice because if we only pick up
+      # the current value of the last_update_finish_time and wait for
+      # it to change, we're actually only waiting for the *current*
+      # run to finish. But in the current run, the file monitor might
+      # have already walked past the changes (because they were not
+      # yet old enough.) Looping through this twice means that we wait
+      # for a new run to begin and for that run to finish, thereby
+      # ensuring that the changes get picked up.
+      1.upto(2) do
         last_time_updated = Earth::Server.this_server.last_update_finish_time
         begin
           sleep 0.5
@@ -301,10 +319,12 @@ class DaemonTest
           end
         end until last_time_updated != Earth::Server.this_server.last_update_finish_time
       end
+
       puts "Verifying data integrity"
       verify_data
       puts "Integrity verified"
-      sleep 2.seconds
+
+      #sleep 2.seconds
     end
   end
 
