@@ -37,6 +37,8 @@ class GraphController < ApplicationController
     @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
 
     @any_empty = false
+
+    @browser_warning = ApplicationHelper::get_browser_warning(request)
   end
 
   #

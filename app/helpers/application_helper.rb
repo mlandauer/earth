@@ -5,7 +5,7 @@ module ApplicationHelper
     if not parent_dir.nil? and directory.id != parent_dir.id
       directory.self_and_ancestors_up_to(parent_dir)
     else
-      []
+      directory.self_and_ancestors
     end
   end
 
@@ -67,6 +67,19 @@ module ApplicationHelper
   # the command "svnversion" being available on the path
   def ApplicationHelper::earth_version
     IO::popen("svnversion #{RAILS_ROOT}") { |f| f.readline }
+  end
+
+  def ApplicationHelper::get_browser_warning(request)
+    begin
+      RAILS_DEFAULT_LOGGER.debug("user agent is #{request.user_agent}, accept is #{request.accept}")
+      if request.user_agent.downcase =~ /firefox\/1.5/
+        "WARNING: You appear to be using Firefox 1.5 - SVG support in this browser is flaky at best. Use <a href='http://www.mozilla.com/en-US/firefox/'>Firefox 2.0</a> for better results."
+      else
+        nil
+      end
+    rescue
+      nil
+    end
   end
 
 private

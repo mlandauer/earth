@@ -246,6 +246,7 @@ div.xxfilebar {
 
 .Left {
   float: left;
+  text-align: left;
 }
 
 .Right {
@@ -572,4 +573,10 @@ tr.odd:hover {
   font-size: 90%;
   margin-top: 0.3em;
   padding-top: 0px;
+}
+
+.browser-warning { 
+  text-align: center;
+  color: #a00000;
+  font-size: small;
 }

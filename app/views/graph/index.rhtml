@@ -1,3 +1,6 @@
+<% if not @browser_warning.nil? %>
+<div class="browser-warning"><%= @browser_warning %></div>
+<% end %>
 <center>
 <div style="width: 600px; align: center;">
   <embed src="<%= url_for :controller => :graph, :action => :show, :params => @svg_params %>" width="600" height="600" type="image/svg+xml"/>
