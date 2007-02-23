@@ -580,3 +580,8 @@ tr.odd:hover {
   color: #a00000;
   font-size: small;
 }
+
+.treemap-warning { 
+  text-align: center;
+  font-size: small;
+}
