@@ -19,7 +19,7 @@
 <div id="footer">
   <%= link_to("Home", { :controller => :browser }) %> |
   <%= if params[:action] != "index" then link_to("Administration Home", { :action => :index }) else "Administration Home" end %> |
-  Earth revision <%= ApplicationHelper.earth_version %>
+  Earth <%= ApplicationHelper.earth_version %>
 </div>
 
 </body>
