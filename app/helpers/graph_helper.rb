@@ -888,7 +888,11 @@ private
 
     def worst(row, w, factor)
       s = row.map { |node| node.size * factor }.sum
-      [(w*w*row[0].size*factor)/(s*s), (s*s)/(w*w*row[-1].size*factor)].max unless row.empty?
+      if row.empty? or s == 0 or factor == 0
+        0
+      else
+        [(w*w*row[0].size*factor)/(s*s), (s*s)/(w*w*row[-1].size*factor)].max
+      end
     end
     
     def squarify(children, row, w, factor) 
