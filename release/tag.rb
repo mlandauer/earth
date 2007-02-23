@@ -42,7 +42,7 @@ svn_root = "https://open.rsp.com.au/svn/earth"
 tagged_location = "#{svn_root}/tags/#{version}"
 
 # Tag version
-system "svn cp #{svn_root}/trunk -r #{svn_revision} #{tagged_location} -m'release/tag.rb automated tagging of version #{version}'"
+system "svn cp #{svn_root}/trunk -r #{svn_revision} #{tagged_location} -m'release/tag.rb automated tagging of version #{version} from subversion revision #{svn_revision}'"
 # Checkout tagged version
 system "svn co #{tagged_location}/app/helpers helpers"
 
