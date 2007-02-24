@@ -23,13 +23,22 @@ xml.svg(:width => "100%",
 
   level_segment_array = create_directory_segments(@directory)
 
+  xml.defs do
+    for level in (1..@level_count)
+      level_segment_array[level].each do |segment|
+        if not segment.empty?
+          xml.path(:id => "segment_#{level}_#{segment.segment_id}", :d => segment.get_svg_text_path(level))
+        end
+      end
+    end
+  end
+
   for level in (1..@level_count)
     level_segment_array[level].each do |segment|
       if not segment.empty?
         xml.path(:class => "segment", 
                  :d => segment.get_svg_path(), 
                  :style => "fill: #{segment.get_color}")
-        xml.path(:id => "segment_#{level}_#{segment.segment_id}", :class => "text-path", :d => segment.get_svg_text_path(level))
         if segment.angle > 10
           xml.text("xml:space".to_sym => "preserve", :class => (segment.directory? ? "directory-segment-text" : "file-segment-text")) do
             xml.textPath(segment.name, "xlink:href".to_sym => "#segment_#{level}_#{segment.segment_id}", :startOffset => "50%")
