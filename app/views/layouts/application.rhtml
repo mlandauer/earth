@@ -12,9 +12,11 @@
 <body>
 
 <div id="Container">
-  <div id="Banner">
-    <!-- Holding Space for a Banner or a Logo -->
-  </div>
+  <%= "<a href=\"#{url_for( :params => { :controller => :browser, :action => :show } ) }\">" %>
+    <div id="Banner">
+      <!-- Holding Space for a Banner or a Logo -->
+    </div>
+  </a>
 
   <div id="BreadcrumbAndFilter">
     <%= render_partial 'browser/breadcrumb_and_filter', nil, :can_show_empty => false %>

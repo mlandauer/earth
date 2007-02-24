@@ -9,8 +9,10 @@
 </head>
 <body>
 
-<div id="Banner">
-</div>
+  <%= "<a href=\"#{url_for( :params => { :controller => :browser, :action => :show } ) }\">" %>
+    <div id="Banner">
+    </div>
+  </a>
 
 <p style="color: green"><%= flash[:notice] %></p>
 
