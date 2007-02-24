@@ -16,7 +16,7 @@ class BrowserController < ApplicationController
     @current_page = (params[:page] || 1).to_i
 
     joins = "JOIN directories ON files.directory_id = directories.id"
-    order = "files.path"
+    order = "files.size desc"
     include_attributes = [ "name", "directory_id", "modified", "size", "uid" ]
     select = include_attributes.map {|attr| "files.#{attr} as #{attr}" }.join(", ")
 

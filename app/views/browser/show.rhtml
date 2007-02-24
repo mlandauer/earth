@@ -3,10 +3,14 @@
     <thead>
       <tr>
         <th class="icon"></th>
-        <th class="name">Name</th>
-        <th class="modified">Modified</th>
-        <th class="user">User</th>
-        <th class="size">Size</th>
+        <% if @server %>
+          <th class="name"><span>Name</span></th>
+          <th class="modified"><span>Modified</span></th>
+          <th class="user"><span>User</span></th>
+        <% else %>
+          <th class="name Server"><span>Name</span></th>
+        <% end %>
+        <th class="size"><span>Size</span></th>
         <th class="bar"></th>
       </tr>
     </thead>
@@ -46,8 +50,8 @@
       <% for server, size in @servers_and_size %>
         <tr class="<%= cycle 'even', 'odd' %>">
           <td class="icon Server"><%= link_to "", :overwrite_params => {:server => server.name, :path => nil} %></td>
-          <td class="name Server" colspan="3"><%= link_to server.name, :overwrite_params => {:server => server.name, :path => nil} %></td>
-          <td class="size Server"><%= link_to "#{ApplicationHelper::human_size_in(units, size)} #{units}", :overwrite_params => {:server => server.name, :path => nil} %></td>
+          <td class="name Server"><%= link_to "<span>#{server.name}</span>", :overwrite_params => {:server => server.name, :path => nil} %></td>
+          <td class="size Server"><%= link_to "<span>#{ApplicationHelper::human_size_in(units, size)} #{units}</span>", :overwrite_params => {:server => server.name, :path => nil} %></td>
           <td class="bar Server"><%= link_to bar(size, max_size, :class => "bar"), :overwrite_params => {:server => server.name, :path => nil} %></td>
         </tr>
       <%  end
@@ -76,7 +80,7 @@
       <tr class="<%= cycle 'even', 'odd' %>">
         <td class="icon Dir"><%= link_to "", :overwrite_params => {:path => directory.path} %></td>
         <td class="name Dir" colspan="3"><%= link_to directory.name, :overwrite_params => {:path => directory.path} %></td>
-        <td class="size Dir"><%= link_to "#{ApplicationHelper::human_size_in(units, size)} #{units}", :overwrite_params => {:path => directory.path} %></td>
+        <td class="size Dir"><%= link_to "<span>#{ApplicationHelper::human_size_in(units, size)} #{units}</span>", :overwrite_params => {:path => directory.path} %></td>
         <td class="bar Dir"><%= link_to bar(size, max_size, :class => "bar"), :overwrite_params => {:path => directory.path} %></td>
       </tr>
     <% end %>

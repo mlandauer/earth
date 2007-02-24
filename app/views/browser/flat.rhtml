@@ -52,6 +52,7 @@
   <table id="flat-browser" class="listing flat">
     <thead>
       <tr>
+        <th class="name">Name</th>
         <th class="path">Path</th>
         <th class="modified">Modified</th>
         <th class="user">User</th>
@@ -62,14 +63,17 @@
     <tbody>
       <% @files.each do |file| %>
         <tr class="<%= cycle 'even', 'odd' %>">
+          <td class="name">
+            <%= file.name %>
+          </td>
           <td class="path">
-             <% if not @server %><%= link_to file.directory.server.name, :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => nil} %>:<% end %><% self_and_ancestors_up_to(file.directory, @directory).reverse.each do |parent| %><%= link_to parent.name, :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => parent.path} %>/<% end %><%= file.name %>
+             <% if not @server %><%= link_to file.directory.server.name, :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => nil} %>:<% else %><% if not (@directory.nil? or @directory.parent_id.nil?) %><%= link_to("..", :overwrite_params => {:page => nil, :path => @directory.parent.path}) %>/<% end %><% end %><% self_and_ancestors_up_to(file.directory, @directory).reverse.each do |parent| %><% if parent == @directory %><%= h parent.name.gsub(/ /, "&nbsp;") %><% else %><%= link_to(parent.name.gsub(/ /, "&nbsp;"), :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => parent.path}) %><% end %>/<wbr/><% end %>
           </td>
           <td class="modified">
             <span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span>
           </td>
-          <td class="owner_user"><%=h file.user.name %></td>
-          <td class="size"><%= ApplicationHelper.human_size_in(ApplicationHelper.human_units_of(file.size), file.size) %> <%= ApplicationHelper.human_units_of(file.size) %></td>
+          <td class="owner_user"><span><%=h file.user.name %></span></td>
+          <td class="size"><span><%= ApplicationHelper.human_size_in(ApplicationHelper.human_units_of(file.size), file.size) %> <%= ApplicationHelper.human_units_of(file.size) %></span></td>
         </tr>
       <% end %>
     </tbody>

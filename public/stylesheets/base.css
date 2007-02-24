@@ -353,21 +353,29 @@ table.listing thead th a.desc {
   white-space: nowrap;  
 }
 
-#Content table#browser td.name {
+#Content table#browser th.name {
   width: 75%;
 }
 
-#Content table#browser td.rev {
+#Content table#browser th.modified span,
+#Content table#browser th.user span,
+#Content table#browser th.size span
+{ 
+  xmargin-left: 1.2em !important;
+  xmargin-right: 1.2em !important;
+}
+
+#Content table#browser th.rev {
   width: 5%;
   background: yellow;
 }
 
-#Content table#browser td.age {
+#Content table#browser th.age {
   width: 5%;
   background: yellow;
 }
 
-#Content table#browser td.msg {
+#Content table#browser th.msg {
   width: 15%;
   background: yellow;
 }
@@ -397,30 +405,58 @@ table.listing thead th a.desc {
 
 #Content table#flat-browser th.size,
 #Content table#flat-browser td.size,
+#Content table#browser th.modified,
+#Content table#browser td.modified,
 #Content table#browser th.size,
 #Content table#browser td.size {
   text-align: right !important;
 }
 
-#Content table#browser th.size
-{ 
-  padding-left: 0.6em;
-  padding-right: 0.6em;
-}
-
-#Content table#browser td.owner_user span,
 #Content table#browser td.size span,
-#Content table#browser td.modified span { 
+#Content table#browser th.size span,
+#Content table#browser td.owner_user span,
+#Content table#browser th.owner_user span,
+#Content table#browser td.modified span,
+#Content table#browser th.modified span
+{
   margin-left: 0.6em;
   margin-right: 0.6em;
 }
 
+#Content table#browser td.owner_user span,
+#Content table#flat-browser td.owner_user span,
+#Content table#flat-browser td.size,
+#Content table#flat-browser td.modified,
+#Content table#flat-browser th.modified,
+#Content table#flat-browser th.size { 
+  margin-left: 1.2em;
+  margin-right: 1.2em;
+}
+
+#Content table#flat-browser th.path,
 #Content table#browser th.path,
 #Content table#browser td.path,
+#Content table#flat-browser th.name,
 #Content table#browser th.name,
 #Content table#browser td.name {
   text-align: left !important;
 }
+
+#Content table#flat-browser td.path { 
+  white-space: normal !important;  
+  padding-left: 1em;
+  text-indent: -1em;
+}
+
+#Content table#flat-browser th.modified,
+#Content table#flat-browser td.modified { 
+  text-align: right;
+}
+
+#Content table#flat-browser td.owner_user { 
+  text-align: center;
+}
+
 
 #Content table#browser td.msg {
   font-size: 9px;
@@ -585,3 +621,4 @@ tr.odd:hover {
   text-align: center;
   font-size: small;
 }
+

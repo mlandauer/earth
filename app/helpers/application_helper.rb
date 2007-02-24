@@ -2,10 +2,12 @@
 module ApplicationHelper
 
   def self_and_ancestors_up_to(directory, parent_dir)
-    if not parent_dir.nil? and directory.id != parent_dir.id
-      directory.self_and_ancestors_up_to(parent_dir)
-    else
+    if parent_dir.nil?
       directory.self_and_ancestors
+    elsif directory.id == parent_dir.id
+      [ directory ]
+    else
+       directory.self_and_ancestors_up_to(parent_dir) + [ parent_dir ]
     end
   end
 
