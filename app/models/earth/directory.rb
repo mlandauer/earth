@@ -249,18 +249,6 @@ module Earth
       end
     end
 
-    def self_and_ancestors_up_to(other)
-      result = []
-      self_and_ancestors.each do |directory|
-        if directory != other
-          result << directory
-        else
-          return result
-        end
-      end
-      result
-    end
-
     def update_cache_before_update
       @remembered_cached_sizes = cached_sizes.find(:all)
     end

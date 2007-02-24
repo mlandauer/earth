@@ -536,9 +536,14 @@ module Rsp
         #
         #   subchild1.ancestors # => [child1, root]
         def ancestors
-          node, nodes = self, []
-          nodes << node = node.parent until not node.has_parent?
-          nodes
+          self.class.find(:all, :conditions => [ "#{left_col_name} < (select #{left_col_name} from #{self.class.table_name} where #{self.class.primary_key} = ?) and #{right_col_name} > (select #{right_col_name} from #{self.class.table_name} where #{self.class.primary_key} = ?) and #{scope_condition}", self.id, self.id ], :order => "#{left_col_name} desc")
+        end
+
+        #
+        # Return a list of ancestors, starting from parent, up to and including the given node
+        #
+        def self_and_ancestors_up_to(other)
+          self.class.find(:all, :conditions => [ "#{left_col_name} <= (select #{left_col_name} from #{self.class.table_name} where #{self.class.primary_key} = ?) and #{right_col_name} >= (select #{right_col_name} from #{self.class.table_name} where #{self.class.primary_key} = ?) and #{level_col_name} >= (select #{level_col_name} from #{self.class.table_name} where #{self.class.primary_key} = ?) and #{scope_condition}", self.id, self.id, other.id ], :order => "#{left_col_name} desc")
         end
 
         def root
