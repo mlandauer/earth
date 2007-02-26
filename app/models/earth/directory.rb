@@ -72,6 +72,47 @@ module Earth
                       :joins => "JOIN directories ON files.directory_id = directories.id").to_i
     end
 
+    def recursive_file_count
+      Earth::File.count(:conditions => [ 
+                          "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
+                          " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
+                          " AND directories.server_id = ?",
+                          self.id,
+                          self.id,
+                          self.server_id,
+                          ],
+                        :joins => "JOIN directories ON files.directory_id = directories.id").to_i
+    end
+
+    def size_and_count
+      result = Earth::File.find(:first, 
+                                :select => "SUM(files.size) AS sum, COUNT(*) AS count",
+                                :joins => "JOIN directories ON files.directory_id = directories.id",
+                                :conditions => [ 
+                                  "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
+                                  " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
+                                  " AND directories.server_id = ?",
+                                  self.id,
+                                  self.id,
+                                  self.server_id,
+                                ])
+      [ (result["sum"] || 0).to_i, result["count"].to_i ]
+    end
+
+    def recursive_cache_count
+      first_filter = Earth::Filter::find(:first)
+      Earth::CachedSize.count(:conditions => [
+                                "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
+                                " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
+                                " AND directories.server_id = ?" + \
+                                " AND filter_id = ?", \
+                                self.id,
+                                self.id,
+                                self.server_id,
+                                first_filter.id],
+                              :joins => "JOIN directories ON cached_sizes.directory_id = directories.id").to_i
+    end
+    
     # Returns the size of all the files (matching the search criterion) recursively
     # below this directory
     # This only requires the id of the current directory and so doesn't need to
@@ -96,61 +137,17 @@ module Earth
       end
     end
 
-    #
-    # Set the recursive size 
-    #
-    def cached_size= (cached_size)
-      @cached_size = cached_size
-    end
-    
-    def recursive_file_count
-      Earth::File.count(:conditions => [ 
-                          "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
-                          " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
-                          " AND directories.server_id = ?",
-                          self.id,
-                          self.id,
-                          self.server_id,
-                          ],
-                        :joins => "JOIN directories ON files.directory_id = directories.id").to_i
-    end
-
-
     def recursive_directory_count
       return 1 + children_count
     end
 
     def cache_complete?
-      first_filter = Earth::Filter::find(:first)
-
-      recursive_cache_count = \
-      Earth::CachedSize.count(:conditions => [
-                                "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
-                                " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
-                                " AND directories.server_id = ?" + \
-                                " AND filter_id = ?", \
-                                self.id,
-                                self.id,
-                                self.server_id,
-                                first_filter.id],
-                              :joins => "JOIN directories ON cached_sizes.directory_id = directories.id").to_i
-
       return recursive_cache_count == recursive_directory_count
     end
-
-    def size_and_count
-      result = Earth::File.find(:first, 
-                                :select => "SUM(files.size) AS sum, COUNT(*) AS count",
-                                :joins => "JOIN directories ON files.directory_id = directories.id",
-                                :conditions => [ 
-                                  "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
-                                  " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
-                                  " AND directories.server_id = ?",
-                                  self.id,
-                                  self.id,
-                                  self.server_id,
-                                ])
-      [ (result["sum"] || 0).to_i, result["count"].to_i ]
+    
+    # Set the recursive size
+    def cached_size= (cached_size)
+      @cached_size = cached_size
     end
     
     # Add caching to recursive_file_count, size_and_count, size and blocks
