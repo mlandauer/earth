@@ -78,7 +78,7 @@ class BrowserController < ApplicationController
       if servers
         @any_empty = false
         @servers_and_size = servers.map do |s|
-          size, count = s.size_and_count
+          size, blocks, count = s.size_blocks_and_count
           @any_empty = true if count == 0
           if @show_empty || count > 0
             [s, size]
