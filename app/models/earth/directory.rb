@@ -274,23 +274,24 @@ module Earth
           end
         end
 
-        diff_size = size - cached_size.size
-        diff_blocks = blocks - cached_size.blocks
-        diff_count = count - cached_size.count
-
-        if diff_size != 0 or diff_blocks != 0 or diff_count != 0
-          Earth::CachedSize.update_all([
-                                         "size = size + ?, blocks = blocks + ?, count = count + ?",
-                                         diff_size, diff_blocks, diff_count 
-                                       ],
-                                       [
-                                         "filter_id = ? and directory_id in (?)",
-                                         filter.id, self.self_and_ancestors.map{|x| x.id}
-                                       ])
-        end
+        increase_cached_sizes_of_self_and_ancestors(filter, size - cached_size.size,
+          blocks - cached_size.blocks, count - cached_size.count)
       end
 
       @remembered_cached_sizes = nil
+    end
+    
+    def increase_cached_sizes_of_self_and_ancestors(filter, size_increase, blocks_increase, count_increase)
+      if size_increase != 0 or blocks_increase != 0 or count_increase != 0
+        Earth::CachedSize.update_all([
+                                       "size = size + ?, blocks = blocks + ?, count = count + ?",
+                                       size_increase, blocks_increase, count_increase 
+                                     ],
+                                     [
+                                       "filter_id = ? and directory_id in (?)",
+                                       filter, self.self_and_ancestors
+                                     ])
+      end    
     end
 
     def update_cache_after_create
