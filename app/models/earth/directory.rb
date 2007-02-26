@@ -252,7 +252,10 @@ module Earth
     def update_caches
       return unless cache_enabled
       
-      cached_sizes.find(:all).each do |cached_size|
+      # content of cached_sizes can be invalidated by updating the size of
+      # another directory, so it should be reloaded from the db before it's used
+      cached_sizes.reload
+      cached_sizes.each do |cached_size|
         filter = cached_size.filter
         size, blocks, count = 0, 0, 0
         self.children.each do |child|
@@ -280,13 +283,14 @@ module Earth
     def create_caches
       return unless cache_enabled
 
-      existing_filters = self.cached_sizes.find(:all).map { |cached_size| cached_size.filter }
+      # See comment in method update_caches
+      cached_sizes.reload
+      existing_filters = cached_sizes.map { |cached_size| cached_size.filter }
       Earth::Filter::find(:all).each do |filter|
         if not existing_filters.include?(filter) then
-          self.cached_sizes.create(:directory => self, :filter => filter)
+          cached_sizes.create(:directory => self, :filter => filter)
         end
       end
-      self.cached_sizes.reload
     end
 
   private
