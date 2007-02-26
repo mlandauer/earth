@@ -180,17 +180,6 @@ module Earth
       end 
     end
 
-    def filter_to_cached_size(id_to_filters)
-      cached_sizes = self.cached_sizes
-      _filter_to_cached_size = Hash.new
-
-      cached_sizes.each do |cached_size|
-        _filter_to_cached_size[id_to_filters[cached_size.filter_id]] = cached_size
-      end
-
-      _filter_to_cached_size
-    end
-
     def find_cached_size_by_filter(filter)
       cached_sizes.find(:first, :conditions => ['filter_id = ?', filter.id])
     end
