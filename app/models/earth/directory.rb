@@ -39,7 +39,8 @@ module Earth
     after_create("self.update_cache_after_create; true")
 
     @@save_observers = []
-    @@cache_disabled = false
+    @@cache_enabled = true
+    cattr_writer :cache_enabled
 
     Stat = Struct.new(:mtime)
     class Stat
@@ -288,7 +289,7 @@ module Earth
     end
 
     def update_cache_after_create
-      if not @@cache_disabled
+      if @@cache_enabled
         create_caches
       end
     end
@@ -301,10 +302,6 @@ module Earth
         end
       end
       self.cached_sizes.reload
-    end
-
-    def Directory.cache_enabled=(cache_enabled)
-      @@cache_disabled = !cache_enabled
     end
   end
 
