@@ -35,8 +35,7 @@ module Earth
 
     after_save("self.observe_after_save; true")
 
-    before_update("self.update_cache_before_update; true")
-    after_update("self.update_cache_after_update; true")
+    after_update("self.update_caches; true")
     after_create("self.update_cache_after_create; true")
 
     @@save_observers = []
@@ -249,12 +248,8 @@ module Earth
       end
     end
 
-    def update_cache_before_update
-      @remembered_cached_sizes = cached_sizes.find(:all)
-    end
-
-    def update_cache_after_update
-      @remembered_cached_sizes.each do |cached_size|
+    def update_caches
+      cached_sizes.find(:all).each do |cached_size|
         filter = cached_size.filter
         size, blocks, count = 0, 0, 0
         self.children.each do |child|
@@ -277,10 +272,8 @@ module Earth
         increase_cached_sizes_of_self_and_ancestors(filter, size - cached_size.size,
           blocks - cached_size.blocks, count - cached_size.count)
       end
-
-      @remembered_cached_sizes = nil
     end
-    
+
     def increase_cached_sizes_of_self_and_ancestors(filter, size_increase, blocks_increase, count_increase)
       if size_increase != 0 or blocks_increase != 0 or count_increase != 0
         Earth::CachedSize.update_all([
@@ -300,11 +293,6 @@ module Earth
       end
     end
     
-    def update_caches
-      update_cache_before_update
-      update_cache_after_update
-    end
-
     def create_caches
       existing_filters = self.cached_sizes.find(:all).map { |cached_size| cached_size.filter }
       Earth::Filter::find(:all).each do |filter|
