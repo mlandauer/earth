@@ -36,11 +36,11 @@ module Earth
     after_save("self.observe_after_save; true")
 
     after_update("self.update_caches; true")
-    after_create("self.update_cache_after_create; true")
+    after_create("self.create_caches; true")
 
     @@save_observers = []
     @@cache_enabled = true
-    cattr_writer :cache_enabled
+    cattr_accessor :cache_enabled
 
     Stat = Struct.new(:mtime)
     class Stat
@@ -250,6 +250,8 @@ module Earth
     end
 
     def update_caches
+      return unless cache_enabled
+      
       cached_sizes.find(:all).each do |cached_size|
         filter = cached_size.filter
         size, blocks, count = 0, 0, 0
@@ -275,6 +277,19 @@ module Earth
       end
     end
 
+    def create_caches
+      return unless cache_enabled
+
+      existing_filters = self.cached_sizes.find(:all).map { |cached_size| cached_size.filter }
+      Earth::Filter::find(:all).each do |filter|
+        if not existing_filters.include?(filter) then
+          self.cached_sizes.create(:directory => self, :filter => filter)
+        end
+      end
+      self.cached_sizes.reload
+    end
+
+  private
     def increase_cached_sizes_of_self_and_ancestors(filter, size_increase, blocks_increase, count_increase)
       if size_increase != 0 or blocks_increase != 0 or count_increase != 0
         Earth::CachedSize.update_all([
@@ -287,23 +302,6 @@ module Earth
                                      ])
       end    
     end
-
-    def update_cache_after_create
-      if @@cache_enabled
-        create_caches
-      end
-    end
-    
-    def create_caches
-      existing_filters = self.cached_sizes.find(:all).map { |cached_size| cached_size.filter }
-      Earth::Filter::find(:all).each do |filter|
-        if not existing_filters.include?(filter) then
-          self.cached_sizes.create(:directory => self, :filter => filter)
-        end
-      end
-      self.cached_sizes.reload
-    end
   end
-
 end
 
