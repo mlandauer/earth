@@ -357,7 +357,7 @@ class DaemonTest
   end
 
   def verify_cache_integrity_recursive(directory)
-    assert("Size and count for node ##{directory.id} (#{directory.path}) match") { directory.size_and_count_with_caching == directory.size_and_count_without_caching }
+    assert("Size, blocks and count for node ##{directory.id} (#{directory.path}) match") { directory.size_blocks_and_count_with_caching == directory.size_blocks_and_count_without_caching }
     directory.children.each do |child|
       verify_cache_integrity_recursive(child)
     end

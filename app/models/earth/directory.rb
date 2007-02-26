@@ -59,34 +59,28 @@ module Earth
       Stat.new(modified) unless modified.nil?
     end
     
-    def sum_files(column)
-      Earth::File.sum(column, 
-                      :conditions => [ 
-                        "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id=?) " + \
-                        " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id=?) " + \
-                        " AND directories.server_id = ?",
-                        self.id,
-                        self.id,
-                        self.server_id
-                      ],
-                      :joins => "JOIN directories ON files.directory_id = directories.id").to_i
+    # Returns the size of all the files (matching the search criterion) recursively
+    # below this directory
+    def size
+      size, blocks, count = size_blocks_and_count
+      size
     end
-
+    
+    def blocks
+      size, blocks, count = size_blocks_and_count
+      blocks
+    end
+        
     def recursive_file_count
-      Earth::File.count(:conditions => [ 
-                          "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
-                          " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
-                          " AND directories.server_id = ?",
-                          self.id,
-                          self.id,
-                          self.server_id,
-                          ],
-                        :joins => "JOIN directories ON files.directory_id = directories.id").to_i
+      size, blocks, count = size_blocks_and_count
+      count
     end
 
-    def size_and_count
+    # This only requires the id of the current directory and so it doesn't matter
+    # if the lft and rgt values of the object in memory is out-of-date with the db state
+    def size_blocks_and_count
       result = Earth::File.find(:first, 
-                                :select => "SUM(files.size) AS sum, COUNT(*) AS count",
+                                :select => "SUM(files.size) AS sum_size, SUM(files.blocks) AS sum_blocks, COUNT(*) AS count",
                                 :joins => "JOIN directories ON files.directory_id = directories.id",
                                 :conditions => [ 
                                   "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
@@ -96,7 +90,7 @@ module Earth
                                   self.id,
                                   self.server_id,
                                 ])
-      [ (result["sum"] || 0).to_i, result["count"].to_i ]
+      [ (result["sum_size"] || 0).to_i, (result["sum_blocks"] || 0).to_i, result["count"].to_i ]
     end
 
     def recursive_cache_count
@@ -113,18 +107,6 @@ module Earth
                               :joins => "JOIN directories ON cached_sizes.directory_id = directories.id").to_i
     end
     
-    # Returns the size of all the files (matching the search criterion) recursively
-    # below this directory
-    # This only requires the id of the current directory and so doesn't need to
-    # protected in a transaction which simplified its use
-    def size
-      sum_files(:size)
-    end
-    
-    def blocks
-      sum_files(:blocks)
-    end
-        
     def cache_data(*columns)
       filter = Thread.current[:with_filter]
       cached_size = cached_sizes.find :first, :conditions => ["filter_id = ?", filter.id] if filter
@@ -155,8 +137,8 @@ module Earth
       cache_data(:count) || recursive_file_count_without_caching
     end
     
-    def size_and_count_with_caching
-      cache_data(:size, :count) || size_and_count_without_caching
+    def size_blocks_and_count_with_caching
+      cache_data(:size, :blocks, :count) || size_blocks_and_count_without_caching
     end
 
     def size_with_caching
@@ -168,7 +150,7 @@ module Earth
     end
 
     alias_method_chain :recursive_file_count, :caching
-    alias_method_chain :size_and_count, :caching
+    alias_method_chain :size_blocks_and_count, :caching
     alias_method_chain :size, :caching
     alias_method_chain :blocks, :caching
 

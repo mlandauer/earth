@@ -23,7 +23,7 @@ module Earth
       size_sum = 0
       count_sum = 0
       Earth::Directory.roots_for_server(self).each do |d|
-        size, count = d.size_and_count
+        size, blocks, count = d.size_blocks_and_count
         size_sum += size
         count_sum += count
       end
