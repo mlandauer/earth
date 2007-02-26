@@ -346,7 +346,7 @@ class DaemonTest
 
       verify_cache_integrity_recursive(root)
 
-      puts "total size/count is [#{root.cache_data(:size)},#{root.cache_data(:count)}] (#{root.size_and_count_without_caching.inspect})"
+      puts "total size/blocks/count is [#{root.cache_data(:size)},#{root.cache_data(:blocks)},#{root.cache_data(:count)}] (#{root.size_blocks_and_count_without_caching.inspect})"
     end
 
     root.ensure_consistency
