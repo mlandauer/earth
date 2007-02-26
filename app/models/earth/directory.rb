@@ -107,32 +107,16 @@ module Earth
                               :joins => "JOIN directories ON cached_sizes.directory_id = directories.id").to_i
     end
     
-    def cache_data(*columns)
-      filter = Thread.current[:with_filter]
-      cached_size = cached_sizes.find :first, :conditions => ["filter_id = ?", filter.id] if filter
-      if cached_size
-        if columns.size > 1
-          columns.map { |column| cached_size[column] }
-        else
-          cached_size[columns[0]]
-        end
-      end
-    end
-
     def recursive_directory_count
       return 1 + children_count
     end
 
-    def cache_complete?
-      return recursive_cache_count == recursive_directory_count
-    end
-    
     # Set the recursive size
     def cached_size= (cached_size)
       @cached_size = cached_size
     end
     
-    # Add caching to recursive_file_count, size_and_count, size and blocks
+    # Add caching to recursive_file_count, size_blocks_and_count, size and blocks
     def recursive_file_count_with_caching
       cache_data(:count) || recursive_file_count_without_caching
     end
@@ -228,6 +212,10 @@ module Earth
       end
     end
 
+    def cache_complete?
+      return recursive_cache_count == recursive_directory_count
+    end
+    
     def update_caches
       return unless cache_enabled
       
@@ -284,6 +272,18 @@ module Earth
                                        filter, self.self_and_ancestors
                                      ])
       end    
+    end
+    
+    def cache_data(*columns)
+      filter = Thread.current[:with_filter]
+      cached_size = cached_sizes.find :first, :conditions => ["filter_id = ?", filter.id] if filter
+      if cached_size
+        if columns.size > 1
+          columns.map { |column| cached_size[column] }
+        else
+          cached_size[columns[0]]
+        end
+      end
     end
   end
 end
