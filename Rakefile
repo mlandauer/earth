@@ -9,6 +9,9 @@ require 'rake/rdoctask'
 
 require 'tasks/rails'
 
+gem 'ci_reporter'
+require 'ci/reporter/rake/test_unit'
+
 ##
 # Run a single test in Rails.
 #
