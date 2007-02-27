@@ -6,10 +6,10 @@ class CreateFiltersAndCachedSizesTable < ActiveRecord::Migration
     end
     add_index :filters, [:filename, :uid]
 
-    Earth::Filter.create(:filename => '*', :uid => nil)
-    Earth::Filter.create(:filename => '*.zip', :uid => nil)
-    Earth::Filter.create(:filename => '*.jar', :uid => nil)
-    Earth::Filter.create(:filename => '*.gif', :uid => nil)
+    execute "INSERT INTO filters(filename, uid) VALUES ('*', NULL)"
+    execute "INSERT INTO filters(filename, uid) VALUES ('*.zip', NULL)"
+    execute "INSERT INTO filters(filename, uid) VALUES ('*.jar', NULL)"
+    execute "INSERT INTO filters(filename, uid) VALUES ('*.gif', NULL)"
     
     create_table :cached_sizes do |t|
       t.column :directory_id, :integer, :null => false

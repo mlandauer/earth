@@ -1,13 +1,13 @@
 class ReplaceDemoFilters < ActiveRecord::Migration
   def self.up
-    Earth::Filter.delete([2, 3, 4])
-    Earth::Filter.create(:filename => '*.tiff', :uid => nil)
+    execute "DELETE FROM filters WHERE id IN (2, 3, 4)"
+    execute "INSERT INTO filters(filename, uid) VALUES ('*.tiff', NULL)"
   end
 
   def self.down
-    Earth::Filter.delete([5])
-    Earth::Filter.create(:filename => '*.zip', :uid => nil)
-    Earth::Filter.create(:filename => '*.jar', :uid => nil)
-    Earth::Filter.create(:filename => '*.gif', :uid => nil)
+    execute "DELETE FROM filters WHERE id=5"
+    execute "INSERT INTO filters(filename, uid) VALUES ('*.zip', NULL)"
+    execute "INSERT INTO filters(filename, uid) VALUES ('*.jar', NULL)"
+    execute "INSERT INTO filters(filename, uid) VALUES ('*.gif', NULL)"
   end
 end
