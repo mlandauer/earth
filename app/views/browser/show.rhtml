@@ -43,11 +43,11 @@
           end
       %></td>
     </tr>
-    <% unless @servers_and_size.nil? || @servers_and_size.empty? %>
-      <% @servers_and_size.sort!{|a,b| b[1] <=> a[1]} %>
-      <% max_size = @servers_and_size[0][1] %>
+    <% unless @servers_and_bytes.nil? || @servers_and_bytes.empty? %>
+      <% @servers_and_bytes.sort!{|a,b| b[1] <=> a[1]} %>
+      <% max_size = @servers_and_bytes[0][1] %>
       <% units = ApplicationHelper::human_units_of max_size %>
-      <% for server, size in @servers_and_size %>
+      <% for server, size in @servers_and_bytes %>
         <tr class="<%= cycle 'even', 'odd' %>">
           <td class="icon Server"><%= link_to "", :overwrite_params => {:server => server.name, :path => nil} %></td>
           <td class="name Server"><%= link_to "<span>#{server.name}</span>", :overwrite_params => {:server => server.name, :path => nil} %></td>
@@ -56,14 +56,14 @@
         </tr>
       <%  end
       end %>
-    <% @directories_and_size = [] if @directories_and_size.nil? %>
+    <% @directories_and_bytes = [] if @directories_and_bytes.nil? %>
     <% @files = [] if @files.nil? %>
-    <% @directories_and_size.sort!{|a,b| b[1] <=> a[1]} %>
+    <% @directories_and_bytes.sort!{|a,b| b[1] <=> a[1]} %>
     <% @files.sort!{|a,b| b.bytes <=> a.bytes} %>
-    <% if @directories_and_size.empty?
+    <% if @directories_and_bytes.empty?
          max_size_directories = 0
        else
-         max_size_directories = @directories_and_size[0][1]
+         max_size_directories = @directories_and_bytes[0][1]
        end %>
     <% if @files.empty?
          max_size_files = 0
@@ -76,7 +76,7 @@
          max_size = max_size_files
        end %>
     <% units = ApplicationHelper::human_units_of max_size %>
-    <% for directory, size in @directories_and_size %>
+    <% for directory, size in @directories_and_bytes %>
       <tr class="<%= cycle 'even', 'odd' %>">
         <td class="icon Dir"><%= link_to "", :overwrite_params => {:path => directory.path} %></td>
         <td class="name Dir" colspan="3"><%= link_to directory.name, :overwrite_params => {:path => directory.path} %></td>

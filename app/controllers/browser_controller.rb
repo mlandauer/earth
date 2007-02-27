@@ -77,32 +77,32 @@ class BrowserController < ApplicationController
       # Filter out servers and directories that have no files, query sizes
       if servers
         @any_empty = false
-        @servers_and_size = servers.map do |s|
-          size, blocks, count = s.bytes_blocks_and_count
+        @servers_and_bytes = servers.map do |s|
+          bytes, blocks, count = s.bytes_blocks_and_count
           @any_empty = true if count == 0
           if @show_empty || count > 0
-            [s, size]
+            [s, bytes]
           end
         end
         # Remove any nil entries resulting from empty servers
-        @servers_and_size.delete_if { |entry| entry.nil? }
+        @servers_and_bytes.delete_if { |entry| entry.nil? }
       elsif directories
         # Instead of filtering out empty directories ahead of time,
         # which requires one additional query per directory, get
         # directory size and file count for each directory in one go
         # and filter out empty directories after the fact
         any_empty_directories = false
-        @directories_and_size = directories.map do |d| 
-          size, blocks, count = d.bytes_blocks_and_count;
+        @directories_and_bytes = directories.map do |d| 
+          bytes, blocks, count = d.bytes_blocks_and_count;
           any_empty_directories = true if count == 0
           if @show_empty || count > 0
-            [d, size]
+            [d, bytes]
           end
         end
         @any_empty = any_empty_directories || (@files.any? { |file| file.bytes == 0 } if @files)
 
         # Remove any nil entries resulting from empty directories
-        @directories_and_size.delete_if { |entry| entry.nil? }
+        @directories_and_bytes.delete_if { |entry| entry.nil? }
       end
     end
     
@@ -113,7 +113,7 @@ class BrowserController < ApplicationController
         @csv_report = StringIO.new
         CSV::Writer.generate(@csv_report, ',') do |csv|
           csv << ['Directory', 'Size (bytes)']
-          for directory, size in @directories_and_size
+          for directory, size in @directories_and_bytes
             csv << [directory.name, size]
           end
         end

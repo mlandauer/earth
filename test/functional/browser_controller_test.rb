@@ -20,7 +20,7 @@ class BrowserControllerTest < Test::Unit::TestCase
     assert_response :success
     assert_template 'show'
 
-    assert_not_nil assigns(:servers_and_size)
+    assert_not_nil assigns(:servers_and_bytes)
   end
 
   def test_show_root_flat
@@ -49,7 +49,7 @@ class BrowserControllerTest < Test::Unit::TestCase
     assert_template 'show'
 
     assert_equal(directories(:foo), assigns(:directory))
-    assert_equal([[directories(:foo_bar), directories(:foo_bar).bytes]], assigns(:directories_and_size))
+    assert_equal([[directories(:foo_bar), directories(:foo_bar).bytes]], assigns(:directories_and_bytes))
   end
 
   def test_show_with_server_and_path_as_csv

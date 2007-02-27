@@ -327,7 +327,7 @@ private
     "#{ApplicationHelper::human_size_in(units, size)} #{units}"
   end
 
-  def add_segments(level, angle_range, level_segment_array, directory, parent_size)
+  def add_segments(level, angle_range, level_segment_array, directory, parent_bytes)
 
     if (level > @level_count)
       return
@@ -341,60 +341,60 @@ private
       add_segments(level + 1, angle_range, level_segment_array, nil, 0)
     else
 
-      if parent_size == 0
-        parent_size = 1
+      if parent_bytes == 0
+        parent_bytes = 1
       end
 
       small_directories = Array.new
       big_directories = Array.new
-      small_directories_size = 0
+      small_directories_bytes = 0
 
       directory.children.each do |child|
-        child_size = child.bytes
-        segment_angle = child_size * angle_range / parent_size
+        child_bytes = child.bytes
+        segment_angle = child_bytes * angle_range / parent_bytes
         if segment_angle >= @minimum_angle
           big_directories << child
         else
-          small_directories_size += child_size
+          small_directories_bytes += child_bytes
           small_directories << child
         end
       end
 
       big_files = Array.new
       small_files = Array.new
-      small_files_size = 0
+      small_files_bytes = 0
 
       directory.files.each do |file|
-        segment_angle = file.bytes * angle_range / parent_size
+        segment_angle = file.bytes * angle_range / parent_bytes
         if segment_angle >= @minimum_angle
           big_files << file
         else
-          small_files_size += file.bytes
+          small_files_bytes += file.bytes
           small_files << file
         end
       end
 
-      small_files_angle = small_files_size * angle_range / parent_size
+      small_files_angle = small_files_bytes * angle_range / parent_bytes
       if @remainder_mode == :drop and small_files_angle < @minimum_angle
-        parent_size -= small_files_size
+        parent_bytes -= small_files_bytes
         small_files = []
-        small_files_size = 0
+        small_files_bytes = 0
         small_files_angle = 0
       end
 
-      small_directories_angle = small_directories_size * angle_range / parent_size
+      small_directories_angle = small_directories_bytes * angle_range / parent_bytes
       if @remainder_mode == :drop and small_directories_angle < @minimum_angle
-        parent_size -= small_directories_size
+        parent_bytes -= small_directories_bytes
         small_directories = []
-        small_directories_size = 0
+        small_directories_bytes = 0
         small_directories_angle = 0
       end
 
-      small_files_angle = small_files_size * angle_range / parent_size
+      small_files_angle = small_files_bytes * angle_range / parent_bytes
       if @remainder_mode == :drop and small_files_angle < @minimum_angle
-        parent_size -= small_files_size
+        parent_bytes -= small_files_bytes
         small_files = []
-        small_files_size = 0
+        small_files_bytes = 0
         small_files_angle = 0
       end
 
@@ -403,7 +403,7 @@ private
           segment = Segment.new(:angle => small_directories_angle, 
                                 :type => ((small_directories_angle >= @minimum_angle or @remainder_mode != :empty) ? :directory : :empty),
                                 :name => "#{small_directories.size} directories", 
-                                :tooltip => "#{small_directories.size} directories in ...#{directory.path_relative_to(@directory)}/ (#{GraphHelper::format_human(small_directories_size)})")
+                                :tooltip => "#{small_directories.size} directories in ...#{directory.path_relative_to(@directory)}/ (#{GraphHelper::format_human(small_directories_bytes)})")
         else
           child = small_directories[0]
           segment = Segment.new(:angle => small_directories_angle, 
@@ -422,7 +422,7 @@ private
       end
 
       big_directories.each do |big_directory|
-        segment_angle = big_directory.bytes * angle_range / parent_size
+        segment_angle = big_directory.bytes * angle_range / parent_bytes
         segment = Segment.new(:angle => segment_angle, 
                               :type => :directory,
                               :name => "#{big_directory.name}/", 
@@ -441,7 +441,7 @@ private
           small_files_segment = Segment.new(:angle => small_files_angle, 
                                             :type => ((small_files_angle >= @minimum_angle or @remainder_mode != :empty) ? :file : :empty),
                                             :name => "#{small_files.size} files",
-                                            :tooltip => "#{small_files.size} files in ...#{directory.path_relative_to(@directory)}/ (#{GraphHelper::format_human(small_files_size)})")
+                                            :tooltip => "#{small_files.size} files in ...#{directory.path_relative_to(@directory)}/ (#{GraphHelper::format_human(small_files_bytes)})")
         else
           file = small_files[0]
           small_files_segment = Segment.new(:angle => small_files_angle, 
@@ -452,12 +452,9 @@ private
         level_segments << small_files_segment
       end
 
-      files_size = 0
       files_total_angle = small_files_angle
       big_files.each do |file|
-        files_size += file.bytes
-
-        angle = file.bytes * angle_range / parent_size
+        angle = file.bytes * angle_range / parent_bytes
         file_segment = Segment.new(:angle => angle, 
                                    :type => :file,
                                    :name => file.name,

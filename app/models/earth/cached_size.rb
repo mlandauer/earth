@@ -1,7 +1,6 @@
 module Earth
   class CachedSize < ActiveRecord::Base
     belongs_to :directory
-    belongs_to :filter
 
     def snapshot
       @size_snapshot, @blocks_snapshot, @count_snapshot = size, blocks, count
