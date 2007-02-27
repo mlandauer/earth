@@ -9,8 +9,14 @@ require 'rake/rdoctask'
 
 require 'tasks/rails'
 
-gem 'ci_reporter'
-require 'ci/reporter/rake/test_unit'
+# Wrap this around in case the user doesn't have CI::Reporter
+# This is only useful for Continuous Integration and shouldn't
+# be mandatory to use Earth
+ci_reporter = Gem.cache.search('ci_reporter').first
+if ci_reporter
+  gem 'ci_reporter'
+  require 'ci/reporter/rake/test_unit'
+end
 
 ##
 # Run a single test in Rails.
