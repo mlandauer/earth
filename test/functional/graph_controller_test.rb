@@ -5,7 +5,7 @@ require 'graph_controller'
 class GraphController; def rescue_action(e) raise e end; end
 
 class GraphControllerTest < Test::Unit::TestCase
-  fixtures :servers, :directories, :files, :filters, :cached_sizes
+  fixtures :servers, :directories, :files, :cached_sizes
   set_fixture_class :servers => Earth::Server, :directories => Earth::Directory, :files => Earth::File, :cached_sizes => Earth::CachedSize
 
   def setup
