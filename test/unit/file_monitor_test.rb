@@ -31,8 +31,6 @@ class FileMonitorTest < Test::Unit::TestCase
 
     server = Earth::Server.this_server
     @directory = server.directories.create(:name => @dir, :path => @dir)
-
-    @match_all_filter = Earth::Filter.create(:filename => '*', :uid => nil)    
   end
   
   def teardown
@@ -68,7 +66,7 @@ class FileMonitorTest < Test::Unit::TestCase
   def assert_cached_sizes_match(directory)
     @directory.create_caches
     @directory.update_caches
-    cached_size = @directory.find_cached_size_by_filter(@match_all_filter)
+    cached_size = @directory.cached_sizes.find(:first)
     cached_size.reload
     assert_equal(cached_size.size, @directory.size)
     assert_equal(cached_size.blocks, @directory.blocks)
@@ -307,7 +305,7 @@ class FileMonitorTest < Test::Unit::TestCase
     backdate(@dir1)
     FileMonitor.update([@directory])
     assert_cached_sizes_match(@directory)
-    assert(@directory.find_cached_size_by_filter(@match_all_filter).size == 0)
+    assert(@directory.cached_sizes.find(:first).size == 0)
 
     # Create a subdirectory and check that it's been created
     subdir = File.join(@dir, "subdir")
@@ -322,10 +320,10 @@ class FileMonitorTest < Test::Unit::TestCase
     assert_equal(Earth::Directory.find_by_name(@dir), Earth::Directory.find_by_name("subdir").parent)
     assert_equal(Earth::Directory.find_by_name(@dir).server, Earth::Directory.find_by_name("subdir").server)
     assert_cached_sizes_match(@directory)
-    assert(@directory.find_cached_size_by_filter(@match_all_filter).size == 0)
+    assert(@directory.cached_sizes.find(:first).size == 0)
 
     # Create a single file in the subdirectory and check that sizes still match
-    prev_cached_size = @directory.find_cached_size_by_filter(@match_all_filter).size
+    prev_cached_size = @directory.cached_sizes.find(:first).size
     file1_size = 3254
     file1 = File.join(subdir, "sub-file1")
     create_random_file(file1, file1_size)
@@ -338,16 +336,16 @@ class FileMonitorTest < Test::Unit::TestCase
     assert_equal(file1_size, Earth::File.find_by_name('sub-file1').size)
     assert_cached_sizes_match(@directory)
     assert_equal(file1_size, Earth::Directory.find_by_name("subdir").size)
-    assert_equal(file1_size, Earth::Directory.find_by_name("subdir").find_cached_size_by_filter(@match_all_filter).size)
+    assert_equal(file1_size, Earth::Directory.find_by_name("subdir").cached_sizes.find(:first).size)
     assert_equal(file1_size, Earth::Directory.find_by_name(@dir).size)
-    assert_equal(file1_size, Earth::Directory.find_by_name(@dir).find_cached_size_by_filter(@match_all_filter).size)
+    assert_equal(file1_size, Earth::Directory.find_by_name(@dir).cached_sizes.find(:first).size)
     assert_equal(@directory, Earth::Directory.find_by_name(@dir))
     assert_equal(file1_size, @directory.size)
-    assert_equal(file1_size, @directory.find_cached_size_by_filter(@match_all_filter).size)
-    assert_equal(@directory.find_cached_size_by_filter(@match_all_filter).size, file1_size)
+    assert_equal(file1_size, @directory.cached_sizes.find(:first).size)
+    assert_equal(@directory.cached_sizes.find(:first).size, file1_size)
 
     # Create two files in the subdirectory and check that sizes still match
-    prev_cached_size = @directory.find_cached_size_by_filter(@match_all_filter).size
+    prev_cached_size = @directory.cached_sizes.find(:first).size
     file2 = File.join(subdir, "sub-file2")
     file2_size = 1314
     create_random_file(file2, file2_size)
@@ -358,7 +356,7 @@ class FileMonitorTest < Test::Unit::TestCase
     backdate(@dir1, 54)
     backdate(subdir, 54)
     FileMonitor.update([@directory])
-    new_cached_size = @directory.find_cached_size_by_filter(@match_all_filter).size
+    new_cached_size = @directory.cached_sizes.find(:first).size
     assert_equal(file2_size + file3_size, new_cached_size - prev_cached_size)
     assert_cached_sizes_match(@directory)
 

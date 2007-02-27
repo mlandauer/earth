@@ -171,7 +171,7 @@ private
       benchmark "Creating cache information" do
         ActiveRecord::Base.logger.debug("begin create cache");
         @cached_size_eta_printer = ETAPrinter.new(directory_count) unless parent
-        create_cache(directory, Earth::Filter::find(:all))
+        create_cache(directory)
         @cached_size_eta_printer = nil
         ActiveRecord::Base.logger.debug("end create cache");
       end
@@ -187,44 +187,27 @@ private
     end
   end
 
-  def FileMonitor.create_cache(directory, filters)
-    if not directory.cached_sizes.loaded? or directory.cached_sizes.size < filters.size
-      cache_map = {}
-      filters.each do |filter|
-        cache_map[filter] = directory.cached_sizes.new(:directory => directory,
-                                                       :filter => filter)
-      end
+  def FileMonitor.create_cache(directory)
+    if not directory.cached_sizes.loaded? or directory.cached_sizes.empty?
+      cache_map_filter = directory.cached_sizes.new(:directory => directory)
 
       directory.children.each do |child|
-        child_cache_map = create_cache(child, filters)
-        filters.each do |filter|
-          cache_map[filter].increment(child_cache_map[filter])
-        end
+        cache_map_filter.increment(create_cache(child))
       end
 
       directory.files.each do |file|
-        filters.each do |filter|
-          if filter.matches(file) then
-            cache_map[filter].size += file.size
-            cache_map[filter].blocks += file.blocks
-            cache_map[filter].count += 1
-          end
-        end
+        cache_map_filter.size += file.size
+        cache_map_filter.blocks += file.blocks
+        cache_map_filter.count += 1
       end
       directory.files.reset
 
-      cache_map.each do |filter, cached_size|
-        cached_size.create
-      end
+      cache_map_filter.create
       @cached_size_eta_printer.increment if @cached_size_eta_printer
-
     else
-      cache_map = {}
-      directory.cached_sizes.each do |cached_size|
-        cache_map[cached_size.filter] = cached_size
-      end
+      cache_map_filter = directory.cached_sizes[0]
     end
-    cache_map
+    cache_map_filter
   end
   
   def FileMonitor.run(directories, force_update_time=nil)
@@ -246,12 +229,11 @@ private
     total_count = 0
     remaining_count = directories.map{|d| d.children_count + 1}.sum
     eta_printer = ETAPrinter.new(remaining_count) if options[:show_eta]
-    filter_count = Earth::Filter::count
     start = Time.new
     logger.debug("starting update cycle, directories.size is #{directories.size} remaining count is #{remaining_count}")
     directories.each do |directory|
       directory.each do |d|
-        total_count += update_non_recursive(d, filter_count, options)
+        total_count += update_non_recursive(d, options)
         remaining_time = update_time - (Time.new - start)
         if remaining_time > 0 && remaining_count > 0
           sleep_time = remaining_time.to_f / remaining_count
@@ -279,7 +261,7 @@ private
     RAILS_DEFAULT_LOGGER
   end
 
-  def FileMonitor.update_non_recursive(directory, filter_count, options)
+  def FileMonitor.update_non_recursive(directory, options)
 
     directory_count = 1
 
@@ -304,7 +286,7 @@ private
         logger.debug("update_non_recursive for directory #{directory.path} -> changed less than 1 second ago (#{new_directory_stat.mtime})")
       end
 
-      if directory.cached_sizes.size != filter_count and not directory.new_record?
+      if directory.cached_sizes.empty? and not directory.new_record?
         Earth::Directory::transaction do
           directory.create_caches
           directory.update_caches
@@ -338,7 +320,7 @@ private
           if options[:only_build_directories] then
             attributes = { :name => name, :path => "#{directory.path}/#{name}", :server_id => directory.server_id }
             dir = directory.children.build(attributes)
-            update_non_recursive(dir, filter_count, options)
+            update_non_recursive(dir, options)
           else
             FileMonitor.silent_benchmark { initial_pass_on_new_directory(name, directory) }
           end

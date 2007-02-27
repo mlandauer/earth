@@ -30,7 +30,6 @@ module Earth
     acts_as_nested_set :scope => :server, :level_column => "level"
     has_many :files, :class_name => "Earth::File", :dependent => :delete_cascade, :order => :name, :extend => Earth::FilesExtension
     has_many :cached_sizes, :class_name => "Earth::CachedSize", :dependent => :delete_cascade
-    has_many :filters, :class_name => "Earth::Filter", :through => :cached_sizes
     belongs_to :server
 
     after_save("self.observe_after_save; true")
@@ -94,16 +93,13 @@ module Earth
     end
 
     def recursive_cache_count
-      first_filter = Earth::Filter::find(:first)
       Earth::CachedSize.count(:conditions => [
                                 "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
                                 " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
-                                " AND directories.server_id = ?" + \
-                                " AND filter_id = ?", \
+                                " AND directories.server_id = ?", \
                                 self.id,
                                 self.id,
-                                self.server_id,
-                                first_filter.id],
+                                self.server_id],
                               :joins => "JOIN directories ON cached_sizes.directory_id = directories.id").to_i
     end
     
@@ -180,10 +176,6 @@ module Earth
       end 
     end
 
-    def find_cached_size_by_filter(filter)
-      cached_sizes.find(:first, :conditions => ['filter_id = ?', filter.id])
-    end
-
     def Directory.add_save_observer(observer)
       @@save_observers = [] unless @@save_observers
       @@save_observers << observer
@@ -212,10 +204,9 @@ module Earth
       # another directory, so it should be reloaded from the db before it's used
       cached_sizes.reload
       cached_sizes.each do |cached_size|
-        filter = cached_size.filter
         size, blocks, count = 0, 0, 0
         self.children.each do |child|
-          child_cached_size = child.find_cached_size_by_filter(filter)
+          child_cached_size = child.cached_sizes.find(:first)
           if child_cached_size
             size += child_cached_size.size
             blocks += child_cached_size.blocks
@@ -224,14 +215,12 @@ module Earth
         end
 
         self.files.each do |file|
-          if filter.matches(file) then
-            size += file.size
-            blocks += file.blocks
-            count += 1
-          end
+          size += file.size
+          blocks += file.blocks
+          count += 1
         end
 
-        increase_cached_sizes_of_self_and_ancestors(filter, size - cached_size.size,
+        increase_cached_sizes_of_self_and_ancestors(size - cached_size.size,
           blocks - cached_size.blocks, count - cached_size.count)
       end
     end
@@ -241,31 +230,27 @@ module Earth
 
       # See comment in method update_caches
       cached_sizes.reload
-      existing_filters = cached_sizes.map { |cached_size| cached_size.filter }
-      Earth::Filter::find(:all).each do |filter|
-        if not existing_filters.include?(filter) then
-          cached_sizes.create(:directory => self, :filter => filter)
-        end
+      if cached_sizes.empty?
+        cached_sizes.create(:directory => self)
       end
     end
 
   private
-    def increase_cached_sizes_of_self_and_ancestors(filter, size_increase, blocks_increase, count_increase)
+    def increase_cached_sizes_of_self_and_ancestors(size_increase, blocks_increase, count_increase)
       if size_increase != 0 or blocks_increase != 0 or count_increase != 0
         Earth::CachedSize.update_all([
                                        "size = size + ?, blocks = blocks + ?, count = count + ?",
                                        size_increase, blocks_increase, count_increase 
                                      ],
-                                     [
-                                       "filter_id = ? and directory_id in (?)",
-                                       filter, self.self_and_ancestors
-                                     ])
+                                     ["directory_id in (?)", self.self_and_ancestors])
       end    
     end
     
     def cache_data(*columns)
-      filter = Thread.current[:with_filter]
-      cached_size = cached_sizes.find :first, :conditions => ["filter_id = ?", filter.id] if filter
+      # If using non-default filtering there is no cache data so return nil
+      return nil if Thread.current[:with_filtering]
+      
+      cached_size = cached_sizes.find :first
       if cached_size
         if columns.size > 1
           columns.map { |column| cached_size[column] }

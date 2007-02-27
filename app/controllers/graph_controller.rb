@@ -136,21 +136,18 @@ class GraphController < ApplicationController
         # If there is cached information for the currently active
         # filter, grab size information from the cache.
         # Otherwise we need to calculate it from the files table.
-        filter = Thread.current[:with_filter]
-        if filter
+        if Thread.current[:with_filtering].nil?
           cached_sizes = Earth::CachedSize.find(:all, 
                                                 :conditions => [ 
                                                   "directory_id IN (SELECT id FROM directories " + \
                                                   "WHERE level = ? " + \
                                                   " AND server_id = ? " + \
                                                   " AND lft >= ? " + \
-                                                  " AND rgt <= ?) " + \
-                                                  " AND filter_id = ?", 
+                                                  " AND rgt <= ?) ", \
                                                   leaf_level,
                                                   @server.id,
                                                   @directory.lft,
-                                                  @directory.rgt,
-                                                  filter.id ])
+                                                  @directory.rgt])
 
           # Use the cached sizes to fill in data for the leaf directories
           cached_sizes.each do |cached_size|

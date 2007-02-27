@@ -47,15 +47,13 @@ module Earth
         filter_conditions = nil
       end
 
-      filter = Earth::Filter.find_filter_for_params(filter_filename, filter_uid)
-
-      Thread.current[:with_filter] = filter
-
+      Thread.current[:with_filtering] = filter_conditions
+      
       Earth::File.with_scope(:find => {:conditions => filter_conditions}) do
         begin
           yield
         ensure
-          Thread.current[:with_filter] = nil
+          Thread.current[:with_filtering] = nil
         end
       end
     end
