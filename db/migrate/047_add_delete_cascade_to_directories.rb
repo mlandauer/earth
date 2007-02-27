@@ -5,7 +5,7 @@ class AddDeleteCascadeToDirectories < ActiveRecord::Migration
   end
 
   def self.down
-    remove_foreign_key :files, :directories_servers_id_fk
+    remove_foreign_key :directories, :directories_servers_id_fk
     add_foreign_key :directories, :server_id, :servers, :id, { :name => "directories_servers_id_fk" }
   end
 end

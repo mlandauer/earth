@@ -5,7 +5,7 @@ class FixDirectoriesPathIndex < ActiveRecord::Migration
   end
 
   def self.down
-    remove_index :directories, :path
+    remove_index :directories, [:path, :server_id]
     add_index :directories, :path, :unique
   end
 end

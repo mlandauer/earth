@@ -1,5 +1,6 @@
 class RemoveFilterTable < ActiveRecord::Migration
   def self.up
+    remove_index :cached_sizes, [:directory_id, :filter_id]
     remove_column :cached_sizes, :filter_id
     drop_table :filters
   end
@@ -10,5 +11,6 @@ class RemoveFilterTable < ActiveRecord::Migration
       t.column :uid,      :integer
     end
     add_column :cached_sizes, :filter_id, :integer, :null => false
+    add_index :cached_sizes, [:directory_id, :filter_id], :unique
   end
 end
