@@ -329,8 +329,6 @@ private
 
   def add_segments(level, angle_range, level_segment_array, directory, parent_size)
 
-    directory.cached_size = directory.bytes unless directory.nil?
-    
     if (level > @level_count)
       return
     end
@@ -352,7 +350,6 @@ private
       small_directories_size = 0
 
       directory.children.each do |child|
-        child.cached_size = child.bytes unless child.nil?
         child_size = child.bytes
         segment_angle = child_size * angle_range / parent_size
         if segment_angle >= @minimum_angle
