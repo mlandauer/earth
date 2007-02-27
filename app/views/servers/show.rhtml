@@ -57,7 +57,7 @@
 
 <tr>
   <th>Total size</th>
-  <td><%= h ApplicationHelper.human_size(@server.size) %></td>
+  <td><%= h ApplicationHelper.human_size(@server.bytes) %></td>
 </tr>
 
 <tr>
@@ -84,7 +84,7 @@
   <tr>
    <td class="icon directory"></td>
    <td class="path"><%= h root.name %></td>
-   <td class="size"><%= h ApplicationHelper.human_size(root.size) %></td>
+   <td class="size"><%= h ApplicationHelper.human_size(root.bytes) %></td>
    <td class="directory-count"><%= h number_with_delimiter(root.recursive_directory_count) %></td>
    <td class="file-count"><%= h number_with_delimiter(root.recursive_file_count) %></td>
    <td class="indexed"><%= h root.cache_complete? ? "Yes" : "Pending" %></td>

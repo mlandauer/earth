@@ -60,26 +60,26 @@ module Earth
     
     # Returns the size of all the files (matching the search criterion) recursively
     # below this directory
-    def size
-      size, blocks, count = size_blocks_and_count
-      size
+    def bytes
+      bytes, blocks, count = bytes_blocks_and_count
+      bytes
     end
     
     def blocks
-      size, blocks, count = size_blocks_and_count
+      bytes, blocks, count = bytes_blocks_and_count
       blocks
     end
         
     def recursive_file_count
-      size, blocks, count = size_blocks_and_count
+      bytes, blocks, count = bytes_blocks_and_count
       count
     end
 
     # This only requires the id of the current directory and so it doesn't matter
     # if the lft and rgt values of the object in memory is out-of-date with the db state
-    def size_blocks_and_count
+    def bytes_blocks_and_count
       result = Earth::File.find(:first, 
-                                :select => "SUM(files.size) AS sum_size, SUM(files.blocks) AS sum_blocks, COUNT(*) AS count",
+                                :select => "SUM(files.bytes) AS sum_bytes, SUM(files.blocks) AS sum_blocks, COUNT(*) AS count",
                                 :joins => "JOIN directories ON files.directory_id = directories.id",
                                 :conditions => [ 
                                   "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
@@ -89,7 +89,7 @@ module Earth
                                   self.id,
                                   self.server_id,
                                 ])
-      [ (result["sum_size"] || 0).to_i, (result["sum_blocks"] || 0).to_i, result["count"].to_i ]
+      [ (result["sum_bytes"] || 0).to_i, (result["sum_blocks"] || 0).to_i, result["count"].to_i ]
     end
 
     def recursive_cache_count
@@ -117,12 +117,12 @@ module Earth
       cache_data(:count) || recursive_file_count_without_caching
     end
     
-    def size_blocks_and_count_with_caching
-      cache_data(:size, :blocks, :count) || size_blocks_and_count_without_caching
+    def bytes_blocks_and_count_with_caching
+      cache_data(:bytes, :blocks, :count) || bytes_blocks_and_count_without_caching
     end
 
-    def size_with_caching
-      @cached_size || cache_data(:size) || size_without_caching
+    def bytes_with_caching
+      @cached_size || cache_data(:bytes) || bytes_without_caching
     end
         
     def blocks_with_caching
@@ -130,8 +130,8 @@ module Earth
     end
 
     alias_method_chain :recursive_file_count, :caching
-    alias_method_chain :size_blocks_and_count, :caching
-    alias_method_chain :size, :caching
+    alias_method_chain :bytes_blocks_and_count, :caching
+    alias_method_chain :bytes, :caching
     alias_method_chain :blocks, :caching
 
     def has_files?
@@ -208,19 +208,19 @@ module Earth
         self.children.each do |child|
           child_cached_size = child.cached_sizes.find(:first)
           if child_cached_size
-            size += child_cached_size.size
+            size += child_cached_size.bytes
             blocks += child_cached_size.blocks
             count += child_cached_size.count
           end
         end
 
         self.files.each do |file|
-          size += file.size
+          size += file.bytes
           blocks += file.blocks
           count += 1
         end
 
-        increase_cached_sizes_of_self_and_ancestors(size - cached_size.size,
+        increase_cached_sizes_of_self_and_ancestors(size - cached_size.bytes,
           blocks - cached_size.blocks, count - cached_size.count)
       end
     end
@@ -238,10 +238,8 @@ module Earth
   private
     def increase_cached_sizes_of_self_and_ancestors(size_increase, blocks_increase, count_increase)
       if size_increase != 0 or blocks_increase != 0 or count_increase != 0
-        Earth::CachedSize.update_all([
-                                       "size = size + ?, blocks = blocks + ?, count = count + ?",
-                                       size_increase, blocks_increase, count_increase 
-                                     ],
+        Earth::CachedSize.update_all(["bytes = bytes + ?, blocks = blocks + ?, count = count + ?",
+                                       size_increase, blocks_increase, count_increase],
                                      ["directory_id in (?)", self.self_and_ancestors])
       end    
     end

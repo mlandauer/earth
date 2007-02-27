@@ -59,7 +59,7 @@
     <% @directories_and_size = [] if @directories_and_size.nil? %>
     <% @files = [] if @files.nil? %>
     <% @directories_and_size.sort!{|a,b| b[1] <=> a[1]} %>
-    <% @files.sort!{|a,b| b.size <=> a.size} %>
+    <% @files.sort!{|a,b| b.bytes <=> a.bytes} %>
     <% if @directories_and_size.empty?
          max_size_directories = 0
        else
@@ -68,7 +68,7 @@
     <% if @files.empty?
          max_size_files = 0
        else
-         max_size_files = @files[0].size
+         max_size_files = @files[0].bytes
        end %>
     <% if max_size_directories > max_size_files
          max_size = max_size_directories
@@ -90,8 +90,8 @@
         <td class="name File"><span><%= file.name %></span></td>
         <td class="modified"><span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span></td>
         <td class="owner_user"><span><%=h file.user.name %></span></td>
-        <td class="size"><span><%= ApplicationHelper::human_size_in(units, file.size) %> <%= units %></span></td>
-        <td class="bar"><%= bar file.size, max_size, :class => "filebar"%></td>
+        <td class="size"><span><%= ApplicationHelper::human_size_in(units, file.bytes) %> <%= units %></span></td>
+        <td class="bar"><%= bar file.bytes, max_size, :class => "filebar"%></td>
       </tr>
     <% end %>
     </tbody>

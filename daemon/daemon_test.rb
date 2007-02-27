@@ -347,7 +347,7 @@ class DaemonTest
       assert("Cache of root complete") {root.cache_complete?}
       verify_cache_integrity_recursive(root)
       
-      puts "total size/blocks/count is #{root.size_blocks_and_count_with_caching.inspect} (#{root.size_blocks_and_count_without_caching.inspect})"
+      puts "total size/blocks/count is #{root.bytes_blocks_and_count_with_caching.inspect} (#{root.bytes_blocks_and_count_without_caching.inspect})"
     end
 
     root.ensure_consistency
@@ -358,7 +358,7 @@ class DaemonTest
   end
 
   def verify_cache_integrity_recursive(directory)
-    assert("Size, blocks and count for node ##{directory.id} (#{directory.path}) match") { directory.size_blocks_and_count_with_caching == directory.size_blocks_and_count_without_caching }
+    assert("Size, blocks and count for node ##{directory.id} (#{directory.path}) match") { directory.bytes_blocks_and_count_with_caching == directory.bytes_blocks_and_count_without_caching }
     directory.children.each do |child|
       verify_cache_integrity_recursive(child)
     end
@@ -402,7 +402,7 @@ class DaemonTest
     db_directory.files.each do |db_file|
       fs_file = File.join(fs_directory, db_file.name)
       fs_file_stat = File.lstat(fs_file)
-      assert("Byte size of #{fs_file} matches database contents (#{fs_file_stat.size} == #{db_file.size})") { fs_file_stat.size == db_file.size }
+      assert("Byte size of #{fs_file} matches database contents (#{fs_file_stat.size} == #{db_file.bytes})") { fs_file_stat.size == db_file.bytes }
       assert("Block size of #{fs_file} matches database contents") { fs_file_stat.blocks == db_file.blocks }
     end
     

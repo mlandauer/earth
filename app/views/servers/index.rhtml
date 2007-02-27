@@ -34,7 +34,7 @@
       <td class="status unknown">Crashed?</td>
     <% end %>
     </td>
-    <td class="size"><%=h ApplicationHelper.human_size(server.size) %></td>
+    <td class="size"><%=h ApplicationHelper.human_size(server.bytes) %></td>
     <td class="version"><%=h server.daemon_version || "Not running" %></td>
     <td class="interval"><%=h server.update_interval %> sec</td>
     <td class="last-heartbeat"><%= if server.heartbeat_time.nil?

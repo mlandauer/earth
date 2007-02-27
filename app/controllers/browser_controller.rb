@@ -16,8 +16,8 @@ class BrowserController < ApplicationController
     @current_page = (params[:page] || 1).to_i
 
     joins = "JOIN directories ON files.directory_id = directories.id"
-    order = "files.size desc"
-    include_attributes = [ "name", "directory_id", "modified", "size", "uid" ]
+    order = "files.bytes desc"
+    include_attributes = [ "name", "directory_id", "modified", "bytes", "uid" ]
     select = include_attributes.map {|attr| "files.#{attr} as #{attr}" }.join(", ")
 
     if @directory
@@ -78,7 +78,7 @@ class BrowserController < ApplicationController
       if servers
         @any_empty = false
         @servers_and_size = servers.map do |s|
-          size, blocks, count = s.size_blocks_and_count
+          size, blocks, count = s.bytes_blocks_and_count
           @any_empty = true if count == 0
           if @show_empty || count > 0
             [s, size]
@@ -93,13 +93,13 @@ class BrowserController < ApplicationController
         # and filter out empty directories after the fact
         any_empty_directories = false
         @directories_and_size = directories.map do |d| 
-          size, blocks, count = d.size_blocks_and_count;
+          size, blocks, count = d.bytes_blocks_and_count;
           any_empty_directories = true if count == 0
           if @show_empty || count > 0
             [d, size]
           end
         end
-        @any_empty = any_empty_directories || (@files.any? { |file| file.size == 0 } if @files)
+        @any_empty = any_empty_directories || (@files.any? { |file| file.bytes == 0 } if @files)
 
         # Remove any nil entries resulting from empty directories
         @directories_and_size.delete_if { |entry| entry.nil? }

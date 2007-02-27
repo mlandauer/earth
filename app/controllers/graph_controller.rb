@@ -295,14 +295,14 @@ private
     if directory.level < leaf_level
       @directory_size_map[directory.id] = 0
         directory.files.each do |file|
-          @directory_size_map[directory.id] += file.size
+          @directory_size_map[directory.id] += file.bytes
       end
       directory.children.each do |child|
         gather_directory_sizes_pass_1(child, leaf_level)
       end
     else
       if not @directory_size_map.has_key?(directory.id)
-        @directory_size_map[directory.id] = directory.size
+        @directory_size_map[directory.id] = directory.bytes
       end
     end
   end

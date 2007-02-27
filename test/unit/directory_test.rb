@@ -78,10 +78,10 @@ class DirectoryTest < Test::Unit::TestCase
   end
   
   def test_size
-    assert_equal(files(:file1).size + files(:file2).size + files(:file3).size + files(:file4).size + files(:zip_file1).size + files(:zip_file2).size,
-      directories(:foo).size)
-    assert_equal(files(:file3).size + files(:file4).size + files(:zip_file1).size + files(:zip_file2).size,
-      directories(:foo_bar).size)
+    assert_equal(files(:file1).bytes + files(:file2).bytes + files(:file3).bytes + files(:file4).bytes + files(:zip_file1).bytes + files(:zip_file2).bytes,
+      directories(:foo).bytes)
+    assert_equal(files(:file3).bytes + files(:file4).bytes + files(:zip_file1).bytes + files(:zip_file2).bytes,
+      directories(:foo_bar).bytes)
   end
   
   # Doing this to double-check my understanding of caching with associations in ActiveRecord
@@ -94,7 +94,7 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal([file1, file2], foo.files)
     assert_number_of_sql_queries(0) {assert_equal([file1, file2], foo.files)}
     # Test that creating on an association like this means that the cached association gets updated too
-    file3 = foo.files.create(:name => "c", :size => 3)
+    file3 = foo.files.create(:name => "c", :bytes => 3)
     assert_number_of_sql_queries(0) {assert_equal([file1, file2, file3], foo.files)}
     foo.files.delete(file2)
     assert_number_of_sql_queries(0) {assert_equal([file1, file3], foo.files)}
@@ -244,7 +244,7 @@ class TransactionalDirectoryTest < Test::Unit::TestCase
         Earth::Directory.transaction do
           foo_bar = Earth::Directory.find(2) # => /foo/bar
           sleep(0.01)
-          assert_equal(31, foo_bar.size)
+          assert_equal(31, foo_bar.bytes)
         end
       end
     end

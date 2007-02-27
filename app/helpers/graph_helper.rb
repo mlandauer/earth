@@ -30,7 +30,7 @@ module GraphHelper
     end
 
     # Recursively fill level arrays
-    add_segments(1, 360.0, level_segment_array, directory, directory.size)
+    add_segments(1, 360.0, level_segment_array, directory, directory.bytes)
 
     # Post-process level arrays
     for level in (1..@level_count)
@@ -56,8 +56,8 @@ module GraphHelper
     #  arbitrary scale and sort descending by the radius (largest
     #  circle first).
     #
-    servers_and_radius = @servers.select { |server| server.size > 0 }.map do |server|
-      { :server => server, :relative_radius => Math.sqrt(server.size) }
+    servers_and_radius = @servers.select { |server| server.bytes > 0 }.map do |server|
+      { :server => server, :relative_radius => Math.sqrt(server.bytes) }
     end
 
     servers_and_radius.sort! do |entry1, entry2|
@@ -329,7 +329,7 @@ private
 
   def add_segments(level, angle_range, level_segment_array, directory, parent_size)
 
-    directory.cached_size = directory.size unless directory.nil?
+    directory.cached_size = directory.bytes unless directory.nil?
     
     if (level > @level_count)
       return
@@ -352,8 +352,8 @@ private
       small_directories_size = 0
 
       directory.children.each do |child|
-        child.cached_size = child.size unless child.nil?
-        child_size = child.size
+        child.cached_size = child.bytes unless child.nil?
+        child_size = child.bytes
         segment_angle = child_size * angle_range / parent_size
         if segment_angle >= @minimum_angle
           big_directories << child
@@ -368,11 +368,11 @@ private
       small_files_size = 0
 
       directory.files.each do |file|
-        segment_angle = file.size * angle_range / parent_size
+        segment_angle = file.bytes * angle_range / parent_size
         if segment_angle >= @minimum_angle
           big_files << file
         else
-          small_files_size += file.size
+          small_files_size += file.bytes
           small_files << file
         end
       end
@@ -425,7 +425,7 @@ private
       end
 
       big_directories.each do |big_directory|
-        segment_angle = big_directory.size * angle_range / parent_size
+        segment_angle = big_directory.bytes * angle_range / parent_size
         segment = Segment.new(:angle => segment_angle, 
                               :type => :directory,
                               :name => "#{big_directory.name}/", 
@@ -434,9 +434,9 @@ private
                                                :overwrite_params => {:server => @server.name, 
                                                                      :action => nil,
                                                                      :path => big_directory.path}),
-                              :tooltip => "...#{big_directory.path_relative_to(@directory)}/ (#{GraphHelper::format_human(big_directory.size)})")
+                              :tooltip => "...#{big_directory.path_relative_to(@directory)}/ (#{GraphHelper::format_human(big_directory.bytes)})")
         level_segments << segment
-        add_segments(level + 1, segment_angle, level_segment_array, big_directory, big_directory.size)
+        add_segments(level + 1, segment_angle, level_segment_array, big_directory, big_directory.bytes)
       end
       
       if small_files_angle > 0
@@ -458,13 +458,13 @@ private
       files_size = 0
       files_total_angle = small_files_angle
       big_files.each do |file|
-        files_size += file.size
+        files_size += file.bytes
 
-        angle = file.size * angle_range / parent_size
+        angle = file.bytes * angle_range / parent_size
         file_segment = Segment.new(:angle => angle, 
                                    :type => :file,
                                    :name => file.name,
-                                   :tooltip => "...#{directory.path_relative_to(@directory)}/#{file.name} (#{GraphHelper::format_human(file.size)})")
+                                   :tooltip => "...#{directory.path_relative_to(@directory)}/#{file.name} (#{GraphHelper::format_human(file.bytes)})")
         level_segments << file_segment
         files_total_angle += angle
       end

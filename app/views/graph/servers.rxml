@@ -19,7 +19,7 @@ xml.svg(:width => "100%",
         "xmlns:xlink".to_sym => "http://www.w3.org/1999/xlink") do 
 
   create_server_circles.each do |server_circle|
-    xml.a("xlink:title".to_sym => "#{server_circle.server.name} (#{ApplicationHelper.human_size_in(ApplicationHelper.human_units_of(server_circle.server.size), server_circle.server.size)} #{ApplicationHelper.human_units_of(server_circle.server.size)})",
+    xml.a("xlink:title".to_sym => "#{server_circle.server.name} (#{ApplicationHelper.human_size_in(ApplicationHelper.human_units_of(server_circle.server.bytes), server_circle.server.bytes)} #{ApplicationHelper.human_units_of(server_circle.server.bytes)})",
           "xlink:href".to_sym => url_for(:controller => "graph", 
                                          :escape => false,                                         
                                          :overwrite_params => { :server => server_circle.server.name, :action => nil }), :target => "_parent") do
@@ -31,7 +31,7 @@ xml.svg(:width => "100%",
                    :y => - 10,
                    :class => "server-name")  
         
-        xml.text("#{ApplicationHelper.human_size_in(ApplicationHelper.human_units_of(server_circle.server.size), server_circle.server.size)} #{ApplicationHelper.human_units_of(server_circle.server.size)}",
+        xml.text("#{ApplicationHelper.human_size_in(ApplicationHelper.human_units_of(server_circle.server.bytes), server_circle.server.bytes)} #{ApplicationHelper.human_units_of(server_circle.server.bytes)}",
                  :y => + 10,
                  :class => "server-size")
         end

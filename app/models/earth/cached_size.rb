@@ -12,7 +12,7 @@ module Earth
     end
 
     def increment(file_or_cached_size)
-      self.size += file_or_cached_size.size
+      self.bytes += file_or_cached_size.bytes
       self.blocks += file_or_cached_size.blocks
       if file_or_cached_size.respond_to?("count")
         self.count += file_or_cached_size.count
@@ -22,7 +22,7 @@ module Earth
     end
 
     def decrement(file_or_cached_size)
-      self.size -= file_or_cached_size.size
+      self.bytes -= file_or_cached_size.bytes
       self.blocks -= file_or_cached_size.blocks
       if file_or_cached_size.respond_to?("count")
         self.count -= file_or_cached_size.count

@@ -5,7 +5,7 @@ file1:
   id: 1
   directory_id: 1
   name: a
-  size: 1
+  bytes: 1
   blocks: 1
   uid: 1
   modified: <%= 20.minutes.ago.to_s(:db) %>
@@ -14,7 +14,7 @@ file2:
   id: 2
   directory_id: 1
   name: b
-  size: 2
+  bytes: 2
   blocks: 1
   uid: 1
   modified: <%= 5.weeks.ago.to_s(:db) %>
@@ -24,7 +24,7 @@ file3:
   id: 3
   directory_id: 2
   name: a
-  size: 3
+  bytes: 3
   blocks: 1
   uid: 1
   modified: <%= 1.year.ago.to_s(:db) %>
@@ -33,7 +33,7 @@ file4:
   id: 4
   directory_id: 2
   name: b
-  size: 4
+  bytes: 4
   blocks: 1
   uid: 1
   modified: <%= 10.years.ago.to_s(:db) %>
@@ -42,7 +42,7 @@ file5:
   id: 5
   directory_id: 7
   name: c
-  size: 17
+  bytes: 17
   blocks: 1
   uid: 1
   modified: <%= 10.years.ago.to_s(:db) %>
@@ -51,7 +51,7 @@ zip_file1:
   id: 6
   directory_id: 2
   name: foo.zip
-  size: 4
+  bytes: 4
   blocks: 1
   uid: 1
   modified: <%= 10.years.ago.to_s(:db) %>
@@ -60,7 +60,7 @@ zip_file2:
   id: 7
   directory_id: 5
   name: baz.zip
-  size: 20
+  bytes: 20
   blocks: 1
   uid: 1
   modified: <%= 10.years.ago.to_s(:db) %>
@@ -69,7 +69,7 @@ large_file1:
   id: 8
   directory_id: 7
   name: large1.data
-  size: 2000
+  bytes: 2000
   blocks: 4
   uid: 1
   modified: <%= 10.years.ago.to_s(:db) %>
@@ -78,7 +78,7 @@ large_file2:
   id: 9
   directory_id: 7
   name: large2.data
-  size: 2000000
+  bytes: 2000000
   blocks: 4000
   uid: 1
   modified: <%= 10.years.ago.to_s(:db) %>
@@ -87,7 +87,7 @@ large_file3:
   id: 10
   directory_id: 7
   name: large3.data
-  size: 2000000000
+  bytes: 2000000000
   blocks: 4000000
   uid: 1
   modified: <%= 10.years.ago.to_s(:db) %>

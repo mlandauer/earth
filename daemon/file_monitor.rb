@@ -196,7 +196,7 @@ private
       end
 
       directory.files.each do |file|
-        cache_map_filter.size += file.size
+        cache_map_filter.bytes += file.bytes
         cache_map_filter.blocks += file.blocks
         cache_map_filter.count += 1
       end

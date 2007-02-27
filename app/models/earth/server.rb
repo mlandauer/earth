@@ -18,12 +18,12 @@ module Earth
       Socket.gethostbyname(Socket.gethostname)[0]
     end
     
-    def size_blocks_and_count
+    def bytes_blocks_and_count
       size_sum = 0
       blocks_sum = 0
       count_sum = 0
       Earth::Directory.roots_for_server(self).each do |d|
-        size, blocks, count = d.size_blocks_and_count
+        size, blocks, count = d.bytes_blocks_and_count
         size_sum += size
         blocks_sum += blocks
         count_sum += count
@@ -31,13 +31,13 @@ module Earth
       [size_sum, blocks_sum, count_sum]
     end
     
-    def size
-      size, blocks, count = size_blocks_and_count
-      size
+    def bytes
+      bytes, blocks, count = bytes_blocks_and_count
+      bytes
     end
     
     def recursive_file_count
-      size, blocks, count = size_blocks_and_count
+      bytes, blocks, count = bytes_blocks_and_count
       count
     end
     

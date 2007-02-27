@@ -13,7 +13,7 @@ module Earth
     # Convenience method for setting all the fields associated with stat in one hit
     def stat=(stat)
       self.modified = stat.mtime
-      self.size = stat.size
+      self.bytes = stat.size
       self.blocks = stat.blocks
       self.uid = stat.uid
       self.gid = stat.gid
@@ -21,7 +21,7 @@ module Earth
     
     # Returns a "fake" Stat object with some of the same information as File::Stat
     def stat
-      Stat.new(modified, size, blocks, uid, gid)
+      Stat.new(modified, bytes, blocks, uid, gid)
     end
 
     def File.with_filter(params = {}) 

@@ -73,7 +73,7 @@
             <span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span>
           </td>
           <td class="owner_user"><span><%=h file.user.name %></span></td>
-          <td class="size"><span><%= ApplicationHelper.human_size_in(ApplicationHelper.human_units_of(file.size), file.size) %> <%= ApplicationHelper.human_units_of(file.size) %></span></td>
+          <td class="size"><span><%= ApplicationHelper.human_size_in(ApplicationHelper.human_units_of(file.bytes), file.bytes) %> <%= ApplicationHelper.human_units_of(file.bytes) %></span></td>
         </tr>
       <% end %>
     </tbody>
