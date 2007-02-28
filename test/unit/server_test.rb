@@ -31,9 +31,9 @@ class ServerTest < Test::Unit::TestCase
   end
   
   def test_recursive_file_count
-    assert_equal(6, servers(:first).recursive_file_count)
-    assert_equal(0, servers(:another).recursive_file_count)
-    assert_equal(4, servers(:yet_another).recursive_file_count)
+    assert_equal(6, servers(:first).size.count)
+    assert_equal(0, servers(:another).size.count)
+    assert_equal(4, servers(:yet_another).size.count)
   end
   
   def test_has_files

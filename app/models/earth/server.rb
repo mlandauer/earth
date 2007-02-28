@@ -18,26 +18,16 @@ module Earth
       Socket.gethostbyname(Socket.gethostname)[0]
     end
     
-    def bytes_blocks_and_count
+    def size
       size_sum = Size.new(0, 0, 0)
       Earth::Directory.roots_for_server(self).each do |d|
         size_sum += d.size
       end
-      [size_sum.bytes, size_sum.blocks, size_sum.count]
+      size_sum
     end
-    
-    def bytes
-      bytes, blocks, count = bytes_blocks_and_count
-      bytes
-    end
-    
-    def recursive_file_count
-      bytes, blocks, count = bytes_blocks_and_count
-      count
-    end
-    
+
     def has_files?
-      recursive_file_count > 0
+      size.count > 0
     end
     
     def heartbeat

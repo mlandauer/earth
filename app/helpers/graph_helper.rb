@@ -56,8 +56,8 @@ module GraphHelper
     #  arbitrary scale and sort descending by the radius (largest
     #  circle first).
     #
-    servers_and_radius = @servers.select { |server| server.bytes > 0 }.map do |server|
-      { :server => server, :relative_radius => Math.sqrt(server.bytes) }
+    servers_and_radius = @servers.select { |server| server.size.bytes > 0 }.map do |server|
+      { :server => server, :relative_radius => Math.sqrt(server.size.bytes) }
     end
 
     servers_and_radius.sort! do |entry1, entry2|

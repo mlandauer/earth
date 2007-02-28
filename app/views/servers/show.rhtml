@@ -57,7 +57,7 @@
 
 <tr>
   <th>Total size</th>
-  <td><%= h ApplicationHelper.human_size(@server.bytes) %></td>
+  <td><%= h ApplicationHelper.human_size(@server.size.bytes) %></td>
 </tr>
 
 <tr>
@@ -66,7 +66,7 @@
 </tr>
 <tr>
   <th>Total files</th>
-  <td><%= h number_with_delimiter(@server.recursive_file_count) %></td>
+  <td><%= h number_with_delimiter(@server.size.count) %></td>
 </tr>
 
 </table>

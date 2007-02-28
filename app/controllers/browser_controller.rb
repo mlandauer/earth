@@ -78,10 +78,10 @@ class BrowserController < ApplicationController
       if servers
         @any_empty = false
         @servers_and_bytes = servers.map do |s|
-          bytes, blocks, count = s.bytes_blocks_and_count
-          @any_empty = true if count == 0
-          if @show_empty || count > 0
-            [s, bytes]
+          size = s.size
+          @any_empty = true if size.count == 0
+          if @show_empty || size.count > 0
+            [s, size.bytes]
           end
         end
         # Remove any nil entries resulting from empty servers
