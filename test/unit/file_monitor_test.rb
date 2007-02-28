@@ -295,7 +295,15 @@ class FileMonitorTest < Test::Unit::TestCase
   end
 
   def create_random_file(file, size)
-    assert_equal "", `dd 2>/dev/null >/dev/null if=/dev/random of=#{file} bs=1 count=#{size}`
+    random_file = File.new(file, 'w')
+    iteration = 1..size
+    iteration.each { |i|
+      random_file.write(Kernel.rand(9).to_i)
+    }
+    # Just in case we truncate it as the size required (yeah, I suck!)
+    random_file.truncate(size)
+    random_file.close()
+    #assert_equal "", `dd 2>/dev/null >/dev/null if=/dev/random of=#{file} bs=1 count=#{size}`
   end
 
   def test_directory_cached_sizes_match
