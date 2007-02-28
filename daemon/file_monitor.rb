@@ -192,13 +192,11 @@ private
       cache_map_filter = directory.cached_sizes.new(:directory => directory)
 
       directory.children.each do |child|
-        cache_map_filter.increment(create_cache(child))
+        cache_map_filter.size += create_cache(child).size
       end
 
       directory.files.each do |file|
-        cache_map_filter.bytes += file.bytes
-        cache_map_filter.blocks += file.blocks
-        cache_map_filter.count += 1
+        cache_map_filter.size += file.size
       end
       directory.files.reset
 
