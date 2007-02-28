@@ -298,12 +298,15 @@ class FileMonitorTest < Test::Unit::TestCase
     random_file = File.new(file, 'w')
     iteration = 1..size
     iteration.each { |i|
+      # For each byte we select a random integer between 0 and 9
+      # as te docs for Kernel.rand specify that the returned number
+      # will be *less* than the number fed.
       random_file.write(Kernel.rand(9).to_i)
     }
     # Just in case we truncate it as the size required (yeah, I suck!)
+    # It's just a precaution ;-)
     random_file.truncate(size)
     random_file.close()
-    #assert_equal "", `dd 2>/dev/null >/dev/null if=/dev/random of=#{file} bs=1 count=#{size}`
   end
 
   def test_directory_cached_sizes_match
