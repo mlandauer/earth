@@ -62,8 +62,7 @@ class FileMonitorTest < Test::Unit::TestCase
     # paths.each_index{|i| assert_directory(paths[i], directories[i])}
     dir_a = []
     directories.each {|d| dir_a<< d.path}
-    dir_a.sort!
-    paths.each_index{|i| assert_directory(paths[i], directories[i])}
+    paths.each_index{|i| assert_directory(paths[i], Earth::Directory.find_by_path(dir_a[i])) }
   end
   
   def assert_files(paths, files)
