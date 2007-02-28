@@ -194,6 +194,11 @@ class FileMonitorTest < Test::Unit::TestCase
 
     directories.each { |dir| backdate(dir) }
     FileMonitor.update([@directory])
+    
+    # debugging test problems on Linux
+    puts directories
+    Earth::Directory.find(:all, :order => :id).each {|d| puts d.path }
+    # end of debugging code
 
     assert_directories(directories, Earth::Directory.find(:all, :order => :id))
 
