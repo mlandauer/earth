@@ -108,8 +108,8 @@ module Earth
     end
     
     def bytes_blocks_and_count_with_caching
-      if @cached_bytes
-        [@cached_bytes, @cached_blocks, @cached_count]
+      if @cached_size
+        [@cached_size.bytes, @cached_size.blocks, @cached_size.count]
       elsif Thread.current[:with_filtering].nil? && cached_sizes.find(:first)
         cached_size = cached_sizes.find :first
         [cached_size.bytes, cached_size.blocks, cached_size.count]
@@ -189,24 +189,19 @@ module Earth
       # another directory, so it should be reloaded from the db before it's used
       cached_sizes.reload
       cached_sizes.each do |cached_size|
-        size, blocks, count = 0, 0, 0
+        size = Size.new(0, 0, 0)
         self.children.each do |child|
           child_cached_size = child.cached_sizes.find(:first)
           if child_cached_size
-            size += child_cached_size.bytes
-            blocks += child_cached_size.blocks
-            count += child_cached_size.count
+            size += child_cached_size.size
           end
         end
 
         self.files.each do |file|
-          size += file.bytes
-          blocks += file.blocks
-          count += 1
+          size += file.size
         end
 
-        increase_cached_sizes_of_self_and_ancestors(size - cached_size.bytes,
-          blocks - cached_size.blocks, count - cached_size.count)
+        increase_cached_sizes_of_self_and_ancestors(size - cached_size)
       end
     end
 
@@ -219,7 +214,6 @@ module Earth
         cached_sizes.create(:directory => self)
       end
     end
-
 
     #
     # The maximum size we allow for the huge CASE WHEN... WHEN... ELSE
@@ -274,9 +268,7 @@ module Earth
 
       # Now determine cumulative size of each directory
 
-      directory_bytes_map = Hash.new
-      directory_blocks_map = Hash.new
-      directory_count_map = Hash.new
+      directory_size_map = Hash.new
       
       # We only need to grab the cumulative size of directories on
       # the leaf level from the database; since we already have all
@@ -302,9 +294,7 @@ module Earth
 
         # Use the cached sizes to fill in data for the leaf directories
         cached_sizes.each do |cached_size|
-          directory_bytes_map[cached_size.directory_id] = cached_size.bytes
-          directory_blocks_map[cached_size.directory_id] = cached_size.blocks
-          directory_count_map[cached_size.directory_id] = cached_size.count
+          directory_size_map[cached_size.directory_id] = cached_size.size
         end
 
       else
@@ -394,9 +384,7 @@ module Earth
             blocks = size_info["sum_blocks"].to_i
             count = size_info["sum_count"].to_i
             directory_id = size_info["dir_id"].to_i
-            directory_bytes_map[directory_id] = bytes
-            directory_blocks_map[directory_id] = blocks
-            directory_count_map[directory_id] = count
+            directory_size_map[directory_id] = Size.new(bytes, blocks, count)
 
             # Remove leaf level directory for which we got size
             # information, leaving only empty directories in the set
@@ -405,9 +393,7 @@ module Earth
 
           # Put empty directories into the map
           directory_id_set.each do |empty_directory_id|
-            directory_bytes_map[empty_directory_id] = 0
-            directory_blocks_map[empty_directory_id] = 0
-            directory_count_map[empty_directory_id] = 0
+            directory_size_map[empty_directory_id] = Size.new(0, 0, 0)
           end
         end
       end
@@ -417,8 +403,8 @@ module Earth
       # leaf-level directories, and caches the size information
       # in each directory.
       
-      compute_cached_size_recursive(self.level + depth, directory_bytes_map, directory_blocks_map, directory_count_map)
-      set_cached_size_recursive(self.level + depth, directory_bytes_map, directory_blocks_map, directory_count_map)
+      compute_cached_size_recursive(self.level + depth, directory_size_map)
+      set_cached_size_recursive(self.level + depth, directory_size_map)
 
       # Done: For each directory up to @level_count levels under the
       # current directory, the files and size getters can now be
@@ -426,10 +412,10 @@ module Earth
     end
 
   private
-    def increase_cached_sizes_of_self_and_ancestors(size_increase, blocks_increase, count_increase)
-      if size_increase != 0 or blocks_increase != 0 or count_increase != 0
+    def increase_cached_sizes_of_self_and_ancestors(size_increase)
+      if size_increase != Size.new(0, 0, 0)
         Earth::CachedSize.update_all(["bytes = bytes + ?, blocks = blocks + ?, count = count + ?",
-                                       size_increase, blocks_increase, count_increase],
+                                       size_increase.bytes, size_increase.blocks, size_increase.count],
                                      ["directory_id in (?)", self.self_and_ancestors])
       end    
     end
@@ -446,42 +432,31 @@ module Earth
       end
     end
 
-    def compute_cached_size_recursive(leaf_level, directory_bytes_map, directory_blocks_map, directory_count_map)
+    def compute_cached_size_recursive(leaf_level, directory_size_map)
       if self.level < leaf_level
-        directory_bytes_map[self.id] = 0
-        directory_blocks_map[self.id] = 0
-        directory_count_map[self.id] = 0
+        directory_size_map[self.id] = Size.new(0, 0, 0)
         self.files.each do |file|
-          directory_bytes_map[self.id] += file.bytes
-          directory_blocks_map[self.id] += file.blocks
-          directory_count_map[self.id] += 1
+          directory_size_map[self.id] += file.size
         end
         self.children.each do |child|
-          child.compute_cached_size_recursive(leaf_level, directory_bytes_map, directory_blocks_map, directory_count_map)
+          child.compute_cached_size_recursive(leaf_level, directory_size_map)
         end
       else
-        if not directory_bytes_map.has_key?(self.id)
-          directory_bytes_map[self.id] = self.bytes
-          directory_blocks_map[self.id] = self.blocks
-          directory_count_map[self.id] = self.recursive_file_count
+        if not directory_size_map.has_key?(self.id)
+          directory_size_map[self.id] = Size.new(self.bytes, self.blocks, self.recursive_file_count)
         end
       end
     end
 
-    def set_cached_size_recursive(leaf_level, directory_bytes_map, directory_blocks_map, directory_count_map)
+    def set_cached_size_recursive(leaf_level, directory_size_map)
       if self.level != leaf_level
         self.children.each do |child|
-          child.set_cached_size_recursive(leaf_level, directory_bytes_map, directory_blocks_map, directory_count_map)
-          directory_bytes_map[self.id] += directory_bytes_map[child.id]
-          directory_blocks_map[self.id] += directory_blocks_map[child.id]
-          directory_count_map[self.id] += directory_count_map[child.id]
+          child.set_cached_size_recursive(leaf_level, directory_size_map)
+          directory_size_map[self.id] += directory_size_map[child.id]
         end
       end
-      @cached_bytes = directory_bytes_map[self.id]
-      @cached_blocks = directory_blocks_map[self.id]
-      @cached_count = directory_count_map[self.id]
+      @cached_size = directory_size_map[self.id]
     end
-
   end
 end
 
