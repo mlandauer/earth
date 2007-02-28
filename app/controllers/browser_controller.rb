@@ -93,10 +93,10 @@ class BrowserController < ApplicationController
         # and filter out empty directories after the fact
         any_empty_directories = false
         @directories_and_bytes = directories.map do |d| 
-          bytes, blocks, count = d.bytes_blocks_and_count;
-          any_empty_directories = true if count == 0
-          if @show_empty || count > 0
-            [d, bytes]
+          size = d.size
+          any_empty_directories = true if size.count == 0
+          if @show_empty || size.count > 0
+            [d, size.bytes]
           end
         end
         @any_empty = any_empty_directories || (@files.any? { |file| file.bytes == 0 } if @files)

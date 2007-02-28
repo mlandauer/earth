@@ -49,7 +49,7 @@ class BrowserControllerTest < Test::Unit::TestCase
     assert_template 'show'
 
     assert_equal(directories(:foo), assigns(:directory))
-    assert_equal([[directories(:foo_bar), directories(:foo_bar).bytes]], assigns(:directories_and_bytes))
+    assert_equal([[directories(:foo_bar), directories(:foo_bar).size.bytes]], assigns(:directories_and_bytes))
   end
 
   def test_show_with_server_and_path_as_csv
@@ -77,7 +77,7 @@ class BrowserControllerTest < Test::Unit::TestCase
     assert_tag :tag => "directory",
       :attributes => {:name => "twiddle"},
       :parent => {:tag => "directory", :attributes => {:path => "/foo/bar"}},
-      :child => {:tag => "size_in_bytes", :content => directories(:foo_bar_twiddle).bytes.to_s}
+      :child => {:tag => "size_in_bytes", :content => directories(:foo_bar_twiddle).size.bytes.to_s}
   end
   
   def test_index

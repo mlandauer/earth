@@ -347,7 +347,7 @@ class DaemonTest
       assert("Cache of root complete") {root.cache_complete?}
       verify_cache_integrity_recursive(root)
       
-      puts "total size/blocks/count is #{root.bytes_blocks_and_count_with_caching.inspect} (#{root.bytes_blocks_and_count_without_caching.inspect})"
+      puts "total size/blocks/count is [#{root.size.bytes}, #{root.size.blocks}, #{root.size.count}] ([#{root.size_without_caching.bytes}, #{root.size_without_caching.blocks}, #{root.size_without_caching.count}])"
     end
 
     root.ensure_consistency
@@ -358,7 +358,7 @@ class DaemonTest
   end
 
   def verify_cache_integrity_recursive(directory)
-    assert("Size, blocks and count for node ##{directory.id} (#{directory.path}) match") { directory.bytes_blocks_and_count_with_caching == directory.bytes_blocks_and_count_without_caching }
+    assert("Size, blocks and count for node ##{directory.id} (#{directory.path}) match") { directory.size_with_caching == directory.size_without_caching }
     directory.children.each do |child|
       verify_cache_integrity_recursive(child)
     end

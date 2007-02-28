@@ -57,27 +57,11 @@ module Earth
     def stat
       Stat.new(modified) unless modified.nil?
     end
-    
-    # Returns the size of all the files (matching the search criterion) recursively
-    # below this directory
-    def bytes
-      bytes, blocks, count = bytes_blocks_and_count
-      bytes
-    end
-    
-    def blocks
-      bytes, blocks, count = bytes_blocks_and_count
-      blocks
-    end
-        
-    def recursive_file_count
-      bytes, blocks, count = bytes_blocks_and_count
-      count
-    end
 
+    # The size (in bytes and blocks) and the number of files recursively contained in this directory
     # This only requires the id of the current directory and so it doesn't matter
     # if the lft and rgt values of the object in memory is out-of-date with the db state
-    def bytes_blocks_and_count
+    def size
       result = Earth::File.find(:first, 
                                 :select => "SUM(files.bytes) AS sum_bytes, SUM(files.blocks) AS sum_blocks, COUNT(*) AS count",
                                 :joins => "JOIN directories ON files.directory_id = directories.id",
@@ -89,7 +73,7 @@ module Earth
                                   self.id,
                                   self.server_id,
                                 ])
-      [ (result["sum_bytes"] || 0).to_i, (result["sum_blocks"] || 0).to_i, result["count"].to_i ]
+      Size.new((result["sum_bytes"] || 0).to_i, (result["sum_blocks"] || 0).to_i, result["count"].to_i)
     end
 
     def recursive_cache_count
@@ -107,20 +91,19 @@ module Earth
       return 1 + children_count
     end
     
-    def bytes_blocks_and_count_with_caching
+    def size_with_caching
       if @cached_size
-        [@cached_size.bytes, @cached_size.blocks, @cached_size.count]
+        @cached_size
       elsif Thread.current[:with_filtering].nil? && cached_sizes.find(:first)
-        cached_size = cached_sizes.find :first
-        [cached_size.bytes, cached_size.blocks, cached_size.count]
+        cached_sizes.find(:first).size
       else
-        bytes_blocks_and_count_without_caching
+        size_without_caching
       end
     end
-    alias_method_chain :bytes_blocks_and_count, :caching
+    alias_method_chain :size, :caching
 
     def has_files?
-      recursive_file_count > 0
+      size.count > 0
     end
     
     # Return all the root directories for the given server as an array
@@ -443,7 +426,7 @@ module Earth
         end
       else
         if not directory_size_map.has_key?(self.id)
-          directory_size_map[self.id] = Size.new(self.bytes, self.blocks, self.recursive_file_count)
+          directory_size_map[self.id] = self.size
         end
       end
     end

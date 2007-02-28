@@ -68,8 +68,8 @@ class FileMonitorTest < Test::Unit::TestCase
     @directory.update_caches
     cached_size = @directory.cached_sizes.find(:first)
     cached_size.reload
-    assert_equal(cached_size.bytes, @directory.bytes)
-    assert_equal(cached_size.blocks, @directory.blocks)
+    assert_equal(cached_size.bytes, @directory.size.bytes)
+    assert_equal(cached_size.blocks, @directory.size.blocks)
 
     # Note: the following assertion assumes that no sparse or
     # compressed files have been created, as in that case disk usage
@@ -351,12 +351,12 @@ class FileMonitorTest < Test::Unit::TestCase
     assert_equal(Earth::Directory.find_by_name("subdir"), Earth::File.find_by_name('sub-file1').directory)
     assert_equal(file1_size, Earth::File.find_by_name('sub-file1').bytes)
     assert_cached_sizes_match(@directory)
-    assert_equal(file1_size, Earth::Directory.find_by_name("subdir").bytes)
+    assert_equal(file1_size, Earth::Directory.find_by_name("subdir").size.bytes)
     assert_equal(file1_size, Earth::Directory.find_by_name("subdir").cached_sizes.find(:first).bytes)
-    assert_equal(file1_size, Earth::Directory.find_by_name(@dir).bytes)
+    assert_equal(file1_size, Earth::Directory.find_by_name(@dir).size.bytes)
     assert_equal(file1_size, Earth::Directory.find_by_name(@dir).cached_sizes.find(:first).bytes)
     assert_equal(@directory, Earth::Directory.find_by_name(@dir))
-    assert_equal(file1_size, @directory.bytes)
+    assert_equal(file1_size, @directory.size.bytes)
     assert_equal(file1_size, @directory.cached_sizes.find(:first).bytes)
     assert_equal(@directory.cached_sizes.find(:first).bytes, file1_size)
 

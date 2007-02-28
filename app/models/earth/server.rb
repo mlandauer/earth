@@ -19,16 +19,11 @@ module Earth
     end
     
     def bytes_blocks_and_count
-      size_sum = 0
-      blocks_sum = 0
-      count_sum = 0
+      size_sum = Size.new(0, 0, 0)
       Earth::Directory.roots_for_server(self).each do |d|
-        size, blocks, count = d.bytes_blocks_and_count
-        size_sum += size
-        blocks_sum += blocks
-        count_sum += count
+        size_sum += d.size
       end
-      [size_sum, blocks_sum, count_sum]
+      [size_sum.bytes, size_sum.blocks, size_sum.count]
     end
     
     def bytes

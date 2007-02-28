@@ -30,7 +30,7 @@ module GraphHelper
     end
 
     # Recursively fill level arrays
-    add_segments(1, 360.0, level_segment_array, directory, directory.bytes)
+    add_segments(1, 360.0, level_segment_array, directory, directory.size.bytes)
 
     # Post-process level arrays
     for level in (1..@level_count)
@@ -350,7 +350,7 @@ private
       small_directories_bytes = 0
 
       directory.children.each do |child|
-        child_bytes = child.bytes
+        child_bytes = child.size.bytes
         segment_angle = child_bytes * angle_range / parent_bytes
         if segment_angle >= @minimum_angle
           big_directories << child
@@ -422,7 +422,7 @@ private
       end
 
       big_directories.each do |big_directory|
-        segment_angle = big_directory.bytes * angle_range / parent_bytes
+        segment_angle = big_directory.size.bytes * angle_range / parent_bytes
         segment = Segment.new(:angle => segment_angle, 
                               :type => :directory,
                               :name => "#{big_directory.name}/", 
@@ -431,9 +431,9 @@ private
                                                :overwrite_params => {:server => @server.name, 
                                                                      :action => nil,
                                                                      :path => big_directory.path}),
-                              :tooltip => "...#{big_directory.path_relative_to(@directory)}/ (#{GraphHelper::format_human(big_directory.bytes)})")
+                              :tooltip => "...#{big_directory.path_relative_to(@directory)}/ (#{GraphHelper::format_human(big_directory.size.bytes)})")
         level_segments << segment
-        add_segments(level + 1, segment_angle, level_segment_array, big_directory, big_directory.bytes)
+        add_segments(level + 1, segment_angle, level_segment_array, big_directory, big_directory.size.bytes)
       end
       
       if small_files_angle > 0

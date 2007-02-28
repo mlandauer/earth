@@ -14,4 +14,8 @@ class Size
   def -(size)
     Size.new(bytes - size.bytes, blocks - size.blocks, count - size.count)
   end
+  
+  def ==(size)
+    bytes == size.bytes && blocks == size.blocks && count == size.count
+  end
 end
