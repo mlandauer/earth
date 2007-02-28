@@ -110,8 +110,11 @@ module Earth
     def bytes_blocks_and_count_with_caching
       if @cached_bytes
         [@cached_bytes, @cached_blocks, @cached_count]
+      elsif Thread.current[:with_filtering].nil? && cached_sizes.find(:first)
+        cached_size = cached_sizes.find :first
+        [cached_size.bytes, cached_size.blocks, cached_size.count]
       else
-        cache_data(:bytes, :blocks, :count) || bytes_blocks_and_count_without_caching
+        bytes_blocks_and_count_without_caching
       end
     end
     alias_method_chain :bytes_blocks_and_count, :caching
@@ -431,20 +434,6 @@ module Earth
       end    
     end
     
-    def cache_data(*columns)
-      # If using non-default filtering there is no cache data so return nil
-      return nil if Thread.current[:with_filtering]
-      
-      cached_size = cached_sizes.find :first
-      if cached_size
-        if columns.size > 1
-          columns.map { |column| cached_size[column] }
-        else
-          cached_size[columns[0]]
-        end
-      end
-    end
-
     protected
     def set_files_recursive(directory_to_file_map)
       if directory_to_file_map.has_key?(self.id)
