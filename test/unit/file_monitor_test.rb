@@ -55,6 +55,14 @@ class FileMonitorTest < Test::Unit::TestCase
 
   def assert_directories(paths, directories)
     assert_equal(paths.size, directories.size)
+    # Insertion order into the Earth::Directory model is not the same
+    # in Linux and Mac OS X (the two platforms to which I have access)
+    # so this assumption that they will be ordered in the same way
+    # is false.
+    # paths.each_index{|i| assert_directory(paths[i], directories[i])}
+    dir_a = []
+    directories.each {|d| dir_a<< d.path}
+    dir_a.sort!
     paths.each_index{|i| assert_directory(paths[i], directories[i])}
   end
   
@@ -195,11 +203,6 @@ class FileMonitorTest < Test::Unit::TestCase
     directories.each { |dir| backdate(dir) }
     FileMonitor.update([@directory])
     
-    # debugging test problems on Linux
-    #puts directories
-    #Earth::Directory.find(:all, :order => :id).each {|d| puts d.path }
-    # end of debugging code
-
     assert_directories(directories, Earth::Directory.find(:all, :order => :id))
 
     FileUtils.rm_rf dir_a
