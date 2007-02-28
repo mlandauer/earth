@@ -197,7 +197,31 @@ module Earth
         cached_sizes.create(:directory => self)
       end
     end
-
+    
+    # Starting at the top of the directory structure create the caches (and make them up-to-date)
+    # for everything recursively below this directory
+    # Returns the current cached size of this directory
+    def create_caches_recursively(eta_printer = nil)
+      if not cached_sizes.loaded? or cached_sizes.empty?
+        cached_size = cached_sizes.new(:directory => self)
+  
+        children.each do |child|
+          cached_size.size += child.create_caches_recursively(eta_printer)
+        end
+  
+        files.each do |file|
+          cached_size.size += file.size
+        end
+        files.reset
+  
+        cached_size.create
+        eta_printer.increment if eta_printer
+      else
+        cached_size = cached_sizes[0]
+      end
+      cached_size.size
+    end
+    
     #
     # The maximum size we allow for the huge CASE WHEN... WHEN... ELSE
     # END construct for getting cumulative sizes for multiple

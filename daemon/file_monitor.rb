@@ -171,7 +171,7 @@ private
       benchmark "Creating cache information" do
         ActiveRecord::Base.logger.debug("begin create cache");
         @cached_size_eta_printer = ETAPrinter.new(directory_count) unless parent
-        create_cache(directory)
+        directory.create_caches_recursively(@cached_size_eta_printer)
         @cached_size_eta_printer = nil
         ActiveRecord::Base.logger.debug("end create cache");
       end
@@ -187,27 +187,6 @@ private
     end
   end
 
-  def FileMonitor.create_cache(directory)
-    if not directory.cached_sizes.loaded? or directory.cached_sizes.empty?
-      cache_map_filter = directory.cached_sizes.new(:directory => directory)
-
-      directory.children.each do |child|
-        cache_map_filter.size += create_cache(child).size
-      end
-
-      directory.files.each do |file|
-        cache_map_filter.size += file.size
-      end
-      directory.files.reset
-
-      cache_map_filter.create
-      @cached_size_eta_printer.increment if @cached_size_eta_printer
-    else
-      cache_map_filter = directory.cached_sizes[0]
-    end
-    cache_map_filter
-  end
-  
   def FileMonitor.run(directories, force_update_time=nil)
     while true do
       # At the beginning of every update get the server information in case it changes on the database
