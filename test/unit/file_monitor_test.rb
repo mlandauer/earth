@@ -196,8 +196,8 @@ class FileMonitorTest < Test::Unit::TestCase
     FileMonitor.update([@directory])
     
     # debugging test problems on Linux
-    puts directories
-    Earth::Directory.find(:all, :order => :id).each {|d| puts d.path }
+    #puts directories
+    #Earth::Directory.find(:all, :order => :id).each {|d| puts d.path }
     # end of debugging code
 
     assert_directories(directories, Earth::Directory.find(:all, :order => :id))
