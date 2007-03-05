@@ -1,8 +1,13 @@
 require "iconv"
 
 class QuoteBadCharacters
-  def quote(text)
-    quote_bad_utf8(quote_backslashes(text))
+  # From the iconv_open man page:
+  # Locale dependent, in terms of char or wchar_t
+  #   (with  machine  dependent  endianness  and  alignment,  and with semantics
+  #   depending on the OS and the  current  LC_CTYPE  locale facet)
+  #     char, wchar_t
+  def quote(text, source_encoding = "char")
+    quote_bad_utf8(quote_backslashes(text), source_encoding)
   end
   
   def quote_backslashes(text)
@@ -17,8 +22,8 @@ class QuoteBadCharacters
     result
   end
   
-  def quote_bad_utf8(text)
-    c = Iconv.new("char", "UTF-8")
+  def quote_bad_utf8(text, source_encoding)
+    c = Iconv.new(source_encoding, "UTF-8")
     begin
       c.iconv(text)
     rescue Iconv::IllegalSequence => c
