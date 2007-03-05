@@ -4,7 +4,10 @@
       <%= breadcrumbs_with_server_and_directory @server, @directory %>
     </h2>
     <h2 class="warning">
-        <%= "Warning! The Earth daemon has stopped running on #{@server.name}" unless @server.nil? || @server.daemon_alive? %>
+      <% unless @server.nil? || @server.daemon_alive? %>
+        Warning! The Earth daemon has stopped running on <%= @server.name %><br />
+        <small>The indexed data is <%= time_ago_in_words(@server.last_update_finish_time, true) unless @server.last_update_finish_time.nil? %> old</small>
+      <% end %>
     </h2>
     
   <small class="show-hide-empty">
