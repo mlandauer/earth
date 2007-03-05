@@ -6,7 +6,7 @@ class QuoteBadCharacters
   #   (with  machine  dependent  endianness  and  alignment,  and with semantics
   #   depending on the OS and the  current  LC_CTYPE  locale facet)
   #     char, wchar_t
-  def initialize(source_encoding = "char")
+  def initialize(source_encoding = "UTF-8")
     @convert = Iconv.new(source_encoding, "UTF-8")
   end
   
