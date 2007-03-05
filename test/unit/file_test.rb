@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class Earth::FileTest < Test::Unit::TestCase
-  fixtures :files
-  set_fixture_class :files => Earth::File
+  fixtures :servers, :directories, :files
+  set_fixture_class :servers => Earth::Server, :directories => Earth::Directory, :files => Earth::File
 
   def test_stat
     # Getting a File::Stat from a "random" file
@@ -26,5 +26,15 @@ class Earth::FileTest < Test::Unit::TestCase
     assert_kind_of(Earth::File::Stat, s)
     assert_equal(stat, s)
     assert_equal(s, stat)
+  end
+  
+  def test_insert_utf8_encoded_filename
+    # Inserting some random bit of japanese (encoded in UTF8)
+    directories(:foo).files.create(:name => "ストリーミング")
+  end
+  
+  def test_insert_bad_utf8_encoded_filename
+    # The character 0xA9 should never appear in UTF8
+    assert_raise(ActiveRecord::StatementInvalid) {directories(:foo).files.create(:name => "\xA9")}
   end
 end
