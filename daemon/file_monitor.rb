@@ -381,6 +381,10 @@ private
     entries.delete(".")
     entries.delete("..")
     
+    # Quote names that can not be converted to UTF8
+    quote = QuoteBadCharacters.new
+    entries.map!{|text| quote.quote(text)}
+    
     # Contains the stat information for both files and directories
     stats = Hash.new
     entries.each do |file| 

@@ -6,8 +6,12 @@ class QuoteBadCharacters
   #   (with  machine  dependent  endianness  and  alignment,  and with semantics
   #   depending on the OS and the  current  LC_CTYPE  locale facet)
   #     char, wchar_t
-  def quote(text, source_encoding = "char")
-    quote_bad_utf8(quote_backslashes(text), source_encoding)
+  def initialize(source_encoding = "char")
+    @convert = Iconv.new(source_encoding, "UTF-8")
+  end
+  
+  def quote(text)
+    quote_bad_utf8(quote_backslashes(text))
   end
   
   def quote_backslashes(text)
@@ -22,11 +26,10 @@ class QuoteBadCharacters
     result
   end
   
-  def quote_bad_utf8(text, source_encoding)
-    c = Iconv.new(source_encoding, "UTF-8")
+  def quote_bad_utf8(text)
     begin
-      c.iconv(text)
-    rescue Iconv::IllegalSequence => c
+      @convert.iconv(text)
+    rescue Iconv::Failure => c
       c.success + quote_bad_character(c.failed[0]) + c.failed[1..-1]
     end
   end
