@@ -7,6 +7,7 @@ class QuoteBadCharactersTest < Test::Unit::TestCase
     assert_equal "Hello", @quote.quote("Hello")
   end
   
+  # This contains a character that is invalid in UTF8
   def test_invalid_character
     assert_equal 'Hello\251 sir!', @quote.quote("Hello\251 sir!")
   end
