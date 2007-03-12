@@ -313,7 +313,7 @@ private
         end
         added_file_names.each do |name|
           Earth::File.benchmark("Creating file with name #{name}", Logger::DEBUG, !log_all_sql) do
-            directory.files.create(:name => name, :path => (directory.path + "/" + name), :stat => stats[name])
+            directory.files.create(:name => name, :stat => stats[name])
           end
         end
 
