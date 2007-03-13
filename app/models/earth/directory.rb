@@ -323,7 +323,7 @@ module Earth
           # a directory found recursively. This is used for grouping
           # (summarizing) results by leaf-level directory.
           edge_case = "CASE ";
-          edges.each do |edge_info|
+          edges.sort_by{|e| e.lft}.reverse.each do |edge_info|
             id = edge_info['id'].to_i
             edge_case += "WHEN lft >= #{edge_info['lft'].to_i} THEN #{id} "
             directory_id_set << id # Remember leaf level directory
