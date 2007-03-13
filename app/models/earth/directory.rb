@@ -233,6 +233,26 @@ module Earth
       cached_size.size
     end
     
+    # Fetch all the files and precache them into the association "files" for all 
+    # directories below this one, down to and including the given level
+    # The clever bit is that we fetch all the files in one go (in a single SQL select)
+    def cache_files_down_to_level(level)
+      files = find_files_down_to_level(level)
+
+      # Sort the files by directory
+      directory_to_file_map = Hash.new
+      files.each do |file|
+        if not directory_to_file_map.has_key?(file.directory_id) then
+          directory_to_file_map[file.directory_id] = Array.new
+        end
+        directory_to_file_map[file.directory_id] << file
+      end
+
+      # Uses the @directory_to_file_map to set the "files"
+      # collection for each directory node, recursively.
+      set_files_recursive(directory_to_file_map)
+    end
+    
     #
     # The maximum size we allow for the huge CASE WHEN... WHEN... ELSE
     # END construct for getting cumulative sizes for multiple
@@ -249,31 +269,12 @@ module Earth
     # directory node.
     #
     def cache_sizes_recursive(depth)
-
       leaf_level = self.level + depth
 
-      # Below, we're fetching recursive file and size information
-      # for the given number of levels efficiently, minimizing the
-      # number of SQL queries that need to be performed.
-
       # We only need to cache the files to the level above the leaf level
-      files = find_files_down_to_level(leaf_level - 1)
-
-      # Sort the files by directory
-      directory_to_file_map = Hash.new
-      files.each do |file|
-        if not directory_to_file_map.has_key?(file.directory_id) then
-          directory_to_file_map[file.directory_id] = Array.new
-        end
-        directory_to_file_map[file.directory_id] << file
-      end
-
-      # Uses the @directory_to_file_map to set the "files"
-      # collection for each directory node, recursively.
-      set_files_recursive(directory_to_file_map)
+      cache_files_down_to_level(leaf_level - 1)
 
       # Now determine cumulative size of each directory
-
       directory_size_map = Hash.new
       
       # We only need to grab the cumulative size of directories on
