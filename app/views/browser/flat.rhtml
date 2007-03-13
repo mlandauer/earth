@@ -67,7 +67,7 @@
             <%= file.name %>
           </td>
           <td class="path">
-             <% if not @server %><%= link_to file.directory.server.name, :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => nil} %>:<% else %><% if not (@directory.nil? or @directory.parent_id.nil?) %><%= link_to("..", :overwrite_params => {:page => nil, :path => @directory.parent.path}) %>/<% end %><% end %><% self_and_ancestors_up_to(file.directory, @directory).reverse.each do |parent| %><% if parent == @directory %><%= h parent.name.gsub(/ /, "&nbsp;") %><% else %><%= link_to(parent.name.gsub(/ /, "&nbsp;"), :overwrite_params => {:page => nil, :server => file.directory.server.name, :path => parent.path}) %><% end %>/<wbr/><% end %>
+            <%= linked_file_path(file) %>
           </td>
           <td class="modified">
             <span title="<%=h file.modified %>"><%= distance_of_time_in_words_to_now(file.modified) %> ago</span>
