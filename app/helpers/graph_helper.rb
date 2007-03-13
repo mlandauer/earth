@@ -844,7 +844,7 @@ private
       remaining_width = @width - @offset_x
       remaining_height = @height - @offset_y
 
-      sum = row.map { |node| node.size*factor }.sum
+      sum = row.map { |node| node.size.bytes*factor }.sum
 
       if remaining_height > 0 and remaining_width > 0 and sum > 0 then
 
@@ -856,7 +856,7 @@ private
           top = @offset_y
 
           row.each do |r|
-            height = r.size*factor/width
+            height = r.size.bytes*factor/width
             @sub_rectangles << SubRect.new(@x + left, @y + top, width, height, r)
             top += height
           end
@@ -869,7 +869,7 @@ private
           top = @offset_y
 
           row.each do |r|
-            width = r.size*factor/height
+            width = r.size.bytes*factor/height
             @sub_rectangles << SubRect.new(@x + left, @y + top, width, height, r)
             left += width
           end
@@ -881,18 +881,18 @@ private
     end
 
     def worst(row, w, factor)
-      s = row.map { |node| node.size * factor }.sum
+      s = row.map { |node| node.size.bytes * factor }.sum
       if row.empty? or s == 0 or factor == 0
         0
       else
-        [(w*w*row[0].size*factor)/(s*s), (s*s)/(w*w*row[-1].size*factor)].max
+        [(w*w*row[0].size.bytes*factor)/(s*s), (s*s)/(w*w*row[-1].size.bytes*factor)].max
       end
     end
     
     def squarify(children, row, w, factor) 
       while true
         if not children.empty?
-          if children[0].size*factor < 0
+          if children[0].size.bytes*factor < 0
             add_remaining("#{children.size} files")
             break
           else
@@ -949,7 +949,7 @@ private
     end
 
     def tooltip
-      "...#{relative_path} (#{GraphHelper::format_human(@directory.size)})"
+      "...#{relative_path} (#{GraphHelper::format_human(@directory.size.bytes)})"
     end
   end
 
@@ -972,7 +972,7 @@ private
     end
 
     def tooltip
-      "...#{@parent.relative_path}/#{@file.name} (#{GraphHelper::format_human(@file.size)})"
+      "...#{@parent.relative_path}/#{@file.name} (#{GraphHelper::format_human(@file.size.bytes)})"
     end
 
     def children
@@ -982,7 +982,7 @@ private
 
   def create_treemap_recursive(node, rect, level, sub_rectangle_array, max_levels)
 
-    total_size = node.children.map { |child| child.size }.sum
+    total_size = node.children.map { |child| child.size.bytes }.sum
     if total_size > 0
       rect.squarify(node.children, [], rect.width(), rect.area / total_size)
 
