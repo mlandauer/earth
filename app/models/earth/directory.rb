@@ -146,16 +146,6 @@ module Earth
       end
     end
     
-    # This assumes there are no overlapping directory trees
-    def Directory.find_by_path(path)
-      return Directory.find(:first, :conditions => ['path = ?', path])
-    end
-    
-    # Returns the child of this directory with the given name
-    def find_by_child_name(n)
-      Directory.find(:first, :conditions => ['parent_id = ? AND name = ?', id, n])
-    end
-    
     # Iterate over each node of the tree. Move from the top to the
     # bottom of the tree
     def each
