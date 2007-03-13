@@ -10,6 +10,7 @@ class DirectoryTest < Test::Unit::TestCase
   
   def test_find_subdirectories_at_level
     assert_equal([directories(:foo_bar_twiddle)], directories(:foo).find_subdirectories_at_level(3))
+    assert_equal([], directories(:bar).find_subdirectories_at_level(2))
   end
   
   def test_find_by_path

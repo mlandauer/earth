@@ -295,17 +295,8 @@ module Earth
       # filter, grab size information from the cache.
       # Otherwise we need to calculate it from the files table.
       if Thread.current[:with_filtering].nil?
-        cached_sizes = Earth::CachedSize.find(:all, 
-                                              :conditions => [ 
-                                                "directory_id IN (SELECT id FROM directories " + \
-                                                "WHERE level = ? " + \
-                                                " AND server_id = ? " + \
-                                                " AND lft >= ? " + \
-                                                " AND lft <= ?) ", \
-                                                leaf_level,
-                                                self.server_id,
-                                                self.lft,
-                                                self.rgt])
+        cached_sizes = Earth::CachedSize.find(:all,
+          :conditions => {:directory_id => find_subdirectories_at_level(leaf_level).map{|d| d.id}})
 
         # Use the cached sizes to fill in data for the leaf directories
         cached_sizes.each do |cached_size|
