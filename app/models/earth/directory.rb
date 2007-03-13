@@ -99,16 +99,13 @@ module Earth
                                  level, self.server_id, self.lft, self.rgt ])
     end
     
-    # FIXME: we already have that information in memory (fetched
-    # using load_all_children above). It would be more efficient
-    # to walk the in-memory tree under @directory and gather the
-    # information from there.
+    # Walk the in-memory tree
     def find_subdirectories_at_level(level)
-      Earth::Directory.find(:all,
-        :conditions => [ 
-          "level = ? AND server_id = ? AND lft >= ? AND lft <= ?",
-          level, self.server_id, self.lft, self.rgt],
-        :order => "lft DESC")
+      if self.level == level
+        [self]
+      else
+        children.map{|c| c.find_subdirectories_at_level(level)}.flatten
+      end
     end
     
     def recursive_directory_count
