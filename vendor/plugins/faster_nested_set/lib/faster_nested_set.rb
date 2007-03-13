@@ -698,6 +698,8 @@ module Rsp
           return self[right_col_name]
         end
 
+        # If depth is 0 will get *all* the children recursively. If non zero, will
+        # only get the children down to a particular level
         def load_all_children(depth=0, options=nil)
           
           if depth == 0 or not has_level_column?
