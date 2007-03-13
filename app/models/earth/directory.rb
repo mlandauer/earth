@@ -88,11 +88,11 @@ module Earth
     end
     
     # Returns all files belonging to sub-directories of the current directory
-    # down to the given level
+    # down to the given level (including that level)
     def find_files_down_to_level(level)
       Earth::File.find(:all, :conditions => [ 
         "directory_id IN (SELECT id FROM directories " + \
-                                 "WHERE level < ? " + \
+                                 "WHERE level <= ? " + \
                                  " AND server_id = ? " + \
                                  " AND lft >= ? " + \
                                  " AND rgt <= ?)",
@@ -256,7 +256,8 @@ module Earth
       # for the given number of levels efficiently, minimizing the
       # number of SQL queries that need to be performed.
 
-      files = find_files_down_to_level(leaf_level)
+      # We only need to cache the files to the level above the leaf level
+      files = find_files_down_to_level(leaf_level - 1)
 
       # Sort the files by directory
       directory_to_file_map = Hash.new
