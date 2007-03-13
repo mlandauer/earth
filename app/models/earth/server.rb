@@ -31,7 +31,7 @@ module Earth
     end
     
     def heartbeat
-      self.heartbeat_time = Time.now
+      self.heartbeat_time = Time.now.utc
       save!
     end
     

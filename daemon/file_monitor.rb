@@ -73,7 +73,7 @@ class FileMonitor
     end
     
     server = Earth::Server.this_server
-    server.last_update_finish_time = Time.new
+    server.last_update_finish_time = Time.new.utc
     server.save!
     
     run(directories, force_update_time) unless only_initial_update
@@ -227,7 +227,7 @@ private
     if not options[:only_build_directories] and not options[:initial_pass]
       # Set the last_update_finish_time
       server = Earth::Server.this_server
-      server.last_update_finish_time = Time.new
+      server.last_update_finish_time = Time.new.utc
       server.save!
     end
     

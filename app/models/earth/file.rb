@@ -12,7 +12,7 @@ module Earth
     
     # Convenience method for setting all the fields associated with stat in one hit
     def stat=(stat)
-      self.modified = stat.mtime
+      self.modified = stat.mtime.utc
       self.bytes = stat.size
       self.blocks = stat.blocks
       self.uid = stat.uid
@@ -26,6 +26,10 @@ module Earth
     
     def size
       Size.new(bytes, blocks, 1)
+    end
+
+    def path
+      File.join(directory.path, name)
     end
     
     def File.with_filter(params = {}) 

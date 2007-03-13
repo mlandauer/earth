@@ -168,7 +168,7 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal(1, foo.lft)
     assert_equal(10, foo.rgt)
     foo.name = 'name'
-    foo.modified = Time.at(0)
+    foo.modified = Time.at(0).utc
     foo.update
     
     foo.reload
