@@ -87,6 +87,30 @@ module Earth
                               :joins => "JOIN directories ON cached_sizes.directory_id = directories.id").to_i
     end
     
+    # Returns all files belonging to sub-directories of the current directory
+    # down to the given level
+    def find_files_down_to_level(level)
+      Earth::File.find(:all, :conditions => [ 
+        "directory_id IN (SELECT id FROM directories " + \
+                                 "WHERE level < ? " + \
+                                 " AND server_id = ? " + \
+                                 " AND lft >= ? " + \
+                                 " AND rgt <= ?)",
+                                 level, self.server_id, self.lft, self.rgt ])
+    end
+    
+    # FIXME: we already have that information in memory (fetched
+    # using load_all_children above). It would be more efficient
+    # to walk the in-memory tree under @directory and gather the
+    # information from there.
+    def find_subdirectories_at_level(level)
+      Earth::Directory.find(:all,
+        :conditions => [ 
+          "level = ? AND server_id = ? AND lft >= ? AND lft <= ?",
+          level, self.server_id, self.lft, self.rgt],
+        :order => "lft DESC")
+    end
+    
     def recursive_directory_count
       return 1 + children_count
     end
@@ -245,20 +269,7 @@ module Earth
       # for the given number of levels efficiently, minimizing the
       # number of SQL queries that need to be performed.
 
-
-      # Grab all files belonging to sub-directories of the current
-      # directory, up to the leaf level (exclusive).
-      files = Earth::File.find(:all, 
-                               :conditions => [ 
-                                 "directory_id IN (SELECT id FROM directories " + \
-                                 "WHERE level < ? " + \
-                                 " AND server_id = ? " + \
-                                 " AND lft >= ? " + \
-                                 " AND rgt <= ?)",
-                                 leaf_level,
-                                 self.server_id,
-                                 self.lft,
-                                 self.rgt ])
+      files = find_files_down_to_level(leaf_level)
 
       # Sort the files by directory
       directory_to_file_map = Hash.new
@@ -316,21 +327,7 @@ module Earth
         # Start by getting the ids and left-edge values for each
         # directory on the leaf level.
 
-        # FIXME: we already have that information in memory (fetched
-        # using load_all_children above). It would be more efficient
-        # to walk the in-memory tree under @directory and gather the
-        # information from there.
-        edges = Earth::Directory.find(:all, 
-                                      :select => [ "lft, id" ],
-                                      :conditions => [ 
-                                        "level = ? AND server_id = ? AND lft >= ? AND lft <= ?",
-                                        leaf_level,
-                                        self.server_id,
-                                        self.lft,
-                                        self.rgt,
-                                      ],
-                                      :order => "lft DESC"
-                                      )
+        edges = find_subdirectories_at_level(leaf_level)
 
         # If the query didn't return any information, there are no
         # directories on the leaf level and we don't need to bother.
