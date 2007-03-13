@@ -10,7 +10,10 @@ class BrowserController < ApplicationController
     @server = Earth::Server.find_by_name(params[:server]) if params[:server]
     @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
 
+    @show_hidden = params[:show_hidden]
+
     @any_empty = false
+    @any_hidden = true
     
     @page_size = 25
     @current_page = (params[:page] || 1).to_i
@@ -38,6 +41,14 @@ class BrowserController < ApplicationController
       conditions = nil
     end
 
+    if not @show_hidden
+      if conditions
+        conditions[0] = "(not files.name like '.%') and " + conditions[0]
+      else
+        conditions = "not files.name like '.%'"
+      end
+    end
+
     Earth::File.with_filter(params) do
       file_count = Earth::File.count(:joins => joins, 
                                      :conditions => conditions)
@@ -59,6 +70,7 @@ class BrowserController < ApplicationController
     @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
     # Filter parameters
     @show_empty = params[:show_empty]
+    @show_hidden = params[:show_hidden]
 
     Earth::File.with_filter(params) do
       # if at the root
@@ -92,17 +104,22 @@ class BrowserController < ApplicationController
         # directory size and file count for each directory in one go
         # and filter out empty directories after the fact
         any_empty_directories = false
+        any_hidden_directories = false
         @directories_and_bytes = directories.map do |d| 
           size = d.size
           any_empty_directories = true if size.count == 0
-          if @show_empty || size.count > 0
+          any_hidden_directories = true if /^\./ =~ d.name
+          if (@show_empty || size.count > 0) && (@show_hidden || /^[^.]/ =~ d.name)
             [d, size.bytes]
           end
         end
         @any_empty = any_empty_directories || (@files.any? { |file| file.bytes == 0 } if @files)
+        @any_hidden = any_hidden_directories || (@files.any? { |file| /^\./ =~ file.name } if @files)
 
         # Remove any nil entries resulting from empty directories
         @directories_and_bytes.delete_if { |entry| entry.nil? }
+
+        @files = @files.select { |file| /^[^.]/ =~ file.name } if @files and not @show_hidden
       end
     end
     

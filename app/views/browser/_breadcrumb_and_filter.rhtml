@@ -9,16 +9,7 @@
         <small>The indexed data is <%= time_ago_in_words(@server.last_update_finish_time, true) unless @server.last_update_finish_time.nil? %> old</small>
       <% end %>
     </h2>
-    
-  <small class="show-hide-empty">
-  <% if params[:show_empty] %>
-    (<%= link_to_if @any_empty, "Hide empty directories and servers", :overwrite_params => {:show_empty => nil} %>)
-  <% else %>
-    (<%= link_to_if @any_empty, "Show empty directories and servers", :overwrite_params => {:show_empty => 1} %>)
-  <% end %>
-  </small>
 
-    
   </div>
 
   <div id="Filter" class="Right" style="margin: 1em 0.1em 0 0;">
@@ -26,15 +17,21 @@
       <table>
         <caption>Filter</caption>
         <tr>
-          <td class="first-row" style="text-align: right;">by filename:</td>
+          <td class="first-row" style="text-align: right;"><%= content_tag :label, "by filename:", {"for"=>"filter_filename" } %></td>
           <td class="first-row"><%= text_field_tag "filter_filename", params[:filter_filename], :size => 15 %></td>
         </tr>
         <tr>
-          <td class="last-row" style="text-align: right;">by user:</td>
+          <td class="last-row" style="text-align: right;"><%= content_tag :label, "by user:", {"for"=>"filter_user" } %></td>
           <td class="last-row"><%= text_field_tag "filter_user", params[:filter_user], :size => 15 %>
           <%= auto_complete_stylesheet %>
           <%= content_tag "div", "", :id => "filter_user_auto_complete", :class => "auto_complete" %>
           <%= auto_complete_field "filter_user", :url => {:action => "auto_complete_for_filter_user"} %></td>
+        </tr>
+        <tr>
+          <td class="double-row" colspan="2">
+            <span class="show-empty-checkbox"><%= check_box_tag "show_empty", "1", params[:show_empty], :disabled => (not can_show_empty or not @any_empty) %><%= content_tag :label, "Show empty", {"for"=>"show_empty", "class"=> ((not can_show_empty or not @any_empty) ? 'checkbox-label-disabled' : 'checkbox-label-enabled'), :title => "Empty servers/directories have no files that match the filter"} %></span>
+            <span class="show-hidden-checkbox"><%= check_box_tag "show_hidden", "1", params[:show_hidden], :disabled => (not can_show_hidden or not @any_hidden) %><%= content_tag :label, "Show hidden", {"for"=>"show_hidden", "class"=> ((not can_show_hidden or not @any_hidden) ? 'checkbox-label-disabled' : 'checkbox-label-enabled'), :title => "Hidden files/directories begin with a dot"} %></span>
+          </td>
         </tr>
         <tr>
           <td id="FilterSubmit" class="filter-submit" colspan="2">

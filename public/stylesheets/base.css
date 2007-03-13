@@ -622,3 +622,10 @@ tr.odd:hover {
   font-size: small;
 }
 
+.checkbox-label-disabled { 
+  color: grey;
+}
+
+.show-empty-checkbox { 
+  margin-right: 1em;
+}

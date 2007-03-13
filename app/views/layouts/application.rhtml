@@ -19,7 +19,7 @@
   </a>
 
   <div id="BreadcrumbAndFilter">
-    <%= render_partial 'browser/breadcrumb_and_filter', nil, :can_show_empty => false %>
+    <%= render_partial 'browser/breadcrumb_and_filter', nil, { :can_show_empty => (@controller.controller_name == "browser" and @action_name == "show"), :can_show_hidden => (@controller.controller_name == "browser") } %>
   </div>
 
   <div id="Top">
@@ -37,7 +37,7 @@
            { :title => "radial",    :controller => "graph",   :action => "index", :mode => "radial" } ].each_with_index { |item, index| 
         html_class = 'active' if controller.controller_class_name == (item[:controller].capitalize + "Controller") and params[:action] == item[:action] and params[:mode] == item[:mode]
               html_style = 'border-left: 1px solid #c2c2c2;' if index == 0 %>
-          <%= link_to(item[:title], { :controller => item[:controller], :action => item[:action], :params => {:server => (@server ? @server.name : nil), :path => (@directory ? @directory.path : nil), :filter_user => params[:filter_user], :filter_filename => params[:filter_filename], :mode => item[:mode]} }, { :class => html_class, :style => html_style } ) %>
+          <%= link_to(item[:title], { :controller => item[:controller], :action => item[:action], :params => {:server => (@server ? @server.name : nil), :path => (@directory ? @directory.path : nil), :filter_user => params[:filter_user], :filter_filename => params[:filter_filename], :show_empty => params[:show_empty], :show_hidden => params[:show_hidden], :mode => item[:mode]} }, { :class => html_class, :style => html_style } ) %>
         <%  } %>
       </div>
     </div>
