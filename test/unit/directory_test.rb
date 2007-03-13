@@ -8,6 +8,10 @@ class DirectoryTest < Test::Unit::TestCase
     assert_equal(servers(:first), directories(:foo_bar_twiddle).server)
   end
   
+  def test_find_subdirectories_at_level
+    assert_equal([directories(:foo_bar_twiddle)], directories(:foo).find_subdirectories_at_level(3))
+  end
+  
   def test_find_by_path
     assert_equal(directories(:foo), Earth::Directory.find_by_path("/foo"))
     assert_equal(directories(:foo_bar), Earth::Directory.find_by_path("/foo/bar"))
