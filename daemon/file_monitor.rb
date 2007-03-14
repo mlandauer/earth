@@ -38,6 +38,9 @@ class FileMonitor
   # TODO: Check that paths are not overlapping
   def FileMonitor.start(paths, only_initial_update = false, force_update_time = nil)
 
+    $stdout.sync = true
+    $stderr.sync = true
+
     server = Earth::Server.this_server
     server.daemon_version = ApplicationHelper.earth_version
     server.save!
