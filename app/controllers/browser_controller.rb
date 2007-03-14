@@ -18,8 +18,42 @@ class BrowserController < ApplicationController
     @page_size = 25
     @current_page = (params[:page] || 1).to_i
 
+    @default_sort_by = [ "size", nil, nil ]
+    @max_num_sort_criteria = 3
+
+    @default_order = {
+      "name" => "asc",
+      "path" => "asc",
+      "size" => "desc",
+      "modified" => "desc"
+    }
+
+    criteria_to_order_map = {
+      "name" => "lower(files.name)",
+      "path" => "lower(directories.path)",
+      "size" => "bytes",
+      "modified" => "modified"
+    }
+
+    order = nil
+    1.upto(@max_num_sort_criteria) do |sort_index|
+      criteria_name = params["sort#{sort_index}".to_sym] || @default_sort_by[sort_index - 1]      
+      if criteria_name
+        direction = params["order#{sort_index}".to_sym] || @default_order[criteria_name]
+
+        # avoid SQL injection
+        direction = "asc" if direction != "asc" and direction != "desc"
+
+        if order.nil?
+          order = ""
+        else
+          order += ", "
+        end
+        order += "#{criteria_to_order_map[criteria_name]} #{direction}"
+      end
+    end
+
     joins = "JOIN directories ON files.directory_id = directories.id"
-    order = "files.bytes desc"
     include_attributes = [ "name", "directory_id", "modified", "bytes", "uid" ]
     select = include_attributes.map {|attr| "files.#{attr} as #{attr}" }.join(", ")
 

@@ -3,6 +3,50 @@ module BrowserHelper
   LINKED_FILE_PATH_SHOW_PARENT_LINK = false
   LINKED_FILE_PATH_SHOW_CURRENT     = false
 
+  def inverse_order(order)
+    if order == "asc"
+      "desc"
+    else
+      "asc"
+    end
+  end
+
+  def sortable_table_header(name, param = nil)    
+    param = name.downcase if param.nil?
+    
+    parameter_map = {}
+    indicator = ""
+
+    sort1 = (params[:sort1] || @default_sort_by[0])
+    sort_order = [
+      [ param, (sort1 == param ? (inverse_order(params[:order1])) : @default_order[param]) ]
+    ]
+
+    1.upto(@max_num_sort_criteria - 1) do |sort_index|
+      sort_param = (params["sort#{sort_index}".to_sym] || @default_sort_by[sort_index - 1])
+      if sort_param != param
+        sort_order << [ sort_param, params["order#{sort_index}".to_sym] || @default_order[sort_param] ]
+      end
+    end
+
+    1.upto(@max_num_sort_criteria) do |sort_index|
+      if sort_index <= sort_order.size
+        parameter_map["sort#{sort_index}".to_sym] = sort_order[sort_index-1][0]
+        parameter_map["order#{sort_index}".to_sym] = sort_order[sort_index-1][1]
+      end
+
+      if (params["sort#{sort_index}".to_sym] || @default_sort_by[sort_index - 1]) == param
+        order = (@params["order#{sort_index}".to_sym] || @default_order[params["sort#{sort_index}".to_sym]])
+        indicator = " <img src=\"/images/sort#{sort_index}-#{order}.png\" width=\"9\" height=\"8\"/>"
+      end
+    end
+
+    parameter_map[:page] = nil
+    url = url_for(:overwrite_params => parameter_map)
+
+    "<a href=\"#{url}\" class=\"sortable-column\">#{name}#{indicator}</a>"
+  end
+
   def linked_file_path(file)
     html = ""
     if not @server

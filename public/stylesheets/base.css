@@ -629,3 +629,7 @@ tr.odd:hover {
 .show-empty-checkbox { 
   margin-right: 1em;
 }
+
+.sortable-column img { 
+  border: 0px;
+}
