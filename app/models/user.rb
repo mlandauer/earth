@@ -1,13 +1,17 @@
 class User
   cattr_accessor :config
   attr_reader :uid, :name
-    
-  self.config = YAML.load(File.open(File.dirname(__FILE__) + "/../../config/earth-webapp.yml"))
+
+  @@config = nil    
+  def self.config
+    @@config = ApplicationController::webapp_config unless @@config
+    @@config
+  end
   
-  @@uid_to_name = ExpiringHash.new(eval(config["ldap_cache_time"]))
+  @@uid_to_name = ExpiringHash.new(config["ldap_cache_time"].to_i)
 
   def User.reset_cache
-    @@uid_to_name = ExpiringHash.new(eval(config["ldap_cache_time"]))
+    @@uid_to_name = ExpiringHash.new(config["ldap_cache_time"].to_i)
   end
 
   def User.ldap_configured?

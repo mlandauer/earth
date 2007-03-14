@@ -57,7 +57,28 @@ module ApplicationHelper
       s += ' &#187 '
       # Note: need to reverse ancestors with behavior compatible to nested_set
       # (as opposed to better_nested_set)
-      for dir in directory.ancestors.reverse
+      path_components = directory.ancestors.reverse
+
+      # Add top-most directory, if present
+      if not path_components.empty?
+        s += link_to(path_components[0][:name], :overwrite_params => {:path => path_components[0].path, :page => nil}) + '/'
+
+        # Remove top-most directory from component list
+        path_components = path_components[1..-1]
+      end
+
+      # Remove top-most directories from component list until breadcrumb size is acceptable
+      # Make sure that at least the parent directory is still in breadcrumb
+      stripped = false
+      while path_components.size > 1 \
+        and path_components.inject(s.size) { |sum, dir| sum += dir.name.size+1 } > ApplicationController::webapp_config["max_breadcrumb_length"].to_i
+        path_components = path_components[1..-1]
+        stripped = true
+      end
+
+      s += ".../" if stripped
+
+      path_components.each do |dir|
         s += link_to(dir[:name], :overwrite_params => {:path => dir.path, :page => nil}) + '/'
       end
       s += h(directory[:name])

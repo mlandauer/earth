@@ -1,4 +1,6 @@
 # Any parameters here affect the Earth web application
+#
+# This file is parsed with ERB, so you can insert ruby code using <%= "..." %> constructs
 
 # Configuration for doing user and group name lookup from uid and gid
 # By default (with ldap_server_name below commented out) ldap lookup is disabled
@@ -9,14 +11,31 @@ ldap_user_lookup:
   base: "ou=people, dc=rsp, dc=com, dc=au"
   id_field: "uidNumber"
   name_field: "uid"
-ldap_cache_time: 1.days
+ldap_cache_time: <%= 1.days %>
 
 #
 # A daemon is considered dead if he didn't emit a heartbeat for this period of time 
 # after he was expected to.  This period should account for any latency that might
 # be caused by database load etc. 
 #
-heartbeat_grace_period: 10.seconds
+heartbeat_grace_period: <%= 10.seconds %>
+
+# ----- Misc -----
+
+# Maximum length of breadcrumb trail in characters. The breadcrumb
+# trail will always contain (if applicable): a link to root, a link to
+# the current server, a link to the top-level directory on the server,
+# a link to the parent directory, and the name of the current
+# directory. Additional directories between the top-level directory
+# and the parent directory will only be shown if the total length of
+# the breadcrumb trail, in characters, is less or equal than the
+# number configured below.  
+#
+# Note that ideally, this would take the width of individual
+# characters and the width of the browser window into account; at this
+# point however this level of precision is not provided by Earth.
+#
+max_breadcrumb_length: 20
 
 # ----- Graph Configuration -----
 

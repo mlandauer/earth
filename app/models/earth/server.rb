@@ -4,11 +4,16 @@ module Earth
 
   class Server < ActiveRecord::Base
     has_many :directories, :dependent => :delete_cascade, :order => :lft
-  
-    cattr_accessor :config
-    cattr_accessor :heartbeat_grace_period
-    self.config = YAML.load(::File.open(::File.dirname(__FILE__) + "/../../../config/earth-webapp.yml"))
-    self.heartbeat_grace_period = eval(self.config["heartbeat_grace_period"])
+
+    @@config = nil    
+    def self.config
+      @@config = ApplicationController::webapp_config unless @@config
+      @@config
+    end
+    
+    def self.heartbeat_grace_period
+      self.config["heartbeat_grace_period"].to_i
+    end
 
     def Server.this_server
       Server.find_or_create_by_name(ENV["EARTH_HOSTNAME"] || this_hostname)
