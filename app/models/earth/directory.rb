@@ -179,9 +179,14 @@ module Earth
     def update_caches
       return unless cache_enabled
       
-      # content of cached_sizes can be invalidated by updating the size of
-      # another directory, so it should be reloaded from the db before it's used
-      cached_sizes.reload
+      # content of cached_sizes can be invalidated by updating the
+      # size of another directory, so it should be reloaded from the
+      # db before it's used.  It might also have not yet been created
+      # (because cache_enabled was set to false and the daemon was
+      # cancelled before bulk cache creation.)  Therefore, invoke
+      # create_cached to make sure the cache exists and is up-to-date.
+      create_caches
+
       cached_sizes.each do |cached_size|
         size = Size.new(0, 0, 0)
         self.children.each do |child|

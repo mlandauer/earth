@@ -404,6 +404,25 @@ class FileMonitorTest < Test::Unit::TestCase
     existing_paths
   end
 
+  def test_late_cache_creation
+    server = Earth::Server.find_or_create_by_name("late_cache")
+    directory = server.directories.build(:name => @dir, :path => @dir)
+    backdate(@dir, 100)
+
+    # Simulate initial directory scan and commit without cache creation
+    FileMonitor.update([directory], 0, :only_build_directories => true)
+    Earth::Directory.cache_enabled = false    
+    directory.save
+    Earth::Directory.cache_enabled = true
+    assert directory.cached_sizes.empty?
+
+    # Touch directory and expect caches to be created after the fact
+    backdate(@dir, 50)
+    FileMonitor.update([directory])
+    assert (not directory.cached_sizes.empty?)
+    assert_cached_sizes_match(directory)
+  end
+
   def test_extensive
     srand(12345)
     server = Earth::Server.find_or_create_by_name("random")
