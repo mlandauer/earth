@@ -36,7 +36,7 @@ module BrowserHelper
       end
 
       if (params["sort#{sort_index}".to_sym] || @default_sort_by[sort_index - 1]) == param
-        order = (@params["order#{sort_index}".to_sym] || @default_order[params["sort#{sort_index}".to_sym]])
+        order = (params["order#{sort_index}".to_sym] || @default_order[params["sort#{sort_index}".to_sym]])
         indicator = " <img src=\"/images/sort#{sort_index}-#{order}.png\" width=\"9\" height=\"8\"/>"
       end
     end
