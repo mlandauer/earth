@@ -76,7 +76,6 @@ class Earthd
       exit 1
     end
 
-    # With -c there shouldn't be a directory. Otherwise there should
     if ARGV.length < 1
       $stderr.puts "ERROR: you must specify an action"
       puts opts
@@ -241,6 +240,8 @@ class Earthd
     when "add"
       response = talk_to_server("add #{ARGV[1]}")
       puts response unless response == "OK"
+    when "remove"
+      $stderr.puts "Remove action is currently not implemented."
     when "clear"
       if not daemon_running?
         init_rails
@@ -252,7 +253,7 @@ class Earthd
       end
     when "status"
       response = talk_to_server("status")
-      puts response unless response.nil?
+      print response unless response.nil?
     end
   end
 
@@ -283,11 +284,11 @@ class Earthd
           client.close
           response
         else
-          puts "ERROR: The earth daemon appears to be running but it does not answer\n(PID file exists and process found, but socket not found)"
+          $stderr.puts "ERROR: The earth daemon appears to be running but it does not answer\n(PID file exists and process found, but socket not found)"
           exit 5
         end
       rescue Errno::ESRCH
-        puts "ERROR: The earth daemon doesn't appear to be running \n(PID file exists but process not found)"
+        $stderr.puts "ERROR: The earth daemon doesn't appear to be running \n(PID file exists but process not found)"
         exit 5
       end
     end
@@ -306,10 +307,10 @@ class Earthd
     if daemon_pid
       begin
         Process.kill("CHLD", daemon_pid)
-        puts "ERROR: earthd is already running with process id #{daemon_pid}"
+        $stderr.puts "ERROR: earthd is already running with process id #{daemon_pid}"
       rescue Errno::ESRCH
-        puts "ERROR: Another daemon has been running at process id #{daemon_pid} but it's apparantly no longer there"
-        puts "Please ensure that there is no daemon running and remove file #{@daemon_pid_file}"
+        $stderr.puts "ERROR: Another daemon has been running at process id #{daemon_pid} but it's apparantly no longer there"
+        $stderr.puts "Please ensure that there is no daemon running and remove file #{@daemon_pid_file}"
       end
       exit(5)
     elsif @options.foreground
@@ -353,14 +354,23 @@ class Earthd
   def daemon_add_directory(path)
     logger.debug("received request to add directory '#{path}'")
     if not @booted
-      "Refusing to add directory '#{path}': server hasn't booted up yet"
+      "Refusing to add directory '#{path}': daemon hasn't booted up yet"
     elsif not File.exists? path
       "Refusing to add directory '#{path}': does not exist"
     elsif not File.directory? path
       "Refusing to add directory '#{path}': not a directory"
-    elsif Earth::Directory::find(:first, :conditions => { :name => path, :server_id => Earth::Server::this_server.id })
-      "Refusing to add directory '#{path}': already monitored"
+    elsif not File.readable? path
+      "Refusing to add directory '#{path}': not readable"
     else
+      Earth::Server::this_server.directories.each do |existing_directory|
+        if existing_directory.path == path
+          return "Refusing to add directory '#{path}': already monitored"
+        elsif subdirectory_of?(existing_directory.path, path)
+          return "Refusing to add directory '#{path}': parent directory #{existing_directory.path} is already monitored"
+        elsif subdirectory_of?(path, existing_directory.path)
+          return "Refusing to add directory '#{path}': is a superdirectory of monitored directory #{existing_directory.path}"
+        end
+      end
       Earth::Server::this_server.directories.create(:name => path, :path => path)
       "OK"
     end
@@ -378,6 +388,7 @@ class Earthd
         response = "Cannot parse message #{message}"
       end
       socket.send(response, 0)
+      logger.debug("Server sent response to message #{message}")
     rescue => err
       logger.fatal("Failure in client connection handler")      
       logger.fatal(err)
@@ -395,8 +406,9 @@ class Earthd
           retry
         end
       end
-    rescue
-      puts "server died"
+    rescue => err
+      logger.fatal("Exiting: Server died")
+      logger.fatal(err)
       exit(5)
     ensure
       @server_socket.close()
@@ -446,9 +458,8 @@ class Earthd
 
       while true
         FileMonitor.logger = logger
-        FileMonitor.start(ARGV, false, nil) #only_initial_update, force_update_time)
+        FileMonitor.iteration(false, @config["override_update_interval"])
       end
-      #FileMonitor.start(ARGV, options.only_initial_update, options.force_update_time)
     rescue => err
       logger.fatal("Exiting: Daemon died")      
       logger.fatal(err)
@@ -460,7 +471,7 @@ class Earthd
 
   def start_heartbeat_thread
     ActiveRecord::Base.allow_concurrency = true
-    logger.info "Starting heartbeat thread..."
+    logger.info "Starting heartbeat thread"
     Thread.new do
       while true do
         # reload the server object in case of changes on the database side

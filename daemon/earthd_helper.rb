@@ -121,3 +121,20 @@ def format_uptime(diff)
   uptime
 end
 
+#
+# Test whether child is a (direct or indirect) sub-directory of parent
+#
+def subdirectory_of?(parent, child)
+  while true
+    child_his_parent = File.dirname(child)
+    if parent == child_his_parent
+      return true
+    elsif child_his_parent.nil?
+      return false
+    elsif child_his_parent == child
+      return false
+    else
+      child = child_his_parent
+    end
+  end
+end

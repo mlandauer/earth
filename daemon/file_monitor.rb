@@ -39,7 +39,7 @@ class FileMonitor
   @@top_level_directories = {}
   
   # TODO: Check that paths are not overlapping
-  def FileMonitor.start(paths, only_initial_update = false, force_update_time = nil)
+  def FileMonitor.iteration(only_initial_update = false, force_update_time = nil)
 
     logger.debug("FileMonitor iteration starting")
     
@@ -62,6 +62,14 @@ class FileMonitor
     @@top_level_directories.values.each do |directory|
       if directory.modified.nil?
         benchmark "Doing initial pass on new path #{directory.path}" do
+          #
+          # FIXME: removing and re-adding the directory is ugly. Find
+          # a better way to do this - either by leaving the new
+          # directory in the database and just building the tree below
+          # it, or by introducing a new database table
+          # "daemon_commands" where add/remove/clear requests are
+          # queued.
+          #
           path = directory.name
           @@top_level_directories.delete directory.id
           server.directories.delete(directory)
@@ -117,7 +125,7 @@ private
   def FileMonitor.initial_pass_on_new_directory(name, parent = nil)
     this_server = Earth::Server.this_server
 
-    benchmark "Scanning and storing tree" do
+    benchmark "Scanning and storing tree for #{name}" do
     
       if parent
         directory = parent.children.build(:name => name, :path => "#{parent.path}/#{name}", :server_id => this_server.id)
@@ -145,9 +153,9 @@ private
         update([directory], 0, :only_build_directories => false, :initial_pass => true, :show_eta => parent.nil?)
       end
 
-      benchmark "Creating cache information" do
+      benchmark "Creating cache information for #{name}" do
         ActiveRecord::Base.logger.debug("begin create cache");
-        @cached_size_eta_printer = ETAPrinter.new("Creating cache information", directory_count) unless parent
+        @cached_size_eta_printer = ETAPrinter.new("Creating cache information for #{name}", directory_count) unless parent
         directory.create_caches_recursively(@cached_size_eta_printer)
         @cached_size_eta_printer = nil
         ActiveRecord::Base.logger.debug("end create cache");
@@ -191,9 +199,6 @@ private
     start = Time.new
     logger.debug("starting update cycle, directories.size is #{directories.size} remaining count is #{remaining_count}")
     directories.each do |directory|
-
-      #all_children = directory.all_children
-      #all_children.each do |d|
       directory.each do |d|
         total_count += update_non_recursive(d, options)
         remaining_time = update_time - (Time.new - start)
