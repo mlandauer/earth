@@ -1,12 +1,17 @@
 class FileMonitor
   cattr_accessor :log_all_sql
   cattr_accessor :console_writer
+  cattr_accessor :logger
+  cattr_accessor :status_info
+
+  self.logger = RAILS_DEFAULT_LOGGER
+  self.status_info = "Starting up"
 
   class ETAPrinter
-    def initialize(number_of_items)
+    def initialize(description, number_of_items)
+      @description = description
       @number_of_items = number_of_items
       @items_completed = 0
-      @longest_output = 0
       @last_eta_update = 0
       @min_eta_update_delta = 1.seconds
       @start = Time.new
@@ -21,57 +26,48 @@ class FileMonitor
         if @last_eta_update.to_i + @min_eta_update_delta <= now.to_i
           @last_eta_update = now
           time_remaining = items_remaining * time_per_item
-          eta_string = "ETA: #{(Time.local(2007) + (time_remaining)).strftime('%H:%M:%S')}s"
-          print(eta_string + "\010" * eta_string.size)
-          $stdout.flush
-          @longest_output = [@longest_output, eta_string.size].max
+          eta_string = "#{@description} [#{@items_completed}/#{@number_of_items}] ETA: #{(Time.local(2007) + (time_remaining)).strftime('%H:%M:%S')}s"
+          FileMonitor.status_info = eta_string
         end
-      else
-        print(" " * @longest_output + "\010" * @longest_output)
       end
     end
   end
   
   # Set this to true if you want to see the individual SQL commands
   self.log_all_sql = false
+
+  @@top_level_directories = {}
   
   # TODO: Check that paths are not overlapping
   def FileMonitor.start(paths, only_initial_update = false, force_update_time = nil)
 
-    $stdout.sync = true
-    $stderr.sync = true
-
-    server = Earth::Server.this_server
-    server.daemon_version = ApplicationHelper.earth_version
-    server.save!
-
-    at_exit { server = Earth::Server.this_server; server.daemon_version = nil; server.save! }
-
-    # Turn the paths into an absolute path
-    paths = paths.map{|p| File.expand_path(p)}
+    logger.debug("FileMonitor iteration starting")
     
     # Find the current directory that it's watching
+    server = Earth::Server.this_server
     directories = Earth::Directory.roots_for_server(server)
-    previous_paths = directories.map{|d| d.path}
-    
-    start_heartbeat_thread
-    
-    paths_to_start_watching = paths - previous_paths
-    paths_to_stop_watching = previous_paths - paths
-    
-    if !paths_to_stop_watching.empty?
-      raise "To stop watching #{paths_to_stop_watching} clear out the database (with --clear)"
-    end
+
+    logger.debug("Top-level directories loaded")    
     
     directories.each do |directory|
-      benchmark "Collecting startup data for directory #{directory.path} from database" do
-        directory.load_all_children(0, { :include => [ :cached_sizes ] })
-        directory.cached_sizes.reload
+      if not @@top_level_directories.keys.include? directory.id
+        @@top_level_directories[directory.id] = directory
+        benchmark "Collecting startup data for directory #{directory.path} from database" do
+          directory.load_all_children(0, { :include => [ :cached_sizes ] })
+          directory.cached_sizes.reload
+        end
       end
     end
-    paths_to_start_watching.each do |path|
-      benchmark "Doing initial pass on new path #{path}" do
-        directories << FileMonitor.initial_pass_on_new_directory(path)
+
+    @@top_level_directories.values.each do |directory|
+      if directory.modified.nil?
+        benchmark "Doing initial pass on new path #{directory.path}" do
+          path = directory.name
+          @@top_level_directories.delete directory.id
+          server.directories.delete(directory)
+          new_directory = FileMonitor.initial_pass_on_new_directory(path)
+          @@top_level_directories[new_directory.id] = new_directory
+        end
       end
     end
     
@@ -79,7 +75,7 @@ class FileMonitor
     server.last_update_finish_time = Time.new.utc
     server.save!
     
-    run(directories, force_update_time) unless only_initial_update
+    run(@@top_level_directories.values, force_update_time) unless only_initial_update
   end
   
   def FileMonitor.directory_saved(node)
@@ -107,43 +103,21 @@ private
     @@benchmark_output_enabled = prev_benchmark_output_enabled
   end
 
-  def FileMonitor.benchmark(description = nil, show_pending = true)
-    if @@benchmark_output_enabled and description and show_pending
-      print "#{description} ... "
-      $stdout.flush
-    end
+  def FileMonitor.benchmark(description = nil)
+    self.status_info = description
     time_before = Time.new
     result = yield
     duration = Time.new - time_before
     if @@benchmark_output_enabled and description
-      if not show_pending
-        print "#{description} "
-      end
-      puts "took #{duration}s"
+      logger.info "#{description} took #{duration}s"
     end
     result
-  end
-
-  def FileMonitor.start_heartbeat_thread
-    ActiveRecord::Base.allow_concurrency = true
-    puts "Starting heartbeat thread..."
-    Thread.new do
-      while true do
-        # reload the server object in case of changes on the database side
-        # TODO: There is a small chance that the server object will get stale here
-        server = Earth::Server.this_server
-        logger.debug("Heartbeat time:   About to update at time #{Time.now}")
-        server.heartbeat
-        logger.debug("Heartbeat time: Finished updating at time #{Time.now}")
-        sleep(server.heartbeat_interval)
-      end
-    end
   end
   
   def FileMonitor.initial_pass_on_new_directory(name, parent = nil)
     this_server = Earth::Server.this_server
 
-    benchmark "Scanning and storing tree", false do
+    benchmark "Scanning and storing tree" do
     
       if parent
         directory = parent.children.build(:name => name, :path => "#{parent.path}/#{name}", :server_id => this_server.id)
@@ -155,7 +129,7 @@ private
       end
 
       benchmark "Committing initial directory structure for #{name} to database" do
-        @directory_eta_printer = ETAPrinter.new(directory_count) unless parent
+        @directory_eta_printer = ETAPrinter.new("Committing initial directory structure for #{name} to database", directory_count) unless parent
         Earth::Directory.add_save_observer(self) unless parent
         Earth::Directory.cache_enabled = false
         directory.save
@@ -173,7 +147,7 @@ private
 
       benchmark "Creating cache information" do
         ActiveRecord::Base.logger.debug("begin create cache");
-        @cached_size_eta_printer = ETAPrinter.new(directory_count) unless parent
+        @cached_size_eta_printer = ETAPrinter.new("Creating cache information", directory_count) unless parent
         directory.create_caches_recursively(@cached_size_eta_printer)
         @cached_size_eta_printer = nil
         ActiveRecord::Base.logger.debug("end create cache");
@@ -191,27 +165,35 @@ private
   end
 
   def FileMonitor.run(directories, force_update_time=nil)
-    while true do
-      # At the beginning of every update get the server information in case it changes on the database
-      server = Earth::Server.this_server
-      update_time = force_update_time || server.update_interval
-      # Hmmm.. children_count doesn't include itself in the count
-      directory_count = directories.map{|d| d.children_count + 1}.sum
-      puts "Updating #{directory_count} directories over #{update_time}s..."
-      update(directories, update_time)      
+    # At the beginning of every update get the server information in case it changes on the database
+    server = Earth::Server.this_server
+    update_time = force_update_time || server.update_interval
+    # Hmmm.. children_count doesn't include itself in the count
+    directory_count = directories.map{|d| d.children_count + 1}.sum
+    if directory_count > 0
+      logger.info "Updating #{directory_count} directories over #{update_time}s..."      
+      update(directories, update_time)
+    else
+      logger.warn "No directories monitored"
+      self.status_info = "Idle - no directories monitored"
+      sleep 2.seconds
     end
   end
   
   def FileMonitor.update(directories, update_time = 0, *args)
-    options = { :only_build_directories => false, :initial_pass => false, :show_eta => false }
+    options = { :only_build_directories => false, :initial_pass => false, :show_eta => true }
     options.update(args.first) if args.first
     # TODO: Do this in a nicer way
     total_count = 0
-    remaining_count = directories.map{|d| d.children_count + 1}.sum
-    eta_printer = ETAPrinter.new(remaining_count) if options[:show_eta]
+    initial_count = directories.map{|d| d.children_count + 1}.sum
+    remaining_count = initial_count
+    eta_printer = ETAPrinter.new("Updating directories", remaining_count) if options[:show_eta]
     start = Time.new
     logger.debug("starting update cycle, directories.size is #{directories.size} remaining count is #{remaining_count}")
     directories.each do |directory|
+
+      #all_children = directory.all_children
+      #all_children.each do |d|
       directory.each do |d|
         total_count += update_non_recursive(d, options)
         remaining_time = update_time - (Time.new - start)
@@ -235,10 +217,6 @@ private
     end
     
     total_count
-  end
-
-  def FileMonitor.logger
-    RAILS_DEFAULT_LOGGER
   end
 
   def FileMonitor.update_non_recursive(directory, options)
