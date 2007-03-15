@@ -50,7 +50,7 @@ end
 #   inflect.uncountable %w( fish sheep )
 # end
 
-Mime::Type.register "text/csv", :csv
+Mime::SET << Mime::CSV unless Mime::SET.include?(Mime::CSV)
 
 require 'foreign_key_constraint_improvements'
 
@@ -59,7 +59,7 @@ class Logger
   alias format_message old_format_message
  
   def format_message(severity, timestamp, progname, msg)
-    "#{timestamp.strftime("%b %d %H:%M:%S")}.#{sprintf("%06d", timestamp.usec)} [#{severity}] - #{msg}\n"
+    @default_formatter.call(severity, timestamp, progname, msg)
   end
 end
 
