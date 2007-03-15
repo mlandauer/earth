@@ -347,6 +347,7 @@ class Earthd
     message += "Status: #{@booted ? 'Running' : 'Booting'}\n"
     if @booted
       message += "File Monitor Status: #{FileMonitor.status_info}\n"
+      message += "Daemon Version: #{@daemon_version.strip}\n"
     end
     message
   end
@@ -443,8 +444,10 @@ class Earthd
       logger.info("Initializing Rails")
       init_rails()
 
+      @daemon_version = ApplicationHelper.earth_version
+
       server = Earth::Server.this_server
-      server.daemon_version = ApplicationHelper.earth_version
+      server.daemon_version = @daemon_version
       server.save!
       
       at_exit { server = Earth::Server.this_server; server.daemon_version = nil; server.save! }
