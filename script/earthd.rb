@@ -478,6 +478,7 @@ class Earthd
       while true
 
         @fileMonitor = @plugin_manager.load_plugin("EarthFileMonitor", loaded_plugin_versions["EarthFileMonitor"]) || @fileMonitor
+        raise RuntimeError, "No file monitor plugin installed." unless @fileMonitor
         loaded_plugin_versions["EarthFileMonitor"] = @fileMonitor.class.plugin_version
 
         raise RuntimeError, "No file monitor found in database!" unless @fileMonitor
