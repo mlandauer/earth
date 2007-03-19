@@ -246,7 +246,7 @@ private
   # solving that for r2 gives:
   # r2                           =  Math.sqrt((outer * outer + inner * inner) / @level_count)
   def get_level_radii
-    inner = 25
+    inner = 20
     outer = 90
     
     if @level_radii.nil?

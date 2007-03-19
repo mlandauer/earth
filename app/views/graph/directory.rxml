@@ -121,13 +121,9 @@ xml.svg(:width => "100%",
     end
   end
 
-  xml.text("#{@directory.name}/", 
-           :y => -3,
+  xml.text("..", 
+           :y => 0,
            :class => "directory-name")  
-
-  xml.text("#{ApplicationHelper::human_size_in(ApplicationHelper::human_units_of(@directory.size.bytes), @directory.size.bytes)} #{ApplicationHelper::human_units_of(@directory.size.bytes)}",
-           :y => 3,
-           :class => "directory-size")  
 
   for level in (1..@level_count)
     level_segment_array[level].each do |segment|
