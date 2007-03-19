@@ -30,6 +30,8 @@ end
 
 class PluginManager
 
+  @@plugin_module_counter = 1
+
   def initialize
     @trusted_certificates = nil
   end
@@ -80,8 +82,8 @@ class PluginManager
     EarthPlugin.on_inheritance do |child|
       @plugin_class = child
     end
-    anon_module = Module.new
-    anon_module.module_eval(code)
+    eval("module PluginModule_#{@@plugin_module_counter}\n" + code + "\nend\n")
+    @@plugin_module_counter +=1
     new_plugin_class = @plugin_class
 
     EarthPlugin.validate_plugin_class(new_plugin_class)
