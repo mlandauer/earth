@@ -27,6 +27,17 @@ module ApplicationHelper
     end
   end
 
+  def ApplicationHelper::current_total_size
+    if @directory
+      @directory.size.bytes
+    elsif @server
+      @server.size.bytes
+    else
+      Earth::Server::find(:all).map { |server| server.size.bytes }.sum
+    end
+  end
+
+
   def ApplicationHelper::human_units_of(size)
     case 
       when size < 1.kilobyte: 'Bytes'

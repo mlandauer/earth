@@ -633,3 +633,7 @@ tr.odd:hover {
 .sortable-column img { 
   border: 0px;
 }
+
+div.total-size { 
+  font-size: small;
+}

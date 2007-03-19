@@ -21,6 +21,9 @@
     <h2 class="breadcrumbs">
       <%= breadcrumbs_with_server_and_directory @server, @directory %>
     </h2>
+    <div class="total-size">
+      <%= size=ApplicationHelper::current_total_size; "#{ApplicationHelper::human_size_in(ApplicationHelper::human_units_of(size), size)} #{ApplicationHelper::human_units_of(size)}" %>
+    </div>
     <h2 class="warning">
       <% unless @server.nil? || @server.daemon_alive? %>
         Warning! The Earth daemon has stopped running on <%= @server.name %><br />

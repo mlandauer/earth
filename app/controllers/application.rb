@@ -26,4 +26,5 @@ class ApplicationController < ActionController::Base
   def self.webapp_config
     @@webapp_config
   end
+
 end
