@@ -87,7 +87,7 @@ class PluginManager
     end
     eval(code)
     new_plugin_class = @plugin_class
-    Class.remove_class(@plugin_class)
+    #Class.remove_class(@plugin_class)
 
     EarthPlugin.validate_plugin_class(new_plugin_class)
 
