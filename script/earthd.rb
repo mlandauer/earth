@@ -191,40 +191,6 @@ class Earthd
     @server_socket_path = @config["socket_file"]
     @daemon_pid_file = @config["pid_file"]
     @log_file_name = @config["log_file"]
-
-    log_file_logger = Logger.new(@log_file_name)
-
-    if @options.foreground
-      stdout_logger = Logger.new($stdout)
-      stdout_verbosity_levels = [ nil, "UNKNOWN", "FATAL", "ERROR", "WARN", "INFO", "DEBUG" ]
-      stdout_logger_level = stdout_verbosity_levels[ [@options.verbosity, stdout_verbosity_levels.size-1].min]
-      if stdout_logger_level
-        stdout_logger.level = eval("Logger::#{stdout_logger_level}")
-        @logger = MultiLogger.new([log_file_logger, stdout_logger])
-      else
-        @logger = log_file_logger
-      end
-    else
-      @logger = log_file_logger
-    end
-    log_file_logger.level = eval("Logger::#{@config['log_level'].upcase}")
-    log_file_logger.info("---")
-    @logger.info("Earth daemon is being started")
-    if @config_file
-      @logger.info("Using configuration overrides from #{@config_file}")
-    else
-      @logger.info("Using default configuration")
-    end
-    @logger.info("Using socket file '#{@config['socket_file']}'")
-    @logger.info("Using pid file '#{@config['pid_file']}'")
-    @logger.info("Using log file '#{@config['log_file']}' with severity threshold #{@config['log_level']}")
-    if @options.foreground
-      @logger.info("Using console output with severity threshold #{stdout_logger_level}")
-    end
-    @logger.info("Using rails environment '#{@config['rails_environment']}'")
-    if @config["override_update_interval"]
-      @logger.warn("Overriding update interval from database for this server with #{@config['override_update_interval']}s")
-    end
   end
 
   def logger
@@ -438,6 +404,42 @@ class Earthd
 
   def daemon_main()
     begin
+
+    log_file_logger = Logger.new(@log_file_name)
+
+      if @options.foreground
+        stdout_logger = Logger.new($stdout)
+        stdout_verbosity_levels = [ nil, "UNKNOWN", "FATAL", "ERROR", "WARN", "INFO", "DEBUG" ]
+        stdout_logger_level = stdout_verbosity_levels[ [@options.verbosity, stdout_verbosity_levels.size-1].min]
+        if stdout_logger_level
+          stdout_logger.level = eval("Logger::#{stdout_logger_level}")
+          @logger = MultiLogger.new([log_file_logger, stdout_logger])
+        else
+          @logger = log_file_logger
+        end
+      else
+        @logger = log_file_logger
+      end
+      log_file_logger.level = eval("Logger::#{@config['log_level'].upcase}")
+
+      log_file_logger.info("---")
+      @logger.info("Earth daemon is being started")
+      if @config_file
+        @logger.info("Using configuration overrides from #{@config_file}")
+      else
+        @logger.info("Using default configuration")
+      end
+      @logger.info("Using socket file '#{@config['socket_file']}'")
+      @logger.info("Using pid file '#{@config['pid_file']}'")
+      @logger.info("Using log file '#{@config['log_file']}' with severity threshold #{@config['log_level']}")
+      if @options.foreground
+        @logger.info("Using console output with severity threshold #{stdout_logger_level}")
+      end
+      @logger.info("Using rails environment '#{@config['rails_environment']}'")
+      if @config["override_update_interval"]
+        @logger.warn("Overriding update interval from database for this server with #{@config['override_update_interval']}s")
+      end
+
       logger.debug("Daemon main loop enter")
       trap("TERM") { logger.info("Exiting (received SIGTERM)"); daemon_stop; exit }
       trap("INT") { logger.info("Exiting (received SIGINT)"); daemon_stop; exit }
