@@ -58,7 +58,7 @@ class Earthd
     end
     opts.separator ""
     opts.separator "Options for action 'start':"
-    opts.on("-f", "--foreground", "Run the earthdaemon in the foreground.") do
+    opts.on("-f", "--foreground", "Run the earth daemon in the foreground.") do
       @options.foreground = true
     end
     opts.on("-v", "--verbose", "Increase verbosity level of console output when running in foreground.") do

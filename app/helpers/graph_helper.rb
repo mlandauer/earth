@@ -430,7 +430,7 @@ private
                                                  :overwrite_params => {:server => @server.name, 
                                                                        :action => nil,
                                                                        :path => child.path}),
-                                :tooltip => "...#{child.path_relative_to(@directory)}/ (#{GraphHelper::format_human(child.size)})")
+                                :tooltip => "...#{child.path_relative_to(@directory)}/ (#{GraphHelper::format_human(child.size.bytes)})")
         end
         level_segments << segment
         
