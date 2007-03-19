@@ -64,11 +64,6 @@ class PluginManager
     File.open(signature_filename, "w") { |f| f.write signature }
   end
 
-  def earth_plugin_inhertited_by(plugin_class)
-    puts "inherited"
-    @@plugin_class = plugin_class
-  end
-
   def get_plugin_class(code, signature)
 
     signer = nil
@@ -85,9 +80,9 @@ class PluginManager
     EarthPlugin.on_inheritance do |child|
       @plugin_class = child
     end
-    eval(code)
+    anon_module = Module.new
+    anon_module.module_eval(code)
     new_plugin_class = @plugin_class
-    #Class.remove_class(@plugin_class)
 
     EarthPlugin.validate_plugin_class(new_plugin_class)
 

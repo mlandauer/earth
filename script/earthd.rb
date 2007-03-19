@@ -320,7 +320,7 @@ class Earthd
     message = "Uptime: #{format_uptime(Time.now - @start_time)}\n"
     message += "Status: #{@booted ? 'Running' : 'Booting'}\n"
     if @booted
-      message += "File Monitor Status: #{@fileMonitor.status_info}\n"
+      message += "File Monitor Status: #{@file_monitor.status_info}\n"
       message += "Daemon Version: #{@daemon_version.strip}\n"
     end
     message
@@ -475,16 +475,38 @@ class Earthd
 
       @plugin_manager = PluginManager.new
 
+      last_known_good_file_monitor = nil
+
       while true
 
-        @fileMonitor = @plugin_manager.load_plugin("EarthFileMonitor", loaded_plugin_versions["EarthFileMonitor"]) || @fileMonitor
-        raise RuntimeError, "No file monitor plugin installed." unless @fileMonitor
-        loaded_plugin_versions["EarthFileMonitor"] = @fileMonitor.class.plugin_version
+        begin
+          @file_monitor = @plugin_manager.load_plugin("EarthFileMonitor", loaded_plugin_versions["EarthFileMonitor"]) || @file_monitor
+          raise RuntimeError, "No file monitor plugin installed." unless @file_monitor
+          if loaded_plugin_versions["EarthFileMonitor"].nil? or loaded_plugin_versions["EarthFileMonitor"] < @file_monitor.class.plugin_version
+            loaded_plugin_versions["EarthFileMonitor"] = @file_monitor.class.plugin_version
+          end
+          
+          raise RuntimeError, "No file monitor found in database!" unless @file_monitor
+          logger.info("Using file monitor version #{@file_monitor.class.plugin_version}")
 
-        raise RuntimeError, "No file monitor found in database!" unless @fileMonitor
-
-        @fileMonitor.logger = logger
-        @fileMonitor.iteration(cache, false, @config["override_update_interval"])
+          @file_monitor.logger = logger
+          @file_monitor.iteration(cache, false, @config["override_update_interval"])
+          if last_known_good_file_monitor and last_known_good_file_monitor != @file_monitor
+            Class.remove_class(last_known_good_file_monitor.class)
+          end
+          last_known_good_file_monitor = @file_monitor
+        rescue => err
+          if last_known_good_file_monitor and last_known_good_file_monitor != @file_monitor
+            logger.error("Daemon caught fatal error from file monitor") 
+            logger.error(err)
+            logger.warn("Retrying with last known good file monitor version") 
+            Class.remove_class(@file_monitor)
+            @file_monitor = last_known_good_file_monitor
+            retry
+          else
+            raise
+          end
+        end
       end
     rescue => err
       logger.fatal("Exiting: Daemon died")      
