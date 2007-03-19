@@ -22,6 +22,9 @@ require 'socket'
 require 'logger'
 require 'erb'
 require 'yaml'
+require File.join(File.dirname(__FILE__), '..', 'lib', 'earth_plugin_interface', 'earth_plugin.rb')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'earth_plugin_interface', 'plugin_manager.rb')
+require File.join(File.dirname(__FILE__), '..', 'lib', 'earthd_helper.rb')
 
 BANNER = <<END_OF_STRING
 
@@ -35,8 +38,6 @@ USAGE:
   #{$0} [-c FILE] remove <directory>             -  Stop monitoring a directory
 
 END_OF_STRING
-
-load File.join(File.dirname(__FILE__), 'earthd_helper.rb')
 
 class Earthd
 
@@ -252,8 +253,8 @@ class Earthd
     when "clear"
       if not daemon_running?
         init_rails
-        FileMonitor.logger = logger
-        FileMonitor.database_cleanup
+        #fileMonitor.logger = logger
+        #fileMonitor.database_cleanup
       else
         $stderr.puts "ERROR: Cannot clear out the database while the daemon is running"
         exit 5
@@ -353,7 +354,7 @@ class Earthd
     message = "Uptime: #{format_uptime(Time.now - @start_time)}\n"
     message += "Status: #{@booted ? 'Running' : 'Booting'}\n"
     if @booted
-      message += "File Monitor Status: #{FileMonitor.status_info}\n"
+      message += "File Monitor Status: #{@fileMonitor.status_info}\n"
       message += "Daemon Version: #{@daemon_version.strip}\n"
     end
     message
@@ -434,7 +435,7 @@ class Earthd
     File.unlink(@daemon_pid_file) if File.exist? @daemon_pid_file
     File.unlink(@server_socket_path) if File.exist? @server_socket_path
   end
-  
+
   def daemon_main()
     begin
       logger.debug("Daemon main loop enter")
@@ -466,9 +467,21 @@ class Earthd
       @booted = true
       logger.info("Entering main loop")
 
+      cache = {}
+
+      loaded_plugin_versions = {}
+
+      @plugin_manager = PluginManager.new
+
       while true
-        FileMonitor.logger = logger
-        FileMonitor.iteration(false, @config["override_update_interval"])
+
+        @fileMonitor = @plugin_manager.load_plugin("EarthFileMonitor", loaded_plugin_versions["EarthFileMonitor"]) || @fileMonitor
+        loaded_plugin_versions["EarthFileMonitor"] = @fileMonitor.class.plugin_version
+
+        raise RuntimeError, "No file monitor found in database!" unless @fileMonitor
+
+        @fileMonitor.logger = logger
+        @fileMonitor.iteration(cache, false, @config["override_update_interval"])
       end
     rescue => err
       logger.fatal("Exiting: Daemon died")      
