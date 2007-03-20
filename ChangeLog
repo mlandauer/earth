@@ -1,5 +1,13 @@
 2007-03-20  Julian Scheid  <julians@rsp.com.au>
 
+	Ticket #170:
+	* app/helpers/application_helper.rb (ApplicationHelper::current_total_size): 
+	Made an instance method.
+	* app/views/browser/_breadcrumb_and_filter.rhtml: Call 
+	current_total_size as an instance method instead.
+
+2007-03-20  Julian Scheid  <julians@rsp.com.au>
+
 	* ChangeLog: New file (generated using svn2cl and tweaked a
 	little.)
 

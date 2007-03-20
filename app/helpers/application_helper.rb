@@ -27,7 +27,7 @@ module ApplicationHelper
     end
   end
 
-  def ApplicationHelper::current_total_size
+  def current_total_size
     if @directory
       @directory.size.bytes
     elsif @server
