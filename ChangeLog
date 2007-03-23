@@ -1,3 +1,8 @@
+2007-03-23  Matthew Landauer  <matthew@visualappliance.com>
+	
+	* script/earthd.rb renamed to earthd for consistency with
+	other scripts
+	
 2007-03-20  Julian Scheid  <julians@rsp.com.au>
 
 	Ticket #170:
