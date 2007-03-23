@@ -3,6 +3,14 @@
 	* script/earthd.rb renamed to earthd for consistency with
 	other scripts
 	
+2007-03-23  Bruno Mattarollo <bruno.mattarollo@rsp.com.au>
+
+  * app/controllers/files_controller.rb, 
+    app/helpers/files_helper.rb
+    app/views/files/
+    test/functional/files_controller_test.rb: removed as they are not being
+    used for anything.
+	
 2007-03-20  Julian Scheid  <julians@rsp.com.au>
 
 	Ticket #170:
