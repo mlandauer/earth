@@ -135,6 +135,15 @@ module ApplicationHelper
       nil
     end
   end
+  
+  def tab_info
+    [ 
+      { :title => "navigation", :controller => "browser", :action => "show", :mode => nil },
+      { :title => "all files",  :controller => "browser", :action => "flat", :mode => nil },
+      { :title => "treemap",    :controller => "graph",   :action => "index", :mode => "treemap"},
+      { :title => "radial",    :controller => "graph",   :action => "index", :mode => "radial" }
+    ]
+  end
 
 private
 

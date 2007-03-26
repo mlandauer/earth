@@ -1,4 +1,12 @@
 2007-03-26  Matthew Landauer  <matthew@visualappliance.com>
+	* app/helpers/application_helper.rb: Extracted method tab_info
+	* app/views/layouts/application.haml, apps/views/layouts/application.rhtml:
+	Replaced rhtml template with haml template
+	* app/views/servers/show.haml, app/views/servers/show.rhtml: Replaced rhtml
+	template with haml template
+	* app/views/servers/index.haml: Made GNU license silent in rendered output
+	
+2007-03-26  Matthew Landauer  <matthew@visualappliance.com>
 	* vendor/plugins/stable: Added haml Rails plugin
 	* app/helpers/servers_helper.rb: Extracted daemon_status helper function
 	* app/views/servers/index.haml, app/views/servers/index.rhtml: Replaced
