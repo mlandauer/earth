@@ -33,15 +33,15 @@
   #Container
     %a{:href => url_for(:params => { :controller => :browser, :action => :show })}
       #Banner
-        <!-- Holding Space for a Banner or a Logo -->
+        / Holding Space for a Banner or a Logo
     #BreadcrumbAndFilter
       = render_partial 'browser/breadcrumb_and_filter', nil, { :can_show_empty => (@controller.controller_name == "browser" and @action_name == "show"), :can_show_hidden => (@controller.controller_name == "browser") }
     #Top
       #LoginInformation
-        <!-- Place Holder for when we need Login Information -->
+        / Place Holder for when we need Login Information
       #Tabs
         #TabsInside
-          <!-- We probably should get these from some configuration file or dynamically -->
+          / We probably should get these from some configuration file or dynamically
           - tab_info.each_with_index do |item, index|
             - html_class = 'active' if controller.controller_class_name == (item[:controller].capitalize + "Controller") and params[:action] == item[:action] and params[:mode] == item[:mode]
             - html_style = 'border-left: 1px solid #c2c2c2;' if index == 0

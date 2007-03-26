@@ -1,4 +1,14 @@
 2007-03-26  Matthew Landauer  <matthew@visualappliance.com>
+	* app/views/browser/_breadcrumb_and_filter.haml,
+	app/views/browser/_breadcrumb_and_filter.rhtml: Replaced
+	rhtml template with haml template
+	* app/views/browser/show.haml, app/views/browser/show.rhtml: Ditto above
+	* app/views/layouts/servers.haml, app/views/layouts/servers.rhtml: Ditto
+	above
+	* app/views/servers/edit.haml, app/views/servers/edit.rhtml: Ditto above
+	* app/views/layouts/application.haml: More concise form for html comments
+	
+2007-03-26  Matthew Landauer  <matthew@visualappliance.com>
 	* app/helpers/application_helper.rb: Extracted method tab_info
 	* app/views/layouts/application.haml, apps/views/layouts/application.rhtml:
 	Replaced rhtml template with haml template
