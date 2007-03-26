@@ -1,3 +1,9 @@
+2007-03-26  Matthew Landauer  <matthew@visualappliance.com>
+	* vendor/plugins/stable: Added haml Rails plugin
+	* app/helpers/servers_helper.rb: Extracted daemon_status helper function
+	* app/views/servers/index.haml, app/views/servers/index.rhtml: Replaced
+	rhtml template with haml template
+	
 2007-03-23  Matthew Landauer  <matthew@visualappliance.com>
 
 	* Changelog: Removed messages from pre-Ruby days.

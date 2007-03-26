@@ -15,4 +15,13 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 module ServersHelper
+  def daemon_status(server)
+    if server.daemon_alive?
+      server.cache_complete? ? "up" : "incomplete"
+    elsif server.daemon_version.nil?
+      "down"
+    else
+      "unknown"
+    end
+  end
 end
