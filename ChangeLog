@@ -1,4 +1,11 @@
+2007-03-27  matthewl  <matthewl@visualappliance.com>
+
+	* app/views/graph/index.haml, app/views/graph/index.rhtml: Replaced rhtml
+	template with haml template
+	* app/views/browser/flat.haml, app/views/browser/flat.rhtml: Ditto above
+
 2007-03-26  Matthew Landauer  <matthew@visualappliance.com>
+
 	* app/views/browser/_breadcrumb_and_filter.haml,
 	app/views/browser/_breadcrumb_and_filter.rhtml: Replaced
 	rhtml template with haml template
@@ -9,6 +16,7 @@
 	* app/views/layouts/application.haml: More concise form for html comments
 	
 2007-03-26  Matthew Landauer  <matthew@visualappliance.com>
+
 	* app/helpers/application_helper.rb: Extracted method tab_info
 	* app/views/layouts/application.haml, apps/views/layouts/application.rhtml:
 	Replaced rhtml template with haml template
@@ -17,6 +25,7 @@
 	* app/views/servers/index.haml: Made GNU license silent in rendered output
 	
 2007-03-26  Matthew Landauer  <matthew@visualappliance.com>
+
 	* vendor/plugins/stable: Added haml Rails plugin
 	* app/helpers/servers_helper.rb: Extracted daemon_status helper function
 	* app/views/servers/index.haml, app/views/servers/index.rhtml: Replaced
