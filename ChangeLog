@@ -1,3 +1,16 @@
+2007-03-27  Julian Scheid  <julians@rsp.com.au>
+
+	* db/migrate/055_move_cache_to_directory.rb: Added.
+	* db/migrate/056_drop_cached_sizes.rb: Added.
+	* app/models/earth/cached_size.rb: Removed.
+	* test/fixtures/cached_sizes.yml: Removed.
+	* app/models/earth/directory.rb: Refactored to store cached size
+	in table directories instead of cached_sizes.
+	* lib/earth_plugins/file_monitor.rb: Likewise.
+	* test/unit/file_monitor_test.rb Likewise.
+	* test/functional/graph_controller_test.rb: Removed use of
+	cached_size fixture.
+
 2007-03-27  Matthew Landauer  <matthewl@visualappliance.com>
 
 	* ChangeLog: fixed name of committer

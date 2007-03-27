@@ -36,7 +36,7 @@ class FileMonitor < EarthPlugin
   end
 
   def self.plugin_version
-    130
+    131
   end
 
   class ETAPrinter
@@ -86,8 +86,7 @@ class FileMonitor < EarthPlugin
       if not cache[:top_level_directories].keys.include? directory.id
         cache[:top_level_directories][directory.id] = directory
         benchmark "Collecting startup data for directory #{directory.path} from database" do
-          directory.load_all_children(0, { :include => [ :cached_sizes ] })
-          directory.cached_sizes.reload
+          directory.load_all_children(0)
         end
       end
     end
@@ -235,8 +234,7 @@ private
       #  Earth::File.connection.update("VACUUM FULL ANALYZE")
       #end
 
-      directory.load_all_children(0, { :include => [ :cached_sizes ] })
-      directory.cached_sizes.reload
+      directory.load_all_children(0)
 
       directory
     end
@@ -281,14 +279,6 @@ private
         logger.debug("update_non_recursive for directory #{directory.path} -> not changed")
       else
         logger.debug("update_non_recursive for directory #{directory.path} -> changed less than 1 second ago (#{new_directory_stat.mtime})")
-      end
-
-      if directory.cached_sizes.empty? and not directory.new_record?
-        Earth::Directory::transaction do
-          directory.create_caches
-          directory.update_caches
-          directory.cached_sizes.reload
-        end
       end
 
       return 1

@@ -44,13 +44,11 @@ module Earth
   class Directory < ActiveRecord::Base
     acts_as_nested_set :scope => :server, :level_column => "level"
     has_many :files, :class_name => "Earth::File", :dependent => :delete_cascade, :order => :name, :extend => Earth::FilesExtension
-    has_many :cached_sizes, :class_name => "Earth::CachedSize", :dependent => :delete_cascade
     belongs_to :server
 
     after_save("self.observe_after_save; true")
 
     after_update("self.update_caches; true")
-    after_create("self.create_caches; true")
 
     @@save_observers = []
     @@cache_enabled = true
@@ -92,14 +90,14 @@ module Earth
     end
 
     def recursive_cache_count
-      Earth::CachedSize.count(:conditions => [
-                                "directories.lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
-                                " AND directories.lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
-                                " AND directories.server_id = ?", \
-                                self.id,
-                                self.id,
-                                self.server_id],
-                              :joins => "JOIN directories ON cached_sizes.directory_id = directories.id").to_i
+      self.class.count(:conditions => [
+                                       "lft >= (SELECT lft FROM #{self.class.table_name} WHERE id = ?) " + \
+                                       " AND lft <= (SELECT rgt FROM #{self.class.table_name} WHERE id = ?) " + \
+                                       " AND server_id = ?" + \
+                                       " AND cache_valid", \
+                                       self.id,
+                                       self.id,
+                                       self.server_id]).to_i
     end
     
     # Returns all files belonging to sub-directories of the current directory
@@ -126,12 +124,16 @@ module Earth
     def recursive_directory_count
       return 1 + children_count
     end
+
+    def has_cached_size?
+      cache_valid
+    end
     
     def size_with_caching
       if @cached_size
         @cached_size
-      elsif Thread.current[:with_filtering].nil? && cached_sizes.find(:first)
-        cached_sizes.find(:first).size
+      elsif Thread.current[:with_filtering].nil? and has_cached_size?
+        recursive_size
       else
         size_without_caching
       end
@@ -140,6 +142,26 @@ module Earth
 
     def has_files?
       size.count > 0
+    end
+
+    def recursive_size
+      Size.new(bytes, blocks, count)
+    end
+
+    def recursive_size_from_db
+      result = Earth::Directory.find(:first, 
+                                     :select => "bytes, blocks, count",
+                                     :conditions => [ 
+                                                     "id = ?",
+                                                     self.id
+                                                    ])
+      Size.new(result["bytes"], result["blocks"], result["count"])
+    end
+
+    def recursive_size=(_size)
+      bytes = _size.bytes
+      blocks = _size.blocks
+      count = _size.count
     end
     
     # Return all the root directories for the given server as an array
@@ -194,63 +216,41 @@ module Earth
     def update_caches
       return unless cache_enabled
       
-      # content of cached_sizes can be invalidated by updating the
-      # size of another directory, so it should be reloaded from the
-      # db before it's used.  It might also have not yet been created
-      # (because cache_enabled was set to false and the daemon was
-      # cancelled before bulk cache creation.)  Therefore, invoke
-      # create_cached to make sure the cache exists and is up-to-date.
-      create_caches
+      old_size = self.recursive_size_from_db
 
-      cached_sizes.each do |cached_size|
-        size = Size.new(0, 0, 0)
-        self.children.each do |child|
-          child_cached_size = child.cached_sizes.find(:first)
-          if child_cached_size
-            size += child_cached_size.size
-          end
-        end
-
-        self.files.each do |file|
-          size += file.size
-        end
-
-        increase_cached_sizes_of_self_and_ancestors(size - cached_size)
+      new_size = Size.new(0, 0, 0)
+      self.children.each do |child|
+        new_size += child.recursive_size_from_db
       end
-    end
 
-    def create_caches
-      return unless cache_enabled
-
-      # See comment in method update_caches
-      cached_sizes.reload
-      if cached_sizes.empty?
-        cached_sizes.create(:directory => self)
+      self.files.each do |file|
+        new_size += file.size
       end
+
+      increase_cached_sizes_of_self_and_ancestors(new_size - old_size)
+
+      self.cache_valid = true
     end
     
     # Starting at the top of the directory structure create the caches (and make them up-to-date)
     # for everything recursively below this directory
     # Returns the current cached size of this directory
     def create_caches_recursively(eta_printer = nil)
-      if not cached_sizes.loaded? or cached_sizes.empty?
-        cached_size = cached_sizes.new(:directory => self)
+      new_size = Size.new(0, 0, 0)
   
-        children.each do |child|
-          cached_size.size += child.create_caches_recursively(eta_printer)
-        end
-  
-        files.each do |file|
-          cached_size.size += file.size
-        end
-        files.reset
-  
-        cached_size.create
-        eta_printer.increment if eta_printer
-      else
-        cached_size = cached_sizes[0]
+      children.each do |child|
+        new_size += child.create_caches_recursively(eta_printer)
       end
-      cached_size.size
+  
+      files.each do |file|
+        new_size += file.size
+      end
+      files.reset
+
+      self.recursive_size = new_size
+      eta_printer.increment if eta_printer
+
+      new_size
     end
     
     # Fetch all the files and precache them into the association "files" for all 
@@ -307,12 +307,15 @@ module Earth
       # filter, grab size information from the cache.
       # Otherwise we need to calculate it from the files table.
       if Thread.current[:with_filtering].nil?
-        cached_sizes = Earth::CachedSize.find(:all,
-          :conditions => {:directory_id => find_subdirectories_at_level(leaf_level).map{|d| d.id}})
+
+        cached_sizes = Earth::Directory.find(:all,
+                                             :select => "id, bytes, blocks, count",
+          :conditions => {:id => find_subdirectories_at_level(leaf_level).map{|d| d.id}})
 
         # Use the cached sizes to fill in data for the leaf directories
         cached_sizes.each do |cached_size|
-          directory_size_map[cached_size.directory_id] = cached_size.size
+          directory_size_map[cached_size.id] = \
+            Size.new(cached_size["bytes"], cached_size["blocks"], cached_size["count"])
         end
 
       else
@@ -418,9 +421,9 @@ module Earth
   private
     def increase_cached_sizes_of_self_and_ancestors(size_increase)
       if size_increase != Size.new(0, 0, 0)
-        Earth::CachedSize.update_all(["bytes = bytes + ?, blocks = blocks + ?, count = count + ?",
-                                       size_increase.bytes, size_increase.blocks, size_increase.count],
-                                     ["directory_id in (?)", self.self_and_ancestors])
+        self.class.update_all(["bytes = bytes + ?, blocks = blocks + ?, count = count + ?",
+                               size_increase.bytes, size_increase.blocks, size_increase.count],
+                              ["id in (?)", self.self_and_ancestors])
       end    
     end
     

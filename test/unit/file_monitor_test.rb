@@ -93,12 +93,11 @@ class FileMonitorTest < Test::Unit::TestCase
   end
 
   def assert_cached_sizes_match(directory)
-    @directory.create_caches
     @directory.update_caches
-    cached_size = @directory.cached_sizes.find(:first)
-    cached_size.reload
-    assert_equal(cached_size.bytes, @directory.size.bytes)
-    assert_equal(cached_size.blocks, @directory.size.blocks)
+    @directory.reload
+    assert_equal(@directory.bytes, @directory.size_without_caching.bytes)
+    assert_equal(@directory.blocks, @directory.size_without_caching.blocks)
+    assert_equal(@directory.count, @directory.size_without_caching.count)
 
     # Note: the following assertion assumes that no sparse or
     # compressed files have been created, as in that case disk usage
@@ -345,7 +344,7 @@ class FileMonitorTest < Test::Unit::TestCase
     backdate(@dir1)
     @fileMonitor.update([@directory])
     assert_cached_sizes_match(@directory)
-    assert(@directory.cached_sizes.find(:first).bytes == 0)
+    assert(@directory.bytes == 0)
 
     # Create a subdirectory and check that it's been created
     subdir = File.join(@dir, "subdir")
@@ -360,10 +359,10 @@ class FileMonitorTest < Test::Unit::TestCase
     assert_equal(Earth::Directory.find_by_name(@dir), Earth::Directory.find_by_name("subdir").parent)
     assert_equal(Earth::Directory.find_by_name(@dir).server, Earth::Directory.find_by_name("subdir").server)
     assert_cached_sizes_match(@directory)
-    assert(@directory.cached_sizes.find(:first).bytes == 0)
+    assert(@directory.bytes == 0)
 
     # Create a single file in the subdirectory and check that sizes still match
-    prev_cached_size = @directory.cached_sizes.find(:first).bytes
+    prev_cached_size = @directory.bytes
     file1_size = 3254
     file1 = File.join(subdir, "sub-file1")
     create_random_file(file1, file1_size)
@@ -376,16 +375,16 @@ class FileMonitorTest < Test::Unit::TestCase
     assert_equal(file1_size, Earth::File.find_by_name('sub-file1').bytes)
     assert_cached_sizes_match(@directory)
     assert_equal(file1_size, Earth::Directory.find_by_name("subdir").size.bytes)
-    assert_equal(file1_size, Earth::Directory.find_by_name("subdir").cached_sizes.find(:first).bytes)
+    assert_equal(file1_size, Earth::Directory.find_by_name("subdir").bytes)
     assert_equal(file1_size, Earth::Directory.find_by_name(@dir).size.bytes)
-    assert_equal(file1_size, Earth::Directory.find_by_name(@dir).cached_sizes.find(:first).bytes)
+    assert_equal(file1_size, Earth::Directory.find_by_name(@dir).bytes)
     assert_equal(@directory, Earth::Directory.find_by_name(@dir))
     assert_equal(file1_size, @directory.size.bytes)
-    assert_equal(file1_size, @directory.cached_sizes.find(:first).bytes)
-    assert_equal(@directory.cached_sizes.find(:first).bytes, file1_size)
+    assert_equal(file1_size, @directory.bytes)
+    assert_equal(@directory.bytes, file1_size)
 
     # Create two files in the subdirectory and check that sizes still match
-    prev_cached_size = @directory.cached_sizes.find(:first).bytes
+    prev_cached_size = @directory.bytes
     file2 = File.join(subdir, "sub-file2")
     file2_size = 1314
     create_random_file(file2, file2_size)
@@ -396,7 +395,8 @@ class FileMonitorTest < Test::Unit::TestCase
     backdate(@dir1, 54)
     backdate(subdir, 54)
     @fileMonitor.update([@directory])
-    new_cached_size = @directory.cached_sizes.find(:first).bytes
+    @directory.reload
+    new_cached_size = @directory.bytes
     assert_equal(file2_size + file3_size, new_cached_size - prev_cached_size)
     assert_cached_sizes_match(@directory)
 
@@ -435,12 +435,11 @@ class FileMonitorTest < Test::Unit::TestCase
     Earth::Directory.cache_enabled = false    
     directory.save
     Earth::Directory.cache_enabled = true
-    assert directory.cached_sizes.empty?
+    assert !directory.has_cached_size?
 
     # Touch directory and expect caches to be created after the fact
     backdate(@dir, 50)
     @fileMonitor.update([directory])
-    assert (not directory.cached_sizes.empty?)
     assert_cached_sizes_match(directory)
   end
 
