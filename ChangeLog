@@ -1,4 +1,8 @@
-2007-03-27  matthewl  <matthewl@visualappliance.com>
+2007-03-27  Matthew Landauer  <matthewl@visualappliance.com>
+
+	* ChangeLog: fixed name of committer
+
+2007-03-27  Matthew Landauer  <matthewl@visualappliance.com>
 
 	* app/views/graph/index.haml, app/views/graph/index.rhtml: Replaced rhtml
 	template with haml template
