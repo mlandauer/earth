@@ -1,3 +1,14 @@
+2007-03-28  Matthew Landauer  <matthewl@visualappliance.com>
+
+	* public/stylesheets/sass/treemap.sass, public/stylesheets/treemap.css:
+	css is now generated dynamically from sass template
+	* public/stylesheets/sass/servers.sass, public/stylesheets/servers.css: 
+	Ditto above
+	* public/stylesheets/sass/svg.sass, public/stylesheets/svg.css: Ditto above
+	* public/stylesheets/sass/base.sass, public/stylesheets/base.css: Ditto
+	above
+	* public/stylesheets/scaffold.css: Removed unused stylesheet
+
 2007-03-27  Julian Scheid  <julians@rsp.com.au>
 
 	* db/migrate/055_move_cache_to_directory.rb: Added.
