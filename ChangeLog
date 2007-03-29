@@ -1,3 +1,8 @@
+2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
+
+	* db/migrate/057_add_cache_valid_to_directory.rb: New migration. Fixes
+	missing column in table from changeset [1109].
+
 2007-03-28  Matthew Landauer  <matthewl@visualappliance.com>
 
 	* public/stylesheets/sass/treemap.sass, public/stylesheets/treemap.css:
