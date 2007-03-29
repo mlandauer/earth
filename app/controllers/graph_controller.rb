@@ -97,11 +97,7 @@ class GraphController < ApplicationController
 
         @directory.cache_sizes_recursive(@level_count)
 
-        if params[:mode] == "treemap"
-          render :layout => false, :action => "directory_treemap.rxml"
-        else
-          render :layout => false, :action => "directory.rxml"
-        end
+        render :layout => false, :action => "directory.rxml"
       else
         @servers = Earth::Server.find(:all)
         render :layout => false, :action => "servers.rxml"

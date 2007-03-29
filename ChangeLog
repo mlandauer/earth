@@ -1,5 +1,11 @@
 2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
 
+	* app/views/layouts/application.haml, app/views/graph/index.haml,
+	app/controllers/graph_controller.rb, app/helpers/application_helper.rb,
+	app/views/graph/directory_treemap.rxml: Removed "treemap" view
+
+2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
+
 	* app/helpers/application_helper.rb (earth_version_svn): If "svnversion"
 	command fails recover gracefully
 

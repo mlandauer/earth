@@ -17,9 +17,6 @@
 - if not @browser_warning.nil?
   .browser-warning= @browser_warning
 
-- if params[:mode] == "treemap"
-  .treemap-warning= "NOTE: The Treemap view is currently experimental. Consider using the " + link_to("radial view", :overwrite_params => { :mode => :radial }) + " instead."
-
 %center
   %div{:style => "width: 600px; align: center;"}
     %embed{:src => url_for(:controller => :graph, :action => :show, :params => @svg_params), :width => "600", :height => "600", :type => "image/svg+xml"}
