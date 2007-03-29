@@ -1,5 +1,12 @@
 2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
 
+	* script/create_cert.rb, script/create_cert: Renamed file. Removed file
+	extension for consistency with other scripts
+	* script/sign_plugin.rb, script/sign_plugin: Ditto above 
+	* script/install_plugin.rb, script/install_plugin: Ditto above
+
+2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
+
 	* app/views/layouts/application.haml, app/views/graph/index.haml,
 	app/controllers/graph_controller.rb, app/helpers/application_helper.rb,
 	app/views/graph/directory_treemap.rxml: Removed "treemap" view
