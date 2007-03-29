@@ -16,15 +16,40 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-#ENV["RAILS_ENV"] = "development"
-#require File.dirname(__FILE__) + '/../config/environment'
-
 require File.join(File.dirname(__FILE__), '..', 'lib', 'earth_plugin_interface', 'plugin_manager')
+require 'optparse'
+
+opts = OptionParser.new
+opts.banner = <<END_OF_STRING
+USAGE: 
+  #{$0} <plugin file> -  Install the earth daemon plugin at the given path
+EXAMPLE:
+  #{$0} lib/earth_plugins/file_monitor.rb
+END_OF_STRING
+opts.on_tail("-h", "--help", "Show this message") do
+  puts opts
+  exit
+end
+opts.separator "General Options:"
+
+begin
+  opts.parse!(ARGV)
+rescue
+  puts opts
+  exit 1
+end
+
+if ARGV.length < 1
+  puts opts
+  exit 1
+end
+
+plugin_file = ARGV[0]
 
 plugin_manager = PluginManager.new
 
 begin
-  plugin = plugin_manager.install_from_file(ARGV[0])
+  plugin = plugin_manager.install_from_file(plugin_file)
 rescue => err
   $stderr.puts "Unable to install plug-in: #$!"
   raise

@@ -24,7 +24,7 @@ keypair_file = File.expand_path(File.join(File.dirname(__FILE__), "..", "config"
 cert_file = File.expand_path(File.join(File.dirname(__FILE__), "..", "config", "certificates", "test_cert.pem"))
 
 raise "Keypair file already exists at #{keypair_file}. Remove that file to proceed" if File.exist? keypair_file
-raise "Certificate file already exists at #{keypair_file}. Remove that file to proceed" if File.exist? cert_file
+raise "Certificate file already exists at #{cert_file}. Remove that file to proceed" if File.exist? cert_file
 
 keypair = OpenSSL::PKey::RSA.new 1024
 

@@ -1,5 +1,10 @@
 2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
 
+	* script/install_plugin: Fixed error message to user about file not existing
+	* script/create_cert: Added usage information for the user
+	
+2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
+
 	* script/create_cert.rb, script/create_cert: Renamed file. Removed file
 	extension for consistency with other scripts
 	* script/sign_plugin.rb, script/sign_plugin: Ditto above 
