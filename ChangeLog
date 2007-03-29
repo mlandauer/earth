@@ -1,5 +1,10 @@
 2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
 
+	* app/helpers/application_helper.rb (earth_version_svn): If "svnversion"
+	command fails recover gracefully
+
+2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
+
 	* db/migrate/057_add_cache_valid_to_directory.rb: New migration. Fixes
 	missing column in table from changeset [1109].
 
