@@ -1,3 +1,7 @@
+2007-03-30  Matthew Landauer  <matthewl@visualappliance.com>
+
+	* vendor/rails: Removed directory
+
 2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
 
 	* script/install_plugin: Fixed error message to user about file not existing
