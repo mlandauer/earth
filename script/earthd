@@ -16,6 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+LOAD_FILE_MONITOR_AS_PLUGIN = false
+
 require 'optparse'
 require 'ostruct'
 require 'socket'
@@ -395,6 +397,9 @@ class Earthd
     # Set environment to run in
     ENV["RAILS_ENV"] = @config["rails_environment"]
     require File.join(File.dirname(__FILE__), '../config/environment')
+    if not LOAD_FILE_MONITOR_AS_PLUGIN
+      require File.join(File.dirname(__FILE__), '..', 'lib', 'earth_plugins', 'file_monitor.rb')
+    end
   end    
 
   def daemon_stop()
@@ -477,18 +482,23 @@ class Earthd
 
       last_known_good_file_monitor = nil
 
+      if not LOAD_FILE_MONITOR_AS_PLUGIN
+        @file_monitor = FileMonitor.new
+      end
+
       while true
 
         begin
-          @file_monitor = @plugin_manager.load_plugin("EarthFileMonitor", loaded_plugin_versions["EarthFileMonitor"]) || @file_monitor
-          raise RuntimeError, "No file monitor plugin installed." unless @file_monitor
-          if loaded_plugin_versions["EarthFileMonitor"].nil? or loaded_plugin_versions["EarthFileMonitor"] < @file_monitor.class.plugin_version
-            loaded_plugin_versions["EarthFileMonitor"] = @file_monitor.class.plugin_version
+          if LOAD_FILE_MONITOR_AS_PLUGIN
+            @file_monitor = @plugin_manager.load_plugin("EarthFileMonitor", loaded_plugin_versions["EarthFileMonitor"]) || @file_monitor
+            raise RuntimeError, "No file monitor plugin installed." unless @file_monitor
+            if loaded_plugin_versions["EarthFileMonitor"].nil? or loaded_plugin_versions["EarthFileMonitor"] < @file_monitor.class.plugin_version
+              loaded_plugin_versions["EarthFileMonitor"] = @file_monitor.class.plugin_version
+            end
+            
+            raise RuntimeError, "No file monitor found in database!" unless @file_monitor
+            logger.info("Using file monitor version #{@file_monitor.class.plugin_version}")
           end
-          
-          raise RuntimeError, "No file monitor found in database!" unless @file_monitor
-          logger.info("Using file monitor version #{@file_monitor.class.plugin_version}")
-
           @file_monitor.logger = logger
           @file_monitor.iteration(cache, false, @config["override_update_interval"])
           if last_known_good_file_monitor and last_known_good_file_monitor != @file_monitor
@@ -496,7 +506,10 @@ class Earthd
           end
           last_known_good_file_monitor = @file_monitor
         rescue => err
-          if last_known_good_file_monitor and last_known_good_file_monitor != @file_monitor
+          if last_known_good_file_monitor \
+            and last_known_good_file_monitor != @file_monitor \
+            and LOAD_FILE_MONITOR_AS_PLUGIN
+
             logger.error("Daemon caught fatal error from file monitor") 
             logger.error(err)
             logger.warn("Retrying with last known good file monitor version") 
