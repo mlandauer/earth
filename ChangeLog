@@ -1,3 +1,7 @@
+2007-04-03  Matthew Landauer  <matthewl@visualappliance.com>
+
+	* NEWS: Added file with text for upcoming 0.2 release
+
 2007-04-02  Julian Scheid  <julians@rsp.com.au>
 
 	* scripts/earthd: Load file monitor from file system instead of
