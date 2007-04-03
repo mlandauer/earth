@@ -20,6 +20,10 @@ class Earth::FileTest < Test::Unit::TestCase
   fixtures :servers, :directories, :files
   set_fixture_class :servers => Earth::Server, :directories => Earth::Directory, :files => Earth::File
 
+  def test_breaking
+    assert(false)
+  end
+  
   def test_stat
     # Getting a File::Stat from a "random" file
     stat = File.lstat(File.dirname(__FILE__) + '/../test_helper.rb')
