@@ -35,6 +35,10 @@ class EarthPlugin
   def self.plugin_name
     raise PluginMethodNotImplementedError
   end
+  
+  def self.plugin_version
+    raise PluginMethodNotImplementedError
+  end
 
   def self.validate_plugin_class(plugin_class)
 
@@ -42,7 +46,7 @@ class EarthPlugin
       plugin_name = plugin_class.plugin_name
     rescue PluginMethodNotImplementedError
       raise InvalidEarthPluginError, "The plugin does not implement the plugin_name method"
-    rescue
+    rescue => err
       raise InvalidEarthPluginError, err
     end
 
