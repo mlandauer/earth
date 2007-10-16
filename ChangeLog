@@ -1,6 +1,9 @@
 2007-10-16  Matthew Landauer  <matthew@visualappliance.com>
 
-	* config/environment.rb: Upgraded to Rails 1.2.5
+	* config/environment.rb, config/boot.rb, public/javascript/control.js,
+	public/javascript/dragdrop.js, public/javascript/effects.js,
+	public/javascript/prototype.js, script/process/inspector:
+	Upgraded to Rails 1.2.5
 
 2007-04-11  Matthew Landauer  <matthew@visualappliance.com>
 
