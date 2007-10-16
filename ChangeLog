@@ -1,10 +1,14 @@
-2007-04-11  Matthew Landauer  <matthewl@visualappliance.com>
+2007-10-16  Matthew Landauer  <matthew@visualappliance.com>
+
+	* config/environment.rb: Upgraded to Rails 1.2.5
+
+2007-04-11  Matthew Landauer  <matthew@visualappliance.com>
 
 	* lib/earth_plugin_interface/earth_plugin.rb,
 	test/unit/earth_plugin_test.rb: Added unit tests and fixed a couple of
 	small bugs shown up by unit tests
 
-2007-04-03  Matthew Landauer  <matthewl@visualappliance.com>
+2007-04-03  Matthew Landauer  <matthew@visualappliance.com>
 
 	* NEWS: Added file with text for upcoming 0.2 release
 
@@ -13,39 +17,39 @@
 	* scripts/earthd: Load file monitor from file system instead of
 	from database.
 
-2007-03-30  Matthew Landauer  <matthewl@visualappliance.com>
+2007-03-30  Matthew Landauer  <matthew@visualappliance.com>
 
 	* vendor/rails: Removed directory
 
-2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
+2007-03-29  Matthew Landauer  <matthew@visualappliance.com>
 
 	* script/install_plugin: Fixed error message to user about file not existing
 	* script/create_cert: Added usage information for the user
 	
-2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
+2007-03-29  Matthew Landauer  <matthew@visualappliance.com>
 
 	* script/create_cert.rb, script/create_cert: Renamed file. Removed file
 	extension for consistency with other scripts
 	* script/sign_plugin.rb, script/sign_plugin: Ditto above 
 	* script/install_plugin.rb, script/install_plugin: Ditto above
 
-2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
+2007-03-29  Matthew Landauer  <matthew@visualappliance.com>
 
 	* app/views/layouts/application.haml, app/views/graph/index.haml,
 	app/controllers/graph_controller.rb, app/helpers/application_helper.rb,
 	app/views/graph/directory_treemap.rxml: Removed "treemap" view
 
-2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
+2007-03-29  Matthew Landauer  <matthew@visualappliance.com>
 
 	* app/helpers/application_helper.rb (earth_version_svn): If "svnversion"
 	command fails recover gracefully
 
-2007-03-29  Matthew Landauer  <matthewl@visualappliance.com>
+2007-03-29  Matthew Landauer  <matthew@visualappliance.com>
 
 	* db/migrate/057_add_cache_valid_to_directory.rb: New migration. Fixes
 	missing column in table from changeset [1109].
 
-2007-03-28  Matthew Landauer  <matthewl@visualappliance.com>
+2007-03-28  Matthew Landauer  <matthew@visualappliance.com>
 
 	* public/stylesheets/sass/treemap.sass, public/stylesheets/treemap.css:
 	css is now generated dynamically from sass template
@@ -69,11 +73,11 @@
 	* test/functional/graph_controller_test.rb: Removed use of
 	cached_size fixture.
 
-2007-03-27  Matthew Landauer  <matthewl@visualappliance.com>
+2007-03-27  Matthew Landauer  <matthew@visualappliance.com>
 
 	* ChangeLog: fixed name of committer
 
-2007-03-27  Matthew Landauer  <matthewl@visualappliance.com>
+2007-03-27  Matthew Landauer  <matthew@visualappliance.com>
 
 	* app/views/graph/index.haml, app/views/graph/index.rhtml: Replaced rhtml
 	template with haml template
