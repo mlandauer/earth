@@ -53,6 +53,35 @@ module Earth
     @@save_observers = []
     @@cache_enabled = true
     cattr_accessor :cache_enabled
+    
+    def self.filter_and_add_bytes(directories,options={})
+        show_empty  = options[:show_empty]
+        show_hidden = options[:show_hidden]
+        
+        # Instead of filtering out empty directories ahead of time,
+        # which requires one additional query per directory, get
+        # directory size and file count for each directory in one go
+        # and filter out empty directories after the fact
+        any_empty_directories  = false
+        any_hidden_directories = false
+        
+        directories_and_bytes = directories.map do |d| 
+          size = d.size
+          
+          any_empty_directories  = true if size.count == 0
+          any_hidden_directories = true if d.hidden?
+          
+          if (show_empty || size.count > 0) && (show_hidden || !d.hidden?)
+            [d, size.bytes]
+          end
+        end
+
+        [directories_and_bytes.compact, any_hidden_directories, any_empty_directories]
+    end
+    
+    def hidden?
+      name && name[0] == ?.
+    end
 
     Stat = Struct.new(:mtime)
     class Stat
@@ -142,6 +171,10 @@ module Earth
 
     def has_files?
       size.count > 0
+    end
+    
+    def empty?
+      size.count <= 0
     end
 
     def recursive_size

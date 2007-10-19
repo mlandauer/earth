@@ -18,13 +18,14 @@ require 'csv'
 require 'pp'
 
 class BrowserController < ApplicationController
+  before_filter :load_context, :only => [:index,:flat,:show]
+  
   def index
     redirect_to :action => 'show'
   end
 
   def flat
-    @server = Earth::Server.find_by_name(params[:server]) if params[:server]
-    @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
+
 
     @show_hidden = params[:show_hidden]
 
@@ -104,7 +105,6 @@ class BrowserController < ApplicationController
                                      :conditions => conditions)
       @page_count = (file_count + @page_size - 1) / @page_size
       
-
       @files = Earth::File.find(:all, 
                                 :select => select,
                                 :joins => joins,
@@ -116,66 +116,15 @@ class BrowserController < ApplicationController
   end
 
   def show
-    @server = Earth::Server.find_by_name(params[:server]) if params[:server]
-    @directory = @server.directories.find_by_path(params[:path].to_s) if @server && params[:path]
     # Filter parameters
-    @show_empty = params[:show_empty]
+    @show_empty  = params[:show_empty]
     @show_hidden = params[:show_hidden]
 
-    Earth::File.with_filter(params) do
-      # if at the root
-      if @server.nil?
-        servers = Earth::Server.find(:all)
-      # if at the root of a server
-      elsif @server && @directory.nil?
-        directories = Earth::Directory.roots_for_server(@server)
-      # if in a directory on a server
-      elsif @server && @directory
-        directories = @directory.children
-        # Scoping appears to not work on associations so doing the find explicitly
-        @files = Earth::File.find(:all, :conditions => ['directory_id = ?', @directory.id])
-      end
-      
-      # Filter out servers and directories that have no files, query sizes
-      if servers
-        @any_empty = false
-        @servers_and_bytes = servers.map do |s|
-          size = s.size
-          @any_empty = true if size.count == 0
-          if @show_empty || size.count > 0
-            [s, size.bytes]
-          end
-        end
-        # Remove any nil entries resulting from empty servers
-        @servers_and_bytes.delete_if { |entry| entry.nil? }
-      elsif directories
-        # Instead of filtering out empty directories ahead of time,
-        # which requires one additional query per directory, get
-        # directory size and file count for each directory in one go
-        # and filter out empty directories after the fact
-        any_empty_directories = false
-        any_hidden_directories = false
-        @directories_and_bytes = directories.map do |d| 
-          size = d.size
-          any_empty_directories = true if size.count == 0
-          any_hidden_directories = true if /^\./ =~ d.name
-          if (@show_empty || size.count > 0) && (@show_hidden || /^[^.]/ =~ d.name)
-            [d, size.bytes]
-          end
-        end
-        @any_empty = any_empty_directories || (@files.any? { |file| file.bytes == 0 } if @files)
-        @any_hidden = any_hidden_directories || (@files.any? { |file| /^\./ =~ file.name } if @files)
+    @servers_and_bytes,@directories_and_bytes,@files,@any_empty,@any_hidden = Earth.filter_context(@server,@directory,params)
 
-        # Remove any nil entries resulting from empty directories
-        @directories_and_bytes.delete_if { |entry| entry.nil? }
-
-        @files = @files.select { |file| /^[^.]/ =~ file.name } if @files and not @show_hidden
-      end
-    end
-    
     respond_to do |wants|
       wants.html
-      wants.xml {render :action => "show.rxml", :layout => false}
+      wants.xml
       wants.csv do
         @csv_report = StringIO.new
         CSV::Writer.generate(@csv_report, ',') do |csv|
@@ -198,5 +147,11 @@ class BrowserController < ApplicationController
       @users = User.find_matching(params[:filter_user])
       render :inline => '<%= content_tag("ul", @users.map { |user| content_tag("li", h(user.name)) })%>'
     end
+  end
+  
+  protected
+  def load_context
+    @server    = Earth::Server.find_by_name(params[:server])           if params[:server]
+    @directory = @server.directories.find_by_path(params[:path] * '/') if @server && params[:path]
   end
 end

@@ -43,33 +43,51 @@ module Earth
     def size
       Size.new(bytes, blocks, 1)
     end
+    
+    def empty?
+      bytes == 0
+    end
+    
+    def hidden?
+      name && name[0] == ?.
+    end
+    
+    def self.filter(files,options={})
+      show_hidden = options[:show_hidden]
+      
+      any_empty  = false
+      any_hidden = false
+      
+      filtered = files.map do |file|
+        any_empty  = true if file.empty?
+        any_hidden = true if file.hidden?
+        
+        file if show_hidden || !file.hidden?
+      end
+      
+      [filtered.compact, any_empty, any_hidden]
+    end
 
     def path
       File.join(directory.path, name)
     end
     
-    def File.with_filter(params = {}) 
+    def self.build_filter_conditions(params)
       filter_filename = params[:filter_filename]
-      if filter_filename.nil? || filter_filename == ""
-        filter_filename = "*"
-      end
+      filter_filename = "*" if filter_filename.blank?
+      
       filter_user = params[:filter_user]
+      filter_uid  = filter_user.blank? ? nil : User.find_by_name(filter_user).uid
 
-      users = User.find_all
-
-      if filter_user && filter_user != ""    
-        filter_uid = User.find_by_name(filter_user).uid
-      else
-        filter_uid = nil
-      end
-
-      if not filter_uid.nil?
-        filter_conditions = ["files.name LIKE ? AND files.uid = ?", filter_filename.tr('*', '%'), filter_uid]
+      if filter_uid
+        ["files.name LIKE ? AND files.uid = ?", filter_filename.tr('*', '%'), filter_uid]
       elsif filter_filename != '*'
-        filter_conditions = ["files.name LIKE ?", filter_filename.tr('*', '%')]
-      else
-        filter_conditions = nil
+        ["files.name LIKE ?", filter_filename.tr('*', '%')]
       end
+    end
+    
+    def self.with_filter(params = {})
+      filter_conditions = build_filter_conditions(params)
 
       Thread.current[:with_filtering] = filter_conditions
       

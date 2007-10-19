@@ -39,6 +39,21 @@ module Earth
       Socket.gethostbyname(Socket.gethostname)[0]
     end
     
+    def self.filter_and_add_bytes(servers,options={})
+      show_empty = options[:show_empty]
+      any_empty = false
+      
+      servers_and_bytes = servers.map do |s|
+        size = s.size
+        any_empty = true if size.count == 0
+        if show_empty || size.count > 0
+          [s, size.bytes]
+        end
+      end
+      
+      [servers_and_bytes.compact, any_empty]
+    end
+    
     def size
       size_sum = Size.new(0, 0, 0)
       Earth::Directory.roots_for_server(self).each do |d|
