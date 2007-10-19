@@ -252,7 +252,7 @@ private
     else
       logger.warn "No directories monitored"
       self.status_info = "Idle - no directories monitored"
-      sleep 2.seconds
+      sleep 2.seconds.to_i
     end
   end
   
