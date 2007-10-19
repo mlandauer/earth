@@ -1,0 +1,98 @@
+Hornsby
+=======
+A Scenario Builder without the fixture pain.
+
+Scenarios look like:
+
+scenario :apple do
+  @apple = Fruit.create! :species => 'apple'
+end
+
+scenario :orange do
+  @orange = Fruit.create! :species => 'orange'
+end
+
+scenario :fruitbowl => [:apple,:orange] do
+  @fruitbowl = FruitBowl.create! :fruit => [@apple,@orange]
+end
+
+scenario :kitchen => :fruitbowl do
+  @kitchen = Kitchen.create! :fruitbowl => @fruitbowl
+end
+
+...and you use them in specs like:
+
+describe Fruit, "@apple" do
+  before do
+    hornsby_scenario :apple
+  end
+  
+  it "should be an apple" do
+    @apple.species.should == 'apple'
+  end
+end
+
+describe FruitBowl, "with and apple and an orange" do
+  before do
+    hornsby_scenario :fruitbowl
+  end
+  
+  it "should have 2 fruits" do
+    @fruitbowl.should have(2).fruit
+  end
+end
+
+Setup
+=====
+Install the plugin:
+
+./script/plugin install http://rails-oceania.googlecode.com/svn/lachiecox/hornsby
+
+Or piston:
+
+piston import http://rails-oceania.googlecode.com/svn/lachiecox/hornsby vendor/plugins/hornsby
+
+Add the following to spec_helper.rb
+
+# by default this loads scenarios from RAILS_ROOT/spec/hornsby_scenarios.rb
+Hornsby.load
+
+Spec::Runner.configure do |config|
+  ...
+  
+  config.include(HornsbySpecHelper)
+end
+
+
+Advanced Usage
+==============
+Its just ruby, right? So go nuts:
+
+1.upto(9) do |i|
+  scenario("user_#{i}") do
+    user = User.create! :name => "user#{i}"
+    instance_variable_set("@user_#{i}",user)
+  end
+end
+
+Rake
+====
+If you'd like simply to load your scenarios into a database, use the rake task like so:
+
+$ rake hornsby:scenario RAILS_ENV=test SCENARIO=fruitbowl
+
+TODO
+====
+* Make transactional for speed.
+* Add scenario namespaces for better organisation.
+* Detect scenario cycles.
+
+Credits
+=======
+Lachie Cox <lachie@smartbomb.com.au>
+
+The code is based on Err's code found in this post: http://errtheblog.com/post/7708
+
+License
+=======
+MIT, see LICENCE
