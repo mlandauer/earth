@@ -33,6 +33,16 @@ The second method allows you to create arbitrary foreign-keys at any time:
 
   add_foreign_key(:orders, :customer_id, :customers, :id, :on_delete => :set_null, :on_update => :cascade)
 
+In either case, if your database supports deferred foreign keys (for example PostgreSQL) you can specify this as well:
+
+  t.foreign_key :customer_id, :customers, :id, :deferrable => true
+  add_foreign_key(:orders, :customer_id, :customers, :id, :deferrable => true)
+
+By default, the foreign key will be assigned a name by the underlying database. However, if this doesn't suit
+your needs, you can override the default assignment using the <code>:name</code> option:
+
+  add_foreign_key(:orders, :customer_id, :customers, :id, :on_delete => :set_null, :on_update => :cascade, <strong>:name => :orders_customer_id_foreign_key<strong>)
+
 You can also query the foreign keys for a model yourself by calling <code>foreign_keys()</code>:
 
   Order.foreign_keys
@@ -61,6 +71,21 @@ each test, you should list your fixtures in order of parent->child. For example:
 
 Rails will then set-up and tear-down the fixtures in the correct sequence.
 
+Some databases (PostgreSQL and MySQL for example) allow you to set a comment for a
+table. You can do this for existing tables by using:
+
+  set_table_comment :orders, "All pending and processed orders"
+
+or even at the time of creation:
+
+  create_table :orders, :comment => "All pending and processed orders" do |t|
+    ...
+  end
+
+You can also clear table comments:
+
+  clear_table_comment :orders
+
 The plugin fully supports and understands the following active-record
 configuration properties:
 
@@ -83,6 +108,23 @@ Would return all the indexes for the +invoices+ table.
 The plugin also adds a method--<code>defining?()</code>--to
 <code>ActiveRecord::Schema</code> to indicate when <code>define()</code> is running. This is necessary
 as some migration plugins must change their behaviour accordingly.
+
+=== Case-insensitive Indexes
+
+For PostgreSQL, you can add an option <code>:case_sensitive => false</code> to <code>add_index</code>
+which will generate an expression index of the form:
+
+  LOWER(column_name)
+
+This means finder queries of the form:
+
+  WHERE LOWER(column_name) = LOWER(?)
+
+are able to use the indexes rather require, in the worst case, full-table scans.
+
+Note also that this ties in well with Rails built-in support for case-insensitive searching:
+
+  validates_uniqueness_of :name, :case_sensitive => false
 
 === See Also
 
