@@ -52,7 +52,7 @@
           - else
             - if @server
               = link_to "..", :overwrite_params => {:server => nil, :path => nil}
-      - unless @servers_and_bytes.nil? || @servers_and_bytes.empty?
+      - unless @servers_and_bytes.blank?
         - @servers_and_bytes.sort!{|a,b| b[1] <=> a[1]}
         - max_size = @servers_and_bytes[0][1]
         - units = ApplicationHelper::human_units_of max_size
@@ -63,8 +63,8 @@
             %td.size.Server= link_to "<span>#{ApplicationHelper::human_size_in(units, size)} #{units}</span>", :overwrite_params => {:server => server.name, :path => nil}
             %td.bar.Server= link_to bar(size, max_size, :class => "bar"), :overwrite_params => {:server => server.name, :path => nil}
       
-      - @directories_and_bytes = [] if @directories_and_bytes.nil?
-      - @files = [] if @files.nil?
+      - @directories_and_bytes ||= []
+      - @files ||= []
       - @directories_and_bytes.sort!{|a,b| b[1] <=> a[1]}
       - @files.sort!{|a,b| b.bytes <=> a.bytes}
       - if @directories_and_bytes.empty?
