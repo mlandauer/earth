@@ -1,5 +1,9 @@
 2007-10-22	Lachie Cox	<lachie.cox@rsp.com.au>
 
+  * lib/tasks/checkin.rake: Improved ci task description text
+
+2007-10-22	Lachie Cox	<lachie.cox@rsp.com.au>
+
   * lib/tasks/checkin.rake: Added checkin rake tasks to automate quality-assured checkins
 
 2007-10-22  Lachie Cox  <lachie.cox@rsp.com.au>

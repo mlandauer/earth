@@ -1,5 +1,6 @@
 require 'open3'
 
+desc "Checks in changes after successfully running tests and automatically adding to the changelog. Set MSG with your check-in message. This is also the message added to the ChangeLog"
 task :ci => 'ci:read_config' do
   begin
     message = ENV['MSG'] or raise "please set checkin message MSG"
