@@ -16,7 +16,7 @@
 
 class AddHeartbeatToServersTable < ActiveRecord::Migration
   def self.up
-    add_column :servers, :heartbeat_interval, :integer, :null => false, :default => 5.minutes
+    add_column :servers, :heartbeat_interval, :integer, :null => false, :default => 5.minutes.to_i
     add_column :servers, :heartbeat_time, :timestamp
   end
 
