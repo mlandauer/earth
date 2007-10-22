@@ -59,7 +59,7 @@ class BrowserControllerTest < Test::Unit::TestCase
   end
 
   def test_show
-    get :show, :server => Earth::Server.this_hostname, :path => "/foo"
+    get :show, :server => Earth::Server.this_hostname, :path => ["","foo"]
     
     assert_response :success
     assert_template 'show'
@@ -70,17 +70,17 @@ class BrowserControllerTest < Test::Unit::TestCase
 
   def test_show_with_server_and_path_as_csv
     @request.env['HTTP_ACCEPT'] = 'text/csv'
-    get :show, {:server => Earth::Server.this_hostname, :path => "/foo/bar", :show_empty => 1}
+    get :show, {:server => Earth::Server.this_hostname, :path => ["","foo","bar"], :show_empty => 1}
     assert_response :success
     assert_equal(directories(:foo_bar), assigns(:directory))
   end
   
   def test_show_with_server_and_path
     @request.env['HTTP_ACCEPT'] = 'application/xml'
-    get :show, {:server => Earth::Server.this_hostname, :path => "/foo/bar", :show_empty => 1}
+    get :show, {:server => Earth::Server.this_hostname, :path => ["","foo","bar"], :show_empty => 1}
     
     assert_response :success
-    assert_template 'show.rxml'
+    assert_template 'show'
     
     assert_equal(directories(:foo_bar), assigns(:directory))
     

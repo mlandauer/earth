@@ -272,7 +272,7 @@ class TransactionalDirectoryTest < Test::Unit::TestCase
     writer = Thread.new do
       (1..10).each { |i|
         d = Earth::Directory.find(1)
-        d.child_create(:name => "bruno#{i}", :server_id => d.server_id) # => /foo/bruno#{counter}
+        d.child_create(:name => "bruno#{i}", :server_id => d.server_id, :path => "/foo/bruno#{i}") # => /foo/bruno#{counter}
         }
       end
 
