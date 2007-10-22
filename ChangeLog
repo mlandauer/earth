@@ -1,3 +1,64 @@
+2007-10-22  Lachie Cox  <lachie.cox@rsp.com.au>
+
+  * ChangeLog: Mega update, including all changes
+  for Rails 2 and a little refactoring. 
+  
+  * test/unit/directory_test.rb, 
+  test/functional/browser_controller_test.rb:
+  Tweaks for Rails 2
+  
+  * app/controllers/browser_controller.rb,
+  app/models/earth/file.rb, 
+  app/models/earth/directory.rb,
+  app/models/earth/server.rb: 
+  Refactoring - moved filtering business logic from controller into models.
+  
+  * app/models/earth.rb:
+  Added. Earth.filter_context acts as a filtering facade for above refactoring.
+  
+  * app/views/browser/show.haml,
+  app/views/browser/show.rxml, 
+  app/views/browser/flat.haml,
+  app/views/browser/_breadcrumb_and_filter.haml:
+  Renamed for Rails 2.
+  
+  * app/views/browser/_breadcrumb_and_filter.html.haml,
+  app/views/browser/show.html.haml,
+  app/views/browser/show.xml.builder,
+  app/views/browser/flat.html.haml:
+  Renamed from above for rails 2.
+  
+  * db/migrate/039_add_last_update_finish_time_to_server.rb,
+  db/migrate/038_add_heartbeat_to_servers_table.rb, 
+  lib/earth_plugins/file_monitor.rb:
+  Changed durations, e.g. 300.seconds to 300.seconds.to_i for Rails 2.
+  
+  * vendor/plugins/auto_complete:
+  Added via piston, this functionality was 
+  extracted from the core for Rails 2.
+  
+  * vendor/plugins/redhillonrails_core:
+  Moved under piston management.
+  
+  * vendor/plugins/redhillonrails_core/init.rb:
+  Added guard against double loading during test.
+  
+  * vendor/plugins/hornsby: Added via piston.
+  * vendor/rails: Added from rails HEAD via piston.
+  * config/environments/development.rb: 
+  Removed breakpoint_server line, deprecated.
+  
+  * config/environment.rb:
+  Added required setup for Rails 2 cookie-based 
+  sessions.
+  
+  * config/boot.rb,
+  public/javascripts/prototype.js, 
+  public/javascripts/effects.js,
+  public/javascripts/dragdrop.js,
+  public/javascripts/controls.js:
+  Updated using rake rails:update
+  
 2007-10-16  Matthew Landauer  <matthew@visualappliance.com>
 
 	* config/environment.rb, config/boot.rb, public/javascript/control.js,
