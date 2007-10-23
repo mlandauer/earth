@@ -22,7 +22,11 @@ require File.expand_path(File.dirname(__FILE__) + '/helper_testcase')
 require 'test/spec'
 require 'mocha'
 
+Hornsby.load
+
 class Test::Unit::TestCase
+  include HornsbySpecHelper
+  
   # Transactional fixtures accelerate your tests by wrapping each test method
   # in a transaction that's rolled back on completion.  This ensures that the
   # test database remains unchanged so your fixtures don't have to be reloaded

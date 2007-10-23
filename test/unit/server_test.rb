@@ -84,3 +84,21 @@ class ServerTest < Test::Unit::TestCase
     assert(!server.daemon_alive?)
   end
 end
+
+
+context "Earth::Server filtering server list, culling empties" do
+  setup do
+    hornsby_scenario(:servers)
+    @size = Size.new(100,200,300)
+    
+    @duck.stubs(:size).returns(@size)
+    @rincewind.stubs(:size).returns(Size.new(0,0,0))
+    
+    @sab,@blank = Earth::Server.filter_and_add_bytes([@duck,@rincewind],:show_empty => false)
+  end
+    
+  specify "should return duck" do
+    @sab.size.should == 1
+    @sab.first.should == [@duck, 100]
+  end
+end
