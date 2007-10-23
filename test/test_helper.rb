@@ -19,6 +19,9 @@ require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
 require 'test_help'
 require File.expand_path(File.dirname(__FILE__) + '/helper_testcase')
 
+require 'test/spec'
+require 'mocha'
+
 class Test::Unit::TestCase
   # Transactional fixtures accelerate your tests by wrapping each test method
   # in a transaction that's rolled back on completion.  This ensures that the
@@ -84,4 +87,45 @@ ActiveRecord::Base.connection.class.class_eval do
     end
     execute_without_query_counting(sql, name, &block)
   end
+end
+
+# snitched from http://fr.ivolo.us/posts/test-unit-mock_model to emulate rspec's mock_model
+def mock_model(klass, options = {})    
+  default_types = {
+  :integer => (1000 + rand(1000)), :string => 'DefaultString', :text => 'DefaultText',
+  :datetime => Time.now.utc, :date => Date.today, :boolean => 0, :float => 1.0}
+  
+  mock_klass = mock(klass.to_s)
+  attributes = {}
+    
+  # for each column, we'll set the attribute hash equal to the default value for the column type
+  klass.columns.reject{|c| c unless default_types.has_key?(c.type) }.each do |col|
+    attributes[col.name.to_sym] = default_types[col.type.to_sym]
+  end
+  attributes[:to_param] = mock_klass.id.to_s
+
+  klass_with_name = mock('klass_with_name')
+  klass_with_name.stubs(:name).returns(klass.to_s)
+
+  # options passed to this method should override default_types
+  attributes.merge!(options)
+  
+  # Now we'll stub out our mock
+  attributes.each do |k,v|
+    mock_klass.stubs(k.to_sym).returns(v)
+  end
+
+  # this is for mocking associations:
+  mock_klass.stubs(:[]=)
+
+  # we want is_a? to return false
+  mock_klass.stubs(:is_a?).returns(false)
+  # unless called with the class this mock was made from
+  mock_klass.stubs(:is_a?).with(klass).returns(true)
+
+  mock_klass.stubs(:new_record?).returns(false)
+  mock_klass.stubs(:class).returns(klass_with_name)
+
+  # return the mock
+  mock_klass
 end

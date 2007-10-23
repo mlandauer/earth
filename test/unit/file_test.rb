@@ -54,3 +54,37 @@ class Earth::FileTest < Test::Unit::TestCase
     assert_raise(ActiveRecord::StatementInvalid) {directories(:foo).files.create(:name => "\xA9")}
   end
 end
+
+
+context "Earth::File building filter" do  
+  setup do
+    @lachie = User.new(100)
+  end
+  
+  def f(params={})
+    @conds = Earth::File.build_filter_conditions(params)
+  end
+  
+  specify "should make file conditions" do
+    f(:filter_filename => 'afile').should == ["files.name LIKE ?","afile"]
+  end
+
+  specify "should make blank file conditions" do
+    f().should.be.nil
+  end
+  
+  specify "should make file wildcard conditions" do
+    f(:filter_filename => 'af*ile').should == ["files.name LIKE ?","af%ile"]
+  end
+  
+  specify "should make user conditions" do
+    User.expects(:find_by_name).with('lachie').returns(@lachie)
+    f(:filter_user => 'lachie').should == ["files.name LIKE ? AND files.uid = ?", '%', 100]
+  end
+  
+  specify "should make user and file conditions" do
+    User.expects(:find_by_name).with('lachie').returns(@lachie)
+    
+    f(:filter_user => 'lachie', :filter_filename => 'afi*le').should == ["files.name LIKE ? AND files.uid = ?", 'afi%le', 100]
+  end
+end
