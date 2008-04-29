@@ -14,5 +14,9 @@ digital visual effects work.
 Earth is free and open source software. It is licensed under the The
 GNU General Public License (GPL) version 2. See the file COPYING for details.
 
+The plugin "Faster Nested Set", which is distributed as part of this project is
+licensed separately under the GNU Lesser General Public License (LGPL) version 3.
+See the file vendor/plugins/faster_nested_set/COPYING for details.
+
 For more info see:
 http://open.rsp.com.au/projects/earth

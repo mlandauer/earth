@@ -1,4 +1,16 @@
 FasterNestedSet
 ===============
 
-Description goes here
+This is another nested set implementation for RoR.  Its main
+advantage over existing implementations is that it allows for
+deferred inserts (large subtrees can be inserted in one go where
+other implementations incur a full table update for each individual
+inserted node), a more natural API (there's no need to pay
+attention to outdated left/right values in nodes), and that it only 
+uses one update statement per insertion/deletion/move operation 
+instead of two.
+
+For more detailed documentation see lib/faster_nested_set.rb
+
+This plugin is licensed under the GNU Lesser General Public License (LGPL) version 3.
+See the file COPYING for details.
